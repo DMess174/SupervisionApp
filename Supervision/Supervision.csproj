@@ -360,35 +360,11 @@
     <Compile Include="Views\EntityViews\DetailViews\CaseShutterView.xaml.cs">
       <DependentUpon>CaseShutterView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EntityViews\DetailViews\StubShutterEditView.xaml.cs">
-      <DependentUpon>StubShutterEditView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EntityViews\DetailViews\StubShutterView.xaml.cs">
-      <DependentUpon>StubShutterView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EntityViews\DetailViews\SteelSleeveShutterEditView.xaml.cs">
-      <DependentUpon>SteelSleeveShutterEditView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EntityViews\DetailViews\SteelSleeveShutterView.xaml.cs">
-      <DependentUpon>SteelSleeveShutterView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\EntityViews\DetailViews\NozzleEditView.xaml.cs">
       <DependentUpon>NozzleEditView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EntityViews\DetailViews\SlamShutterEditView.xaml.cs">
-      <DependentUpon>SlamShutterEditView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EntityViews\DetailViews\ShaftShutterEditView.xaml.cs">
-      <DependentUpon>ShaftShutterEditView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\EntityViews\DetailViews\NozzleView.xaml.cs">
       <DependentUpon>NozzleView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EntityViews\DetailViews\SlamShutterView.xaml.cs">
-      <DependentUpon>SlamShutterView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EntityViews\DetailViews\ShaftShutterView.xaml.cs">
-      <DependentUpon>ShaftShutterView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\BaseDetailView.xaml.cs">
       <DependentUpon>BaseDetailView.xaml</DependentUpon>
@@ -449,43 +425,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\EntityViews\DetailViews\StubShutterEditView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\EntityViews\DetailViews\StubShutterView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\EntityViews\DetailViews\SteelSleeveShutterEditView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\EntityViews\DetailViews\SteelSleeveShutterView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\EntityViews\DetailViews\NozzleEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\EntityViews\DetailViews\SlamShutterEditView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\EntityViews\DetailViews\ShaftShutterEditView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\EntityViews\DetailViews\NozzleView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\EntityViews\DetailViews\SlamShutterView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\EntityViews\DetailViews\ShaftShutterView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
