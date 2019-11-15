@@ -1,0 +1,209 @@
+﻿<Window x:Class="Supervision.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Supervision"
+        mc:Ignorable="d"
+        Title="Главное меню" Height="800" Width="1200"
+        WindowStartupLocation="CenterScreen"
+                      WindowStyle="ThreeDBorderWindow">
+    <Grid Background="LightGray">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="3"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="3"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        
+        <Menu Style="{StaticResource BaseMenu}" 
+              MinHeight="25" 
+              MaxHeight="25" 
+              VerticalAlignment="Top" 
+              Grid.Row="0" 
+              Background="LightGray">
+            
+            <MenuItem Style="{StaticResource BaseMenuItem}" 
+                      Header="Файл" >
+                <MenuItem Style="{StaticResource BaseMenuItem}"
+                          Header="New Project" />
+                <MenuItem Style="{StaticResource BaseMenuItem}"
+                          Header="Open Project" >
+                    <MenuItem Style="{StaticResource BaseMenuItem}"
+                              Header="WinForms" />
+                    <MenuItem Style="{StaticResource BaseMenuItem}"
+                              Header="WPF" />
+                </MenuItem>
+                <Separator />
+                <MenuItem Style="{StaticResource BaseMenuItem}"
+                          Header="Выход" 
+                          Command="{Binding AppExit}"/>
+            </MenuItem>
+
+            <MenuItem Style="{StaticResource BaseMenuItem}"
+                      Header="Заказ" >
+                <MenuItem Style="{StaticResource BaseMenuItem}"
+                          Header="Спецификации" />
+                <MenuItem Style="{StaticResource BaseMenuItem}"
+                          Header="PID" />
+            </MenuItem>
+
+            <MenuItem Style="{StaticResource BaseMenuItem}"
+                      Header="Изделие" >
+                <MenuItem Header="Тип" />
+                <MenuItem Header="Задвижка шиберная (ЗШ)" />
+                <MenuItem Header="Задвижка Шиберная Листовая (ЗШЛ)" />
+                <MenuItem Header="Задвижка Компактная с расширяющимся затвором (ЗШК)" />
+                <MenuItem Header="Затвор Обратный (ЗО)"
+                          Command="{Binding ShutterReverseOpen}" />
+            </MenuItem>
+
+            <MenuItem Style="{StaticResource BaseMenuItem}"
+                      Header="Деталировка" >
+                <MenuItem Header="Втулка" >
+                    <MenuItem Header="Втулка бронзовая (ЗО)"
+                              Command="{Binding BronzeSleeveShutterOpen}"/>
+                    <MenuItem Header="Втулка стальная (ЗО)"
+                              Command="{Binding SteelSleeveShutterOpen}" />
+                    <MenuItem Header="Втулка крышки (ЗШЛ, ЗШК)" />
+                    <MenuItem Header="Втулка ходовая (ЗШ, ЗШЛ, ЗШК)" />
+                </MenuItem>
+
+                <MenuItem Header="Заглушка (ЗО)"
+                          Command="{Binding StubShutterOpen}"/>
+
+                <MenuItem Header="Захлопка (ЗО)"
+                          Command="{Binding SlamShutterOpen}"/>
+
+                <MenuItem Header="Катушка (ЗШ, ЗО)"
+                          Command="{Binding NozzleOpen}"/>
+
+                <MenuItem Header="Корпус" >
+                    <MenuItem Header="ЗШ" />
+                    <MenuItem Header="ЗШЛ" />
+                    <MenuItem Header="ЗШК" />
+                    <MenuItem Header="ЗО" />
+                </MenuItem>
+                
+                <MenuItem Header="Крышка" >
+                    <MenuItem Header="ЗШ" />
+                    <MenuItem Header="ЗШЛ" />
+                    <MenuItem Header="ЗШК" />
+                </MenuItem>
+
+                <MenuItem Header="Ось (ЗО)"
+                          Command="{Binding ShaftShutterOpen}"/>
+
+                <MenuItem Header="Седло" />
+                <MenuItem Header="Шибер" />
+                <MenuItem Header="Шпиндель" />
+                
+                
+                
+            </MenuItem>
+
+            <MenuItem Style="{StaticResource BaseMenuItem}"
+                      Command="{Binding InspectorOpen}" 
+                      Header="Персонал"/>
+
+            <MenuItem Style="{StaticResource BaseMenuItem}"
+                      Header="ПТК">
+                <MenuItem Header="Антикоррозионное покрытие (АКП)"  />
+                <MenuItem Header="Задвижка компактная с расширяющимся затвором (ЗШК)" />
+                <MenuItem Header="Задвижка шиберная (ЗШ)" />
+                <MenuItem Header="Задвижка шиберная листовая (ЗШЛ)" />
+                
+                <MenuItem Header="Затвор обратный (ЗО)" >
+                    <MenuItem Header="Втулка бронзовая" Command="{Binding BronzeSleeveShutterTCPOpen}" />
+                    <MenuItem Header="Втулка стальная" Command="{Binding SteelSleeveShutterTCPOpen}" />
+                    <MenuItem Header="Заглушка" Command="{Binding StubShutterTCPOpen}" />
+                    <MenuItem Header="Затвор обратный" Command="{Binding ShutterReverseTCPOpen}" />
+                    <MenuItem Header="Захлопка" Command="{Binding SlamShutterTCPOpen}" />
+                    <MenuItem Header="Катушка" Command="{Binding NozzleTCPOpen}" />
+                    <MenuItem Header="Корпус затвора" Command="{Binding CaseShutterTCPOpen}" />
+                    <MenuItem Header="Ось" Command="{Binding ShaftShutterTCPOpen}" />
+                </MenuItem>
+
+                <MenuItem Header="Шибер" />
+            </MenuItem>
+        </Menu>
+        
+        <Separator Grid.Row="1" 
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Stretch" 
+                   Height="3" 
+                   Foreground="Black" 
+                   BorderBrush="#FF828790" 
+                   Background="#FF828790" 
+                   Margin="0" 
+                   VerticalContentAlignment="Center"/>
+        
+        <Grid Grid.Row="2" Background="LightGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="96*" MinWidth="200"/>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="426*" MinWidth="500"/>
+            </Grid.ColumnDefinitions>
+            <TreeView Style="{StaticResource BaseTreeView}"
+                      Grid.Column="0">
+                <Label Style="{StaticResource BaseLabel}" 
+                       Content="Сущности"/>
+                <TreeViewItem Header="Изделие">
+                    <Button Style="{StaticResource TreeViewButton}" 
+                            Command="{Binding AddItem}" 
+                            Content="(ЗШ) Задвижка шиберная"/>
+                    <Button Style="{StaticResource TreeViewButton}" 
+                            Command="{Binding TreeMainShutterReverse_Click}" 
+                            Content="(ЗШЛ) Задвижка листовя шиберная"/>
+                    <Button Style="{StaticResource TreeViewButton}" 
+                            Command="{Binding TreeMainShutterReverse_Click}" 
+                            Content="(ЗШК) Задвижка компактная с расширяющимся затвором"/>
+                    <Button Style="{StaticResource TreeViewButton}"
+                            Command="{Binding ShutterReverseOpen}" 
+                            Content="(ЗО) Затвор обратный"/>
+                </TreeViewItem>
+                <TreeViewItem Header="Деталировка">
+                    <TreeViewItem Header="Затвор обратный">
+                        <Button Style="{StaticResource TreeViewButton}"
+                                Command="{Binding BronzeSleeveShutterOpen}" 
+                                Content="Втулка бронзовая" />
+                        <Button Style="{StaticResource TreeViewButton}"
+                                Command="{Binding SteelSleeveShutterOpen}" 
+                                Content="Втулка стальная" />
+                        <Button Style="{StaticResource TreeViewButton}"
+                                Command="{Binding StubShutterOpen}" 
+                                Content="Заглушка" />
+                        <Button Style="{StaticResource TreeViewButton}"
+                                Command="{Binding SlamShutterOpen}" 
+                                Content="Захлопка" />
+                        <Button Style="{StaticResource TreeViewButton}"
+                                Command="{Binding NozzleOpen}" 
+                                Content="Катушка" />
+                        <Button Style="{StaticResource TreeViewButton}"
+                                Command="{Binding CaseShutterOpen}" 
+                                Content="Корпус" />
+                        <Button Style="{StaticResource TreeViewButton}"
+                                Command="{Binding ShaftShutterOpen}" 
+                                Content="Ось" />
+                    </TreeViewItem>
+                    <TreeViewItem Header="Задвижка шиберная">
+                        <TreeViewItem Header="Корпус" />
+                        <TreeViewItem Header="Крышка" />
+                        <TreeViewItem Header="Шпиндель" />
+                    </TreeViewItem>
+                </TreeViewItem>
+            </TreeView>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" ShowsPreview="False" Width="5" Background="DarkGray"/>
+            <Frame 
+                VerticalAlignment="Stretch"
+                Background="LightGray"
+                Margin="2, 2, 2, 2"
+                Grid.Column="2"
+                Content="{Binding CurrentPage}"
+                NavigationUIVisibility="Hidden"
+                Opacity="{Binding FrameOpacity}"/>
+        </Grid>
+        <Separator Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="3" Foreground="Black" BorderBrush="#FF828790" Background="#FF828790" Margin="0" VerticalContentAlignment="Center"/>
+    </Grid>
+</Window>
