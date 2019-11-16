@@ -179,11 +179,24 @@
                    Margin="0,1" >
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
+                
+                <StackPanel DockPanel.Dock="Bottom"
+                            Orientation="Horizontal" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Bottom">
+                    <Button Style="{StaticResource BaseButton}"
+                        Content="Копировать запись" 
+                        Margin="10" 
+                        Command="{Binding CopyItem}" 
+                        CommandParameter="{Binding ElementName=AllInstances, Path=SelectedItem}" />
+                </StackPanel>
 
-                <StackPanel  DockPanel.Dock="Bottom" 
+                <StackPanel  DockPanel.Dock="Bottom"
+                         Grid.Column="1"
                          Grid.ColumnSpan="2"
                          Background="LightGray" 
                          Orientation="Horizontal" 
@@ -209,8 +222,9 @@
                 </StackPanel>
 
                 <StackPanel 
-                        Grid.Column="1"
-                        Orientation="Horizontal">
+                        Grid.Column="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
                     <Button Style="{StaticResource BaseButton}"
                             HorizontalAlignment="Right"
                             Content="Закрыть" 

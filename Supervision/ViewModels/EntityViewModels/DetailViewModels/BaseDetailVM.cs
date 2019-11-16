@@ -30,6 +30,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
+        private ICommand copyItem;
         private ICommand closeWindow;
         
 
@@ -67,6 +68,33 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
+        public ICommand CopyItem
+        {
+            get
+            {
+                return copyItem ?? (
+                    copyItem = new DelegateCommand(() =>
+                    {
+                        if (SelectedItem != null)
+                        {
+                            var item = new TEntity()
+                            {
+                                Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
+                                Drawing = SelectedItem.Drawing,
+                                Material = SelectedItem.Material,
+                                Melt = SelectedItem.Melt,
+                                Certificate = SelectedItem.Certificate,
+                                Status = SelectedItem.Status,
+                                Name = SelectedItem.Name
+                            };
+                            db.Set<TEntity>().Add(item);
+                            db.SaveChanges();
+                            
+                        }
+                        else MessageBox.Show("Объект не выбран", "Ошибка");
+                    }));
+            }
+        }
 
         public ICommand AddItem
         {
@@ -79,7 +107,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                         db.Set<TEntity>().Add(item);
                         db.SaveChanges();
                         SelectedItem = item;
-                        var tcpPoints = db.BronzeSleeveShutterTCPs.ToList();
+                        var tcpPoints = db.Set<TEntityTCP>().ToList();
                         foreach (var i in tcpPoints)
                         {
                             var journal = new TEntityJournal()

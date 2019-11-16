@@ -31,6 +31,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         private TEntity selectedItem;
         private ICommand saveItem;
         private ICommand closeWindow;
+        private ICommand addItem;
 
         public TEntity SelectedItem
         {
@@ -49,6 +50,24 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             {
                 journal = value;
                 RaisePropertyChanged("Journal");
+            }
+        }
+        public List<TEntityTCP> Points
+        {
+            get { return points; }
+            set
+            {
+                points = value;
+                RaisePropertyChanged("Points");
+            }
+        }
+        public List<TUser> Inspectors
+        {
+            get { return inspectors; }
+            set
+            {
+                inspectors = value;
+                RaisePropertyChanged("Inspectors");
             }
         }
 
@@ -89,6 +108,23 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                     }));
             }
         }
+        public ICommand AddItem
+        {
+            get
+            {
+                return addItem ?? (
+                    addItem = new DelegateCommand(() =>
+                    {
+                        var item = new TEntityJournal()
+                        {
+                            DetailId = SelectedItem.Id
+                        };
+                        db.Set<TEntityJournal>().Add(item);
+                        db.SaveChanges();
+                        Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                    }));
+            }
+        }
 
         public List<string> Materials
         {
@@ -108,31 +144,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Drawings");
             }
         }
-        public List<TEntityTCP> Points
-        {
-            get { return points; }
-            set
-            {
-                points = value;
-                RaisePropertyChanged("Points");
-            }
-        }
-        public List<TUser> Inspectors
-        {
-            get { return inspectors; }
-            set
-            {
-                inspectors = value;
-                RaisePropertyChanged("Inspectors");
-            }
-        }
+        
 
 
         public BaseDetailEditVM(int id)
         {
             db = new DataContext();
             SelectedItem = db.Set<TEntity>().Find(id);
-            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).ToList();
+            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             //Journal SelectedItem.BronzeSleeveShutterJournals = db.BronzeSleeveShutterJournals.Where(i => i.BronzeSleeveShutterId == selected.Id).ToList();
             Materials = db.Set<TEntity>().Select(d => d.Material).Distinct().ToList();
             Drawings = db.Set<TEntity>().Select(s => s.Drawing).Distinct().ToList();

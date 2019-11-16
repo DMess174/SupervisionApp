@@ -272,22 +272,41 @@
             </DataGrid.Columns>
         </DataGrid>
         <DockPanel Grid.Row="3"  Height="50" VerticalAlignment="Bottom" Margin="0,1" >
-            <StackPanel DockPanel.Dock="Bottom" 
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel DockPanel.Dock="Bottom"
+                        Background="LightGray" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Left" 
+                        VerticalAlignment="Bottom">
+                    <Button Style="{StaticResource BaseButton}" 
+                            Content="Добавить" 
+                            Margin="10" 
+                            Command="{Binding AddItem}" />
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1"
+                        DockPanel.Dock="Bottom" 
                         Background="LightGray" 
                         Orientation="Horizontal" 
                         HorizontalAlignment="Right" 
                         VerticalAlignment="Bottom">
-                <Button Style="{StaticResource BaseButton}" 
-                        Content="Сохранить" 
-                        Margin="10" 
-                        Command="{Binding SaveItem}" 
-                        CommandParameter="{Binding SelectedItem}"/>
-                <Button Style="{StaticResource BaseButton}" 
-                        Content="Закрыть" 
-                        Margin="10" 
-                        Command="{Binding CloseWindow}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                    <Button Style="{StaticResource BaseButton}" 
+                            Content="Сохранить" 
+                            Margin="10" 
+                            Command="{Binding SaveItem}" 
+                            CommandParameter="{Binding SelectedItem}"/>
+                
+                    <Button Style="{StaticResource BaseButton}" 
+                            Content="Закрыть" 
+                            Margin="10" 
+                            Command="{Binding CloseWindow}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
             </StackPanel>
+            </Grid>
         </DockPanel>
     </Grid>
 </Window>
