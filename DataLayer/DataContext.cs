@@ -5,6 +5,7 @@ using System.Reflection;
 using DataLayer.TechnicalControlPlans.AssemblyUnits;
 using DataLayer.TechnicalControlPlans.Detailing;
 using DataLayer.Journals.Detailing;
+using DataLayer.Journals;
 
 namespace DataLayer
 {
@@ -15,6 +16,7 @@ namespace DataLayer
         public DbSet<Specification> Specifications{ get; set; }
         public DbSet<PID> PIDs { get; set; }
         public DbSet<Inspector> Inspectors { get; set; }
+        public DbSet<JournalNumber> JournalNumbers { get; set; }
 
         public DbSet<BronzeSleeveShutter> BronzeSleeveShutters { get; set; }
         public DbSet<BronzeSleeveShutterTCP> BronzeSleeveShutterTCPs { get; set; }
@@ -50,6 +52,7 @@ namespace DataLayer
 
         public DataContext()
         {
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
             //Database.Migrate();
         }

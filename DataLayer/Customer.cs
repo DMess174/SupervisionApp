@@ -9,7 +9,5 @@ namespace DataLayer
         public string ShortName { get; set; }
 
         public List <Specification> Specifications { get; set; }
-
-
     }
 }

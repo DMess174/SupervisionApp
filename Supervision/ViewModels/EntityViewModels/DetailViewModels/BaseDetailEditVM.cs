@@ -4,11 +4,8 @@ using DataLayer.Journals;
 using DataLayer.TechnicalControlPlans;
 using DevExpress.Mvvm;
 using Supervision.Views.EntityViews.DetailViews;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -22,6 +19,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
     {
         
         private readonly DataContext db;
+        private List<string> journalNumbers;
         private List<string> materials;
         private List<string> drawings;
         private List<TEntityTCP> points;
@@ -144,15 +142,25 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Drawings");
             }
         }
-        
+        public List<string> JournalNumbers
+        {
+            get { return journalNumbers; }
+            set
+            {
+                journalNumbers = value;
+                RaisePropertyChanged("JournalNumbers");
+            }
+        }
+
+
 
 
         public BaseDetailEditVM(int id)
         {
             db = new DataContext();
             SelectedItem = db.Set<TEntity>().Find(id);
-            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            //Journal SelectedItem.BronzeSleeveShutterJournals = db.BronzeSleeveShutterJournals.Where(i => i.BronzeSleeveShutterId == selected.Id).ToList();
+            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.DetailName == SelectedItem.Name).OrderBy(x => x.PointId).ToList();
+            JournalNumbers = db.JournalNumbers.Select(i => i.Number).ToList();
             Materials = db.Set<TEntity>().Select(d => d.Material).Distinct().ToList();
             Drawings = db.Set<TEntity>().Select(s => s.Drawing).Distinct().ToList();
             Inspectors = db.Set<TUser>().OrderBy(i => i.Name).ToList();
