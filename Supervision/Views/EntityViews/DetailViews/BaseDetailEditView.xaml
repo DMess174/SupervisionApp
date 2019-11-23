@@ -169,7 +169,7 @@
                 Grid.Row="2" 
                 Grid.Column="0" 
                 Grid.ColumnSpan="1"
-                RowHeight="50"
+                MinRowHeight="50"
                 ItemsSource="{Binding Journal}"
                 IsReadOnly="False" 
                 CanUserAddRows="False"
@@ -225,6 +225,37 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" 
+                                    Header="Пункт"  
+                                    Width="auto" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource BaseTextBlock}"
+                                    FontWeight="Normal"
+                                    Text="{Binding Path = Point}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" 
+                                    Header="Операция"  
+                                    Width="200" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Style="{StaticResource BaseTextBox}"
+                                    BorderThickness="0"
+                                     TextWrapping="Wrap"
+                                     Background="LightGray"
+                                    FontWeight="Normal"
+                                    Text="{Binding Path = Description}"
+                                    VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
 
                 <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" Header="Инспектор">
                     <DataGridTemplateColumn.CellTemplate>
