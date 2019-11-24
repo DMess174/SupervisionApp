@@ -80,6 +80,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                         {
                             db.Set<TEntity>().Update(SelectedItem);
                             db.SaveChanges();
+                            foreach(var i in Journal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
                             db.Set<TEntityJournal>().UpdateRange(Journal);
                             db.SaveChanges();
                         }
@@ -113,8 +118,13 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 return addItem ?? (
                     addItem = new DelegateCommand(() =>
                     {
+                        
                         var item = new TEntityJournal()
                         {
+                            
+                            DetailDrawing = SelectedItem.Drawing,
+                            DetailNumber = SelectedItem.Number,
+                            DetailName = SelectedItem.Name,
                             DetailId = SelectedItem.Id
                         };
                         db.Set<TEntityJournal>().Add(item);
