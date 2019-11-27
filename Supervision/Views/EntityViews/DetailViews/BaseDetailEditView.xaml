@@ -191,12 +191,12 @@
                 <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" x:Name="PointColumn" Header="Пункт ПТК" Width="350*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox Style="{StaticResource BaseCombobox}" 
+                            <ComboBox x:Name="comb" Style="{StaticResource BaseCombobox}" 
                                       VerticalContentAlignment="Center" 
                                       ItemsSource="{Binding Path=DataContext.Points, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                                       SelectedItem="Id"
-                                      SelectedValuePath="Id"
-                                      SelectedValue="{Binding Path=PointId, UpdateSourceTrigger=PropertyChanged}">
+                                      SelectedValuePath="Description"
+                                      SelectedValue="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.Width>
                                     <Binding ElementName="PointColumn" Path="ActualWidth"/>
                                 </ComboBox.Width>

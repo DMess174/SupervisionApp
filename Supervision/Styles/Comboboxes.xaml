@@ -7,5 +7,5 @@
         <Setter Property="FontSize" Value="{StaticResource Big}" />
         <Setter Property="Foreground" Value="Black" />
     </Style>
-    
+
 </ResourceDictionary>
