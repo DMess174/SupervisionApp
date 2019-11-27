@@ -13,36 +13,34 @@ using Supervision.ViewModels.EntityViewModels.DetailViewModels;
 using DataLayer.Entities.Detailing;
 using DataLayer.TechnicalControlPlans.Detailing;
 using DataLayer.Journals.Detailing;
+using Supervision.ViewModels.TCPViewModels;
+using DataLayer.TechnicalControlPlans.AssemblyUnits;
 
 namespace Supervision.ViewModels
 {
     public class MainViewModel : BasePropertyChanged
     {
-        //private Page Customer;
-        private Page Inspector;
-        //private Page ProductType;
-        //private Page Specification;
-
-
-        private Page ShutterReverseTCP;
-
-        private Page BronzeSleeveShutterTCP;
-        private Page ShaftShutterTCP;
-
         private Page currentPage;
         public Page CurrentPage
         { 
             get { return currentPage; } 
             set 
             { 
-                currentPage = value; 
-                RaisePropertyChanged("CurrentPage"); 
+                currentPage = value;
+                RaisePropertyChanged("CurrentPage");
             } 
         }
 
         private double frameOpacity;
         public double FrameOpacity
-        { get { return frameOpacity; } set { frameOpacity = value; RaisePropertyChanged(); } }
+        { 
+            get { return frameOpacity; } 
+            set 
+            { 
+                frameOpacity = value; 
+                RaisePropertyChanged(); 
+            } 
+        }
 
         public MainViewModel() { }
 
@@ -156,33 +154,99 @@ namespace Supervision.ViewModels
         {
             get
             {
-                Inspector = new InspectorView();
-                return new DelegateCommand(() => SlowOpacity(Inspector));
+                Page inspector = new InspectorView();
+                return new DelegateCommand(() => SlowOpacity(inspector));
             }
         }
+
 
         public ICommand ShutterReverseTCPOpen
         {
             get
             {
-                ShutterReverseTCP = new ShutterReverseTCPView();
-                return new DelegateCommand(() => SlowOpacity(ShutterReverseTCP));
+                Page tcp = new TCPView
+                {
+                    DataContext = new TCPViewModel<ShutterReverseTCP>()
+                };
+                return new DelegateCommand(() => SlowOpacity(tcp));
             }
         }
+
         public ICommand BronzeSleeveShutterTCPOpen
         {
             get
             {
-                BronzeSleeveShutterTCP = new BronzeSleeveShutterTCPView();
-                return new DelegateCommand(() => SlowOpacity(BronzeSleeveShutterTCP));
+                Page tcp = new TCPView
+                {
+                    DataContext = new TCPViewModel<BronzeSleeveShutterTCP>()
+                };
+                return new DelegateCommand(() => SlowOpacity(tcp));
             }
         }
         public ICommand ShaftShutterTCPOpen
         {
             get
             {
-                ShaftShutterTCP = new ShaftShutterTCPView();
-                return new DelegateCommand(() => SlowOpacity(ShaftShutterTCP));
+                Page tcp = new TCPView
+                {
+                    DataContext = new TCPViewModel<ShaftShutterTCP>()
+                };
+                return new DelegateCommand(() => SlowOpacity(tcp));
+            }
+        }
+        public ICommand SlamShutterTCPOpen
+        {
+            get
+            {
+                Page tcp = new TCPView
+                {
+                    DataContext = new TCPViewModel<SlamShutterTCP>()
+                };
+                return new DelegateCommand(() => SlowOpacity(tcp));
+            }
+        }
+        public ICommand StubShutterTCPOpen
+        {
+            get
+            {
+                Page tcp = new TCPView
+                {
+                    DataContext = new TCPViewModel<StubShutterTCP>()
+                };
+                return new DelegateCommand(() => SlowOpacity(tcp));
+            }
+        }
+        public ICommand NozzleTCPOpen
+        {
+            get
+            {
+                Page tcp = new TCPView
+                {
+                    DataContext = new TCPViewModel<NozzleTCP>()
+                };
+                return new DelegateCommand(() => SlowOpacity(tcp));
+            }
+        }
+        public ICommand SteelSleeveShutterTCPOpen
+        {
+            get
+            {
+                Page tcp = new TCPView
+                {
+                    DataContext = new TCPViewModel<SteelSleeveShutterTCP>()
+                };
+                return new DelegateCommand(() => SlowOpacity(tcp));
+            }
+        }
+        public ICommand CaseShutterTCPOpen
+        {
+            get
+            {
+                Page tcp = new TCPView
+                {
+                    DataContext = new TCPViewModel<CaseShutterTCP>()
+                };
+                return new DelegateCommand(() => SlowOpacity(tcp));
             }
         }
 

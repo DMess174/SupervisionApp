@@ -351,6 +351,7 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\BaseDetailEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\BaseDetailVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\IBaseDetailVM.cs" />
+    <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\ShaftShutterTCPViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\ShutterReverseTCPViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\BronzeSleeveShutterTCPViewModel.cs" />
@@ -372,6 +373,9 @@
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\BaseDetailEditView.xaml.cs">
       <DependentUpon>BaseDetailEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TCPViews\TCPView.xaml.cs">
+      <DependentUpon>TCPView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TCPViews\ShaftShutterTCPView.xaml.cs">
       <DependentUpon>ShaftShutterTCPView.xaml</DependentUpon>
@@ -439,6 +443,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EntityViews\DetailViews\BaseDetailEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\TCPViews\TCPView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -6,7 +6,7 @@
         mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       WindowStartupLocation="CenterScreen"
-      Title="Втулка бронзовая">
+      Title="{Binding Name}">
 
     <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
@@ -214,6 +214,7 @@
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
                     <Button Style="{StaticResource BaseButton}"
+                        Visibility="Collapsed"
                         Content="Удалить" 
                         Margin="10" 
                         Command="{Binding RemoveItem}"

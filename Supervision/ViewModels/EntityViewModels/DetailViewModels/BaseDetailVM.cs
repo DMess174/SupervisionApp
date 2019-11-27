@@ -29,6 +29,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         private ICommand copyItem;
         private ICommand closeWindow;
 
+        private string name;
         private string number = "";
         private string drawing = "";
         private string status = "";
@@ -278,6 +279,16 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         #endregion
 
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                name = value;
+                RaisePropertyChanged("Name");
+            }
+        }
+
         public TEntity SelectedItem
         {
             get { return selectedItem; }
@@ -310,9 +321,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         public BaseDetailVM()
         {
             db = new DataContext();
-            db.Set<TEntity>().Load();
-            AllInstances = db.Set<TEntity>().Local.ToObservableCollection();
+            AllInstances = db.Set<TEntity>().ToList();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
+            if (AllInstances.Count() != 0)
+            {
+                Name = AllInstances.First().Name;
+            }
         }
     }
 }

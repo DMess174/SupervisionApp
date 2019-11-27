@@ -87,11 +87,13 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                             }
                             db.Set<TEntityJournal>().UpdateRange(Journal);
                             db.SaveChanges();
+                            
                         }
                         else
                         {
                             MessageBox.Show("Объект не найден!", "Ошибка");
                         }
+
                     }));
             }
         }
@@ -107,7 +109,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
-
                     }));
             }
         }
@@ -170,7 +171,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             db = new DataContext();
             SelectedItem = db.Set<TEntity>().Find(id);
             Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.DetailName == SelectedItem.Name).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Select(i => i.Number).ToList();
+            JournalNumbers = db.JournalNumbers.Select(i => i.Number).Distinct().ToList();
             Materials = db.Set<TEntity>().Select(d => d.Material).Distinct().ToList();
             Drawings = db.Set<TEntity>().Select(s => s.Drawing).Distinct().ToList();
             Inspectors = db.Set<TUser>().OrderBy(i => i.Name).ToList();

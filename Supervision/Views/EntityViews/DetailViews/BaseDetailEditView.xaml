@@ -6,12 +6,13 @@
       xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
       xmlns:viewmodel="clr-namespace:Supervision.ViewModels"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="1200"
         WindowStartupLocation="CenterScreen"
-        Title="Втулка бронзовая">
+        Title="{Binding SelectedItem.Name}">
     <Window.Resources>
         <CollectionViewSource x:Key="Inspectors" Source="{Binding Inspectors}"/>
         <CollectionViewSource x:Key="Points" Source="{Binding Points}" />
+        <CollectionViewSource x:Key="JournalNumbers" Source="{Binding JournalNumbers}"/>
     </Window.Resources>
     
     <Grid Background="LightGray">
@@ -227,7 +228,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" 
-                                    Header="Пункт"  
+                                    Header="Пункт"
                                     Width="auto" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -288,7 +289,8 @@
                             <ComboBox Style="{StaticResource BaseCombobox}" 
                                       Height="50" 
                                       VerticalContentAlignment="Center" 
-                                      HorizontalContentAlignment="Center" 
+                                      HorizontalContentAlignment="Center"
+                                      IsEditable="True"
                                       Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" 
                                       SelectedItem= "{Binding Status}">
                                 <ComboBoxItem Content="Соответствует"/>
@@ -298,7 +300,23 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn HeaderStyle="{StaticResource BaseDataGridHeader}" Header="Примечание"  Width="350*" Binding ="{Binding Path = Remark}"/>
+                <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" Header="Номер журнала" Width="130">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox Style="{StaticResource BaseCombobox}" 
+                                      Height="50" 
+                                      VerticalContentAlignment="Center" 
+                                      HorizontalContentAlignment="Center"
+                                      ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                      SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn HeaderStyle="{StaticResource BaseDataGridHeader}" Header="Примечание" 
+                                    Width="350*" 
+                                    Binding ="{Binding Path = Remark}"/>
                 
             </DataGrid.Columns>
         </DataGrid>
