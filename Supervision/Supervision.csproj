@@ -348,7 +348,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\NozzleEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\BaseDetailEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\NozzleVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\BaseDetailVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\IBaseDetailVM.cs" />
     <Compile Include="ViewModels\ProductTypeViewModel.cs" />

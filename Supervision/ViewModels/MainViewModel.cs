@@ -74,21 +74,21 @@ namespace Supervision.ViewModels
         //                    });
         //    }
         //}
-        //public ICommand NozzleOpen
-        //{
-        //    get
-        //    {
-        //        return new DelegateCommand
-        //                (
-        //                    () =>
-        //                    {
-        //                        var w = new NozzleView();
-        //                        var vm = new NozzleViewModel();
-        //                        w.DataContext = vm;
-        //                        w.ShowDialog();
-        //                    });
-        //    }
-        //}
+        public ICommand NozzleOpen
+        {
+            get
+            {
+                return new DelegateCommand
+                        (
+                            () =>
+                            {
+                                var w = new NozzleView();
+                                var vm = new NozzleVM();
+                                w.DataContext = vm;
+                                w.ShowDialog();
+                            });
+            }
+        }
         public ICommand ShaftShutterOpen
         {
             get

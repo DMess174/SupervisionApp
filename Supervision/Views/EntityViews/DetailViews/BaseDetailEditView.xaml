@@ -338,7 +338,7 @@
                         HorizontalAlignment="Left" 
                         VerticalAlignment="Bottom">
                     <Button Style="{StaticResource BaseButton}" 
-                            Content="Добавить" 
+                            Content="Добавить операцию" 
                             Margin="10" 
                             Command="{Binding AddItem}" />
                 </StackPanel>

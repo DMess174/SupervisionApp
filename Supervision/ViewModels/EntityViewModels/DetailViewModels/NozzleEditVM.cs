@@ -1,7 +1,7 @@
 ﻿using DataLayer;
 using DataLayer.Entities.Detailing;
-using DataLayer.Journals;
-using DataLayer.TechnicalControlPlans;
+using DataLayer.Journals.Detailing;
+using DataLayer.TechnicalControlPlans.Detailing;
 using DevExpress.Mvvm;
 using Supervision.Views.EntityViews.DetailViews;
 using System.Collections.Generic;
@@ -11,27 +11,26 @@ using System.Windows.Input;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
-    public class BaseDetailEditVM<TEntity, TUser, TEntityTCP, TEntityJournal> : BasePropertyChanged
-        where TEntity : BaseDetail, new()
-        where TUser : Inspector
-        where TEntityTCP : BaseTCP
-        where TEntityJournal : BaseJournal<TEntity, TEntityTCP>, new()
+    public class NozzleEditVM : BasePropertyChanged
     {
 
         private readonly DataContext db;
         private List<string> journalNumbers;
         private List<string> materials;
         private List<string> drawings;
-        private List<TEntityTCP> points;
-        private List<TUser> inspectors;
-        private IEnumerable<TEntityJournal> journal;
+        private List<string> thickness;
+        private List<string> thicknessJoin;
+        private List<string> diameter;
+        private List<NozzleTCP> points;
+        private List<Inspector> inspectors;
+        private IEnumerable<NozzleJournal> journal;
 
-        private TEntity selectedItem;
+        private Nozzle selectedItem;
         private ICommand saveItem;
         private ICommand closeWindow;
         private ICommand addItem;
 
-        public TEntity SelectedItem
+        public Nozzle SelectedItem
         {
             get { return selectedItem; }
             set
@@ -41,7 +40,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public IEnumerable<TEntityJournal> Journal
+        public IEnumerable<NozzleJournal> Journal
         {
             get { return journal; }
             set
@@ -50,7 +49,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Journal");
             }
         }
-        public List<TEntityTCP> Points
+        public List<NozzleTCP> Points
         {
             get { return points; }
             set
@@ -59,7 +58,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Points");
             }
         }
-        public List<TUser> Inspectors
+        public List<Inspector> Inspectors
         {
             get { return inspectors; }
             set
@@ -78,14 +77,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                     {
                         if (SelectedItem != null)
                         {
-                            db.Set<TEntity>().Update(SelectedItem);
+                            db.Nozzles.Update(SelectedItem);
                             db.SaveChanges();
                             foreach(var i in Journal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.Set<TEntityJournal>().UpdateRange(Journal);
+                            db.NozzleJournals.UpdateRange(Journal);
                             db.SaveChanges();
                             
                         }
@@ -104,8 +103,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        var wn = new BaseDetailView();
-                        var vm = new BaseDetailVM<TEntity, TEntityTCP, TEntityJournal>();
+                        var wn = new NozzleView();
+                        var vm = new NozzleVM();
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
@@ -120,16 +119,16 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                     addItem = new DelegateCommand(() =>
                     {
                         
-                        var item = new TEntityJournal()
+                        var item = new NozzleJournal()
                         {
                             DetailDrawing = SelectedItem.Drawing,
                             DetailNumber = SelectedItem.Number,
                             DetailName = SelectedItem.Name,
                             DetailId = SelectedItem.Id,
                         };
-                        db.Set<TEntityJournal>().Add(item);
+                        db.NozzleJournals.Add(item);
                         db.SaveChanges();
-                        Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                        Journal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
                     }));
             }
         }
@@ -162,19 +161,49 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
+        public List<string> Thickness
+        {
+            get { return thickness; }
+            set
+            {
+                thickness = value;
+                RaisePropertyChanged("Thickness");
+            }
+        }
 
+        public List<string> ThicknessJoin
+        {
+            get { return thicknessJoin; }
+            set
+            {
+                thicknessJoin = value;
+                RaisePropertyChanged("ThicknessJoin");
+            }
+        }
 
+        public List<string> Diameter
+        {
+            get { return diameter; }
+            set
+            {
+                diameter = value;
+                RaisePropertyChanged("Diameter");
+            }
+        }
 
-        public BaseDetailEditVM(int id)
+        public NozzleEditVM(int id)
         {
             db = new DataContext();
-            SelectedItem = db.Set<TEntity>().Find(id);
-            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+            SelectedItem = db.Nozzles.Find(id);
+            Journal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Select(i => i.Number).Distinct().ToList();
-            Materials = db.Set<TEntity>().Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            Drawings = db.Set<TEntity>().Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            Inspectors = db.Set<TUser>().OrderBy(i => i.Name).ToList();
-            Points = db.Set<TEntityTCP>().ToList();
+            Materials = db.Nozzles.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
+            Drawings = db.Nozzles.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
+            Thickness = db.Nozzles.Select(t => t.Thickness).Distinct().OrderBy(x => x).ToList();
+            ThicknessJoin = db.Nozzles.Select(t => t.ThicknessJoin).Distinct().OrderBy(x => x).ToList();
+            Diameter = db.Nozzles.Select(d => d.Diameter).Distinct().OrderBy(x => x).ToList();
+            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
+            Points = db.NozzleTCPs.ToList();
         }
     }
 }
