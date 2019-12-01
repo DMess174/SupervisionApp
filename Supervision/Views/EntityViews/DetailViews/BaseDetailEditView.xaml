@@ -188,6 +188,12 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
+                <DataGridComboBoxColumn Header="Пункт" x:Name="comb1"                                   
+                          ItemsSource="{Binding Path=DataContext.Points, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                        DisplayMemberPath="Point"
+                                        SelectedItemBinding="{Binding Path= Id}"/>
+
+
                 <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" x:Name="PointColumn" Header="Пункт ПТК" Width="350*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -211,7 +217,7 @@
                                                     <Binding Path="Point" StringFormat="{}{0} - "/>
                                                 </TextBlock.Text>
                                             </TextBlock>
-                                            <TextBlock TextWrapping="Wrap" >
+                                            <TextBlock x:Name="T1" TextWrapping="Wrap" >
                                                 <TextBlock.Text>
                                                     <Binding Path="Description"/>
                                                 </TextBlock.Text>
@@ -251,7 +257,7 @@
                                      TextWrapping="Wrap"
                                      Background="LightGray"
                                     FontWeight="Normal"
-                                    Text="{Binding Path = Description}"
+                                    Text="{Binding Path = Text, ElementName = T1}"
                                     VerticalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

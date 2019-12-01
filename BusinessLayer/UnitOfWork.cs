@@ -15,6 +15,9 @@ using BusinessLayer.Implementations.Journals.AssemblyUnits;
 using BusinessLayer.Implementations.TechnicalControlPlans.AssemblyUnits;
 using BusinessLayer.Implementations.TechnicalControlPlans.Detailing;
 using System.Threading.Tasks;
+using DataLayer.Entities;
+using DataLayer.TechnicalControlPlans;
+using DataLayer.Journals;
 
 namespace BusinessLayer
 {
@@ -26,6 +29,7 @@ namespace BusinessLayer
         {
             Context = context;
 
+            BaseDetail = new BaseDetailRepository(Context);
             ShutterReverse = new ShutterReverseRepository(Context);
             ShutterReverseJournal = new ShutterReverseJournalRepository(Context);
             ShutterReverseTCP = new ShutterReverseTCPRepository(Context);
@@ -65,6 +69,7 @@ namespace BusinessLayer
             Specification = new SpecificationRepository(Context);
         }
 
+        public IBaseDetailRepository<BaseJournal<BaseEntity, BaseTCP>, BaseTCP> BaseDetail { get; private set; }
         public IShutterReverseRepository ShutterReverse { get; private set; }
         public IShutterReverseJournalRepository ShutterReverseJournal { get; private set; }
         public IShutterReverseTCPRepository ShutterReverseTCP { get; private set; }

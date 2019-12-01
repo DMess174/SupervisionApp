@@ -8,7 +8,7 @@ namespace BusinessLayer.Interfaces
     public interface IRepository<TEntity> where TEntity : class
     {
         Task<TEntity> Get(int id);
-        IEnumerable<TEntity> GetAll();
+        Task<IEnumerable<TEntity>> GetAll();
 
         IEnumerable<string> GetListPropertyDistinct(Func<TEntity, string> predicate);
 

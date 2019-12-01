@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interfaces;
 using DataLayer;
+using DataLayer.Entities.Detailing;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,9 @@ namespace BusinessLayer.Implementations
             return Context.Set<TEntity>().FindAsync(id);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
-            Context.Set<TEntity>().LoadAsync();
+            await Context.Set<TEntity>().LoadAsync();
             return Context.Set<TEntity>().Local.ToObservableCollection();
         }
 

@@ -5,6 +5,9 @@ using BusinessLayer.Interfaces.Journals.AssemblyUnits;
 using BusinessLayer.Interfaces.Journals.Detailing;
 using BusinessLayer.Interfaces.TechnicalControlPlans.AssemblyUnits;
 using BusinessLayer.Interfaces.TechnicalControlPlans.Detailing;
+using DataLayer.Entities;
+using DataLayer.Journals;
+using DataLayer.TechnicalControlPlans;
 using System;
 using System.Threading.Tasks;
 
@@ -12,6 +15,7 @@ namespace BusinessLayer.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
+        IBaseDetailRepository<BaseJournal<BaseEntity, BaseTCP>, BaseTCP> BaseDetail { get; }
         IShutterReverseRepository ShutterReverse { get; }
         IShutterReverseJournalRepository ShutterReverseJournal { get; }
         IShutterReverseTCPRepository ShutterReverseTCP { get; }

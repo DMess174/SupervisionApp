@@ -1,4 +1,5 @@
-﻿using DataLayer;
+﻿using BusinessLayer;
+using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Journals;
 using DataLayer.TechnicalControlPlans;
@@ -17,7 +18,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         where TEntityTCP : BaseTCP
         where TEntityJournal : BaseJournal<TEntity, TEntityTCP>, new()
     {
-        
+
         private readonly DataContext db;
         private List<string> journalNumbers;
         private List<string> materials;
@@ -122,11 +123,10 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                         
                         var item = new TEntityJournal()
                         {
-                            
                             DetailDrawing = SelectedItem.Drawing,
                             DetailNumber = SelectedItem.Number,
                             DetailName = SelectedItem.Name,
-                            DetailId = SelectedItem.Id
+                            DetailId = SelectedItem.Id,
                         };
                         db.Set<TEntityJournal>().Add(item);
                         db.SaveChanges();
@@ -170,7 +170,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         {
             db = new DataContext();
             SelectedItem = db.Set<TEntity>().Find(id);
-            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.DetailName == SelectedItem.Name).OrderBy(x => x.PointId).ToList();
+            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Select(i => i.Number).Distinct().ToList();
             Materials = db.Set<TEntity>().Select(d => d.Material).Distinct().ToList();
             Drawings = db.Set<TEntity>().Select(s => s.Drawing).Distinct().ToList();
