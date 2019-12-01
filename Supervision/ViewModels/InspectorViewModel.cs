@@ -128,15 +128,8 @@ namespace Supervision.ViewModels
                         (
                             () =>
                             {
-                                if (SelectedItem != null)
-                                {
-                                    db.Inspectors.Update(SelectedItem);
-                                    db.SaveChanges();
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Объект не выбран!", "Ошибка");
-                                }
+                                db.Inspectors.UpdateRange(AllInstances);
+                                db.SaveChanges();
                             })
                     );
             }

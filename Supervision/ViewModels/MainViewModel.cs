@@ -158,6 +158,14 @@ namespace Supervision.ViewModels
                 return new DelegateCommand(() => SlowOpacity(inspector));
             }
         }
+        public ICommand ProductTypeOpen
+        {
+            get
+            {
+                Page product = new ProductTypeView();
+                return new DelegateCommand(() => SlowOpacity(product));
+            }
+        }
 
 
         public ICommand ShutterReverseTCPOpen

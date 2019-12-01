@@ -8,7 +8,7 @@ namespace DataLayer
         public string Name { get; set; }
         public string ShortName { get; set; }
 
-        public List <PID> PIDs { get; set; }
+        public List<PID> PIDs { get; set; }
 
     }
 }

@@ -1,4 +1,4 @@
-﻿<Page x:Class="Supervision.Views.EntityViews.InspectorView"
+﻿<Page x:Class="Supervision.Views.EntityViews.ProductTypeView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -80,86 +80,51 @@
     </Page.Resources>
     <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="5"/>
             <RowDefinition />
             <RowDefinition Height="50"/>
             <RowDefinition Height="5" />
-            <RowDefinition Height="152"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        
-        <StackPanel Grid.Row="0" 
-                    Orientation="Horizontal" 
-                    Margin="5 5 0 0">
-            <TextBlock Text="ФИО" 
-                       Style="{StaticResource BaseTextBlock}" 
-                       Margin="5 0 5 0" 
-                       VerticalAlignment="Center"/>
-            
-            <TextBox Style="{StaticResource BaseTextBox}"   
-                     Width="100"
-                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-            
-            <TextBlock Text="Служба" 
-                       Style="{StaticResource BaseTextBlock}" 
-                       Margin="5 0 5 0" 
-                       VerticalAlignment="Center"/>
-            
-            <TextBox Style="{StaticResource BaseTextBox}" 
-                       Width="100"
-                       Text="{Binding Department, UpdateSourceTrigger=PropertyChanged}" />
-            
-            <TextBlock Text="Управление" 
-                       Style="{StaticResource BaseTextBlock}"
-                       Margin="5 0 5 0" 
-                       VerticalAlignment="Center"/>
-            
-            <TextBox Style="{StaticResource BaseTextBox}" 
-                       Width="100"
-                       Text="{Binding Subdivision, UpdateSourceTrigger=PropertyChanged}" />
-        </StackPanel>
-        
+
         <Separator Grid.Row="1" Foreground="Black" BorderBrush="#FF828790" Background="#FF828790" 
-                   Margin="0,0,0,0.5" VerticalContentAlignment="Center" Height="3" VerticalAlignment="Bottom"/>
+                   Margin="0,0,0,0.5" VerticalContentAlignment="Center" Height="3" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
 
         <DataGrid Style="{StaticResource BaseDataGrid}"
                 Grid.Row="2" 
-                Grid.Column="0" 
-                Grid.ColumnSpan="1"
+                Grid.ColumnSpan="2"
                 ItemsSource="{Binding AllInstancesView}"
                 SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"
                                     HeaderStyle="{StaticResource BaseDataGridHeader}" 
-                                    Width="35*" 
+                                    Width="35" 
                                     Binding="{Binding Path = Id}" 
                                     TextBlock.TextAlignment="Center">
                 </DataGridTextColumn>
-                
-                <DataGridTextColumn Header="ФИО" 
+
+                <DataGridTextColumn Header="Наименование" 
                                     HeaderStyle="{StaticResource BaseDataGridHeader}" 
                                     Width="200*" 
                                     Binding="{Binding Path = Name}" 
                                     TextBlock.TextAlignment="Center" >
                 </DataGridTextColumn>
-                
-                <DataGridTextColumn Header="Служба" 
+
+                <DataGridTextColumn Header="Сокращенное&#x0a;наименование"
                                     HeaderStyle="{StaticResource BaseDataGridHeader}" 
-                                    Width="200*" 
-                                    Binding="{Binding Path= Department}"/>
-                
-                <DataGridTextColumn Header="Управление" 
-                                    HeaderStyle="{StaticResource BaseDataGridHeader}" 
-                                    Width="150*" 
-                                    Binding ="{Binding Path = Subdivision}"/>
-            </DataGrid.Columns>
+                                    Width="170" 
+                                    Binding="{Binding Path= ShortName}"/>
+                </DataGrid.Columns>
         </DataGrid>
-        
-        <DockPanel Grid.Row="3"  Height="50" VerticalAlignment="Bottom" Margin="0,1" >
+
+        <DockPanel Grid.Row="2"  Height="50" VerticalAlignment="Bottom" Margin="0,0,0,1" Grid.ColumnSpan="2" Grid.RowSpan="2" >
             <StackPanel  DockPanel.Dock="Bottom" 
                          Background="LightGray" 
                          Orientation="Horizontal" 
@@ -169,7 +134,7 @@
                     Content="Добавить" 
                         Margin="10" 
                         Command="{Binding AddItem}" />
-                
+
                 <Button Content="Удалить" 
                         Style="{StaticResource BaseButton}" 
                         Margin="10" 
@@ -178,53 +143,37 @@
             </StackPanel>
         </DockPanel>
         <Separator Grid.Row="4" Foreground="Black" BorderBrush="#FF828790" Background="#FF828790" 
-                   Margin="0,0,0,0.5" VerticalContentAlignment="Center" Height="3" VerticalAlignment="Bottom"/>
-        <StackPanel Background="LightGray" 
-                    Grid.Row="5" 
-                    Grid.Column="0" 
-                    Margin="5,0,5,5" 
-                    Height="142" 
-                    VerticalAlignment="Bottom">
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock Style="{StaticResource BaseTextBlock}" 
-                           Text="ФИО" 
-                           Margin="5 0 0 0" />
-                
-                <TextBox Style="{StaticResource BaseTextBox}" 
-                         Width="300" 
-                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
-                        DataContext="{Binding SelectedItem}"
-                        Margin="60 0 0 0"/>
-            </StackPanel>
-            
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock Style="{StaticResource BaseTextBlock}" 
-                           Text="Служба" 
-                           Margin="5 0 0 0" />
-                <ComboBox Width="300" 
-                          IsEditable="True" 
-                          Text="{Binding SelectedItem.Department, UpdateSourceTrigger=PropertyChanged}" 
-                          ItemsSource="{Binding Departments}" 
-                          SelectedItem= "{Binding SelectedItem.Department}"
-                          Margin="41.5 0 0 0"/>
-            </StackPanel>
-            
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock Style="{StaticResource BaseTextBlock}" 
-                           Text="Управление" 
-                           Margin="5 0 0 0"  />
-                <ComboBox Width="300" 
-                          IsEditable="True" 
-                          Text="{Binding SelectedItem.Subdivision, UpdateSourceTrigger=PropertyChanged}" 
-                          ItemsSource="{Binding Subdivisions}" SelectedItem= "{Binding SelectedItem.Subdivision}"
-                          Margin="7 0 0 0"/>
-            </StackPanel>
-            <Button Style="{StaticResource BaseButton}" 
-                    Width="100" 
-                    Content="Сохранить" 
-                    Margin="10" 
-                    Command="{Binding SaveItem}" 
-                    CommandParameter="{Binding ElementName=AllInstance, Path=SelectedItem}" />
+                   Margin="0,0,0,0.5" VerticalContentAlignment="Center" Height="3" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
+        <StackPanel Grid.Row="5"
+                    Width="auto">
+            <TextBlock Style="{StaticResource BaseTextBlock}" 
+                           Text="Наименование" 
+                           Margin="5" />
+
+            <TextBlock Style="{StaticResource BaseTextBlock}" 
+                           Text="Сокращенное &#x0a;наименование" 
+                           Margin="5" />
         </StackPanel>
+        <StackPanel Grid.Row="5"
+                    Grid.Column="1" 
+                    HorizontalAlignment="Left">
+            <TextBox Style="{StaticResource BaseTextBox}"
+                     Width="300" 
+                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                     DataContext="{Binding SelectedItem}"/>
+
+            <TextBox Style="{StaticResource BaseTextBox}" 
+                     Width="300"
+                     Margin="0 12"
+                     Text="{Binding ShortName, UpdateSourceTrigger=PropertyChanged}" 
+                     DataContext="{Binding SelectedItem}"/>
+        </StackPanel>
+        <Button Grid.Row="6" Grid.ColumnSpan="2"
+                Style="{StaticResource BaseButton}" 
+                Width="100" 
+                Content="Сохранить" 
+                Margin="10" 
+                Command="{Binding SaveItem}" 
+                CommandParameter="{Binding ElementName=AllInstance, Path=SelectedItem}" />
     </Grid>
 </Page>

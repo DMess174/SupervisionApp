@@ -25,7 +25,7 @@
               Background="LightGray">
             
             <MenuItem Style="{StaticResource BaseMenuItem}" 
-                      Header="Файл" >
+                      Header="Файл">
                 <MenuItem Style="{StaticResource BaseMenuItem}"
                           Header="New Project" />
                 <MenuItem Style="{StaticResource BaseMenuItem}"
@@ -51,7 +51,8 @@
 
             <MenuItem Style="{StaticResource BaseMenuItem}"
                       Header="Изделие" >
-                <MenuItem Header="Тип" />
+                <MenuItem Header="Тип"
+                          Command="{Binding ProductTypeOpen}"/>
                 <MenuItem Header="Задвижка шиберная (ЗШ)" />
                 <MenuItem Header="Задвижка Шиберная Листовая (ЗШЛ)" />
                 <MenuItem Header="Задвижка Компактная с расширяющимся затвором (ЗШК)" />
@@ -146,10 +147,10 @@
                 <ColumnDefinition Width="426*" MinWidth="500"/>
             </Grid.ColumnDefinitions>
             <TreeView Style="{StaticResource BaseTreeView}"
-                      Grid.Column="0">
-                <Label Style="{StaticResource BaseLabel}" 
-                       Content="Сущности"/>
-                <TreeViewItem Header="Изделие">
+                      Grid.Column="0"
+                      Margin="3">
+                <TreeViewItem Header="Изделие"
+                              Margin="2">
                     <Button Style="{StaticResource TreeViewButton}" 
                             Command="{Binding AddItem}" 
                             Content="(ЗШ) Задвижка шиберная"/>
@@ -163,7 +164,8 @@
                             Command="{Binding ShutterReverseOpen}" 
                             Content="(ЗО) Затвор обратный"/>
                 </TreeViewItem>
-                <TreeViewItem Header="Деталировка">
+                <TreeViewItem Header="Деталировка"
+                              Margin="2">
                     <TreeViewItem Header="Затвор обратный">
                         <Button Style="{StaticResource TreeViewButton}"
                                 Command="{Binding BronzeSleeveShutterOpen}" 
