@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="Styles\DataGrids.xaml" />
                 <ResourceDictionary Source="Styles\Menu.xaml" />
                 <ResourceDictionary Source="Styles\Comboboxes.xaml" />
+                <ResourceDictionary Source="Styles\ListBoxes.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

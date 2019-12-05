@@ -1,13 +1,14 @@
 ﻿using System.Windows;
 
+
 namespace Supervision.Views.EntityViews.DetailViews
 {
     /// <summary>
     /// Логика взаимодействия для ShutterReverse.xaml
     /// </summary>
-    public partial class CaseShutterView : Window
+    public partial class CastingCaseEditView : Window
     {
-        public CaseShutterView()
+        public CastingCaseEditView()
         {
             InitializeComponent();
         }

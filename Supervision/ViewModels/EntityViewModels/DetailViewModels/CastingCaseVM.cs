@@ -1,6 +1,7 @@
 ﻿using DataLayer;
 using DataLayer.Entities.Detailing;
-using DataLayer.Journals.Detailing;
+using DataLayer.Journals;
+using DataLayer.TechnicalControlPlans;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
 using Supervision.Views.EntityViews.DetailViews;
@@ -13,12 +14,15 @@ using System.Windows.Input;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
-    public class NozzleVM : BasePropertyChanged
+    public class CastingCaseVM<TEntity, TEntityTCP, TEntityJournal> : BasePropertyChanged
+        where TEntity : BaseCastingCase, new()
+        where TEntityJournal : BaseJournal<TEntity,TEntityTCP>, new()
+        where TEntityTCP : BaseTCP
     {
         private readonly DataContext db;
-        private IEnumerable<Nozzle> allInstances;
+        private IEnumerable<TEntity> allInstances;
         private ICollectionView allInstancesView;
-        private Nozzle selectedItem;
+        private TEntity selectedItem;
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
@@ -43,7 +47,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Number");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is Nozzle item && item.Number != null)
+                    if (obj is TEntity item && item.Number != null)
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
@@ -60,7 +64,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Drawing");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is Nozzle item && item.Drawing != null)
+                    if (obj is TEntity item && item.Drawing != null)
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
@@ -77,7 +81,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Status");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is Nozzle item && item.Status != null)
+                    if (obj is TEntity item && item.Status != null)
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
@@ -94,7 +98,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Material");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is Nozzle item && item.Material != null)
+                    if (obj is TEntity item && item.Material != null)
                     {
                         return item.Material.ToLower().Contains(Material.ToLower());
                     }
@@ -111,7 +115,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Certificate");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is Nozzle item && item.Certificate != null)
+                    if (obj is TEntity item && item.Certificate != null)
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
@@ -128,7 +132,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Melt");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is Nozzle item && item.Melt != null)
+                    if (obj is TEntity item && item.Melt != null)
                     {
                         return item.Melt.ToLower().Contains(Melt.ToLower());
                     }
@@ -159,8 +163,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                     {
                         if (SelectedItem != null)
                         {
-                            var wn = new NozzleEditView();
-                            var vm = new NozzleEditVM(SelectedItem.Id, SelectedItem);
+                            var wn = new CastingCaseEditView();
+                            var vm = new CastingCaseEditVM<TEntity, Inspector, TEntityTCP, TEntityJournal>(SelectedItem.Id);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -179,7 +183,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                     {
                         if (SelectedItem != null)
                         {
-                            var item = new Nozzle()
+                            var item = new TEntity()
                             {
                                 Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
                                 Drawing = SelectedItem.Drawing,
@@ -187,17 +191,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                                 Melt = SelectedItem.Melt,
                                 Certificate = SelectedItem.Certificate,
                                 Status = SelectedItem.Status,
-                                Name = SelectedItem.Name,
-                                Diameter = SelectedItem.Diameter,
-                                Thickness = SelectedItem.Thickness,
-                                ThicknessJoin = SelectedItem.ThicknessJoin
+                                Name = SelectedItem.Name
                             };
-                            db.Nozzles.Add(item);
+                            db.Set<TEntity>().Add(item);
                             db.SaveChanges();
-                            var Journal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
+                            var Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).ToList();
                             foreach (var record in Journal)
                             {
-                                var Record = new NozzleJournal()
+                                var Record = new TEntityJournal()
                                 {
                                     Date = record.Date,
                                     DetailId = item.Id,
@@ -212,7 +213,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                                     Status = record.Status,
                                     JournalNumber = record.JournalNumber
                                 };
-                                db.NozzleJournals.Add(Record);
+                                db.Set<TEntityJournal>().Add(Record);
                                 db.SaveChanges();
                             }
 
@@ -229,14 +230,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 return addItem ?? (
                     addItem = new DelegateCommand<Window>((w) =>
                     {
-                        var item = new Nozzle();
-                        db.Nozzles.Add(item);
+                        var item = new TEntity();
+                        db.Set<TEntity>().Add(item);
                         db.SaveChanges();
                         SelectedItem = item;
-                        var tcpPoints = db.NozzleTCPs.ToList();
+                        var tcpPoints = db.Set<TEntityTCP>().ToList();
                         foreach (var i in tcpPoints)
                         {
-                            var journal = new NozzleJournal()
+                            var journal = new TEntityJournal()
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
@@ -248,12 +249,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                             };
                             if (journal != null)
                             {
-                                db.NozzleJournals.Add(journal);
+                                db.Set<TEntityJournal>().Add(journal);
                                 db.SaveChanges();
                             }
                         }
-                        var wn = new NozzleEditView();
-                        var vm = new NozzleEditVM(SelectedItem.Id, SelectedItem);
+                        var wn = new CastingCaseEditView();
+                        var vm = new CastingCaseEditVM<TEntity, Inspector, TEntityTCP, TEntityJournal>(SelectedItem.Id);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
@@ -269,7 +270,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                     {
                         if (SelectedItem != null)
                         {
-                            db.Nozzles.Remove(SelectedItem);
+                            db.Set<TEntity>().Remove(SelectedItem);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -288,7 +289,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public Nozzle SelectedItem
+        public TEntity SelectedItem
         {
             get { return selectedItem; }
             set
@@ -298,7 +299,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public IEnumerable<Nozzle> AllInstances
+        public IEnumerable<TEntity> AllInstances
         {
             get { return allInstances; }
             set
@@ -317,11 +318,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public NozzleVM()
+        public CastingCaseVM()
         {
             db = new DataContext();
-            db.Nozzles.Load();
-            AllInstances = db.Nozzles.Local.ToObservableCollection();
+            db.Set<TEntity>().Load();
+            AllInstances = db.Set<TEntity>().Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             if (AllInstances.Count() != 0)
             {

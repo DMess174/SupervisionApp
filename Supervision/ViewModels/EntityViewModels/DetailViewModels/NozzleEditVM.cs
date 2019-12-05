@@ -1,4 +1,5 @@
 ﻿using DataLayer;
+using DataLayer.Entities;
 using DataLayer.Entities.Detailing;
 using DataLayer.Journals.Detailing;
 using DataLayer.TechnicalControlPlans.Detailing;
@@ -13,7 +14,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
     public class NozzleEditVM : BasePropertyChanged
     {
-
         private readonly DataContext db;
         private List<string> journalNumbers;
         private List<string> materials;
@@ -24,6 +24,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         private List<NozzleTCP> points;
         private List<Inspector> inspectors;
         private IEnumerable<NozzleJournal> journal;
+        private readonly BaseEntity ParentEntity;
 
         private Nozzle selectedItem;
         private ICommand saveItem;
@@ -103,11 +104,22 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        var wn = new NozzleView();
-                        var vm = new NozzleVM();
-                        wn.DataContext = vm;
-                        w?.Close();
-                        wn.ShowDialog();
+                        if (ParentEntity is ShutterCase)
+                        {
+                            var wn = new CastingCaseEditView();
+                            var vm = new CastingCaseEditVM<ShutterCase, Inspector, CaseShutterTCP, CaseShutterJournal>(ParentEntity.Id);
+                            wn.DataContext = vm;
+                            w?.Close();
+                            wn.ShowDialog();
+                        }
+                        else if (ParentEntity is Nozzle)
+                        {
+                            var wn = new NozzleView();
+                            var vm = new NozzleVM();
+                            wn.DataContext = vm;
+                            w?.Close();
+                            wn.ShowDialog();
+                        }
                     }));
             }
         }
@@ -191,8 +203,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public NozzleEditVM(int id)
+        public NozzleEditVM(int id, BaseEntity entity)
         {
+            ParentEntity = entity;
             db = new DataContext();
             SelectedItem = db.Nozzles.Find(id);
             Journal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();

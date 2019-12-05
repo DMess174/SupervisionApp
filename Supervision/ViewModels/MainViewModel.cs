@@ -59,21 +59,39 @@ namespace Supervision.ViewModels
                             });
             }
         }
-        //public ICommand CaseShutterOpen
-        //{
-        //    get
-        //    {
-        //        return new DelegateCommand
-        //                (
-        //                    () =>
-        //                    {
-        //                        var w = new CaseShutterView();
-        //                        var vm = new CaseShutterViewModel();
-        //                        w.DataContext = vm;
-        //                        w.ShowDialog();
-        //                    });
-        //    }
-        //}
+
+        public ICommand CaseShutterOpen
+        {
+            get
+            {
+                return new DelegateCommand
+                        (
+                            () =>
+                            {
+                                var w = new CastingCaseView();
+                                var vm = new CastingCaseVM<ShutterCase, CaseShutterTCP, CaseShutterJournal>();
+                                w.DataContext = vm;
+                                w.ShowDialog();
+                            });
+            }
+        }
+
+        public ICommand ValveCaseOpen
+        {
+            get
+            {
+                return new DelegateCommand
+                        (
+                            () =>
+                            {
+                                var w = new CastingCaseView();
+                                var vm = new CastingCaseVM<ValveCase, ValveCaseTCP, ValveCaseJournal>();
+                                w.DataContext = vm;
+                                w.ShowDialog();
+                            });
+            }
+        }
+
         public ICommand NozzleOpen
         {
             get

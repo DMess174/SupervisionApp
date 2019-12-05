@@ -69,4 +69,52 @@
         <Setter Property="Background" Value="LightGray"/>
         <Setter Property="Foreground" Value="Black"/>
     </Style>
+
+    <Style x:Key="GlassButton" TargetType="{x:Type Button}">
+        <Setter Property="FontSize" Value="{StaticResource Regular}" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBlock}">
+                    <Border x:Name="ButtonBorder" 
+                  CornerRadius="10,10,10,10" 
+                  BorderThickness="2" 
+                  Background="#AA000000"  
+                  BorderBrush="#99FFFFFF"
+                  RenderTransformOrigin="0.5,0.5">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="1.7*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" CornerRadius="23,23,0,0">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                        <GradientStop Color="#08FFFFFF" Offset="0"/>
+                                        <GradientStop Color="#88FFFFFF" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+                            <ContentPresenter x:Name="ButtonContentPresenter"
+                                VerticalAlignment="Center"  
+                                Grid.RowSpan="2" 
+                                HorizontalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <!-- <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True"> 
+                            <Setter Property="RenderTransform" TargetName="ButtonBorder">
+                                <Setter.Value>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                                    </TransformGroup>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers> -->
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

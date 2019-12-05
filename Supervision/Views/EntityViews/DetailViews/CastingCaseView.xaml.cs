@@ -6,9 +6,9 @@ namespace Supervision.Views.EntityViews.DetailViews
     /// <summary>
     /// Логика взаимодействия для ShutterReverse.xaml
     /// </summary>
-    public partial class CaseShutterEditView : Window
+    public partial class CastingCaseView : Window
     {
-        public CaseShutterEditView()
+        public CastingCaseView()
         {
             InitializeComponent();
         }

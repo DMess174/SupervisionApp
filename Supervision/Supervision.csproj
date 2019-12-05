@@ -348,6 +348,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CastingCaseEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CastingCaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\NozzleEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\BaseDetailEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\NozzleVM.cs" />
@@ -356,11 +358,11 @@
     <Compile Include="ViewModels\ProductTypeViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyViewModels\ShutterReverseViewModel.cs" />
-    <Compile Include="Views\EntityViews\DetailViews\CaseShutterEditView.xaml.cs">
-      <DependentUpon>CaseShutterEditView.xaml</DependentUpon>
+    <Compile Include="Views\EntityViews\DetailViews\CastingCaseView.xaml.cs">
+      <DependentUpon>CastingCaseView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EntityViews\DetailViews\CaseShutterView.xaml.cs">
-      <DependentUpon>CaseShutterView.xaml</DependentUpon>
+    <Compile Include="Views\EntityViews\DetailViews\CastingCaseEditView.xaml.cs">
+      <DependentUpon>CastingCaseEditView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\NozzleEditView.xaml.cs">
       <DependentUpon>NozzleEditView.xaml</DependentUpon>
@@ -380,6 +382,10 @@
     <Compile Include="Views\TCPViews\TCPView.xaml.cs">
       <DependentUpon>TCPView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Styles\ListBoxes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\Buttons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -416,11 +422,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\EntityViews\DetailViews\CaseShutterEditView.xaml">
+    <Page Include="Views\EntityViews\DetailViews\CastingCaseView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\EntityViews\DetailViews\CaseShutterView.xaml">
+    <Page Include="Views\EntityViews\DetailViews\CastingCaseEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -54,10 +54,12 @@ namespace DataLayer.Entities.Detailing
             }
         }
 
-        public List<CaseShutter> FirstCaseShutters { get; set; }
-        public List<CaseShutter> SecondCaseShutters { get; set; }
 
-        public List<NozzleJournal> NozzleJournals{ get; set; }
+        public int? CastingCaseId { get; set; }
+
+        public BaseCastingCase CastingCase { get; set; }
+
+        public List<NozzleJournal> NozzleJournals { get; set; }
         [NotMapped]
         public List<NozzleTCP> NozzleTCPs{ get; set; }
     }

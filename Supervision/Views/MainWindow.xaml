@@ -81,10 +81,10 @@
                           Command="{Binding NozzleOpen}"/>
 
                 <MenuItem Header="Корпус" >
-                    <MenuItem Header="ЗШ" />
+                    <MenuItem Header="ЗШ" Command="{Binding ValveCaseOpen}" />
                     <MenuItem Header="ЗШЛ" />
                     <MenuItem Header="ЗШК" />
-                    <MenuItem Header="ЗО" />
+                    <MenuItem Header="ЗО" Command="{Binding CaseShutterOpen}" />
                 </MenuItem>
                 
                 <MenuItem Header="Крышка" >
@@ -190,7 +190,9 @@
                                 Content="Ось" />
                     </TreeViewItem>
                     <TreeViewItem Header="Задвижка шиберная">
-                        <TreeViewItem Header="Корпус" />
+                        <Button Style="{StaticResource TreeViewButton}"
+                                Command="{Binding ValveCaseOpen}"
+                                Content="Корпус" />
                         <TreeViewItem Header="Крышка" />
                         <TreeViewItem Header="Шпиндель" />
                     </TreeViewItem>

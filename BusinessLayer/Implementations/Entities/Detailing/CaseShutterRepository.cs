@@ -4,7 +4,7 @@ using DataLayer.Entities.Detailing;
 
 namespace BusinessLayer.Implementations.Entities.Detailing
 {
-    public class CaseShutterRepository : Repository<CaseShutter>, ICaseShutterRepository
+    public class CaseShutterRepository : Repository<ShutterCase>, ICaseShutterRepository
     {
         public CaseShutterRepository(DataContext context)
             : base(context)

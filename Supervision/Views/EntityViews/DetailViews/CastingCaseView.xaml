@@ -1,107 +1,106 @@
-﻿<Window x:Class="Supervision.Views.EntityViews.DetailViews.CaseShutterView"
+﻿<Window x:Class="Supervision.Views.EntityViews.DetailViews.CastingCaseView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
-      xmlns:viewmodel="clr-namespace:Supervision.ViewModels"
-      mc:Ignorable="d" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       WindowStartupLocation="CenterScreen"
-      Title="Корпус затвора">
+      Title="{Binding Name}">
 
     <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="5"/>
             <RowDefinition />
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        
+
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="11*"/>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="13*"/>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="13*"/>
             </Grid.ColumnDefinitions>
-            
-            <StackPanel Grid.Column="0" Orientation="Vertical" Margin="5">
+
+            <StackPanel Grid.Column="0" Orientation="Vertical" Margin="5,5,5,4.8">
                 <TextBlock Style="{StaticResource BaseTextBlock}" 
                            Text="Номер" 
                            Margin="5" 
                            VerticalAlignment="Center"/>
-                
+
                 <TextBlock Style="{StaticResource BaseTextBlock}" 
                            Text="Чертеж" 
                            Margin="5" 
                            VerticalAlignment="Center"/>
             </StackPanel>
-            
+
             <StackPanel Grid.Column="1" 
                         Orientation="Vertical" 
-                        Margin="5">
+                        Margin="5,5,5.4,4.8" Grid.ColumnSpan="2">
                 <TextBox Style="{StaticResource BaseTextBox}" 
                          VerticalAlignment="Center" 
                          Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}" />
-                
+
                 <TextBox Style="{StaticResource BaseTextBox}" 
                          VerticalAlignment="Center" 
                          Text="{Binding Drawing, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
-            
-            <StackPanel Grid.Column="2" Orientation="Vertical" Margin="5">
+
+            <StackPanel Grid.Column="3" Orientation="Vertical" Margin="4.6,5,4.6,4.8">
                 <TextBlock Style="{StaticResource BaseTextBlock}" 
                            Text="Материал" 
                            Margin="5" 
                            VerticalAlignment="Center"/>
-                
+
                 <TextBlock Style="{StaticResource BaseTextBlock}"  
                            Text="Сертификат" 
                            Margin="5" 
                            VerticalAlignment="Center"/>
             </StackPanel>
-            
-            <StackPanel Grid.Column="3" 
+
+            <StackPanel Grid.Column="4" 
                         Orientation="Vertical" 
-                        Margin="5">
+                        Margin="5.4,5,5,4.8">
                 <TextBox Style="{StaticResource BaseTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
                          Text="{Binding Material, UpdateSourceTrigger=PropertyChanged}" />
-                
+
                 <TextBox Style="{StaticResource BaseTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
                          Text="{Binding Certificate, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
-            
-            <StackPanel Grid.Column="4" 
+
+            <StackPanel Grid.Column="5" 
                         Orientation="Vertical" 
-                        Margin="5">
+                        Margin="5,5,5.2,4.8">
                 <TextBlock Style="{StaticResource BaseTextBlock}" 
                            Text="Плавка" Margin="5" 
                            VerticalAlignment="Center"/>
-                
+
                 <TextBlock Style="{StaticResource BaseTextBlock}"  
                            Text="Статус" Margin="5" 
                            VerticalAlignment="Center"/>
             </StackPanel>
-            
-            <StackPanel Grid.Column="5" 
+
+            <StackPanel Grid.Column="6" 
                         Orientation="Vertical" 
-                        Margin="5">
+                        Margin="4.8,5,4.6,4.8">
                 <TextBox Style="{StaticResource BaseTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
                          Text="{Binding Melt, UpdateSourceTrigger=PropertyChanged}" />
-                
+
                 <TextBox Style="{StaticResource BaseTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
@@ -117,7 +116,7 @@
                    VerticalContentAlignment="Center" 
                    Height="3" 
                    VerticalAlignment="Bottom"/>
-        
+
         <DataGrid
                 Style="{StaticResource BaseDataGrid}"
                 Grid.Row="2" 
@@ -125,14 +124,14 @@
                 Grid.ColumnSpan="1"
                 ItemsSource="{Binding AllInstancesView}"
                 SelectedItem="{Binding SelectedItem}">
-            
+
             <DataGrid.InputBindings>
                 <MouseBinding
                     MouseAction="LeftDoubleClick"
                     Command="{Binding EditItem}"
                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
             </DataGrid.InputBindings>
-            
+
             <DataGrid.Columns>
                 <DataGridTextColumn HeaderStyle="{StaticResource BaseDataGridHeader}" 
                                     Header="ID" 
@@ -179,11 +178,24 @@
                    Margin="0,1" >
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel  DockPanel.Dock="Bottom" 
+                <StackPanel DockPanel.Dock="Bottom"
+                            Orientation="Horizontal" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Bottom">
+                    <Button Style="{StaticResource BaseButton}"
+                        Content="Копировать запись" 
+                        Margin="10" 
+                        Command="{Binding CopyItem}" 
+                        CommandParameter="{Binding ElementName=AllInstances, Path=SelectedItem}" />
+                </StackPanel>
+
+                <StackPanel  DockPanel.Dock="Bottom"
+                         Grid.Column="1"
                          Grid.ColumnSpan="2"
                          Background="LightGray" 
                          Orientation="Horizontal" 
@@ -202,6 +214,7 @@
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
                     <Button Style="{StaticResource BaseButton}"
+                        Visibility="Collapsed"
                         Content="Удалить" 
                         Margin="10" 
                         Command="{Binding RemoveItem}"
@@ -209,8 +222,9 @@
                 </StackPanel>
 
                 <StackPanel 
-                        Grid.Column="1"
-                        Orientation="Horizontal">
+                        Grid.Column="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
                     <Button Style="{StaticResource BaseButton}"
                             HorizontalAlignment="Right"
                             Content="Закрыть" 

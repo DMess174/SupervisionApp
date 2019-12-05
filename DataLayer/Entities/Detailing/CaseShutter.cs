@@ -6,21 +6,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Entities.Detailing
 {
-    public class CaseShutter : BaseDetail
+    public class ShutterCase : BaseCastingCase
     {
-        public CaseShutter() : base()
+        public ShutterCase() : base()
         {
             Name = "Корпус затвора";
         }
-
-        public int? FirstNozzleId { get; set; }
-        public int? SecondNozzleId { get; set; }
-
-        [InverseProperty("FirstCaseShutters")]
-        public Nozzle FirstNozzle { get; set; }
-
-        [InverseProperty("SecondCaseShutters")]
-        public Nozzle SecondNozzle { get; set; }
 
         public List<ShutterReverse> ShutterReverses { get; set; }
 

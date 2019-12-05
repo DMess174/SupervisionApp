@@ -22,7 +22,7 @@ namespace DataLayer
         public DbSet<BronzeSleeveShutterTCP> BronzeSleeveShutterTCPs { get; set; }
         public DbSet<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
         
-        public DbSet<CaseShutter> CaseShutters { get; set; }
+        public DbSet<ShutterCase> CaseShutters { get; set; }
         public DbSet<CaseShutterTCP> CaseShutterTCPs{ get; set; }
         public DbSet<CaseShutterJournal> CaseShutterJournals{ get; set; }
 
@@ -49,6 +49,10 @@ namespace DataLayer
         public DbSet<StubShutter> StubShutters { get; set; }
         public DbSet<StubShutterTCP> StubShutterTCPs { get; set; }
         public DbSet<StubShutterJournal> StubShutterJournals { get; set; }
+
+        public DbSet<ValveCase> ValveCases { get; set; }
+        public DbSet<ValveCaseTCP> ValveCaseTCPs { get; set; }
+        public DbSet<ValveCaseJournal> ValveCaseJournals { get; set; }
 
         public DataContext()
         {

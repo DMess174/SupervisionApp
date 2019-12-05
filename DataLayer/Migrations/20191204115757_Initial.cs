@@ -8,6 +8,26 @@ namespace DataLayer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "BaseCastingCase",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Number = table.Column<string>(nullable: true),
+                    Drawing = table.Column<string>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Material = table.Column<string>(nullable: true),
+                    Certificate = table.Column<string>(nullable: true),
+                    Melt = table.Column<string>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BaseCastingCase", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BronzeSleeveShutters",
                 columns: table => new
                 {
@@ -86,25 +106,17 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Nozzles",
+                name: "JournalNumbers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Number = table.Column<string>(nullable: true),
-                    Drawing = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Material = table.Column<string>(nullable: true),
-                    Certificate = table.Column<string>(nullable: true),
-                    Melt = table.Column<string>(nullable: true),
-                    Diameter = table.Column<string>(nullable: true),
-                    Thickness = table.Column<string>(nullable: true),
-                    ThicknessJoin = table.Column<string>(nullable: true)
+                    IsHidden = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Nozzles", x => x.Id);
+                    table.PrimaryKey("PK_JournalNumbers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -288,6 +300,50 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ValveCaseTCPs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Point = table.Column<string>(nullable: true),
+                    OperationName = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ValveCaseTCPs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Nozzles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Number = table.Column<string>(nullable: true),
+                    Drawing = table.Column<string>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Material = table.Column<string>(nullable: true),
+                    Certificate = table.Column<string>(nullable: true),
+                    Melt = table.Column<string>(nullable: true),
+                    Diameter = table.Column<string>(nullable: true),
+                    Thickness = table.Column<string>(nullable: true),
+                    ThicknessJoin = table.Column<string>(nullable: true),
+                    CastingCaseId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Nozzles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Nozzles_BaseCastingCase_CastingCaseId",
+                        column: x => x.CastingCaseId,
+                        principalTable: "BaseCastingCase",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Specifications",
                 columns: table => new
                 {
@@ -318,8 +374,10 @@ namespace DataLayer.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     DetailName = table.Column<string>(nullable: true),
                     DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
                     Point = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: true),
                     Status = table.Column<string>(nullable: true),
                     Remark = table.Column<string>(nullable: true),
@@ -351,48 +409,17 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CaseShutters",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Number = table.Column<string>(nullable: true),
-                    Drawing = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Material = table.Column<string>(nullable: true),
-                    Certificate = table.Column<string>(nullable: true),
-                    Melt = table.Column<string>(nullable: true),
-                    FirstNozzleId = table.Column<int>(nullable: true),
-                    SecondNozzleId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CaseShutters", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CaseShutters_Nozzles_FirstNozzleId",
-                        column: x => x.FirstNozzleId,
-                        principalTable: "Nozzles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CaseShutters_Nozzles_SecondNozzleId",
-                        column: x => x.SecondNozzleId,
-                        principalTable: "Nozzles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "NozzleJournals",
+                name: "CaseShutterJournals",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     DetailName = table.Column<string>(nullable: true),
                     DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
                     Point = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: true),
                     Status = table.Column<string>(nullable: true),
                     Remark = table.Column<string>(nullable: true),
@@ -402,23 +429,23 @@ namespace DataLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NozzleJournals", x => x.Id);
+                    table.PrimaryKey("PK_CaseShutterJournals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_NozzleJournals_Nozzles_DetailId",
+                        name: "FK_CaseShutterJournals_BaseCastingCase_DetailId",
                         column: x => x.DetailId,
-                        principalTable: "Nozzles",
+                        principalTable: "BaseCastingCase",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_NozzleJournals_Inspectors_InspectorId",
+                        name: "FK_CaseShutterJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_NozzleJournals_NozzleTCPs_PointId",
+                        name: "FK_CaseShutterJournals_CaseShutterTCPs_PointId",
                         column: x => x.PointId,
-                        principalTable: "NozzleTCPs",
+                        principalTable: "CaseShutterTCPs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -431,8 +458,10 @@ namespace DataLayer.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     DetailName = table.Column<string>(nullable: true),
                     DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
                     Point = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: true),
                     Status = table.Column<string>(nullable: true),
                     Remark = table.Column<string>(nullable: true),
@@ -471,8 +500,10 @@ namespace DataLayer.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     DetailName = table.Column<string>(nullable: true),
                     DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
                     Point = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: true),
                     Status = table.Column<string>(nullable: true),
                     Remark = table.Column<string>(nullable: true),
@@ -511,8 +542,10 @@ namespace DataLayer.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     DetailName = table.Column<string>(nullable: true),
                     DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
                     Point = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: true),
                     Status = table.Column<string>(nullable: true),
                     Remark = table.Column<string>(nullable: true),
@@ -551,8 +584,10 @@ namespace DataLayer.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     DetailName = table.Column<string>(nullable: true),
                     DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
                     Point = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: true),
                     Status = table.Column<string>(nullable: true),
                     Remark = table.Column<string>(nullable: true),
@@ -579,6 +614,84 @@ namespace DataLayer.Migrations
                         name: "FK_StubShutterJournals_StubShutterTCPs_PointId",
                         column: x => x.PointId,
                         principalTable: "StubShutterTCPs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ValveCaseJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Remark = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ValveCaseJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ValveCaseJournals_BaseCastingCase_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "BaseCastingCase",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ValveCaseJournals_ValveCaseTCPs_PointId",
+                        column: x => x.PointId,
+                        principalTable: "ValveCaseTCPs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NozzleJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Remark = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NozzleJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NozzleJournals_Nozzles_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "Nozzles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_NozzleJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_NozzleJournals_NozzleTCPs_PointId",
+                        column: x => x.PointId,
+                        principalTable: "NozzleTCPs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -620,46 +733,6 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CaseShutterJournals",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DetailName = table.Column<string>(nullable: true),
-                    DetailNumber = table.Column<string>(nullable: true),
-                    Point = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    Remark = table.Column<string>(nullable: true),
-                    InspectorId = table.Column<int>(nullable: true),
-                    DetailId = table.Column<int>(nullable: true),
-                    PointId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CaseShutterJournals", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CaseShutterJournals_CaseShutters_DetailId",
-                        column: x => x.DetailId,
-                        principalTable: "CaseShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CaseShutterJournals_Inspectors_InspectorId",
-                        column: x => x.InspectorId,
-                        principalTable: "Inspectors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CaseShutterJournals_CaseShutterTCPs_PointId",
-                        column: x => x.PointId,
-                        principalTable: "CaseShutterTCPs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ShutterReverses",
                 columns: table => new
                 {
@@ -684,9 +757,9 @@ namespace DataLayer.Migrations
                 {
                     table.PrimaryKey("PK_ShutterReverses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShutterReverses_CaseShutters_CaseShutterId",
+                        name: "FK_ShutterReverses_BaseCastingCase_CaseShutterId",
                         column: x => x.CaseShutterId,
-                        principalTable: "CaseShutters",
+                        principalTable: "BaseCastingCase",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -753,8 +826,10 @@ namespace DataLayer.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     DetailName = table.Column<string>(nullable: true),
                     DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
                     Point = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: true),
                     Status = table.Column<string>(nullable: true),
                     Remark = table.Column<string>(nullable: true),
@@ -816,16 +891,6 @@ namespace DataLayer.Migrations
                 column: "PointId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CaseShutters_FirstNozzleId",
-                table: "CaseShutters",
-                column: "FirstNozzleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CaseShutters_SecondNozzleId",
-                table: "CaseShutters",
-                column: "SecondNozzleId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_NozzleJournals_DetailId",
                 table: "NozzleJournals",
                 column: "DetailId");
@@ -839,6 +904,11 @@ namespace DataLayer.Migrations
                 name: "IX_NozzleJournals_PointId",
                 table: "NozzleJournals",
                 column: "PointId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Nozzles_CastingCaseId",
+                table: "Nozzles",
+                column: "CastingCaseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PIDs_ProductTypeId",
@@ -979,6 +1049,16 @@ namespace DataLayer.Migrations
                 name: "IX_StubShutterJournals_PointId",
                 table: "StubShutterJournals",
                 column: "PointId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ValveCaseJournals_DetailId",
+                table: "ValveCaseJournals",
+                column: "DetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ValveCaseJournals_PointId",
+                table: "ValveCaseJournals",
+                column: "PointId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -988,6 +1068,9 @@ namespace DataLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "CaseShutterJournals");
+
+            migrationBuilder.DropTable(
+                name: "JournalNumbers");
 
             migrationBuilder.DropTable(
                 name: "NozzleJournals");
@@ -1008,10 +1091,16 @@ namespace DataLayer.Migrations
                 name: "StubShutterJournals");
 
             migrationBuilder.DropTable(
+                name: "ValveCaseJournals");
+
+            migrationBuilder.DropTable(
                 name: "BronzeSleeveShutterTCPs");
 
             migrationBuilder.DropTable(
                 name: "CaseShutterTCPs");
+
+            migrationBuilder.DropTable(
+                name: "Nozzles");
 
             migrationBuilder.DropTable(
                 name: "NozzleTCPs");
@@ -1038,7 +1127,10 @@ namespace DataLayer.Migrations
                 name: "StubShutterTCPs");
 
             migrationBuilder.DropTable(
-                name: "CaseShutters");
+                name: "ValveCaseTCPs");
+
+            migrationBuilder.DropTable(
+                name: "BaseCastingCase");
 
             migrationBuilder.DropTable(
                 name: "BronzeSleeveShutters");
@@ -1057,9 +1149,6 @@ namespace DataLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "SlamShutters");
-
-            migrationBuilder.DropTable(
-                name: "Nozzles");
 
             migrationBuilder.DropTable(
                 name: "ProductTypes");

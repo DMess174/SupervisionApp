@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.TechnicalControlPlans.Detailing
 {
-    public class CaseShutterTCP : BaseTCP
+    public class ValveCaseTCP : BaseTCP
     {
-        public List<CaseShutterJournal> CaseShutterJournals { get; set; }
+        public List<ValveCaseJournal> ValveCaseJournals { get; set; }
 
         [NotMapped]
-        public List<ShutterCase> CaseShutters { get; set; }
+        public List<ValveCase> ValveCases { get; set; }
     }
 }

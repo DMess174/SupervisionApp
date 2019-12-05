@@ -3,7 +3,7 @@ using DataLayer.TechnicalControlPlans.Detailing;
 
 namespace DataLayer.Journals.Detailing
 {
-    public class CaseShutterJournal : BaseJournal<ShutterCase, CaseShutterTCP>
+    public class ValveCaseJournal : BaseJournal<ValveCase, ValveCaseTCP>
     {
     }
 }

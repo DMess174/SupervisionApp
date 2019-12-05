@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191113193431_Initial")]
+    [Migration("20191204115757_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,6 +90,35 @@ namespace DataLayer.Migrations
                     b.ToTable("ShutterReverses");
                 });
 
+            modelBuilder.Entity("DataLayer.Entities.Detailing.BaseCastingCase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Certificate");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.Property<string>("Drawing");
+
+                    b.Property<string>("Material");
+
+                    b.Property<string>("Melt");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Number");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BaseCastingCase");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseCastingCase");
+                });
+
             modelBuilder.Entity("DataLayer.Entities.Detailing.BronzeSleeveShutter", b =>
                 {
                     b.Property<int>("Id")
@@ -114,42 +143,12 @@ namespace DataLayer.Migrations
                     b.ToTable("BronzeSleeveShutters");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Detailing.CaseShutter", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Certificate");
-
-                    b.Property<string>("Drawing");
-
-                    b.Property<int?>("FirstNozzleId");
-
-                    b.Property<string>("Material");
-
-                    b.Property<string>("Melt");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Number");
-
-                    b.Property<int?>("SecondNozzleId");
-
-                    b.Property<string>("Status");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FirstNozzleId");
-
-                    b.HasIndex("SecondNozzleId");
-
-                    b.ToTable("CaseShutters");
-                });
-
             modelBuilder.Entity("DataLayer.Entities.Detailing.Nozzle", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("CastingCaseId");
 
                     b.Property<string>("Certificate");
 
@@ -172,6 +171,8 @@ namespace DataLayer.Migrations
                     b.Property<string>("ThicknessJoin");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CastingCaseId");
 
                     b.ToTable("Nozzles");
                 });
@@ -297,6 +298,8 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("DetailDrawing");
+
                     b.Property<int?>("DetailId");
 
                     b.Property<string>("DetailName");
@@ -304,6 +307,8 @@ namespace DataLayer.Migrations
                     b.Property<string>("DetailNumber");
 
                     b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
 
                     b.Property<string>("Point");
 
@@ -333,6 +338,8 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("DetailDrawing");
+
                     b.Property<int?>("DetailId");
 
                     b.Property<string>("DetailName");
@@ -340,6 +347,8 @@ namespace DataLayer.Migrations
                     b.Property<string>("DetailNumber");
 
                     b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
 
                     b.Property<string>("Point");
 
@@ -369,6 +378,8 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("DetailDrawing");
+
                     b.Property<int?>("DetailId");
 
                     b.Property<string>("DetailName");
@@ -376,6 +387,8 @@ namespace DataLayer.Migrations
                     b.Property<string>("DetailNumber");
 
                     b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
 
                     b.Property<string>("Point");
 
@@ -405,6 +418,8 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("DetailDrawing");
+
                     b.Property<int?>("DetailId");
 
                     b.Property<string>("DetailName");
@@ -412,6 +427,8 @@ namespace DataLayer.Migrations
                     b.Property<string>("DetailNumber");
 
                     b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
 
                     b.Property<string>("Point");
 
@@ -441,6 +458,8 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("DetailDrawing");
+
                     b.Property<int?>("DetailId");
 
                     b.Property<string>("DetailName");
@@ -448,6 +467,8 @@ namespace DataLayer.Migrations
                     b.Property<string>("DetailNumber");
 
                     b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
 
                     b.Property<string>("Point");
 
@@ -477,6 +498,8 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("DetailDrawing");
+
                     b.Property<int?>("DetailId");
 
                     b.Property<string>("DetailName");
@@ -484,6 +507,8 @@ namespace DataLayer.Migrations
                     b.Property<string>("DetailNumber");
 
                     b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
 
                     b.Property<string>("Point");
 
@@ -513,6 +538,8 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("DetailDrawing");
+
                     b.Property<int?>("DetailId");
 
                     b.Property<string>("DetailName");
@@ -520,6 +547,8 @@ namespace DataLayer.Migrations
                     b.Property<string>("DetailNumber");
 
                     b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
 
                     b.Property<string>("Point");
 
@@ -549,6 +578,8 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("DetailDrawing");
+
                     b.Property<int?>("DetailId");
 
                     b.Property<string>("DetailName");
@@ -556,6 +587,8 @@ namespace DataLayer.Migrations
                     b.Property<string>("DetailNumber");
 
                     b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
 
                     b.Property<string>("Point");
 
@@ -574,6 +607,58 @@ namespace DataLayer.Migrations
                     b.HasIndex("PointId");
 
                     b.ToTable("StubShutterJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.ValveCaseJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("Remark");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("ValveCaseJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.JournalNumber", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsHidden");
+
+                    b.Property<string>("Number");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JournalNumbers");
                 });
 
             modelBuilder.Entity("DataLayer.PID", b =>
@@ -778,6 +863,36 @@ namespace DataLayer.Migrations
                     b.ToTable("StubShutterTCPs");
                 });
 
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.ValveCaseTCP", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("OperationName");
+
+                    b.Property<string>("Point");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ValveCaseTCPs");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.CaseShutter", b =>
+                {
+                    b.HasBaseType("DataLayer.Entities.Detailing.BaseCastingCase");
+
+                    b.HasDiscriminator().HasValue("CaseShutter");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.ValveCase", b =>
+                {
+                    b.HasBaseType("DataLayer.Entities.Detailing.BaseCastingCase");
+
+                    b.HasDiscriminator().HasValue("ValveCase");
+                });
+
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.ShutterReverse", b =>
                 {
                     b.HasOne("DataLayer.Entities.Detailing.CaseShutter")
@@ -821,15 +936,11 @@ namespace DataLayer.Migrations
                         .HasForeignKey("SlamShutterId");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Detailing.CaseShutter", b =>
+            modelBuilder.Entity("DataLayer.Entities.Detailing.Nozzle", b =>
                 {
-                    b.HasOne("DataLayer.Entities.Detailing.Nozzle", "FirstNozzle")
-                        .WithMany("FirstCaseShutters")
-                        .HasForeignKey("FirstNozzleId");
-
-                    b.HasOne("DataLayer.Entities.Detailing.Nozzle", "SecondNozzle")
-                        .WithMany("SecondCaseShutters")
-                        .HasForeignKey("SecondNozzleId");
+                    b.HasOne("DataLayer.Entities.Detailing.BaseCastingCase", "CastingCase")
+                        .WithMany("Nozzles")
+                        .HasForeignKey("CastingCaseId");
                 });
 
             modelBuilder.Entity("DataLayer.Journals.Detailing.BronzeSleeveShutterJournal", b =>
@@ -949,6 +1060,17 @@ namespace DataLayer.Migrations
 
                     b.HasOne("DataLayer.TechnicalControlPlans.Detailing.StubShutterTCP", "EntityTCP")
                         .WithMany("StubShutterJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.ValveCaseJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.ValveCase", "Entity")
+                        .WithMany("ValveCaseJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Detailing.ValveCaseTCP", "EntityTCP")
+                        .WithMany("ValveCaseJournals")
                         .HasForeignKey("PointId");
                 });
 
