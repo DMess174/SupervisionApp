@@ -13,12 +13,12 @@ namespace DataLayer.Entities.Detailing
             Name = "Втулка стальная";
         }
 
-        public List<ShutterReverse> FirstShutterReverses { get; set; }
-        public List<ShutterReverse> SecondShutterReverses { get; set; }
+        public int? ShutterReverseId { get; set; }
+        public ShutterReverse ShutterReverse { get; set; }
 
-        public List<SteelSleeveShutterJournal> SteelSleeveShutterJournals{ get; set; }
+        public IEnumerable<SteelSleeveShutterJournal> SteelSleeveShutterJournals{ get; set; }
         [NotMapped]
-        public List<SteelSleeveShutterTCP> SteelSleeveShutterTCPs{ get; set; }
+        public IEnumerable<SteelSleeveShutterTCP> SteelSleeveShutterTCPs{ get; set; }
 
     }
 }

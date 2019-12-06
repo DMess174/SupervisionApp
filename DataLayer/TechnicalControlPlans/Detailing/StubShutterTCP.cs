@@ -7,9 +7,9 @@ namespace DataLayer.TechnicalControlPlans.Detailing
 {
     public class StubShutterTCP : BaseTCP
     {
-        public List<StubShutterJournal> StubShutterJournals{ get; set; }
+        public IEnumerable<StubShutterJournal> StubShutterJournals{ get; set; }
 
         [NotMapped]
-        public List<StubShutter> StubShutters{ get; set; }
+        public IEnumerable<StubShutter> StubShutters{ get; set; }
     }
 }

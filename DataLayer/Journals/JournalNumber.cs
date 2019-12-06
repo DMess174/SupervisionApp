@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataLayer.Journals
+﻿namespace DataLayer.Journals
 {
     public class JournalNumber : BasePropertyChanged
     {

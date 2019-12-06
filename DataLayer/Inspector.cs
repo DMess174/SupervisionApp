@@ -13,15 +13,14 @@ namespace DataLayer
 
         public string Department { get; set; }
 
-        public List<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
-        public List<CaseShutterJournal> CaseShutterJournals{ get; set; }
-        public List<NozzleJournal> NozzleJournals{ get; set; }
-        public List<ShaftShutterJournal> ShaftShutterJournals{ get; set; }
-        public List<SlamShutterJournal> SlamShutterJournals{ get; set; }
-        public List<SteelSleeveShutterJournal> SteelSleeveShutterJournals{ get; set; }
-        public List<StubShutterJournal> StubShutterJournals{ get; set; }
-        public List<ShutterReverseJournal> ShutterReverseJournals{ get; set; }
-
-
+        public IEnumerable<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
+        public IEnumerable<ShutterCaseJournal> CaseShutterJournals{ get; set; }
+        public IEnumerable<NozzleJournal> NozzleJournals{ get; set; }
+        public IEnumerable<ShaftShutterJournal> ShaftShutterJournals{ get; set; }
+        public IEnumerable<SlamShutterJournal> SlamShutterJournals{ get; set; }
+        public IEnumerable<SteelSleeveShutterJournal> SteelSleeveShutterJournals{ get; set; }
+        public IEnumerable<StubShutterJournal> StubShutterJournals{ get; set; }
+        public IEnumerable<ShutterReverseJournal> ShutterReverseJournals{ get; set; }
+        public IEnumerable<ValveCaseJournal> ValveCaseJournals { get; set; }
     }
 }

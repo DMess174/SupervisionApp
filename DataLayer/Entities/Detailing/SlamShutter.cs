@@ -13,11 +13,11 @@ namespace DataLayer.Entities.Detailing
             Name = "Захлопка";
         }
 
-        public List<ShutterReverse> ShutterReverses { get; set; }
+        public ShutterReverse ShutterReverse { get; set; }
 
-        public List<SlamShutterJournal> SlamShutterJournals{ get; set; }
+        public IEnumerable<SlamShutterJournal> SlamShutterJournals{ get; set; }
         [NotMapped]
-        public List<SlamShutterTCP> SlamShutterTCPs{ get; set; }
+        public IEnumerable<SlamShutterTCP> SlamShutterTCPs{ get; set; }
     }
 }
 

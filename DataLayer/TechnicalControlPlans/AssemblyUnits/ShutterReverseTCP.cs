@@ -7,9 +7,9 @@ namespace DataLayer.TechnicalControlPlans.AssemblyUnits
 {
     public class ShutterReverseTCP: BaseTCP
     {
-        public List<ShutterReverseJournal> ShutterReverseJournals { get; set; }
+        public IEnumerable<ShutterReverseJournal> ShutterReverseJournals { get; set; }
 
         [NotMapped]
-        public List<ShutterReverse> ShutterReverses { get; set; }
+        public IEnumerable<ShutterReverse> ShutterReverses { get; set; }
     }
 }

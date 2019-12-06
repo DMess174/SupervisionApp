@@ -10,7 +10,6 @@ namespace DataLayer.Entities.Detailing
 
         public string Melt { get; set; }
 
-        public ICollection<Nozzle> Nozzles { get; set; } = new List<Nozzle>(2);
-
+        public IEnumerable<Nozzle> Nozzles { get; set; }
     }
 }

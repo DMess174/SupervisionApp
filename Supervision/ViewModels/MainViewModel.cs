@@ -69,7 +69,7 @@ namespace Supervision.ViewModels
                             () =>
                             {
                                 var w = new CastingCaseView();
-                                var vm = new CastingCaseVM<ShutterCase, CaseShutterTCP, CaseShutterJournal>();
+                                var vm = new CastingCaseVM<ShutterCase, ShutterCaseTCP, ShutterCaseJournal>();
                                 w.DataContext = vm;
                                 w.ShowDialog();
                             });
@@ -270,7 +270,7 @@ namespace Supervision.ViewModels
             {
                 Page tcp = new TCPView
                 {
-                    DataContext = new TCPViewModel<CaseShutterTCP>()
+                    DataContext = new TCPViewModel<ShutterCaseTCP>()
                 };
                 return new DelegateCommand(() => SlowOpacity(tcp));
             }

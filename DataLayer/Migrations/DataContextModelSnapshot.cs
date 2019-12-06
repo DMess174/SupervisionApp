@@ -30,20 +30,12 @@ namespace DataLayer.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.ShutterReverse", b =>
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.CastingValve", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("CaseShutterId");
-
                     b.Property<string>("Drawing");
-
-                    b.Property<int?>("FirstBronzeSleeveShutterId");
-
-                    b.Property<int?>("FirstSteelSleeveShutterId");
-
-                    b.Property<int?>("FirstStubShutterId");
 
                     b.Property<string>("Name");
 
@@ -51,13 +43,36 @@ namespace DataLayer.Migrations
 
                     b.Property<int?>("PIDId");
 
-                    b.Property<int?>("SecondBronzeSleeveShutterId");
+                    b.Property<string>("Status");
 
-                    b.Property<int?>("SecondSteelSleeveShutterId");
+                    b.Property<int?>("ValveCaseId");
 
-                    b.Property<int?>("SecondStubShutterId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("PIDId");
+
+                    b.HasIndex("ValveCaseId")
+                        .IsUnique();
+
+                    b.ToTable("CastingValves");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.ShutterReverse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Drawing");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Number");
+
+                    b.Property<int?>("PIDId");
 
                     b.Property<int?>("ShaftShutterId");
+
+                    b.Property<int?>("ShutterCaseId");
 
                     b.Property<int?>("SlamShutterId");
 
@@ -65,25 +80,16 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CaseShutterId");
-
-                    b.HasIndex("FirstBronzeSleeveShutterId");
-
-                    b.HasIndex("FirstSteelSleeveShutterId");
-
-                    b.HasIndex("FirstStubShutterId");
-
                     b.HasIndex("PIDId");
 
-                    b.HasIndex("SecondBronzeSleeveShutterId");
+                    b.HasIndex("ShaftShutterId")
+                        .IsUnique();
 
-                    b.HasIndex("SecondSteelSleeveShutterId");
+                    b.HasIndex("ShutterCaseId")
+                        .IsUnique();
 
-                    b.HasIndex("SecondStubShutterId");
-
-                    b.HasIndex("ShaftShutterId");
-
-                    b.HasIndex("SlamShutterId");
+                    b.HasIndex("SlamShutterId")
+                        .IsUnique();
 
                     b.ToTable("ShutterReverses");
                 });
@@ -134,9 +140,13 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Number");
 
+                    b.Property<int?>("ShutterReverseId");
+
                     b.Property<string>("Status");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShutterReverseId");
 
                     b.ToTable("BronzeSleeveShutters");
                 });
@@ -240,9 +250,13 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Number");
 
+                    b.Property<int?>("ShutterReverseId");
+
                     b.Property<string>("Status");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShutterReverseId");
 
                     b.ToTable("SteelSleeveShutters");
                 });
@@ -264,9 +278,13 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Number");
 
+                    b.Property<int?>("ShutterReverseId");
+
                     b.Property<string>("Status");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShutterReverseId");
 
                     b.ToTable("StubShutters");
                 });
@@ -325,46 +343,6 @@ namespace DataLayer.Migrations
                     b.HasIndex("PointId");
 
                     b.ToTable("BronzeSleeveShutterJournals");
-                });
-
-            modelBuilder.Entity("DataLayer.Journals.Detailing.CaseShutterJournal", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime?>("Date");
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("DetailDrawing");
-
-                    b.Property<int?>("DetailId");
-
-                    b.Property<string>("DetailName");
-
-                    b.Property<string>("DetailNumber");
-
-                    b.Property<int?>("InspectorId");
-
-                    b.Property<string>("JournalNumber");
-
-                    b.Property<string>("Point");
-
-                    b.Property<int?>("PointId");
-
-                    b.Property<string>("Remark");
-
-                    b.Property<string>("Status");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DetailId");
-
-                    b.HasIndex("InspectorId");
-
-                    b.HasIndex("PointId");
-
-                    b.ToTable("CaseShutterJournals");
                 });
 
             modelBuilder.Entity("DataLayer.Journals.Detailing.NozzleJournal", b =>
@@ -447,7 +425,7 @@ namespace DataLayer.Migrations
                     b.ToTable("ShaftShutterJournals");
                 });
 
-            modelBuilder.Entity("DataLayer.Journals.Detailing.ShutterReverseJournal", b =>
+            modelBuilder.Entity("DataLayer.Journals.Detailing.ShutterCaseJournal", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -477,6 +455,50 @@ namespace DataLayer.Migrations
                     b.Property<string>("Status");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("CaseShutterJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.ShutterReverseJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("CastingValveId");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("Remark");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CastingValveId");
 
                     b.HasIndex("DetailId");
 
@@ -640,6 +662,8 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("DetailId");
 
+                    b.HasIndex("InspectorId");
+
                     b.HasIndex("PointId");
 
                     b.ToTable("ValveCaseJournals");
@@ -765,22 +789,6 @@ namespace DataLayer.Migrations
                     b.ToTable("BronzeSleeveShutterTCPs");
                 });
 
-            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.CaseShutterTCP", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("OperationName");
-
-                    b.Property<string>("Point");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CaseShutterTCPs");
-                });
-
             modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.NozzleTCP", b =>
                 {
                     b.Property<int>("Id")
@@ -811,6 +819,22 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ShaftShutterTCPs");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.ShutterCaseTCP", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("OperationName");
+
+                    b.Property<string>("Point");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CaseShutterTCPs");
                 });
 
             modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.SlamShutterTCP", b =>
@@ -877,11 +901,11 @@ namespace DataLayer.Migrations
                     b.ToTable("ValveCaseTCPs");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Detailing.CaseShutter", b =>
+            modelBuilder.Entity("DataLayer.Entities.Detailing.ShutterCase", b =>
                 {
                     b.HasBaseType("DataLayer.Entities.Detailing.BaseCastingCase");
 
-                    b.HasDiscriminator().HasValue("CaseShutter");
+                    b.HasDiscriminator().HasValue("ShutterCase");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.ValveCase", b =>
@@ -891,47 +915,41 @@ namespace DataLayer.Migrations
                     b.HasDiscriminator().HasValue("ValveCase");
                 });
 
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.CastingValve", b =>
+                {
+                    b.HasOne("DataLayer.PID", "PID")
+                        .WithMany()
+                        .HasForeignKey("PIDId");
+
+                    b.HasOne("DataLayer.Entities.Detailing.ValveCase", "ValveCase")
+                        .WithOne("CastingValve")
+                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.CastingValve", "ValveCaseId");
+                });
+
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.ShutterReverse", b =>
                 {
-                    b.HasOne("DataLayer.Entities.Detailing.CaseShutter")
-                        .WithMany("ShutterReverses")
-                        .HasForeignKey("CaseShutterId");
-
-                    b.HasOne("DataLayer.Entities.Detailing.BronzeSleeveShutter", "FirstBronzeSleeveShutter")
-                        .WithMany("FirstShutterReverses")
-                        .HasForeignKey("FirstBronzeSleeveShutterId");
-
-                    b.HasOne("DataLayer.Entities.Detailing.SteelSleeveShutter", "FirstSteelSleeveShutter")
-                        .WithMany("FirstShutterReverses")
-                        .HasForeignKey("FirstSteelSleeveShutterId");
-
-                    b.HasOne("DataLayer.Entities.Detailing.StubShutter", "FirstStubShutter")
-                        .WithMany("FirstShutterReverses")
-                        .HasForeignKey("FirstStubShutterId");
-
-                    b.HasOne("DataLayer.PID")
+                    b.HasOne("DataLayer.PID", "PID")
                         .WithMany("ShutterReverses")
                         .HasForeignKey("PIDId");
 
-                    b.HasOne("DataLayer.Entities.Detailing.BronzeSleeveShutter", "SecondBronzeSleeveShutter")
-                        .WithMany("SecondShutterReverses")
-                        .HasForeignKey("SecondBronzeSleeveShutterId");
+                    b.HasOne("DataLayer.Entities.Detailing.ShaftShutter", "ShaftShutter")
+                        .WithOne("ShutterReverse")
+                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.ShutterReverse", "ShaftShutterId");
 
-                    b.HasOne("DataLayer.Entities.Detailing.SteelSleeveShutter", "SecondSteelSleeveShutter")
-                        .WithMany("SecondShutterReverses")
-                        .HasForeignKey("SecondSteelSleeveShutterId");
+                    b.HasOne("DataLayer.Entities.Detailing.ShutterCase", "ShutterCase")
+                        .WithOne("ShutterReverse")
+                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.ShutterReverse", "ShutterCaseId");
 
-                    b.HasOne("DataLayer.Entities.Detailing.StubShutter", "SecondStubShutter")
-                        .WithMany("SecondShutterReverses")
-                        .HasForeignKey("SecondStubShutterId");
+                    b.HasOne("DataLayer.Entities.Detailing.SlamShutter", "SlamShutter")
+                        .WithOne("ShutterReverse")
+                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.ShutterReverse", "SlamShutterId");
+                });
 
-                    b.HasOne("DataLayer.Entities.Detailing.ShaftShutter")
-                        .WithMany("ShutterReverses")
-                        .HasForeignKey("ShaftShutterId");
-
-                    b.HasOne("DataLayer.Entities.Detailing.SlamShutter")
-                        .WithMany("ShutterReverses")
-                        .HasForeignKey("SlamShutterId");
+            modelBuilder.Entity("DataLayer.Entities.Detailing.BronzeSleeveShutter", b =>
+                {
+                    b.HasOne("DataLayer.Entities.AssemblyUnits.ShutterReverse", "ShutterReverse")
+                        .WithMany("BronzeSleeveShutters")
+                        .HasForeignKey("ShutterReverseId");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.Nozzle", b =>
@@ -941,33 +959,32 @@ namespace DataLayer.Migrations
                         .HasForeignKey("CastingCaseId");
                 });
 
+            modelBuilder.Entity("DataLayer.Entities.Detailing.SteelSleeveShutter", b =>
+                {
+                    b.HasOne("DataLayer.Entities.AssemblyUnits.ShutterReverse", "ShutterReverse")
+                        .WithMany("SteelSleeveShutters")
+                        .HasForeignKey("ShutterReverseId");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.StubShutter", b =>
+                {
+                    b.HasOne("DataLayer.Entities.AssemblyUnits.ShutterReverse", "ShutterReverse")
+                        .WithMany("StubShutters")
+                        .HasForeignKey("ShutterReverseId");
+                });
+
             modelBuilder.Entity("DataLayer.Journals.Detailing.BronzeSleeveShutterJournal", b =>
                 {
                     b.HasOne("DataLayer.Entities.Detailing.BronzeSleeveShutter", "Entity")
                         .WithMany("BronzeSleeveShutterJournals")
                         .HasForeignKey("DetailId");
 
-                    b.HasOne("DataLayer.Inspector")
+                    b.HasOne("DataLayer.Inspector", "Inspector")
                         .WithMany("BronzeSleeveShutterJournals")
                         .HasForeignKey("InspectorId");
 
                     b.HasOne("DataLayer.TechnicalControlPlans.Detailing.BronzeSleeveShutterTCP", "EntityTCP")
                         .WithMany("BronzeSleeveShutterJournals")
-                        .HasForeignKey("PointId");
-                });
-
-            modelBuilder.Entity("DataLayer.Journals.Detailing.CaseShutterJournal", b =>
-                {
-                    b.HasOne("DataLayer.Entities.Detailing.CaseShutter", "Entity")
-                        .WithMany("CaseShutterJournals")
-                        .HasForeignKey("DetailId");
-
-                    b.HasOne("DataLayer.Inspector")
-                        .WithMany("CaseShutterJournals")
-                        .HasForeignKey("InspectorId");
-
-                    b.HasOne("DataLayer.TechnicalControlPlans.Detailing.CaseShutterTCP", "EntityTCP")
-                        .WithMany("CaseShutterJournals")
                         .HasForeignKey("PointId");
                 });
 
@@ -977,7 +994,7 @@ namespace DataLayer.Migrations
                         .WithMany("NozzleJournals")
                         .HasForeignKey("DetailId");
 
-                    b.HasOne("DataLayer.Inspector")
+                    b.HasOne("DataLayer.Inspector", "Inspector")
                         .WithMany("NozzleJournals")
                         .HasForeignKey("InspectorId");
 
@@ -992,7 +1009,7 @@ namespace DataLayer.Migrations
                         .WithMany("ShaftShutterJournals")
                         .HasForeignKey("DetailId");
 
-                    b.HasOne("DataLayer.Inspector")
+                    b.HasOne("DataLayer.Inspector", "Inspector")
                         .WithMany("ShaftShutterJournals")
                         .HasForeignKey("InspectorId");
 
@@ -1001,13 +1018,32 @@ namespace DataLayer.Migrations
                         .HasForeignKey("PointId");
                 });
 
+            modelBuilder.Entity("DataLayer.Journals.Detailing.ShutterCaseJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.ShutterCase", "Entity")
+                        .WithMany("ShutterCaseJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany("CaseShutterJournals")
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Detailing.ShutterCaseTCP", "EntityTCP")
+                        .WithMany("CaseShutterJournals")
+                        .HasForeignKey("PointId");
+                });
+
             modelBuilder.Entity("DataLayer.Journals.Detailing.ShutterReverseJournal", b =>
                 {
+                    b.HasOne("DataLayer.Entities.AssemblyUnits.CastingValve")
+                        .WithMany("ShutterReverseJournals")
+                        .HasForeignKey("CastingValveId");
+
                     b.HasOne("DataLayer.Entities.AssemblyUnits.ShutterReverse", "Entity")
                         .WithMany("ShutterReverseJournals")
                         .HasForeignKey("DetailId");
 
-                    b.HasOne("DataLayer.Inspector")
+                    b.HasOne("DataLayer.Inspector", "Inspector")
                         .WithMany("ShutterReverseJournals")
                         .HasForeignKey("InspectorId");
 
@@ -1022,7 +1058,7 @@ namespace DataLayer.Migrations
                         .WithMany("SlamShutterJournals")
                         .HasForeignKey("DetailId");
 
-                    b.HasOne("DataLayer.Inspector")
+                    b.HasOne("DataLayer.Inspector", "Inspector")
                         .WithMany("SlamShutterJournals")
                         .HasForeignKey("InspectorId");
 
@@ -1037,7 +1073,7 @@ namespace DataLayer.Migrations
                         .WithMany("SteelSleeveShutterJournals")
                         .HasForeignKey("DetailId");
 
-                    b.HasOne("DataLayer.Inspector")
+                    b.HasOne("DataLayer.Inspector", "Inspector")
                         .WithMany("SteelSleeveShutterJournals")
                         .HasForeignKey("InspectorId");
 
@@ -1052,7 +1088,7 @@ namespace DataLayer.Migrations
                         .WithMany("StubShutterJournals")
                         .HasForeignKey("DetailId");
 
-                    b.HasOne("DataLayer.Inspector")
+                    b.HasOne("DataLayer.Inspector", "Inspector")
                         .WithMany("StubShutterJournals")
                         .HasForeignKey("InspectorId");
 
@@ -1067,6 +1103,10 @@ namespace DataLayer.Migrations
                         .WithMany("ValveCaseJournals")
                         .HasForeignKey("DetailId");
 
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany("ValveCaseJournals")
+                        .HasForeignKey("InspectorId");
+
                     b.HasOne("DataLayer.TechnicalControlPlans.Detailing.ValveCaseTCP", "EntityTCP")
                         .WithMany("ValveCaseJournals")
                         .HasForeignKey("PointId");
@@ -1074,18 +1114,18 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.PID", b =>
                 {
-                    b.HasOne("DataLayer.ProductType")
+                    b.HasOne("DataLayer.ProductType", "ProductType")
                         .WithMany("PIDs")
                         .HasForeignKey("ProductTypeId");
 
-                    b.HasOne("DataLayer.Specification")
+                    b.HasOne("DataLayer.Specification", "Specification")
                         .WithMany("PIDs")
                         .HasForeignKey("SpecificationId");
                 });
 
             modelBuilder.Entity("DataLayer.Specification", b =>
                 {
-                    b.HasOne("DataLayer.Customer")
+                    b.HasOne("DataLayer.Customer", "Customer")
                         .WithMany("Specifications")
                         .HasForeignKey("CustomerId");
                 });

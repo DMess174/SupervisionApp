@@ -20,6 +20,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
@@ -242,13 +243,15 @@
                 Grid.Row="2" 
                 Grid.Column="0" 
                 Grid.ColumnSpan="1"
-                RowHeight="50"
-                ItemsSource="{Binding SelectedItem.BronzeSleeveShutterJournals}"
+                MinRowHeight="50"
+                ItemsSource="{Binding Journal}"
                 IsReadOnly="False" 
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
                 Height="auto" 
                 HorizontalContentAlignment="Stretch">
             <DataGrid.Columns>
-                
+
                 <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" Width="100" Header="Дата">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -258,46 +261,30 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" x:Name="PointColumn" Header="Пункт ПТК" Width="350*">
+                <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" 
+                                    Header="Пункт"
+                                    MinWidth="50"
+                                    Width="auto" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox Style="{StaticResource BaseCombobox}" 
-                                      VerticalContentAlignment="Center" 
-                                      ItemsSource="{Binding Path=DataContext.Points, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                      SelectedItem="Id"
-                                      SelectedValuePath="Id"
-                                      SelectedValue="{Binding Path=BronzeSleeveShutterTCPId, UpdateSourceTrigger=PropertyChanged}">
-                                <ComboBox.Width>
-                                    <Binding ElementName="PointColumn" Path="ActualWidth"/>
-                                </ComboBox.Width>
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <StackPanel.Width>
-                                                <Binding ElementName="PointColumn" Path="ActualWidth"/>
-                                            </StackPanel.Width>
-                                            <TextBlock Width="20">
-                                                <TextBlock.Text>
-                                                    <Binding Path="Point" StringFormat="{}{0} - "/>
-                                                </TextBlock.Text>
-                                            </TextBlock>
-                                            <TextBlock TextWrapping="Wrap" >
-                                                <TextBlock.Text>
-                                                    <Binding Path="Description"/>
-                                                </TextBlock.Text>
-                                                <TextBlock.Width>
-                                                    <Binding ElementName="PointColumn" Path="ActualWidth"/>
-                                                </TextBlock.Width>
-                                            </TextBlock>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
+                            <TextBlock Style="{StaticResource BaseTextBlock}"
+                                    FontWeight="Normal"
+                                    Text="{Binding Path = Point}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" Header="Инспектор">
+                <DataGridTextColumn HeaderStyle="{StaticResource BaseDataGridHeader}" 
+                                    Header="Операция" 
+                                    Width="350*" 
+                                    Binding ="{Binding Path = Description}"/>
+
+                <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" 
+                                        Header="Инспектор"
+                                        MinWidth="120"
+                                        Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox Style="{StaticResource BaseCombobox}" 
@@ -322,13 +309,15 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" Header="Статус" Width="150">
+                <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" 
+                                        Header="Статус" Width="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox Style="{StaticResource BaseCombobox}" 
+                            <ComboBox Style="{StaticResource BaseCombobox}"
                                       Height="50" 
                                       VerticalContentAlignment="Center" 
-                                      HorizontalContentAlignment="Center" 
+                                      HorizontalContentAlignment="Center"
+                                      IsEditable="False"
                                       Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" 
                                       SelectedItem= "{Binding Status}">
                                 <ComboBoxItem Content="Соответствует"/>
@@ -338,11 +327,71 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn HeaderStyle="{StaticResource BaseDataGridHeader}" Header="Примечание"  Width="350*" Binding ="{Binding Path = Remark}"/>
-                
+                <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" Header="Номер журнала" Width="130">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox Style="{StaticResource BaseCombobox}" 
+                                      Height="50" 
+                                      VerticalContentAlignment="Center" 
+                                      HorizontalContentAlignment="Center"
+                                      ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                      SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn HeaderStyle="{StaticResource BaseDataGridHeader}" Header="Примечание" 
+                                    Width="350*" 
+                                    Binding ="{Binding Path = Remark}"/>
+
             </DataGrid.Columns>
         </DataGrid>
-        <DockPanel Grid.Row="3"  Height="50" VerticalAlignment="Bottom" Margin="0,1" >
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <Label Content="Добавление операции:"
+                   Margin="0 0 10 0"
+                   FontSize="{StaticResource Big}"
+                   Style="{StaticResource BaseLabel}"
+                   VerticalContentAlignment="Center"/>
+
+            <ComboBox Style="{StaticResource BaseCombobox}" 
+                      VerticalContentAlignment="Center" 
+                      ItemsSource="{Binding Path=DataContext.Points, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                      SelectedItem="{Binding SelectedTCPPoint}"
+                      MinWidth="300"
+                      Width="auto">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel.Width>
+                                <Binding ElementName="PointColumn" Path="ActualWidth"/>
+                            </StackPanel.Width>
+                            <TextBlock Width="auto">
+                                <TextBlock.Text>
+                                    <Binding Path="Point" StringFormat="{}{0} - "/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" >
+                                <TextBlock.Text>
+                                    <Binding Path="Description"/>
+                                </TextBlock.Text>
+                                <TextBlock.Width>
+                                    <Binding ElementName="PointColumn" Path="ActualWidth"/>
+                                </TextBlock.Width>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Button Style="{StaticResource BaseButton}" 
+                            Content="Добавить операцию" 
+                            Margin="10" 
+                            Command="{Binding AddOperation}" />
+        </StackPanel>
+
+        <DockPanel Grid.Row="4"  Height="50" VerticalAlignment="Bottom" Margin="0,1" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -353,10 +402,7 @@
                         Orientation="Horizontal" 
                         HorizontalAlignment="Left" 
                         VerticalAlignment="Bottom">
-                    <Button Style="{StaticResource BaseButton}" 
-                            Content="Добавить операцию" 
-                            Margin="10" 
-                            Command="{Binding AddItem}" />
+
                 </StackPanel>
 
                 <StackPanel Grid.Column="1"

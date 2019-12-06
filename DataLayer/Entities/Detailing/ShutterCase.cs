@@ -13,10 +13,10 @@ namespace DataLayer.Entities.Detailing
             Name = "Корпус затвора";
         }
 
-        public List<ShutterReverse> ShutterReverses { get; set; }
+        public ShutterReverse ShutterReverse { get; set; }
 
-        public List<CaseShutterJournal> CaseShutterJournals{ get; set; }
+        public IEnumerable<ShutterCaseJournal> ShutterCaseJournals { get; set; }
         [NotMapped]
-        public List<CaseShutterTCP> CaseShutterTCPs{ get; set; }
+        public IEnumerable<ShutterCaseTCP> ShutterCaseTCPs { get; set; }
     }
 }

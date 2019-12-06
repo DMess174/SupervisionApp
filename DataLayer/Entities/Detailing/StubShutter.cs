@@ -13,11 +13,11 @@ namespace DataLayer.Entities.Detailing
             Name = "Заглушка затвора";
         }
 
-        public List<ShutterReverse> FirstShutterReverses { get; set; }
-        public List<ShutterReverse> SecondShutterReverses { get; set; }
+        public int? ShutterReverseId { get; set; }
+        public ShutterReverse ShutterReverse { get; set; }
 
-        public List<StubShutterJournal> StubShutterJournals { get; set; }
+        public IEnumerable<StubShutterJournal> StubShutterJournals { get; set; }
         [NotMapped]
-        public List<StubShutterTCP> StubShutterTCPs { get; set; }
+        public IEnumerable<StubShutterTCP> StubShutterTCPs { get; set; }
     }
 }

@@ -13,11 +13,11 @@ namespace DataLayer.Entities.Detailing
             Name = "Втулка бронзовая";
         }
 
-        public List<ShutterReverse> FirstShutterReverses { get; set; }
-        public List<ShutterReverse> SecondShutterReverses { get; set; }
+        public int? ShutterReverseId { get; set; }
+        public ShutterReverse ShutterReverse { get; set; }
 
-        public List<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
+        public IEnumerable<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
         [NotMapped]
-        public List<BronzeSleeveShutterTCP> BronzeSleeveShutterTCPs { get; set; }        
+        public IEnumerable<BronzeSleeveShutterTCP> BronzeSleeveShutterTCPs { get; set; }        
     }
 }

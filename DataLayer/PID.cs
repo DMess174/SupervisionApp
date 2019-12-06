@@ -17,9 +17,13 @@ namespace DataLayer
         public string DriveType { get; set; }
         public string TechDocumentation { get; set; }
         public DateTime? ShippingDate { get; set; }
-        public int? SpecificationId { get; set; }
-        public int? ProductTypeId { get; set; }
 
-        public List <ShutterReverse> ShutterReverses{ get; set; }
+        public int? SpecificationId { get; set; }
+        public Specification Specification { get; set; }
+
+        public int? ProductTypeId { get; set; }
+        public ProductType ProductType { get; set; }
+
+        public IEnumerable<ShutterReverse> ShutterReverses{ get; set; }
     }
 }

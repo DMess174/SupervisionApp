@@ -15,21 +15,22 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
     public class NozzleEditVM : BasePropertyChanged
     {
         private readonly DataContext db;
-        private List<string> journalNumbers;
-        private List<string> materials;
-        private List<string> drawings;
-        private List<string> thickness;
-        private List<string> thicknessJoin;
-        private List<string> diameter;
-        private List<NozzleTCP> points;
-        private List<Inspector> inspectors;
+        private IEnumerable<string> journalNumbers;
+        private IEnumerable<string> materials;
+        private IEnumerable<string> drawings;
+        private IEnumerable<string> thickness;
+        private IEnumerable<string> thicknessJoin;
+        private IEnumerable<string> diameter;
+        private IEnumerable<NozzleTCP> points;
+        private IEnumerable<Inspector> inspectors;
         private IEnumerable<NozzleJournal> journal;
         private readonly BaseEntity ParentEntity;
+        private NozzleTCP selectedTCPPoint;
 
         private Nozzle selectedItem;
         private ICommand saveItem;
         private ICommand closeWindow;
-        private ICommand addItem;
+        private ICommand addOperation;
 
         public Nozzle SelectedItem
         {
@@ -50,7 +51,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Journal");
             }
         }
-        public List<NozzleTCP> Points
+        public IEnumerable<NozzleTCP> Points
         {
             get { return points; }
             set
@@ -59,7 +60,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Points");
             }
         }
-        public List<Inspector> Inspectors
+        public IEnumerable<Inspector> Inspectors
         {
             get { return inspectors; }
             set
@@ -107,7 +108,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                         if (ParentEntity is ShutterCase)
                         {
                             var wn = new CastingCaseEditView();
-                            var vm = new CastingCaseEditVM<ShutterCase, Inspector, CaseShutterTCP, CaseShutterJournal>(ParentEntity.Id);
+                            var vm = new CastingCaseEditVM<ShutterCase, Inspector, ShutterCaseTCP, ShutterCaseJournal>(ParentEntity.Id);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -123,29 +124,35 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                     }));
             }
         }
-        public ICommand AddItem
+        public ICommand AddOperation
         {
             get
             {
-                return addItem ?? (
-                    addItem = new DelegateCommand(() =>
+                return addOperation ?? (
+                    addOperation = new DelegateCommand(() =>
                     {
-                        
-                        var item = new NozzleJournal()
+                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+                        else
                         {
-                            DetailDrawing = SelectedItem.Drawing,
-                            DetailNumber = SelectedItem.Number,
-                            DetailName = SelectedItem.Name,
-                            DetailId = SelectedItem.Id,
-                        };
-                        db.NozzleJournals.Add(item);
-                        db.SaveChanges();
-                        Journal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            var item = new NozzleJournal()
+                            {
+                                DetailDrawing = SelectedItem.Drawing,
+                                DetailNumber = SelectedItem.Number,
+                                DetailName = SelectedItem.Name,
+                                DetailId = SelectedItem.Id,
+                                Point = SelectedTCPPoint.Point,
+                                Description = SelectedTCPPoint.Description,
+                                PointId = SelectedTCPPoint.Id,
+                            };
+                            db.NozzleJournals.Add(item);
+                            db.SaveChanges();
+                            Journal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                        }
                     }));
             }
         }
 
-        public List<string> Materials
+        public IEnumerable<string> Materials
         {
             get { return materials; }
             set
@@ -154,7 +161,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Materials");
             }
         }
-        public List<string> Drawings
+        public IEnumerable<string> Drawings
         {
             get { return drawings; }
             set
@@ -163,7 +170,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Drawings");
             }
         }
-        public List<string> JournalNumbers
+        public IEnumerable<string> JournalNumbers
         {
             get { return journalNumbers; }
             set
@@ -173,7 +180,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public List<string> Thickness
+        public IEnumerable<string> Thickness
         {
             get { return thickness; }
             set
@@ -183,7 +190,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public List<string> ThicknessJoin
+        public IEnumerable<string> ThicknessJoin
         {
             get { return thicknessJoin; }
             set
@@ -193,13 +200,23 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public List<string> Diameter
+        public IEnumerable<string> Diameter
         {
             get { return diameter; }
             set
             {
                 diameter = value;
                 RaisePropertyChanged("Diameter");
+            }
+        }
+
+        public NozzleTCP SelectedTCPPoint
+        {
+            get { return selectedTCPPoint; }
+            set
+            {
+                selectedTCPPoint = value;
+                RaisePropertyChanged("SelectedTCPPoint");
             }
         }
 

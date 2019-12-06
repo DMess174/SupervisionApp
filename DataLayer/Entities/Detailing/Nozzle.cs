@@ -56,11 +56,10 @@ namespace DataLayer.Entities.Detailing
 
 
         public int? CastingCaseId { get; set; }
-
         public BaseCastingCase CastingCase { get; set; }
 
-        public List<NozzleJournal> NozzleJournals { get; set; }
+        public IEnumerable<NozzleJournal> NozzleJournals { get; set; }
         [NotMapped]
-        public List<NozzleTCP> NozzleTCPs{ get; set; }
+        public IEnumerable<NozzleTCP> NozzleTCPs{ get; set; }
     }
 }

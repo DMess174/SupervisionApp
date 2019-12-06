@@ -13,8 +13,10 @@ namespace DataLayer.Entities.Detailing
             Name = "Корпус ЗШ";
         }
 
-        public List<ValveCaseJournal> ValveCaseJournals{ get; set; }
+        public CastingValve CastingValve { get; set; }
+
+        public IEnumerable<ValveCaseJournal> ValveCaseJournals{ get; set; }
         [NotMapped]
-        public List<ValveCaseTCP> ValveCaseTCPs{ get; set; }
+        public IEnumerable<ValveCaseTCP> ValveCaseTCPs{ get; set; }
     }
 }

@@ -28,25 +28,6 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BronzeSleeveShutters",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Number = table.Column<string>(nullable: true),
-                    Drawing = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Material = table.Column<string>(nullable: true),
-                    Certificate = table.Column<string>(nullable: true),
-                    Melt = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BronzeSleeveShutters", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BronzeSleeveShutterTCPs",
                 columns: table => new
                 {
@@ -232,25 +213,6 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SteelSleeveShutters",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Number = table.Column<string>(nullable: true),
-                    Drawing = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Material = table.Column<string>(nullable: true),
-                    Certificate = table.Column<string>(nullable: true),
-                    Melt = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SteelSleeveShutters", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SteelSleeveShutterTCPs",
                 columns: table => new
                 {
@@ -263,25 +225,6 @@ namespace DataLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SteelSleeveShutterTCPs", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StubShutters",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Number = table.Column<string>(nullable: true),
-                    Drawing = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Material = table.Column<string>(nullable: true),
-                    Certificate = table.Column<string>(nullable: true),
-                    Melt = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StubShutters", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -362,48 +305,6 @@ namespace DataLayer.Migrations
                         name: "FK_Specifications_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BronzeSleeveShutterJournals",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DetailName = table.Column<string>(nullable: true),
-                    DetailNumber = table.Column<string>(nullable: true),
-                    DetailDrawing = table.Column<string>(nullable: true),
-                    Point = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    JournalNumber = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    Remark = table.Column<string>(nullable: true),
-                    InspectorId = table.Column<int>(nullable: true),
-                    DetailId = table.Column<int>(nullable: true),
-                    PointId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BronzeSleeveShutterJournals", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BronzeSleeveShutterJournals_BronzeSleeveShutters_DetailId",
-                        column: x => x.DetailId,
-                        principalTable: "BronzeSleeveShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BronzeSleeveShutterJournals_Inspectors_InspectorId",
-                        column: x => x.InspectorId,
-                        principalTable: "Inspectors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BronzeSleeveShutterJournals_BronzeSleeveShutterTCPs_PointId",
-                        column: x => x.PointId,
-                        principalTable: "BronzeSleeveShutterTCPs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -535,90 +436,6 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SteelSleeveShutterJournals",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DetailName = table.Column<string>(nullable: true),
-                    DetailNumber = table.Column<string>(nullable: true),
-                    DetailDrawing = table.Column<string>(nullable: true),
-                    Point = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    JournalNumber = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    Remark = table.Column<string>(nullable: true),
-                    InspectorId = table.Column<int>(nullable: true),
-                    DetailId = table.Column<int>(nullable: true),
-                    PointId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SteelSleeveShutterJournals", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SteelSleeveShutterJournals_SteelSleeveShutters_DetailId",
-                        column: x => x.DetailId,
-                        principalTable: "SteelSleeveShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SteelSleeveShutterJournals_Inspectors_InspectorId",
-                        column: x => x.InspectorId,
-                        principalTable: "Inspectors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SteelSleeveShutterJournals_SteelSleeveShutterTCPs_PointId",
-                        column: x => x.PointId,
-                        principalTable: "SteelSleeveShutterTCPs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StubShutterJournals",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DetailName = table.Column<string>(nullable: true),
-                    DetailNumber = table.Column<string>(nullable: true),
-                    DetailDrawing = table.Column<string>(nullable: true),
-                    Point = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    JournalNumber = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    Remark = table.Column<string>(nullable: true),
-                    InspectorId = table.Column<int>(nullable: true),
-                    DetailId = table.Column<int>(nullable: true),
-                    PointId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StubShutterJournals", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_StubShutterJournals_StubShutters_DetailId",
-                        column: x => x.DetailId,
-                        principalTable: "StubShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_StubShutterJournals_Inspectors_InspectorId",
-                        column: x => x.InspectorId,
-                        principalTable: "Inspectors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_StubShutterJournals_StubShutterTCPs_PointId",
-                        column: x => x.PointId,
-                        principalTable: "StubShutterTCPs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ValveCaseJournals",
                 columns: table => new
                 {
@@ -644,6 +461,12 @@ namespace DataLayer.Migrations
                         name: "FK_ValveCaseJournals_BaseCastingCase_DetailId",
                         column: x => x.DetailId,
                         principalTable: "BaseCastingCase",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ValveCaseJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -733,6 +556,36 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CastingValves",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Number = table.Column<string>(nullable: true),
+                    Drawing = table.Column<string>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    PIDId = table.Column<int>(nullable: true),
+                    ValveCaseId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CastingValves", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CastingValves_PIDs_PIDId",
+                        column: x => x.PIDId,
+                        principalTable: "PIDs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CastingValves_BaseCastingCase_ValveCaseId",
+                        column: x => x.ValveCaseId,
+                        principalTable: "BaseCastingCase",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ShutterReverses",
                 columns: table => new
                 {
@@ -743,65 +596,17 @@ namespace DataLayer.Migrations
                     Status = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     PIDId = table.Column<int>(nullable: true),
-                    CaseShutterId = table.Column<int>(nullable: true),
+                    ShutterCaseId = table.Column<int>(nullable: true),
                     ShaftShutterId = table.Column<int>(nullable: true),
-                    SlamShutterId = table.Column<int>(nullable: true),
-                    FirstBronzeSleeveShutterId = table.Column<int>(nullable: true),
-                    SecondBronzeSleeveShutterId = table.Column<int>(nullable: true),
-                    FirstSteelSleeveShutterId = table.Column<int>(nullable: true),
-                    SecondSteelSleeveShutterId = table.Column<int>(nullable: true),
-                    FirstStubShutterId = table.Column<int>(nullable: true),
-                    SecondStubShutterId = table.Column<int>(nullable: true)
+                    SlamShutterId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShutterReverses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShutterReverses_BaseCastingCase_CaseShutterId",
-                        column: x => x.CaseShutterId,
-                        principalTable: "BaseCastingCase",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ShutterReverses_BronzeSleeveShutters_FirstBronzeSleeveShutterId",
-                        column: x => x.FirstBronzeSleeveShutterId,
-                        principalTable: "BronzeSleeveShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ShutterReverses_SteelSleeveShutters_FirstSteelSleeveShutterId",
-                        column: x => x.FirstSteelSleeveShutterId,
-                        principalTable: "SteelSleeveShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ShutterReverses_StubShutters_FirstStubShutterId",
-                        column: x => x.FirstStubShutterId,
-                        principalTable: "StubShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_ShutterReverses_PIDs_PIDId",
                         column: x => x.PIDId,
                         principalTable: "PIDs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ShutterReverses_BronzeSleeveShutters_SecondBronzeSleeveShutterId",
-                        column: x => x.SecondBronzeSleeveShutterId,
-                        principalTable: "BronzeSleeveShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ShutterReverses_SteelSleeveShutters_SecondSteelSleeveShutterId",
-                        column: x => x.SecondSteelSleeveShutterId,
-                        principalTable: "SteelSleeveShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ShutterReverses_StubShutters_SecondStubShutterId",
-                        column: x => x.SecondStubShutterId,
-                        principalTable: "StubShutters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -811,9 +616,41 @@ namespace DataLayer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_ShutterReverses_BaseCastingCase_ShutterCaseId",
+                        column: x => x.ShutterCaseId,
+                        principalTable: "BaseCastingCase",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_ShutterReverses_SlamShutters_SlamShutterId",
                         column: x => x.SlamShutterId,
                         principalTable: "SlamShutters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BronzeSleeveShutters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Number = table.Column<string>(nullable: true),
+                    Drawing = table.Column<string>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Material = table.Column<string>(nullable: true),
+                    Certificate = table.Column<string>(nullable: true),
+                    Melt = table.Column<string>(nullable: true),
+                    ShutterReverseId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BronzeSleeveShutters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BronzeSleeveShutters_ShutterReverses_ShutterReverseId",
+                        column: x => x.ShutterReverseId,
+                        principalTable: "ShutterReverses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -835,11 +672,18 @@ namespace DataLayer.Migrations
                     Remark = table.Column<string>(nullable: true),
                     InspectorId = table.Column<int>(nullable: true),
                     DetailId = table.Column<int>(nullable: true),
-                    PointId = table.Column<int>(nullable: true)
+                    PointId = table.Column<int>(nullable: true),
+                    CastingValveId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShutterReverseJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ShutterReverseJournals_CastingValves_CastingValveId",
+                        column: x => x.CastingValveId,
+                        principalTable: "CastingValves",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShutterReverseJournals_ShutterReverses_DetailId",
                         column: x => x.DetailId,
@@ -860,6 +704,184 @@ namespace DataLayer.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SteelSleeveShutters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Number = table.Column<string>(nullable: true),
+                    Drawing = table.Column<string>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Material = table.Column<string>(nullable: true),
+                    Certificate = table.Column<string>(nullable: true),
+                    Melt = table.Column<string>(nullable: true),
+                    ShutterReverseId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SteelSleeveShutters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SteelSleeveShutters_ShutterReverses_ShutterReverseId",
+                        column: x => x.ShutterReverseId,
+                        principalTable: "ShutterReverses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StubShutters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Number = table.Column<string>(nullable: true),
+                    Drawing = table.Column<string>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Material = table.Column<string>(nullable: true),
+                    Certificate = table.Column<string>(nullable: true),
+                    Melt = table.Column<string>(nullable: true),
+                    ShutterReverseId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StubShutters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StubShutters_ShutterReverses_ShutterReverseId",
+                        column: x => x.ShutterReverseId,
+                        principalTable: "ShutterReverses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BronzeSleeveShutterJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Remark = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BronzeSleeveShutterJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BronzeSleeveShutterJournals_BronzeSleeveShutters_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "BronzeSleeveShutters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BronzeSleeveShutterJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BronzeSleeveShutterJournals_BronzeSleeveShutterTCPs_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BronzeSleeveShutterTCPs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SteelSleeveShutterJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Remark = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SteelSleeveShutterJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SteelSleeveShutterJournals_SteelSleeveShutters_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "SteelSleeveShutters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SteelSleeveShutterJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SteelSleeveShutterJournals_SteelSleeveShutterTCPs_PointId",
+                        column: x => x.PointId,
+                        principalTable: "SteelSleeveShutterTCPs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StubShutterJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Remark = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StubShutterJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StubShutterJournals_StubShutters_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "StubShutters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StubShutterJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StubShutterJournals_StubShutterTCPs_PointId",
+                        column: x => x.PointId,
+                        principalTable: "StubShutterTCPs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_BronzeSleeveShutterJournals_DetailId",
                 table: "BronzeSleeveShutterJournals",
@@ -876,6 +898,11 @@ namespace DataLayer.Migrations
                 column: "PointId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BronzeSleeveShutters_ShutterReverseId",
+                table: "BronzeSleeveShutters",
+                column: "ShutterReverseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CaseShutterJournals_DetailId",
                 table: "CaseShutterJournals",
                 column: "DetailId");
@@ -889,6 +916,17 @@ namespace DataLayer.Migrations
                 name: "IX_CaseShutterJournals_PointId",
                 table: "CaseShutterJournals",
                 column: "PointId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CastingValves_PIDId",
+                table: "CastingValves",
+                column: "PIDId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CastingValves_ValveCaseId",
+                table: "CastingValves",
+                column: "ValveCaseId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_NozzleJournals_DetailId",
@@ -936,6 +974,11 @@ namespace DataLayer.Migrations
                 column: "PointId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ShutterReverseJournals_CastingValveId",
+                table: "ShutterReverseJournals",
+                column: "CastingValveId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ShutterReverseJournals_DetailId",
                 table: "ShutterReverseJournals",
                 column: "DetailId");
@@ -951,54 +994,27 @@ namespace DataLayer.Migrations
                 column: "PointId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShutterReverses_CaseShutterId",
-                table: "ShutterReverses",
-                column: "CaseShutterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ShutterReverses_FirstBronzeSleeveShutterId",
-                table: "ShutterReverses",
-                column: "FirstBronzeSleeveShutterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ShutterReverses_FirstSteelSleeveShutterId",
-                table: "ShutterReverses",
-                column: "FirstSteelSleeveShutterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ShutterReverses_FirstStubShutterId",
-                table: "ShutterReverses",
-                column: "FirstStubShutterId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ShutterReverses_PIDId",
                 table: "ShutterReverses",
                 column: "PIDId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShutterReverses_SecondBronzeSleeveShutterId",
-                table: "ShutterReverses",
-                column: "SecondBronzeSleeveShutterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ShutterReverses_SecondSteelSleeveShutterId",
-                table: "ShutterReverses",
-                column: "SecondSteelSleeveShutterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ShutterReverses_SecondStubShutterId",
-                table: "ShutterReverses",
-                column: "SecondStubShutterId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ShutterReverses_ShaftShutterId",
                 table: "ShutterReverses",
-                column: "ShaftShutterId");
+                column: "ShaftShutterId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShutterReverses_ShutterCaseId",
+                table: "ShutterReverses",
+                column: "ShutterCaseId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShutterReverses_SlamShutterId",
                 table: "ShutterReverses",
-                column: "SlamShutterId");
+                column: "SlamShutterId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SlamShutterJournals_DetailId",
@@ -1036,6 +1052,11 @@ namespace DataLayer.Migrations
                 column: "PointId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SteelSleeveShutters_ShutterReverseId",
+                table: "SteelSleeveShutters",
+                column: "ShutterReverseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StubShutterJournals_DetailId",
                 table: "StubShutterJournals",
                 column: "DetailId");
@@ -1051,9 +1072,19 @@ namespace DataLayer.Migrations
                 column: "PointId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StubShutters_ShutterReverseId",
+                table: "StubShutters",
+                column: "ShutterReverseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ValveCaseJournals_DetailId",
                 table: "ValveCaseJournals",
                 column: "DetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ValveCaseJournals_InspectorId",
+                table: "ValveCaseJournals",
+                column: "InspectorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ValveCaseJournals_PointId",
@@ -1094,6 +1125,9 @@ namespace DataLayer.Migrations
                 name: "ValveCaseJournals");
 
             migrationBuilder.DropTable(
+                name: "BronzeSleeveShutters");
+
+            migrationBuilder.DropTable(
                 name: "BronzeSleeveShutterTCPs");
 
             migrationBuilder.DropTable(
@@ -1109,7 +1143,7 @@ namespace DataLayer.Migrations
                 name: "ShaftShutterTCPs");
 
             migrationBuilder.DropTable(
-                name: "ShutterReverses");
+                name: "CastingValves");
 
             migrationBuilder.DropTable(
                 name: "ShutterReverseTCPs");
@@ -1118,34 +1152,34 @@ namespace DataLayer.Migrations
                 name: "SlamShutterTCPs");
 
             migrationBuilder.DropTable(
+                name: "SteelSleeveShutters");
+
+            migrationBuilder.DropTable(
                 name: "SteelSleeveShutterTCPs");
 
             migrationBuilder.DropTable(
-                name: "Inspectors");
+                name: "StubShutters");
 
             migrationBuilder.DropTable(
                 name: "StubShutterTCPs");
 
             migrationBuilder.DropTable(
+                name: "Inspectors");
+
+            migrationBuilder.DropTable(
                 name: "ValveCaseTCPs");
 
             migrationBuilder.DropTable(
-                name: "BaseCastingCase");
-
-            migrationBuilder.DropTable(
-                name: "BronzeSleeveShutters");
-
-            migrationBuilder.DropTable(
-                name: "SteelSleeveShutters");
-
-            migrationBuilder.DropTable(
-                name: "StubShutters");
+                name: "ShutterReverses");
 
             migrationBuilder.DropTable(
                 name: "PIDs");
 
             migrationBuilder.DropTable(
                 name: "ShaftShutters");
+
+            migrationBuilder.DropTable(
+                name: "BaseCastingCase");
 
             migrationBuilder.DropTable(
                 name: "SlamShutters");

@@ -2,7 +2,7 @@
 
 namespace BusinessLayer.Interfaces.Journals.Detailing
 {
-    public interface ICaseShutterJournalRepository : IRepository<CaseShutterJournal>
+    public interface ICaseShutterJournalRepository : IRepository<ShutterCaseJournal>
     {
     }
 }

@@ -13,36 +13,23 @@ namespace DataLayer.Entities.AssemblyUnits
             Name = "Затвор";
         }
 
-        public int? CaseShutterId { get; set; }
+        public int? ShutterCaseId { get; set; }
+        public ShutterCase ShutterCase { get; set; }
+
         public int? ShaftShutterId { get; set; }
+        public ShaftShutter ShaftShutter { get; set; }
+
         public int? SlamShutterId { get; set; }
-        public int? FirstBronzeSleeveShutterId { get; set; }
-        public int? SecondBronzeSleeveShutterId { get; set; }
-        public int? FirstSteelSleeveShutterId { get; set; }
-        public int? SecondSteelSleeveShutterId { get; set; }
-        public int? FirstStubShutterId { get; set; }
-        public int? SecondStubShutterId { get; set; }
+        public SlamShutter SlamShutter { get; set; }
 
-        [InverseProperty("FirstShutterReverses")]
-        public BronzeSleeveShutter FirstBronzeSleeveShutter { get; set; }
+        public IEnumerable<BronzeSleeveShutter> BronzeSleeveShutters { get; set; }
 
-        [InverseProperty("SecondShutterReverses")]
-        public BronzeSleeveShutter SecondBronzeSleeveShutter { get; set; }
+        public IEnumerable<SteelSleeveShutter> SteelSleeveShutters { get; set; }
 
-        [InverseProperty("FirstShutterReverses")]
-        public SteelSleeveShutter FirstSteelSleeveShutter { get; set; }
+        public IEnumerable<StubShutter> StubShutters { get; set; }
 
-        [InverseProperty("SecondShutterReverses")]
-        public SteelSleeveShutter SecondSteelSleeveShutter { get; set; }
-
-        [InverseProperty("FirstShutterReverses")]
-        public StubShutter FirstStubShutter { get; set; }
-
-        [InverseProperty("SecondShutterReverses")]
-        public StubShutter SecondStubShutter { get; set; }
-
-        public List<ShutterReverseJournal> ShutterReverseJournals{ get; set; }
+        public IEnumerable<ShutterReverseJournal> ShutterReverseJournals{ get; set; }
         [NotMapped]
-        public List<ShutterReverseTCP> ShutterReverseTCPs{ get; set; }
+        public IEnumerable<ShutterReverseTCP> ShutterReverseTCPs{ get; set; }
     }
 }

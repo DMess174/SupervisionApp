@@ -7,9 +7,9 @@ namespace DataLayer.TechnicalControlPlans.Detailing
 {
     public class NozzleTCP : BaseTCP
     {
-        public List<NozzleJournal> NozzleJournals { get; set; }
+        public IEnumerable<NozzleJournal> NozzleJournals { get; set; }
 
         [NotMapped]
-        public List<Nozzle> Nozzles { get; set; }
+        public IEnumerable<Nozzle> Nozzles { get; set; }
     }
 }

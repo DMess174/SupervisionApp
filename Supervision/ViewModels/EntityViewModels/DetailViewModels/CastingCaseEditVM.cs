@@ -23,23 +23,24 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
     {
 
         private readonly DataContext db;
-        private List<string> journalNumbers;
-        private List<string> materials;
-        private List<string> drawings;
-        private List<TEntityTCP> points;
-        private List<TUser> inspectors;
+        private IEnumerable<string> journalNumbers;
+        private IEnumerable<string> materials;
+        private IEnumerable<string> drawings;
+        private IEnumerable<TEntityTCP> points;
+        private IEnumerable<TUser> inspectors;
         private IEnumerable<TEntityJournal> journal;
 
         private TEntity selectedItem;
         private ICommand saveItem;
         private ICommand closeWindow;
-        private ICommand addItem;
+        private ICommand addOperation;
         private IEnumerable<Nozzle> nozzles;
         private Nozzle selectedNozzle; 
         private Nozzle selectedNozzleFromList;
         private ICommand editNozzle;
-        private ICommand updateNozzle;
+        private ICommand addNozzleToCase;
         private ICommand deleteNozzleFromCase;
+        private TEntityTCP selectedTCPPoint;
 
         public TEntity SelectedItem
         {
@@ -60,7 +61,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Journal");
             }
         }
-        public List<TEntityTCP> Points
+        public IEnumerable<TEntityTCP> Points
         {
             get { return points; }
             set
@@ -69,7 +70,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Points");
             }
         }
-        public List<TUser> Inspectors
+        public IEnumerable<TUser> Inspectors
         {
             get { return inspectors; }
             set
@@ -132,6 +133,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                             item.CastingCaseId = null;
                             db.Nozzles.Update(item);
                             db.SaveChanges();
+                            Nozzles = null;
+                            Nozzles = db.Nozzles.Local.Where(i => i.CastingCaseId == null).ToObservableCollection();
                         }
                         else MessageBox.Show("Объект не выбран", "Ошибка");
                     }));
@@ -181,48 +184,70 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                     }));
             }
         }
-        public ICommand AddItem
+        public ICommand AddOperation
         {
             get
             {
-                return addItem ?? (
-                    addItem = new DelegateCommand(() =>
+                return addOperation ?? (
+                    addOperation = new DelegateCommand(() =>
                     {
-                        
-                        var item = new TEntityJournal()
+                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+                        else
                         {
-                            DetailDrawing = SelectedItem.Drawing,
-                            DetailNumber = SelectedItem.Number,
-                            DetailName = SelectedItem.Name,
-                            DetailId = SelectedItem.Id,
-                        };
-                        db.Set<TEntityJournal>().Add(item);
-                        db.SaveChanges();
-                        Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                    }));
-            }
-        }
-
-        public ICommand UpdateNozzle
-        {
-            get
-            {
-                return updateNozzle ?? (
-                    updateNozzle = new DelegateCommand(() =>
-                    {
-                        if (SelectedNozzle != null)
-                        {
-                            var item = SelectedNozzle;
-                            item.CastingCaseId = SelectedItem.Id;
-                            db.Nozzles.Update(item);
+                            var item = new TEntityJournal()
+                            {
+                                DetailDrawing = SelectedItem.Drawing,
+                                DetailNumber = SelectedItem.Number,
+                                DetailName = SelectedItem.Name,
+                                DetailId = SelectedItem.Id,
+                                Point = SelectedTCPPoint.Point,
+                                Description = SelectedTCPPoint.Description,
+                                PointId = SelectedTCPPoint.Id,
+                            };
+                            db.Set<TEntityJournal>().Add(item);
                             db.SaveChanges();
+                            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
                         }
-                        else MessageBox.Show("Объект не выбран!", "Ошибка");
                     }));
             }
         }
 
-        public List<string> Materials
+        public TEntityTCP SelectedTCPPoint
+        {
+            get { return selectedTCPPoint; }
+            set
+            {
+                selectedTCPPoint = value;
+                RaisePropertyChanged("SelectedTCPPoint");
+            }
+        }
+
+        public ICommand AddNozzleToCase
+        {
+            get
+            {
+                return addNozzleToCase ?? (
+                    addNozzleToCase = new DelegateCommand(() =>
+                    {
+                        if (SelectedItem.Nozzles.Count() < 2)
+                        {
+                            if (SelectedNozzle != null)
+                            {
+                                var item = SelectedNozzle;
+                                item.CastingCaseId = SelectedItem.Id;
+                                db.Nozzles.Update(item);
+                                db.SaveChanges();
+                                Nozzles = null;
+                                Nozzles = db.Nozzles.Local.Where(i => i.CastingCaseId == null).ToObservableCollection();
+                            }
+                            else MessageBox.Show("Объект не выбран!", "Ошибка");
+                        }
+                        else MessageBox.Show("Невозможно привязать более 2 катушек!", "Ошибка");
+                    }));
+            }
+        }
+
+        public IEnumerable<string> Materials
         {
             get { return materials; }
             set
@@ -231,7 +256,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Materials");
             }
         }
-        public List<string> Drawings
+        public IEnumerable<string> Drawings
         {
             get { return drawings; }
             set
@@ -240,7 +265,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 RaisePropertyChanged("Drawings");
             }
         }
-        public List<string> JournalNumbers
+        public IEnumerable<string> JournalNumbers
         {
             get { return journalNumbers; }
             set

@@ -2,7 +2,7 @@
 
 namespace BusinessLayer.Interfaces.TechnicalControlPlans.Detailing
 {
-    public interface ICaseShutterTCPRepository : IRepository<CaseShutterTCP>
+    public interface ICaseShutterTCPRepository : IRepository<ShutterCaseTCP>
     {
     }
 }

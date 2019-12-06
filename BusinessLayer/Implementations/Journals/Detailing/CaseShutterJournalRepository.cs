@@ -4,7 +4,7 @@ using DataLayer.Journals.Detailing;
 
 namespace BusinessLayer.Implementations.Journals.Detailing
 {
-    public class CaseShutterJournalRepository : Repository<CaseShutterJournal>, ICaseShutterJournalRepository
+    public class CaseShutterJournalRepository : Repository<ShutterCaseJournal>, ICaseShutterJournalRepository
     {
         public CaseShutterJournalRepository(DataContext context)
             : base(context)

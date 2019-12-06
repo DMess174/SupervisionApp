@@ -4,7 +4,7 @@ using DataLayer.TechnicalControlPlans.Detailing;
 
 namespace BusinessLayer.Implementations.TechnicalControlPlans.Detailing
 {
-    public class CaseShutterTCPRepository : Repository<CaseShutterTCP>, ICaseShutterTCPRepository
+    public class CaseShutterTCPRepository : Repository<ShutterCaseTCP>, ICaseShutterTCPRepository
     {
         public CaseShutterTCPRepository(DataContext context)
             : base(context)
