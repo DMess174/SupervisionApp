@@ -10,11 +10,15 @@ using DataLayer;
 using Supervision.Views.EntityViews.DetailViews;
 using Supervision.Views.EntityViews;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels;
-using DataLayer.Entities.Detailing;
+using DataLayer.Entities.Detailing.CastGateValveDetails;
+using DataLayer.Entities.Detailing.ReverseShutterDetails;
 using DataLayer.TechnicalControlPlans.Detailing;
-using DataLayer.Journals.Detailing;
+using DataLayer.Journals.Detailing.CastGateValveDetails;
+using DataLayer.Journals.Detailing.ReverseShutterDetails;
 using Supervision.ViewModels.TCPViewModels;
 using DataLayer.TechnicalControlPlans.AssemblyUnits;
+using DataLayer.TechnicalControlPlans.Detailing.CastGateValveDetails;
+using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
 
 namespace Supervision.ViewModels
 {
@@ -23,7 +27,7 @@ namespace Supervision.ViewModels
         private Page currentPage;
         public Page CurrentPage
         { 
-            get { return currentPage; } 
+            get => currentPage;
             set 
             { 
                 currentPage = value;
@@ -34,15 +38,13 @@ namespace Supervision.ViewModels
         private double frameOpacity;
         public double FrameOpacity
         { 
-            get { return frameOpacity; } 
+            get => frameOpacity;
             set 
             { 
                 frameOpacity = value; 
                 RaisePropertyChanged(); 
             } 
         }
-
-        public MainViewModel() { }
 
         public ICommand BronzeSleeveShutterOpen
         {
@@ -69,7 +71,7 @@ namespace Supervision.ViewModels
                             () =>
                             {
                                 var w = new CastingCaseView();
-                                var vm = new CastingCaseVM<ShutterCase, ShutterCaseTCP, ShutterCaseJournal>();
+                                var vm = new CastingCaseVM<ReverseShutterCase, ReverseShutterCaseTCP, ReverseShutterCaseJournal>();
                                 w.DataContext = vm;
                                 w.ShowDialog();
                             });
@@ -85,7 +87,7 @@ namespace Supervision.ViewModels
                             () =>
                             {
                                 var w = new CastingCaseView();
-                                var vm = new CastingCaseVM<ValveCase, ValveCaseTCP, ValveCaseJournal>();
+                                var vm = new CastingCaseVM<CastGateValveCase, CastGateValveCaseTCP, CastGateValveCaseJournal>();
                                 w.DataContext = vm;
                                 w.ShowDialog();
                             });
@@ -192,7 +194,7 @@ namespace Supervision.ViewModels
             {
                 Page tcp = new TCPView
                 {
-                    DataContext = new TCPViewModel<ShutterReverseTCP>()
+                    DataContext = new TCPViewModel<ReverseShutterTCP>()
                 };
                 return new DelegateCommand(() => SlowOpacity(tcp));
             }
@@ -270,7 +272,7 @@ namespace Supervision.ViewModels
             {
                 Page tcp = new TCPView
                 {
-                    DataContext = new TCPViewModel<ShutterCaseTCP>()
+                    DataContext = new TCPViewModel<ReverseShutterCaseTCP>()
                 };
                 return new DelegateCommand(() => SlowOpacity(tcp));
             }

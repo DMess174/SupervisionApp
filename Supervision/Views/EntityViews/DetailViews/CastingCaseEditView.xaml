@@ -3,13 +3,11 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
-      xmlns:viewmodel="clr-namespace:Supervision.ViewModels"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        mc:Ignorable="d" 
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-        WindowStartupLocation="CenterScreen"
-        Title="Корпус затвора">
+      WindowStartupLocation="CenterScreen"
+      Title="{Binding SelectedItem.Name}">
     <Window.Resources>
         <CollectionViewSource x:Key="Inspectors" Source="{Binding Inspectors}"/>
         <CollectionViewSource x:Key="Points" Source="{Binding Points}" />
@@ -21,6 +19,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
@@ -209,7 +208,7 @@
                             Height="30">
                         </ComboBox>
 
-                        <ListBox 
+                        <ListBox  
                             ItemsSource="{Binding SelectedItem.Nozzles}" 
                             Margin="5"
                             Grid.ColumnSpan="2"
@@ -219,7 +218,8 @@
                             SelectedItem="{Binding SelectedNozzleFromList}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseDoubleClick">
-                                    <i:InvokeCommandAction Command="{Binding EditNozzle}"/>
+                                    <i:InvokeCommandAction Command="{Binding EditNozzle}"
+                                                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <ListBox.ItemTemplate>
@@ -276,9 +276,7 @@
                                   ItemsSource="{Binding Journal}"
                                   IsReadOnly="False" 
                                   CanUserAddRows="False"
-                                  CanUserDeleteRows="False"
-                                  Height="auto" 
-                                  HorizontalContentAlignment="Stretch">
+                                  CanUserDeleteRows="False">
                             <DataGrid.Columns>
 
                                 <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" Width="100" Header="Дата">
@@ -317,10 +315,10 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <ComboBox Style="{StaticResource BaseCombobox}" 
-                                      VerticalContentAlignment="Center"
-                                      ItemsSource="{Binding Path=DataContext.Inspectors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                      SelectedValuePath="Id"
-                                      SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}">
+                                                    VerticalContentAlignment="Center"
+                                                    ItemsSource="{Binding Path=DataContext.Inspectors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                                    SelectedValuePath="Id"
+                                                    SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}">
                                                 <ComboBox.ItemTemplate>
                                                     <DataTemplate>
                                                         <TextBlock>
@@ -343,12 +341,12 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <ComboBox Style="{StaticResource BaseCombobox}"
-                                      Height="50" 
-                                      VerticalContentAlignment="Center" 
-                                      HorizontalContentAlignment="Center"
-                                      IsEditable="False"
-                                      Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" 
-                                      SelectedItem= "{Binding Status}">
+                                                    Height="50" 
+                                                    VerticalContentAlignment="Center" 
+                                                    HorizontalContentAlignment="Center"
+                                                    IsEditable="False"
+                                                    Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" 
+                                                    SelectedItem= "{Binding Status}">
                                                 <ComboBoxItem Content="Соответствует"/>
                                                 <ComboBoxItem Content="Не соответствует"/>
                                             </ComboBox>
@@ -360,11 +358,11 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <ComboBox Style="{StaticResource BaseCombobox}" 
-                                      Height="50" 
-                                      VerticalContentAlignment="Center" 
-                                      HorizontalContentAlignment="Center"
-                                      ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                      SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
+                                                Height="50" 
+                                                VerticalContentAlignment="Center" 
+                                                HorizontalContentAlignment="Center"
+                                                ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                                SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                             </ComboBox>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -392,6 +390,7 @@
                       VerticalContentAlignment="Center" 
                       ItemsSource="{Binding Path=DataContext.Points, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                       SelectedItem="{Binding SelectedTCPPoint}"
+                      Margin="5"
                       MinWidth="300"
                       Width="auto">
                 <ComboBox.ItemTemplate>
@@ -419,12 +418,23 @@
             </ComboBox>
 
             <Button Style="{StaticResource BaseButton}" 
-                            Content="Добавить операцию" 
-                            Margin="10" 
-                            Command="{Binding AddOperation}" />
+                           Content="Добавить операцию" 
+                           Margin="10" 
+                           Command="{Binding AddOperation}" />
         </StackPanel>
 
-        <DockPanel Grid.Row="4"  Height="50" VerticalAlignment="Bottom" Margin="0,1" >
+        <Separator Grid.Row="4" Foreground="Black" 
+                   BorderBrush="#FF828790" 
+                   Background="#FF828790" 
+                   Margin="0,0,0,0.5" 
+                   VerticalContentAlignment="Center" 
+                   Height="3" 
+                   VerticalAlignment="Bottom"/>
+        
+        <DockPanel Grid.Row="5"  
+                   Height="50" 
+                   VerticalAlignment="Bottom" 
+                   Margin="1" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -435,7 +445,6 @@
                         Orientation="Horizontal" 
                         HorizontalAlignment="Left" 
                         VerticalAlignment="Bottom">
-
                 </StackPanel>
 
                 <StackPanel Grid.Column="1"
@@ -444,6 +453,7 @@
                         Orientation="Horizontal" 
                         HorizontalAlignment="Right" 
                         VerticalAlignment="Bottom">
+
                     <Button Style="{StaticResource BaseButton}" 
                             Content="Сохранить" 
                             Margin="10" 

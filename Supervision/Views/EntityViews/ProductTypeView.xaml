@@ -3,87 +3,14 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
-      xmlns:viewmodel="clr-namespace:Supervision.ViewModels"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Персонал">
-    <Page.Resources>
-        <Style TargetType="ComboBox">
-            <Setter Property="FontFamily" Value="Franklin Gothic Book"/>
-            <Setter Property="FontSize" Value="16"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="FontFamily" Value="Franklin Gothic Book"/>
-            <Setter Property="FontSize" Value="16"/>
-        </Style>
-        <Style TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="Franklin Gothic Book"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="DemiBold"/>
-        </Style>
-        <Style TargetType="DataGridColumnHeader">
-            <Setter Property="FontFamily" Value="Franklin Gothic Book"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="DemiBold"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
-        <ControlTemplate x:Key="Button_Template" TargetType="{x:Type Button}">
-            <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3"
-                                TextBlock.Foreground="#ddd" Margin="0 0 10 0" MaxHeight="30"
-                                MinWidth="80" Padding="5" Name="myBorder">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="#676767" Offset="0"></GradientStop>
-                        <GradientStop Color="#474747" Offset="1"></GradientStop>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <ContentPresenter RecognizesAccessKey="True" Margin="{TemplateBinding Padding}"
-                              VerticalAlignment="Center" HorizontalAlignment="Center"></ContentPresenter>
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="myBorder" Property="Background">
-                        <Setter.Value>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                <GradientStop Color="#777777" Offset="0"></GradientStop>
-                                <GradientStop Color="#575757" Offset="1"></GradientStop>
-                            </LinearGradientBrush>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="myBorder" Property="Cursor" Value="Hand"></Setter>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter TargetName="myBorder" Property="Background">
-                        <Setter.Value>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                <GradientStop Color="#939292" Offset="0"></GradientStop>
-                                <GradientStop Color="#575757" Offset="1"></GradientStop>
-                            </LinearGradientBrush>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="myBorder" Property="Cursor" Value="Hand"></Setter>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter TargetName="myBorder" Property="Background">
-                        <Setter.Value>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                <GradientStop Color="#444" Offset="0"></GradientStop>
-                                <GradientStop Color="#222" Offset="1"></GradientStop>
-                            </LinearGradientBrush>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="myBorder" Property="Opacity" Value="0.4"></Setter>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-    </Page.Resources>
+      Title="Тип продукции">
     <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="5"/>
@@ -93,9 +20,15 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-
-        <Separator Grid.Row="1" Foreground="Black" BorderBrush="#FF828790" Background="#FF828790" 
-                   Margin="0,0,0,0.5" VerticalContentAlignment="Center" Height="3" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
+        <Separator Grid.Row="1" 
+                   Foreground="Black" 
+                   BorderBrush="#FF828790" 
+                   Background="#FF828790" 
+                   Margin="0,0,0,0.5" 
+                   VerticalContentAlignment="Center" 
+                   Height="3" 
+                   VerticalAlignment="Bottom" 
+                   Grid.ColumnSpan="2"/>
 
         <DataGrid Style="{StaticResource BaseDataGrid}"
                 Grid.Row="2" 
@@ -104,36 +37,41 @@
                 SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"
-                                    HeaderStyle="{StaticResource BaseDataGridHeader}" 
-                                    Width="35" 
-                                    Binding="{Binding Path = Id}" 
-                                    TextBlock.TextAlignment="Center">
+                    HeaderStyle="{StaticResource BaseDataGridHeader}" 
+                    Width="35" 
+                    Binding="{Binding Path = Id}" 
+                    TextBlock.TextAlignment="Center">
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="Наименование" 
-                                    HeaderStyle="{StaticResource BaseDataGridHeader}" 
-                                    Width="200*" 
-                                    Binding="{Binding Path = Name}" 
-                                    TextBlock.TextAlignment="Center" >
+                    HeaderStyle="{StaticResource BaseDataGridHeader}" 
+                    Width="200*" 
+                    Binding="{Binding Path = Name}" 
+                    TextBlock.TextAlignment="Center" >
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="Сокращенное&#x0a;наименование"
-                                    HeaderStyle="{StaticResource BaseDataGridHeader}" 
-                                    Width="170" 
-                                    Binding="{Binding Path= ShortName}"/>
-                </DataGrid.Columns>
+                    HeaderStyle="{StaticResource BaseDataGridHeader}" 
+                    Width="170" 
+                    Binding="{Binding Path= ShortName}"/>
+            </DataGrid.Columns>
         </DataGrid>
 
-        <DockPanel Grid.Row="2"  Height="50" VerticalAlignment="Bottom" Margin="0,0,0,1" Grid.ColumnSpan="2" Grid.RowSpan="2" >
+        <DockPanel Grid.Row="2"  
+                   Height="50" 
+                   VerticalAlignment="Bottom" 
+                   Margin="0,0,0,1" 
+                   Grid.ColumnSpan="2" 
+                   Grid.RowSpan="2" >
             <StackPanel  DockPanel.Dock="Bottom" 
-                         Background="LightGray" 
-                         Orientation="Horizontal" 
-                         HorizontalAlignment="Center" 
-                         VerticalAlignment="Bottom">
+                    Background="LightGray" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Bottom">
                 <Button Style="{StaticResource BaseButton}" 
                     Content="Добавить" 
-                        Margin="10" 
-                        Command="{Binding AddItem}" />
+                    Margin="10" 
+                    Command="{Binding AddItem}" />
 
                 <Button Content="Удалить" 
                         Style="{StaticResource BaseButton}" 
@@ -142,31 +80,39 @@
                         CommandParameter="{Binding ElementName=AllInstances, Path=SelectedItem}"  />
             </StackPanel>
         </DockPanel>
-        <Separator Grid.Row="4" Foreground="Black" BorderBrush="#FF828790" Background="#FF828790" 
-                   Margin="0,0,0,0.5" VerticalContentAlignment="Center" Height="3" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
-        <StackPanel Grid.Row="5"
+        <Separator Grid.Row="4" 
+                   Foreground="Black" 
+                   BorderBrush="#FF828790" 
+                   Background="#FF828790" 
+                   Margin="0,0,0,0.5" 
+                   VerticalContentAlignment="Center" 
+                   Height="3" 
+                   VerticalAlignment="Bottom" 
+                   Grid.ColumnSpan="2"/>
+
+        <StackPanel Grid.Row="5" 
                     Width="auto">
             <TextBlock Style="{StaticResource BaseTextBlock}" 
-                           Text="Наименование" 
-                           Margin="5" />
+                Text="Наименование" 
+                Margin="5" />
 
             <TextBlock Style="{StaticResource BaseTextBlock}" 
-                           Text="Сокращенное &#x0a;наименование" 
-                           Margin="5" />
+                Text="Сокращенное &#x0a;наименование" 
+                Margin="5" />
         </StackPanel>
         <StackPanel Grid.Row="5"
-                    Grid.Column="1" 
-                    HorizontalAlignment="Left">
+                Grid.Column="1" 
+                HorizontalAlignment="Left">
             <TextBox Style="{StaticResource BaseTextBox}"
-                     Width="300" 
-                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
-                     DataContext="{Binding SelectedItem}"/>
+                Width="300" 
+                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                DataContext="{Binding SelectedItem}"/>
 
             <TextBox Style="{StaticResource BaseTextBox}" 
-                     Width="300"
-                     Margin="0 12"
-                     Text="{Binding ShortName, UpdateSourceTrigger=PropertyChanged}" 
-                     DataContext="{Binding SelectedItem}"/>
+                Width="300"
+                Margin="0 12"
+                Text="{Binding ShortName, UpdateSourceTrigger=PropertyChanged}" 
+                DataContext="{Binding SelectedItem}"/>
         </StackPanel>
         <Button Grid.Row="6" Grid.ColumnSpan="2"
                 Style="{StaticResource BaseButton}" 

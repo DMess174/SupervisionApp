@@ -1,9 +1,7 @@
 ﻿using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Journals;
-using DataLayer.Journals.Detailing;
 using DataLayer.TechnicalControlPlans;
-using DataLayer.TechnicalControlPlans.Detailing;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.Native;
 using Microsoft.EntityFrameworkCore;
@@ -44,7 +42,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public TEntity SelectedItem
         {
-            get { return selectedItem; }
+            get => selectedItem;
             set
             {
                 selectedItem = value;
@@ -54,7 +52,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public IEnumerable<TEntityJournal> Journal
         {
-            get { return journal; }
+            get => journal;
             set
             {
                 journal = value;
@@ -63,7 +61,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public IEnumerable<TEntityTCP> Points
         {
-            get { return points; }
+            get => points;
             set
             {
                 points = value;
@@ -72,7 +70,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public IEnumerable<TUser> Inspectors
         {
-            get { return inspectors; }
+            get => inspectors;
             set
             {
                 inspectors = value;
@@ -82,7 +80,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public Nozzle SelectedNozzle
         {
-            get { return selectedNozzle; }
+            get => selectedNozzle;
             set
             {
                 selectedNozzle = value;
@@ -92,7 +90,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public Nozzle SelectedNozzleFromList
         {
-            get { return selectedNozzleFromList; }
+            get => selectedNozzleFromList;
             set
             {
                 selectedNozzleFromList = value;
@@ -214,7 +212,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public TEntityTCP SelectedTCPPoint
         {
-            get { return selectedTCPPoint; }
+            get => selectedTCPPoint;
             set
             {
                 selectedTCPPoint = value;
@@ -249,7 +247,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public IEnumerable<string> Materials
         {
-            get { return materials; }
+            get => materials;
             set
             {
                 materials = value;
@@ -258,7 +256,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public IEnumerable<string> Drawings
         {
-            get { return drawings; }
+            get => drawings;
             set
             {
                 drawings = value;
@@ -267,7 +265,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public IEnumerable<string> JournalNumbers
         {
-            get { return journalNumbers; }
+            get => journalNumbers;
             set
             {
                 journalNumbers = value;
@@ -277,7 +275,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public IEnumerable<Nozzle> Nozzles
         {
-            get { return nozzles; }
+            get => nozzles;
             set
             {
                 nozzles = value;

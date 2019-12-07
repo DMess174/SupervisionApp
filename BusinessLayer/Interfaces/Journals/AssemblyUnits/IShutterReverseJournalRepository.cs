@@ -1,8 +1,8 @@
-﻿using DataLayer.Journals.Detailing;
+﻿using DataLayer.Journals.AssemblyUnits;
 
 namespace BusinessLayer.Interfaces.Journals.AssemblyUnits
 {
-    public interface IShutterReverseJournalRepository : IRepository<ShutterReverseJournal>
+    public interface IShutterReverseJournalRepository : IRepository<ReverseShutterJournal>
     {
     }
 }

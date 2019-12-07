@@ -9,6 +9,5 @@ namespace DataLayer
         public string ShortName { get; set; }
 
         public IEnumerable<PID> PIDs { get; set; }
-
     }
 }

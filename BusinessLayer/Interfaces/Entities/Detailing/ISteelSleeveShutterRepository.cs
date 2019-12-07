@@ -1,4 +1,4 @@
-﻿using DataLayer.Entities.Detailing;
+﻿using DataLayer.Entities.Detailing.ReverseShutterDetails;
 
 namespace BusinessLayer.Interfaces.Entities.Detailing
 {

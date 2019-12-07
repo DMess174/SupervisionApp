@@ -1,8 +1,8 @@
-﻿using DataLayer.TechnicalControlPlans.Detailing;
+﻿using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
 
 namespace BusinessLayer.Interfaces.TechnicalControlPlans.Detailing
 {
-    public interface ICaseShutterTCPRepository : IRepository<ShutterCaseTCP>
+    public interface ICaseShutterTCPRepository : IRepository<ReverseShutterCaseTCP>
     {
     }
 }

@@ -1,6 +1,4 @@
-﻿using DataLayer.TechnicalControlPlans;
-using Supervision.ViewModels.TCPViewModels;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace Supervision.Views.TCPViews
 {

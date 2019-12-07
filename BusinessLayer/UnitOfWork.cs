@@ -1,4 +1,4 @@
-﻿    using BusinessLayer.Implementations.Entities;
+﻿using BusinessLayer.Implementations.Entities;
 using BusinessLayer.Implementations.Entities.Detailing;
 using BusinessLayer.Implementations.Entities.AssemblyUnits;
 using BusinessLayer.Interfaces;
@@ -14,7 +14,6 @@ using BusinessLayer.Implementations.Journals.Detailing;
 using BusinessLayer.Implementations.Journals.AssemblyUnits;
 using BusinessLayer.Implementations.TechnicalControlPlans.AssemblyUnits;
 using BusinessLayer.Implementations.TechnicalControlPlans.Detailing;
-using System.Threading.Tasks;
 using DataLayer.Entities;
 using DataLayer.TechnicalControlPlans;
 using DataLayer.Journals;
@@ -23,50 +22,50 @@ namespace BusinessLayer
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly DataContext Context;
+        private readonly DataContext context;
 
         public UnitOfWork(DataContext context)
         {
-            Context = context;
+            this.context = context;
 
-            BaseDetail = new BaseDetailRepository(Context);
-            ShutterReverse = new ShutterReverseRepository(Context);
-            ShutterReverseJournal = new ShutterReverseJournalRepository(Context);
-            ShutterReverseTCP = new ShutterReverseTCPRepository(Context);
+            BaseDetail = new BaseDetailRepository(this.context);
+            ShutterReverse = new ShutterReverseRepository(this.context);
+            ShutterReverseJournal = new ShutterReverseJournalRepository(this.context);
+            ShutterReverseTCP = new ShutterReverseTCPRepository(this.context);
 
-            BronzeSleeveShutter = new BronzeSleeveShutterRepository(Context);
-            BronzeSleeveShutterJournal = new BronzeSleeveShutterJournalRepository(Context);
-            BronzeSleeveShutterTCP = new BronzeSleeveShutterTCPRepository(Context);
+            BronzeSleeveShutter = new BronzeSleeveShutterRepository(this.context);
+            BronzeSleeveShutterJournal = new BronzeSleeveShutterJournalRepository(this.context);
+            BronzeSleeveShutterTCP = new BronzeSleeveShutterTCPRepository(this.context);
 
-            CaseShutter = new CaseShutterRepository(Context);
-            CaseShutterJournal = new CaseShutterJournalRepository(Context);
-            CaseShutterTCP = new CaseShutterTCPRepository(Context);
+            CaseShutter = new CaseShutterRepository(this.context);
+            CaseShutterJournal = new CaseShutterJournalRepository(this.context);
+            CaseShutterTCP = new CaseShutterTCPRepository(this.context);
 
-            Nozzle = new NozzleRepository(Context);
-            NozzleJournal = new NozzleJournalRepository(Context);
-            NozzleTCP = new NozzleTCPRepository(Context);
+            Nozzle = new NozzleRepository(this.context);
+            NozzleJournal = new NozzleJournalRepository(this.context);
+            NozzleTCP = new NozzleTCPRepository(this.context);
 
-            ShaftShutter = new ShaftShutterRepository(Context);
-            ShaftShutterJournal = new ShaftShutterJournalRepository(Context);
-            ShaftShutterTCP = new ShaftShutterTCPRepository(Context);
+            ShaftShutter = new ShaftShutterRepository(this.context);
+            ShaftShutterJournal = new ShaftShutterJournalRepository(this.context);
+            ShaftShutterTCP = new ShaftShutterTCPRepository(this.context);
 
-            SlamShutter = new SlamShutterRepository(Context);
-            SlamShutterJournal = new SlamShutterJournalRepository(Context);
-            SlamShutterTCP = new SlamShutterTCPRepository(Context);
+            SlamShutter = new SlamShutterRepository(this.context);
+            SlamShutterJournal = new SlamShutterJournalRepository(this.context);
+            SlamShutterTCP = new SlamShutterTCPRepository(this.context);
 
-            SteelSleeveShutter = new SteelSleeveShutterRepository(Context);
-            SteelSleeveShutterJournal = new SteelSleeveShutterJournalRepository(Context);
-            SteelSleeveShutterTCP = new SteelSleeveShutterTCPRepository(Context);
+            SteelSleeveShutter = new SteelSleeveShutterRepository(this.context);
+            SteelSleeveShutterJournal = new SteelSleeveShutterJournalRepository(this.context);
+            SteelSleeveShutterTCP = new SteelSleeveShutterTCPRepository(this.context);
 
-            StubShutter = new StubShutterRepository(Context);
-            StubShutterJournal = new StubShutterJournalRepository(Context);
-            StubShutterTCP = new StubShutterTCPRepository(Context);
+            StubShutter = new StubShutterRepository(this.context);
+            StubShutterJournal = new StubShutterJournalRepository(this.context);
+            StubShutterTCP = new StubShutterTCPRepository(this.context);
 
-            Customer = new CustomerRepository(Context);
-            Inspector = new InspectorRepository(Context);
-            PID = new PIDRepository(Context);
-            ProductType = new ProductTypeRepository(Context);
-            Specification = new SpecificationRepository(Context);
+            Customer = new CustomerRepository(this.context);
+            Inspector = new InspectorRepository(this.context);
+            PID = new PIDRepository(this.context);
+            ProductType = new ProductTypeRepository(this.context);
+            Specification = new SpecificationRepository(this.context);
         }
 
         public IBaseDetailRepository<BaseJournal<BaseEntity, BaseTCP>, BaseTCP> BaseDetail { get; private set; }
@@ -110,12 +109,12 @@ namespace BusinessLayer
 
         public int Complete()
         {
-            return Context.SaveChanges();
+            return context.SaveChanges();
         }
 
         public void Dispose()
         {
-            Context.Dispose();
+            context.Dispose();
         }
 
     }

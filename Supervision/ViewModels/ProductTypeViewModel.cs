@@ -1,6 +1,6 @@
-﻿using DevExpress.Mvvm;
+﻿using System.Collections.Generic;
+using DevExpress.Mvvm;
 using DataLayer;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -8,14 +8,13 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Microsoft.EntityFrameworkCore;
-using BusinessLayer;
 
 namespace Supervision.ViewModels
 {
     class ProductTypeViewModel : BasePropertyChanged
     {
         private readonly DataContext db;
-        private ObservableCollection<ProductType> allInstances;
+        private IEnumerable<ProductType> allInstances;
         private ICollectionView allInstancesView;
         private ProductType selectedItem;
         private ICommand addItem;
@@ -79,7 +78,7 @@ namespace Supervision.ViewModels
 
         public ProductType SelectedItem
         {
-            get { return selectedItem; }
+            get => selectedItem;
             set
             {
                 selectedItem = value;
@@ -87,9 +86,9 @@ namespace Supervision.ViewModels
             }
         }
 
-        public ObservableCollection<ProductType> AllInstances
+        public IEnumerable<ProductType> AllInstances
         {
-            get { return allInstances; }
+            get => allInstances;
             set
             {
                 allInstances = value;
@@ -99,15 +98,13 @@ namespace Supervision.ViewModels
 
         public ICollectionView AllInstancesView
         {
-            get { return allInstancesView; }
+            get => allInstancesView;
             set
             {
                 allInstancesView = value;
                 RaisePropertyChanged("AllInstancesView");
             }
         }
-
-        
 
         public ProductTypeViewModel()
         {

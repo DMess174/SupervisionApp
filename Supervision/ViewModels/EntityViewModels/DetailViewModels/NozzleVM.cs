@@ -36,7 +36,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         #region Filter
         public string Number 
         {
-            get { return number; }
+            get => number;
             set
             {
                 number = value;
@@ -53,7 +53,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public string Drawing
         {
-            get { return drawing; }
+            get => drawing;
             set
             {
                 drawing = value;
@@ -70,7 +70,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public string Status
         {
-            get { return status; }
+            get => status;
             set
             {
                 status = value;
@@ -87,7 +87,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public string Material
         {
-            get { return material; }
+            get => material;
             set
             {
                 material= value;
@@ -104,7 +104,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public string Certificate
         {
-            get { return certificate; }
+            get => certificate;
             set
             {
                 certificate = value;
@@ -121,7 +121,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public string Melt
         {
-            get { return melt; }
+            get => melt;
             set
             {
                 melt = value;
@@ -280,7 +280,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public string Name
         {
-            get { return name; }
+            get => name;
             set
             {
                 name = value;
@@ -290,7 +290,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public Nozzle SelectedItem
         {
-            get { return selectedItem; }
+            get => selectedItem;
             set
             {
                 selectedItem = value;
@@ -300,7 +300,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public IEnumerable<Nozzle> AllInstances
         {
-            get { return allInstances; }
+            get => allInstances;
             set
             {
                 allInstances = value;
@@ -309,7 +309,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public ICollectionView AllInstancesView
         {
-            get { return allInstancesView; }
+            get => allInstancesView;
             set
             {
                 allInstancesView = value;

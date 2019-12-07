@@ -357,7 +357,7 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\IBaseDetailVM.cs" />
     <Compile Include="ViewModels\ProductTypeViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
-    <Compile Include="ViewModels\EntityViewModels\AssemblyViewModels\ShutterReverseViewModel.cs" />
+    <Compile Include="ViewModels\EntityViewModels\AssemblyViewModels\ReverseShutterViewModel.cs" />
     <Compile Include="Views\EntityViews\DetailViews\CastingCaseView.xaml.cs">
       <DependentUpon>CastingCaseView.xaml</DependentUpon>
     </Compile>
@@ -466,7 +466,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModels\InspectorViewModel.cs" />
+    <Compile Include="ViewModels\InspectorVM.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\EntityViews\InspectorView.xaml.cs">
       <DependentUpon>InspectorView.xaml</DependentUpon>

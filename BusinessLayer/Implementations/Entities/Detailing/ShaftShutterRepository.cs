@@ -1,6 +1,6 @@
 ﻿using BusinessLayer.Interfaces.Entities.Detailing;
 using DataLayer;
-using DataLayer.Entities.Detailing;
+using DataLayer.Entities.Detailing.ReverseShutterDetails;
 
 namespace BusinessLayer.Implementations.Entities.Detailing
 {
@@ -11,9 +11,6 @@ namespace BusinessLayer.Implementations.Entities.Detailing
         {
         }
 
-        public DataContext DataContext
-        {
-            get { return Context as DataContext; }
-        }
+        public DataContext DataContext => Context as DataContext;
     }
 }

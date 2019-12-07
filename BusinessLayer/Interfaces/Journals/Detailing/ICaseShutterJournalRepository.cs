@@ -1,8 +1,8 @@
-﻿using DataLayer.Journals.Detailing;
+﻿using DataLayer.Journals.Detailing.ReverseShutterDetails;
 
 namespace BusinessLayer.Interfaces.Journals.Detailing
 {
-    public interface ICaseShutterJournalRepository : IRepository<ShutterCaseJournal>
+    public interface ICaseShutterJournalRepository : IRepository<ReverseShutterCaseJournal>
     {
     }
 }

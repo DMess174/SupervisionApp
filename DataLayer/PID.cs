@@ -24,6 +24,7 @@ namespace DataLayer
         public int? ProductTypeId { get; set; }
         public ProductType ProductType { get; set; }
 
-        public IEnumerable<ShutterReverse> ShutterReverses{ get; set; }
+        public IEnumerable<ReverseShutter> ReverseShutters { get; set; }
+        public IEnumerable<CastGateValve> CastGateValves { get; set; }
     }
 }

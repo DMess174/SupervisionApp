@@ -8,10 +8,9 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
         WindowStartupLocation="CenterScreen"
-        Title="Катушка">
+        Title="{Binding SelectedItem.Name}">
     <Window.Resources>
         <CollectionViewSource x:Key="Inspectors" Source="{Binding Inspectors}"/>
-        <CollectionViewSource x:Key="Points" Source="{Binding Points}" />
     </Window.Resources>
     
     <Grid Background="LightGray">
@@ -20,6 +19,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
@@ -237,7 +237,14 @@
             </Grid>
         </Grid>
         
-        <Separator Grid.Row="1" Foreground="Black" BorderBrush="#FF828790" Background="#FF828790" Margin="0,0,0,0.5" VerticalContentAlignment="Center" Height="3" VerticalAlignment="Bottom"/>
+        <Separator Grid.Row="1" Foreground="Black" 
+                   BorderBrush="#FF828790" 
+                   Background="#FF828790" 
+                   Margin="0,0,0,0.5" 
+                   VerticalContentAlignment="Center" 
+                   Height="3" 
+                   VerticalAlignment="Bottom"/>
+        
         <DataGrid Style="{StaticResource BaseDataGrid}"
                 Background="LightGray"
                 Grid.Row="2" 
@@ -349,7 +356,7 @@
         </DataGrid>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <Label Content="Добавление операции:"
+            <Label Content="Выбор пункта:"
                    Margin="0 0 10 0"
                    FontSize="{StaticResource Big}"
                    Style="{StaticResource BaseLabel}"
@@ -357,8 +364,9 @@
 
             <ComboBox Style="{StaticResource BaseCombobox}" 
                       VerticalContentAlignment="Center" 
-                      ItemsSource="{Binding Path=DataContext.Points, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                      ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
+                      Margin="5"
                       MinWidth="300"
                       Width="auto">
                 <ComboBox.ItemTemplate>
@@ -391,7 +399,15 @@
                             Command="{Binding AddOperation}" />
         </StackPanel>
 
-        <DockPanel Grid.Row="4"  Height="50" VerticalAlignment="Bottom" Margin="0,1" >
+        <Separator Grid.Row="4" Foreground="Black" 
+                   BorderBrush="#FF828790" 
+                   Background="#FF828790" 
+                   Margin="0,0,0,0.5" 
+                   VerticalContentAlignment="Center" 
+                   Height="3" 
+                   VerticalAlignment="Bottom"/>
+        
+        <DockPanel Grid.Row="5"  Height="50" VerticalAlignment="Bottom" Margin="0,1" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>

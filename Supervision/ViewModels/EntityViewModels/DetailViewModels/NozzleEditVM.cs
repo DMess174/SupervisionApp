@@ -9,6 +9,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using DataLayer.Entities.Detailing.CastGateValveDetails;
+using DataLayer.Entities.Detailing.ReverseShutterDetails;
+using DataLayer.Journals.Detailing.CastGateValveDetails;
+using DataLayer.Journals.Detailing.ReverseShutterDetails;
+using DataLayer.TechnicalControlPlans.Detailing.CastGateValveDetails;
+using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
@@ -24,7 +30,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         private IEnumerable<NozzleTCP> points;
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<NozzleJournal> journal;
-        private readonly BaseEntity ParentEntity;
+        private readonly BaseEntity parentEntity;
         private NozzleTCP selectedTCPPoint;
 
         private Nozzle selectedItem;
@@ -34,7 +40,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public Nozzle SelectedItem
         {
-            get { return selectedItem; }
+            get => selectedItem;
             set
             {
                 selectedItem = value;
@@ -44,7 +50,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public IEnumerable<NozzleJournal> Journal
         {
-            get { return journal; }
+            get => journal;
             set
             {
                 journal = value;
@@ -53,7 +59,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public IEnumerable<NozzleTCP> Points
         {
-            get { return points; }
+            get => points;
             set
             {
                 points = value;
@@ -62,7 +68,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public IEnumerable<Inspector> Inspectors
         {
-            get { return inspectors; }
+            get => inspectors;
             set
             {
                 inspectors = value;
@@ -105,15 +111,23 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        if (ParentEntity is ShutterCase)
+                        if (parentEntity is ReverseShutterCase)
                         {
                             var wn = new CastingCaseEditView();
-                            var vm = new CastingCaseEditVM<ShutterCase, Inspector, ShutterCaseTCP, ShutterCaseJournal>(ParentEntity.Id);
+                            var vm = new CastingCaseEditVM<ReverseShutterCase, Inspector, ReverseShutterCaseTCP, ReverseShutterCaseJournal>(parentEntity.Id);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
                         }
-                        else if (ParentEntity is Nozzle)
+                        else if (parentEntity is CastGateValveCase)
+                        {
+                            var wn = new CastingCaseEditView();
+                            var vm = new CastingCaseEditVM<CastGateValveCase, Inspector, CastGateValveCaseTCP, CastGateValveCaseJournal>(parentEntity.Id);
+                            wn.DataContext = vm;
+                            w?.Close();
+                            wn.ShowDialog();
+                        }
+                        else if (parentEntity is Nozzle)
                         {
                             var wn = new NozzleView();
                             var vm = new NozzleVM();
@@ -154,7 +168,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public IEnumerable<string> Materials
         {
-            get { return materials; }
+            get => materials;
             set
             {
                 materials = value;
@@ -163,7 +177,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public IEnumerable<string> Drawings
         {
-            get { return drawings; }
+            get => drawings;
             set
             {
                 drawings = value;
@@ -172,7 +186,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         }
         public IEnumerable<string> JournalNumbers
         {
-            get { return journalNumbers; }
+            get => journalNumbers;
             set
             {
                 journalNumbers = value;
@@ -182,7 +196,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public IEnumerable<string> Thickness
         {
-            get { return thickness; }
+            get => thickness;
             set
             {
                 thickness = value;
@@ -192,7 +206,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public IEnumerable<string> ThicknessJoin
         {
-            get { return thicknessJoin; }
+            get => thicknessJoin;
             set
             {
                 thicknessJoin = value;
@@ -202,7 +216,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public IEnumerable<string> Diameter
         {
-            get { return diameter; }
+            get => diameter;
             set
             {
                 diameter = value;
@@ -212,7 +226,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public NozzleTCP SelectedTCPPoint
         {
-            get { return selectedTCPPoint; }
+            get => selectedTCPPoint;
             set
             {
                 selectedTCPPoint = value;
@@ -222,7 +236,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 
         public NozzleEditVM(int id, BaseEntity entity)
         {
-            ParentEntity = entity;
+            parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.Nozzles.Find(id);
             Journal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();

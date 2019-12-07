@@ -4,16 +4,13 @@ using DataLayer.Entities.AssemblyUnits;
 
 namespace BusinessLayer.Implementations.Entities.AssemblyUnits
 {
-    public class ShutterReverseRepository : Repository<ShutterReverse>, IShutterReverseRepository
+    public class ShutterReverseRepository : Repository<ReverseShutter>, IShutterReverseRepository
     {
         public ShutterReverseRepository(DataContext context)
             : base(context)
         {
         }
 
-        public DataContext DataContext
-        {
-            get { return Context as DataContext; }
-        }
+        public DataContext DataContext => Context as DataContext;
     }
 }

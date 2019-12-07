@@ -11,7 +11,7 @@ namespace Supervision.Views.EntityViews
         public InspectorView()
         {
             InitializeComponent();
-            DataContext = new InspectorViewModel();
+            DataContext = new InspectorVM();
         }
     }
 }

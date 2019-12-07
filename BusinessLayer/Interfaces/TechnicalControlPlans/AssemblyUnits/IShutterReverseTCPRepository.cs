@@ -2,7 +2,7 @@
 
 namespace BusinessLayer.Interfaces.TechnicalControlPlans.AssemblyUnits
 {
-    public interface IShutterReverseTCPRepository : IRepository<ShutterReverseTCP>
+    public interface IShutterReverseTCPRepository : IRepository<ReverseShutterTCP>
     {
     }
 }

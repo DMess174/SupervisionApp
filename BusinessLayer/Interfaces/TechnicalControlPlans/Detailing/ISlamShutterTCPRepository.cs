@@ -1,4 +1,4 @@
-﻿using DataLayer.TechnicalControlPlans.Detailing;
+﻿using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
 
 namespace BusinessLayer.Interfaces.TechnicalControlPlans.Detailing
 {

@@ -11,9 +11,6 @@ namespace BusinessLayer.Implementations.TechnicalControlPlans.Detailing
         {
         }
 
-        public DataContext DataContext
-        {
-            get { return Context as DataContext; }
-        }
+        public DataContext DataContext => Context as DataContext;
     }
 }

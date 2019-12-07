@@ -1,8 +1,8 @@
-﻿using DataLayer.Entities.Detailing;
+﻿using DataLayer.Entities.Detailing.ReverseShutterDetails;
 
 namespace BusinessLayer.Interfaces.Entities.Detailing
 {
-    public interface ICaseShutterRepository : IRepository<ShutterCase>
+    public interface ICaseShutterRepository : IRepository<ReverseShutterCase>
     {
 
     }

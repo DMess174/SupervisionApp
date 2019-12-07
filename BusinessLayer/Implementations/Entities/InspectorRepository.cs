@@ -10,9 +10,6 @@ namespace BusinessLayer.Implementations.Entities
         {
         }
 
-        public DataContext DataContext
-        {
-            get { return Context as DataContext; }
-        }
+        public DataContext DataContext => Context as DataContext;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace BusinessLayer.Interfaces.Entities.AssemblyUnits
 {
-    public interface IShutterReverseRepository : IRepository<ShutterReverse>
+    public interface IShutterReverseRepository : IRepository<ReverseShutter>
     {
 
     }

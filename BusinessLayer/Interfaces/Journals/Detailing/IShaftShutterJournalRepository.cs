@@ -1,4 +1,4 @@
-﻿using DataLayer.Journals.Detailing;
+﻿using DataLayer.Journals.Detailing.ReverseShutterDetails;
 
 namespace BusinessLayer.Interfaces.Journals.Detailing
 {

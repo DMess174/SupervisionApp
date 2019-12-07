@@ -1,6 +1,6 @@
 ﻿using BusinessLayer.Interfaces.Journals.Detailing;
 using DataLayer;
-using DataLayer.Journals.Detailing;
+using DataLayer.Journals.Detailing.ReverseShutterDetails;
 
 namespace BusinessLayer.Implementations.Journals.Detailing
 {
@@ -11,9 +11,6 @@ namespace BusinessLayer.Implementations.Journals.Detailing
         {
         }
 
-        public DataContext DataContext
-        {
-            get { return Context as DataContext; }
-        }
+        public DataContext DataContext => Context as DataContext;
     }
 }

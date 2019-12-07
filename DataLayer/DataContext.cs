@@ -2,14 +2,21 @@
 using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Entities.Detailing;
 using System.Reflection;
+using DataLayer.Entities.Detailing.CastGateValveDetails;
+using DataLayer.Entities.Detailing.ReverseShutterDetails;
 using DataLayer.TechnicalControlPlans.AssemblyUnits;
 using DataLayer.TechnicalControlPlans.Detailing;
 using DataLayer.Journals.Detailing;
 using DataLayer.Journals;
+using DataLayer.Journals.AssemblyUnits;
+using DataLayer.Journals.Detailing.CastGateValveDetails;
+using DataLayer.Journals.Detailing.ReverseShutterDetails;
+using DataLayer.TechnicalControlPlans.Detailing.CastGateValveDetails;
+using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
 
 namespace DataLayer
 {
-    public class DataContext : DbContext
+    public sealed class DataContext : DbContext
     {
         public DbSet<Customer> Customers { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
@@ -22,9 +29,9 @@ namespace DataLayer
         public DbSet<BronzeSleeveShutterTCP> BronzeSleeveShutterTCPs { get; set; }
         public DbSet<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
         
-        public DbSet<ShutterCase> CaseShutters { get; set; }
-        public DbSet<ShutterCaseTCP> CaseShutterTCPs{ get; set; }
-        public DbSet<ShutterCaseJournal> CaseShutterJournals{ get; set; }
+        public DbSet<ReverseShutterCase> ReverseShutterCases { get; set; }
+        public DbSet<ReverseShutterCaseTCP> ReverseShutterCaseTCPs { get; set; }
+        public DbSet<ReverseShutterCaseJournal> ReverseShutterCaseJournals { get; set; }
 
         public DbSet<Nozzle> Nozzles { get; set; }
         public DbSet<NozzleTCP> NozzleTCPs { get; set; }
@@ -34,9 +41,9 @@ namespace DataLayer
         public DbSet<ShaftShutterTCP> ShaftShutterTCPs { get; set; }
         public DbSet<ShaftShutterJournal> ShaftShutterJournals { get; set; }
         
-        public DbSet<ShutterReverse> ShutterReverses { get; set; }
-        public DbSet<ShutterReverseTCP> ShutterReverseTCPs { get; set; }
-        public DbSet<ShutterReverseJournal> ShutterReverseJournals { get; set; }
+        public DbSet<ReverseShutter> ShutterReverses { get; set; }
+        public DbSet<ReverseShutterTCP> ReverseShutterTCPs { get; set; }
+        public DbSet<ReverseShutterJournal> ReverseShutterJournals { get; set; }
 
         public DbSet<SlamShutter> SlamShutters { get; set; }
         public DbSet<SlamShutterTCP> SlamShutterTCPs { get; set; }
@@ -50,29 +57,24 @@ namespace DataLayer
         public DbSet<StubShutterTCP> StubShutterTCPs { get; set; }
         public DbSet<StubShutterJournal> StubShutterJournals { get; set; }
 
-        public DbSet<ValveCase> ValveCases { get; set; }
-        public DbSet<ValveCaseTCP> ValveCaseTCPs { get; set; }
-        public DbSet<ValveCaseJournal> ValveCaseJournals { get; set; }
+        public DbSet<CastGateValveCase> CastGateValveCases { get; set; }
+        public DbSet<CastGateValveCaseTCP> CastGateValveCaseTCPs { get; set; }
+        public DbSet<CastGateValveCaseJournal> CastGateValveCaseJournals { get; set; }
 
-        public DbSet<CastingValve> CastingValves { get; set; }
+        public DbSet<CastGateValve> CastGateValves { get; set; }
+        public DbSet<CastGateValveTCP> CastGateValveTCPs { get; set; }
+        public DbSet<CastGateValveJournal> CastGateValveJournals { get; set; }
 
         public DataContext()
         {
-            //Database.EnsureDeleted();
             Database.EnsureCreated();
             //Database.Migrate();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Filename=SupervisionData.sqlite", options =>
-            {
-                options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
-            });
-
-
+            optionsBuilder.UseSqlite("Filename=SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
             base.OnConfiguring(optionsBuilder);
         }
-
     }
 }

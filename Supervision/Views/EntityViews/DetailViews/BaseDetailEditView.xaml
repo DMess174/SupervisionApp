@@ -2,9 +2,7 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
-      xmlns:viewmodel="clr-namespace:Supervision.ViewModels"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="1200"
         WindowStartupLocation="CenterScreen"
@@ -21,6 +19,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
@@ -169,15 +168,12 @@
         <DataGrid Style="{StaticResource BaseDataGrid}"
                 Background="LightGray"
                 Grid.Row="2" 
-                Grid.Column="0" 
-                Grid.ColumnSpan="1"
+                Grid.Column="0"
                 MinRowHeight="50"
                 ItemsSource="{Binding Journal}"
                 IsReadOnly="False" 
                 CanUserAddRows="False"
-                CanUserDeleteRows="False"
-                Height="auto" 
-                HorizontalContentAlignment="Stretch">
+                CanUserDeleteRows="False">
             <DataGrid.Columns>
 
                 <DataGridTemplateColumn HeaderStyle="{StaticResource BaseDataGridHeader}" Width="100" Header="Дата">
@@ -287,6 +283,7 @@
                       VerticalContentAlignment="Center" 
                       ItemsSource="{Binding Path=DataContext.Points, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                       SelectedItem="{Binding SelectedTCPPoint}"
+                      Margin="5"
                       MinWidth="300"
                       Width="auto">
                 <ComboBox.ItemTemplate>
@@ -318,8 +315,16 @@
                             Margin="10" 
                             Command="{Binding AddOperation}" />
         </StackPanel>
-        
-        <DockPanel Grid.Row="4"  Height="50" VerticalAlignment="Bottom" Margin="0,1" >
+
+        <Separator Grid.Row="4" Foreground="Black" 
+                   BorderBrush="#FF828790" 
+                   Background="#FF828790" 
+                   Margin="0,0,0,0.5" 
+                   VerticalContentAlignment="Center" 
+                   Height="3" 
+                   VerticalAlignment="Bottom"/>
+
+        <DockPanel Grid.Row="5"  Height="50" VerticalAlignment="Bottom" Margin="0,1" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>

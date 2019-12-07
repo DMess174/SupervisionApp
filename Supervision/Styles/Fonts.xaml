@@ -1,9 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Supervision.Styles"
     xmlns:system="clr-namespace:System;assembly=mscorlib">
-
 
     <FontFamily x:Key="BaseFont">Franklin Gothic Book</FontFamily>
     <system:Double x:Key="Small">10</system:Double>

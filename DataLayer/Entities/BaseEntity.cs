@@ -1,10 +1,4 @@
-﻿using DataLayer.Journals;
-using DataLayer.TechnicalControlPlans;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataLayer.Entities
+﻿namespace DataLayer.Entities
 {
     public class BaseEntity : BasePropertyChanged
     {

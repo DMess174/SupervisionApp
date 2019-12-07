@@ -1,15 +1,12 @@
 ﻿using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
 using DataLayer;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using DataLayer.TechnicalControlPlans.Detailing;
 using System.Collections.Generic;
 using DataLayer.TechnicalControlPlans;
-using System.Linq;
 
 namespace Supervision.ViewModels.TCPViewModels
 {
@@ -31,7 +28,7 @@ namespace Supervision.ViewModels.TCPViewModels
 
         public string PointTCP
         {
-            get { return pointTCP; }
+            get => pointTCP;
             set
             {
                 pointTCP = value;
@@ -55,7 +52,7 @@ namespace Supervision.ViewModels.TCPViewModels
         }
         public string OperationNameTCP
         {
-            get { return operationNameTCP; }
+            get => operationNameTCP;
             set
             {
                 operationNameTCP = value;
@@ -79,7 +76,7 @@ namespace Supervision.ViewModels.TCPViewModels
         }
         public string DescriptionTCP
         {
-            get { return descriptionTCP; }
+            get => descriptionTCP;
             set
             {
                 descriptionTCP = value;
@@ -173,7 +170,7 @@ namespace Supervision.ViewModels.TCPViewModels
 
         public TEntityTCP SelectedPoint
         {
-            get { return selectedPoint; }
+            get => selectedPoint;
             set
             {
                 selectedPoint = value;
@@ -183,7 +180,7 @@ namespace Supervision.ViewModels.TCPViewModels
 
         public IEnumerable<TEntityTCP> TCPs
         {
-            get { return tCPs; }
+            get => tCPs;
             set
             {
                 tCPs = value;
@@ -193,7 +190,7 @@ namespace Supervision.ViewModels.TCPViewModels
 
         public ICollectionView TCPsView
         {
-            get { return tCPsView; }
+            get => tCPsView;
             set
             {
                 tCPsView = value;

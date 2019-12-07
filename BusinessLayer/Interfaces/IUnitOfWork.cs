@@ -9,7 +9,6 @@ using DataLayer.Entities;
 using DataLayer.Journals;
 using DataLayer.TechnicalControlPlans;
 using System;
-using System.Threading.Tasks;
 
 namespace BusinessLayer.Interfaces
 {

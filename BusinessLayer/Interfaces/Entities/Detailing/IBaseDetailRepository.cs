@@ -1,5 +1,4 @@
 ﻿using DataLayer.Entities;
-using DataLayer.Entities.Detailing;
 using DataLayer.Journals;
 using DataLayer.TechnicalControlPlans;
 using System.Collections.Generic;

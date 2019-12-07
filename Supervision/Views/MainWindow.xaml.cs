@@ -1,7 +1,7 @@
-﻿using Supervision.ViewModels;
-using System.Windows;
+﻿using System.Windows;
+using Supervision.ViewModels;
 
-namespace Supervision
+namespace Supervision.Views
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
