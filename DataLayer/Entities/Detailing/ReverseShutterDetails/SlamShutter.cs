@@ -6,7 +6,7 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
 {
     public class SlamShutter : BaseDetail
     {
-        public SlamShutter() : base()
+        public SlamShutter()
         {
             Name = "Захлопка";
         }

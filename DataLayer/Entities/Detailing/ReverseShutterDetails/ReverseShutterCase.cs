@@ -6,7 +6,7 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
 {
     public class ReverseShutterCase : BaseCastingCase
     {
-        public ReverseShutterCase() : base()
+        public ReverseShutterCase()
         {
             Name = "Корпус затвора";
         }

@@ -6,7 +6,7 @@ namespace DataLayer.Entities.AssemblyUnits
 {
     public class ReverseShutter : BaseAssemblyUnit
     {
-        public ReverseShutter() : base()
+        public ReverseShutter()
         {
             Name = "Затвор обратный";
         }

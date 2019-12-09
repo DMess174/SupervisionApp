@@ -6,7 +6,7 @@ namespace DataLayer.Entities.Detailing.CastGateValveDetails
 {
     public class CastGateValveCase : BaseCastingCase
     {
-        public CastGateValveCase() : base()
+        public CastGateValveCase()
         {
             Name = "Корпус ЗШ";
         }

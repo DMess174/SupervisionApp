@@ -5,7 +5,7 @@ namespace DataLayer.Entities.Detailing
 {
     public class Nozzle : BaseDetail
     {
-        public Nozzle() : base()
+        public Nozzle()
         {
             Name = "Катушка";
         }

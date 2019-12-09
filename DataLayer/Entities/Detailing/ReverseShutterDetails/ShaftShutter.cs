@@ -6,7 +6,7 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
 {
     public class ShaftShutter : BaseDetail
     {
-        public ShaftShutter() : base()
+        public ShaftShutter()
         {
             Name = "Ось затвора";
         }

@@ -2,7 +2,7 @@
 
 namespace DataLayer.Entities.Detailing
 {
-    public class BaseCastingCase : BaseEntity
+    public class BaseCastingCase : BaseCase
     {
         public string Material { get; set; }
 

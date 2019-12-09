@@ -6,7 +6,7 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
 {
     public class SteelSleeveShutter : BaseDetail
     {
-        public SteelSleeveShutter() : base()
+        public SteelSleeveShutter()
         {
             Name = "Втулка стальная";
         }
