@@ -150,14 +150,17 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                         {
                             db.Set<TEntity>().Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
+                            if (Journal != null)
                             {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
+                                foreach (var i in Journal)
+                                {
+                                    i.DetailNumber = SelectedItem.Number;
+                                    i.DetailDrawing = SelectedItem.Drawing;
+                                }
+
+                                db.Set<TEntityJournal>().UpdateRange(Journal);
                             }
-                            db.Set<TEntityJournal>().UpdateRange(Journal);
                             db.SaveChanges();
-                            
                         }
                         else
                         {

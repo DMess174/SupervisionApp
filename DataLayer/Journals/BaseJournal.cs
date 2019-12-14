@@ -5,11 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Journals
 {
-    public class BaseJournal<TEntity, TEntityTCP> : BasePropertyChanged
-        where TEntity : BaseEntity
+    public class BaseJournal<TEntity, TEntityTCP> : BaseTable
+        where TEntity : BaseTable
         where TEntityTCP : BaseTCP
     {
-        public int Id { get; set; }
         public string DetailName { get; set; }
         public string DetailNumber { get; set; }
         public string DetailDrawing { get; set; }

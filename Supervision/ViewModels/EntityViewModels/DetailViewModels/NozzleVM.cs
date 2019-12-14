@@ -10,6 +10,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using BusinessLayer.Repository.Interfaces;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
@@ -194,8 +195,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                             };
                             db.Nozzles.Add(item);
                             db.SaveChanges();
-                            var Journal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
-                            foreach (var record in Journal)
+                            var journal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
+                            foreach (var record in journal)
                             {
                                 var Record = new NozzleJournal()
                                 {

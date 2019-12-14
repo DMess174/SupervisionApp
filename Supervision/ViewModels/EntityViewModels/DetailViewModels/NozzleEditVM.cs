@@ -15,7 +15,7 @@ using DataLayer.Journals.Detailing.CastGateValveDetails;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
 using DataLayer.TechnicalControlPlans.Detailing.CastGateValveDetails;
 using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
-
+using Microsoft.EntityFrameworkCore;
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
     public class NozzleEditVM : BasePropertyChanged
@@ -87,12 +87,16 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                         {
                             db.Nozzles.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
+                            if (Journal != null)
                             {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
+                                foreach (var i in Journal)
+                                {
+                                    i.DetailNumber = SelectedItem.Number;
+                                    i.DetailDrawing = SelectedItem.Drawing;
+                                }
+
+                                db.NozzleJournals.UpdateRange(Journal);
                             }
-                            db.NozzleJournals.UpdateRange(Journal);
                             db.SaveChanges();
                             
                         }
@@ -238,8 +242,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.Nozzles.Find(id);
-            Journal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+            SelectedItem = db.Nozzles.Include(i => i.CastingCase).SingleOrDefault(i => i.Id == id);
+            Journal = db.Set<NozzleJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Select(i => i.Number).Distinct().ToList();
             Materials = db.Nozzles.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
             Drawings = db.Nozzles.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();

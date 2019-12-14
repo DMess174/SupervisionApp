@@ -2,9 +2,8 @@
 
 namespace DataLayer
 {
-    public class Specification : BasePropertyChanged
+    public class Specification : BaseTable
     {
-        public int Id { get; set; }
         public string Number { get; set; }
         public string Program { get; set; }
         public string Consignee { get; set; }

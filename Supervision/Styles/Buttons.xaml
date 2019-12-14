@@ -68,13 +68,10 @@
     </Style>
 
     <Style x:Key="TreeViewButton" TargetType="Button">
-        <Setter Property="FontFamily" Value="{StaticResource BaseFont}"/>
-        <Setter Property="FontSize" Value="{StaticResource Regular}"/>
-        <Setter Property="Width" Value="auto"/>
         <Setter Property="Margin" Value="1"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Background" Value="LightGray"/>
-        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="Background" Value="{DynamicResource LightBackground}"/>
     </Style>
 
     <Style x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -103,7 +100,7 @@
                                 </Border.Background>
                             </Border>
                             <ContentPresenter x:Name="ButtonContentPresenter"
-                                VerticalAlignment="Center"  
+                                VerticalAlignment="Center"
                                 Grid.RowSpan="2" 
                                 HorizontalAlignment="Center"/>
                         </Grid>

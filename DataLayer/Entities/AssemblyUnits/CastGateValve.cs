@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DataLayer.Entities.Detailing;
 using DataLayer.Entities.Detailing.CastGateValveDetails;
 using DataLayer.Journals.AssemblyUnits;
 

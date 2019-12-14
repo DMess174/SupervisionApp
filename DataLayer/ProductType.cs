@@ -2,9 +2,8 @@
 
 namespace DataLayer
 {
-    public class ProductType : BasePropertyChanged
+    public class ProductType : BaseTable
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
 

@@ -10,8 +10,8 @@
 
         public string Certificate { get; set; }
 
-        public int? Amount { get; set; }
+        public int Amount { get; set; }
 
-        public int? AmountUsed { get; set; } = 0;
+        public int AmountUsed { get; set; } 
     }
 }

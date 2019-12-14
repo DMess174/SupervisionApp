@@ -19,6 +19,11 @@
                 <ResourceDictionary Source="Styles\Comboboxes.xaml" />
                 <ResourceDictionary Source="Styles\ListBoxes.xaml"/>
                 <ResourceDictionary Source="Styles\UserControl.xaml"/>
+                <ResourceDictionary Source="Styles\Separators.xaml"/>
+                <ResourceDictionary Source="Styles/ProjectStyles/MetroWindowResources.xaml"/>
+                <ResourceDictionary Source="Styles/ProjectStyles/Resources.xaml"/>
+                <ResourceDictionary Source="Styles/ProjectStyles/Styles.xaml"/>
+
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

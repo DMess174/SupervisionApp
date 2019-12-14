@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DataLayer.Entities.Detailing;
 using DataLayer.Journals.AssemblyUnits;
 
 namespace DataLayer.Entities.AssemblyUnits

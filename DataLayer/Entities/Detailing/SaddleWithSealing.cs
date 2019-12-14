@@ -1,8 +1,4 @@
-﻿using DataLayer.Entities.AssemblyUnits;
-using DataLayer.Journals.Detailing;
-using System.Collections.Generic;
-
-namespace DataLayer.Entities.Detailing
+﻿namespace DataLayer.Entities.Detailing
 {
     public class SaddleWithSealing
     {

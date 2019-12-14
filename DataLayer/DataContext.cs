@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Entities.Detailing;
-using System.Reflection;
 using DataLayer.Entities.Detailing.CastGateValveDetails;
 using DataLayer.Entities.Detailing.CompactGateValveDetails;
 using DataLayer.Entities.Detailing.ReverseShutterDetails;
@@ -48,7 +48,7 @@ namespace DataLayer
         public DbSet<ShaftShutterTCP> ShaftShutterTCPs { get; set; }
         public DbSet<ShaftShutterJournal> ShaftShutterJournals { get; set; }
         
-        public DbSet<ReverseShutter> ShutterReverses { get; set; }
+        public DbSet<ReverseShutter> ReverseShutters { get; set; }
         public DbSet<ReverseShutterTCP> ReverseShutterTCPs { get; set; }
         public DbSet<ReverseShutterJournal> ReverseShutterJournals { get; set; }
 
@@ -180,6 +180,14 @@ namespace DataLayer
         public DbSet<ScrewNutJournal> ScrewNutJournals { get; set; }
         public DbSet<BaseValveWithScrewNut> BaseValveWithScrewNuts { get; set; }
 
+        public DbSet<Spring> Springs { get; set; }
+        public DbSet<SpringTCP> SpringTCPs { get; set; }
+        public DbSet<SpringJournal> SpringJournals { get; set; }
+        public DbSet<BaseValveWithSpring> BaseValveWithSprings { get; set; }
+
+        public DbSet<ShearPin> ShearPins { get; set; }
+        public DbSet<ShearPinTCP> ShearPinTCPs { get; set; }
+        public DbSet<ShearPinJournal> ShearPinJournals { get; set; }
 
         //TODO: Не забываем добавлять все таблицы
 

@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+        Style="{StaticResource StandardWindow}"
         Title="Главное меню" Height="800" Width="1200"
         WindowStartupLocation="CenterScreen"
                       WindowStyle="ThreeDBorderWindow">
-    <Grid Background="LightGray">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="3"/>
@@ -16,40 +17,29 @@
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         
-        <Menu Style="{StaticResource BaseMenu}" 
+        <Menu Style="{StaticResource StandardMenu}" 
               MinHeight="25" 
               MaxHeight="25" 
               VerticalAlignment="Top" 
-              Grid.Row="0" 
-              Background="LightGray">
+              Grid.Row="0" >
             
-            <MenuItem Style="{StaticResource BaseMenuItem}" 
-                      Header="Файл">
-                <MenuItem Style="{StaticResource BaseMenuItem}"
-                          Header="New Project" />
-                <MenuItem Style="{StaticResource BaseMenuItem}"
-                          Header="Open Project" >
-                    <MenuItem Style="{StaticResource BaseMenuItem}"
-                              Header="WinForms" />
-                    <MenuItem Style="{StaticResource BaseMenuItem}"
-                              Header="WPF" />
+            <MenuItem Header="Файл">
+                <MenuItem Header="New Project" />
+                <MenuItem Header="Open Project" >
+                    <MenuItem Header="WinForms" />
+                    <MenuItem Header="WPF" />
                 </MenuItem>
                 <Separator />
-                <MenuItem Style="{StaticResource BaseMenuItem}"
-                          Header="Выход" 
+                <MenuItem Header="Выход" 
                           Command="{Binding AppExit}"/>
             </MenuItem>
 
-            <MenuItem Style="{StaticResource BaseMenuItem}"
-                      Header="Заказ" >
-                <MenuItem Style="{StaticResource BaseMenuItem}"
-                          Header="Спецификации" />
-                <MenuItem Style="{StaticResource BaseMenuItem}"
-                          Header="PID" />
+            <MenuItem Header="Заказ" >
+                <MenuItem Header="Спецификации" />
+                <MenuItem Header="PID" />
             </MenuItem>
 
-            <MenuItem Style="{StaticResource BaseMenuItem}"
-                      Header="Изделие" >
+            <MenuItem Header="Изделие" >
                 <MenuItem Header="Тип"
                           Command="{Binding ProductTypeOpen}"/>
                 <MenuItem Header="Задвижка шиберная (ЗШ)" />
@@ -59,8 +49,7 @@
                           Command="{Binding ShutterReverseOpen}" />
             </MenuItem>
 
-            <MenuItem Style="{StaticResource BaseMenuItem}"
-                      Header="Деталировка" >
+            <MenuItem Header="Деталировка" >
                 <MenuItem Header="Втулка" >
                     <MenuItem Header="Втулка бронзовая (ЗО)"
                               Command="{Binding BronzeSleeveShutterOpen}"/>
@@ -94,21 +83,15 @@
 
                 <MenuItem Header="Ось (ЗО)"
                           Command="{Binding ShaftShutterOpen}"/>
-
                 <MenuItem Header="Седло" />
                 <MenuItem Header="Шибер" />
                 <MenuItem Header="Шпиндель" />
-                
-                
-                
             </MenuItem>
 
-            <MenuItem Style="{StaticResource BaseMenuItem}"
-                      Command="{Binding InspectorOpen}" 
-                      Header="Персонал"/>
+            <MenuItem Header="Персонал"
+                      Command="{Binding InspectorOpen}"/>
 
-            <MenuItem Style="{StaticResource BaseMenuItem}"
-                      Header="ПТК">
+            <MenuItem Header="ПТК">
                 <MenuItem Header="Антикоррозионное покрытие (АКП)"  />
                 <MenuItem Header="Задвижка компактная с расширяющимся затвором (ЗШК)" />
                 <MenuItem Header="Задвижка шиберная (ЗШ)" />
@@ -129,34 +112,28 @@
             </MenuItem>
         </Menu>
         
-        <Separator Grid.Row="1" 
-                   VerticalAlignment="Center" 
-                   HorizontalAlignment="Stretch" 
-                   Height="3" 
-                   Foreground="Black" 
-                   BorderBrush="#FF828790" 
-                   Background="#FF828790" 
-                   Margin="0" 
-                   VerticalContentAlignment="Center"/>
+        <Separator Style="{StaticResource HorizontalSeparator}" 
+                   Grid.Row="1"/>
         
-        <Grid Grid.Row="2" Background="LightGray">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="96*" MinWidth="200"/>
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="426*" MinWidth="500"/>
             </Grid.ColumnDefinitions>
-            <TreeView Style="{StaticResource BaseTreeView}"
+            <TreeView Background="{StaticResource LightBackground}"
                       Grid.Column="0"
                       Margin="3">
                 <TreeViewItem Header="Изделие"
+                              Style="{StaticResource TreeViewItemStandard}"
                               Margin="2">
-                    <Button Style="{StaticResource TreeViewButton}" 
+                    <Button Style="{StaticResource TreeViewButton}"
                             Command="{Binding AddItem}" 
                             Content="(ЗШ) Задвижка шиберная"/>
-                    <Button Style="{StaticResource TreeViewButton}" 
+                    <Button Style="{StaticResource TreeViewButton}"
                             Command="{Binding TreeMainShutterReverse_Click}" 
                             Content="(ЗШЛ) Задвижка листовя шиберная"/>
-                    <Button Style="{StaticResource TreeViewButton}" 
+                    <Button Style="{StaticResource TreeViewButton}"
                             Command="{Binding TreeMainShutterReverse_Click}" 
                             Content="(ЗШК) Задвижка компактная с расширяющимся затвором"/>
                     <Button Style="{StaticResource TreeViewButton}"
@@ -164,8 +141,10 @@
                             Content="(ЗО) Затвор обратный"/>
                 </TreeViewItem>
                 <TreeViewItem Header="Деталировка"
+                              Style="{StaticResource TreeViewItemStandard}"
                               Margin="2">
-                    <TreeViewItem Header="Затвор обратный">
+                    <TreeViewItem Header="Затвор обратный"
+                                  Style="{StaticResource TreeViewItemStandard}">
                         <Button Style="{StaticResource TreeViewButton}"
                                 Command="{Binding BronzeSleeveShutterOpen}" 
                                 Content="Втулка бронзовая" />
@@ -188,25 +167,41 @@
                                 Command="{Binding ShaftShutterOpen}" 
                                 Content="Ось" />
                     </TreeViewItem>
-                    <TreeViewItem Header="Задвижка шиберная">
+                    <TreeViewItem Header="Задвижка шиберная"
+                                  Style="{StaticResource TreeViewItemStandard}">
                         <Button Style="{StaticResource TreeViewButton}"
                                 Command="{Binding ValveCaseOpen}"
                                 Content="Корпус" />
-                        <TreeViewItem Header="Крышка" />
-                        <TreeViewItem Header="Шпиндель" />
+                        <Button Style="{StaticResource TreeViewButton}" 
+                                Content="Крышка" />
+                        <Button Style="{StaticResource TreeViewButton}" 
+                                Content="Шпиндель" />
                     </TreeViewItem>
                 </TreeViewItem>
             </TreeView>
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" ShowsPreview="False" Width="5" Background="DarkGray"/>
-            <Frame 
+            <GridSplitter 
+                Grid.Column="1" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Stretch" 
+                ShowsPreview="False" 
+                Width="5" 
+                Background="DarkGray"/>
+            <Frame
+                Background="{StaticResource LightBackground}"
                 VerticalAlignment="Stretch"
-                Background="LightGray"
                 Margin="2, 2, 2, 2"
                 Grid.Column="2"
                 Content="{Binding CurrentPage}"
                 NavigationUIVisibility="Hidden"
                 Opacity="{Binding FrameOpacity}"/>
         </Grid>
-        <Separator Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="3" Foreground="Black" BorderBrush="#FF828790" Background="#FF828790" Margin="0" VerticalContentAlignment="Center"/>
+        <Separator Grid.Row="3" 
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Stretch" 
+                   Height="3" Foreground="Black" 
+                   BorderBrush="#FF828790" 
+                   Background="#FF828790" 
+                   Margin="0" 
+                   VerticalContentAlignment="Center"/>
     </Grid>
 </Window>

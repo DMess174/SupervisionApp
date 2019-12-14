@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using DataLayer.Entities.AssemblyUnits;
-using DataLayer.Journals.Detailing.WeldGateValveDetails;
+﻿using DataLayer.Entities.AssemblyUnits;
 
 namespace DataLayer.Entities.Detailing.WeldGateValveDetails
 {

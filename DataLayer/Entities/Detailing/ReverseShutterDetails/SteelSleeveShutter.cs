@@ -4,7 +4,7 @@ using DataLayer.Journals.Detailing.ReverseShutterDetails;
 
 namespace DataLayer.Entities.Detailing.ReverseShutterDetails
 {
-    public class SteelSleeveShutter : BaseDetail
+    public class SteelSleeveShutter : ReverseShutterDetail
     {
         public SteelSleeveShutter()
         {
@@ -12,7 +12,6 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
         }
 
         public int? ReverseShutterId { get; set; }
-        public ReverseShutter ReverseShutter { get; set; }
 
         public IEnumerable<SteelSleeveShutterJournal> SteelSleeveShutterJournals{ get; set; }
     }

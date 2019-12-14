@@ -5,15 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20191208132506_Initial.cs" />
-    <Compile Remove="Migrations\20191208132506_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20191208142056_Initial.cs" />
-    <Compile Remove="Migrations\20191208142056_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20191208154245_Initial.cs" />
-    <Compile Remove="Migrations\20191208154245_Initial.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Fody" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -4,9 +4,8 @@ using System.Collections.Generic;
 
 namespace DataLayer
 {
-    public class PID : BasePropertyChanged
+    public class PID : BaseTable
     {
-        public int Id { get; set; }
         public string Number { get; set; }
         public string Amount { get; set; }
         public string DN { get; set; }
@@ -25,6 +24,6 @@ namespace DataLayer
         public ProductType ProductType { get; set; }
 
         public IEnumerable<ReverseShutter> ReverseShutters { get; set; }
-        public IEnumerable<CastGateValve> CastGateValves { get; set; }
+        public IEnumerable<BaseValve> BaseValves { get; set; }
     }
 }

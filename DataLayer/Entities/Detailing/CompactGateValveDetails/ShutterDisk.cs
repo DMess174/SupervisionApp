@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Journals.Detailing.CompactGateValveDetails;
 
 namespace DataLayer.Entities.Detailing.CompactGateValveDetails

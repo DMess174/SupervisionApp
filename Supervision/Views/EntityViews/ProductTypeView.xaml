@@ -4,9 +4,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
+      Style="{StaticResource StandardPage}"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Тип продукции">
-    <Grid Background="LightGray">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="1*"/>
@@ -20,40 +21,32 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Separator Grid.Row="1" 
-                   Foreground="Black" 
-                   BorderBrush="#FF828790" 
-                   Background="#FF828790" 
-                   Margin="0,0,0,0.5" 
-                   VerticalContentAlignment="Center" 
-                   Height="3" 
-                   VerticalAlignment="Bottom" 
+        <Separator Style="{StaticResource HorizontalSeparator}" 
+                   Grid.Row="1" 
                    Grid.ColumnSpan="2"/>
 
-        <DataGrid Style="{StaticResource BaseDataGrid}"
+        <DataGrid Style="{StaticResource StandardDataGrid}"
                 Grid.Row="2" 
-                Grid.ColumnSpan="2"
+                Grid.ColumnSpan="2" 
+                Grid.Column="0"
                 ItemsSource="{Binding AllInstancesView}"
                 SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"
-                    HeaderStyle="{StaticResource BaseDataGridHeader}" 
-                    Width="35" 
-                    Binding="{Binding Path = Id}" 
-                    TextBlock.TextAlignment="Center">
+                                    Width="35"
+                                    Binding="{Binding Path = Id}" 
+                                    TextBlock.TextAlignment="Center">
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="Наименование" 
-                    HeaderStyle="{StaticResource BaseDataGridHeader}" 
-                    Width="200*" 
-                    Binding="{Binding Path = Name}" 
-                    TextBlock.TextAlignment="Center" >
+                                    Width="200*" 
+                                    Binding="{Binding Path = Name}" 
+                                    TextBlock.TextAlignment="Center" >
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="Сокращенное&#x0a;наименование"
-                    HeaderStyle="{StaticResource BaseDataGridHeader}" 
-                    Width="170" 
-                    Binding="{Binding Path= ShortName}"/>
+                                    Width="170" 
+                                    Binding="{Binding Path= ShortName}"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -62,60 +55,59 @@
                    VerticalAlignment="Bottom" 
                    Margin="0,0,0,1" 
                    Grid.ColumnSpan="2" 
+                   Grid.Column="0"
                    Grid.RowSpan="2" >
             <StackPanel  DockPanel.Dock="Bottom" 
-                    Background="LightGray" 
-                    Orientation="Horizontal" 
+                         Orientation="Horizontal" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Bottom">
-                <Button Style="{StaticResource BaseButton}" 
+                <Button Style="{StaticResource StandardButton}" 
                     Content="Добавить" 
                     Margin="10" 
                     Command="{Binding AddItem}" />
 
                 <Button Content="Удалить" 
-                        Style="{StaticResource BaseButton}" 
+                        Style="{StaticResource StandardButton}" 
                         Margin="10" 
                         Command="{Binding RemoveItem}"
                         CommandParameter="{Binding ElementName=AllInstances, Path=SelectedItem}"  />
             </StackPanel>
         </DockPanel>
-        <Separator Grid.Row="4" 
-                   Foreground="Black" 
-                   BorderBrush="#FF828790" 
-                   Background="#FF828790" 
-                   Margin="0,0,0,0.5" 
-                   VerticalContentAlignment="Center" 
-                   Height="3" 
-                   VerticalAlignment="Bottom" 
-                   Grid.ColumnSpan="2"/>
+        <Separator Style="{StaticResource HorizontalSeparator}" 
+                   Grid.Row="4" 
+                   Grid.ColumnSpan="2" 
+                   Grid.Column="0" />
 
         <StackPanel Grid.Row="5" 
+                    Grid.Column="0"
                     Width="auto">
-            <TextBlock Style="{StaticResource BaseTextBlock}" 
+            <TextBlock Style="{StaticResource StandardTextBlock}" 
                 Text="Наименование" 
                 Margin="5" />
 
-            <TextBlock Style="{StaticResource BaseTextBlock}" 
+            <TextBlock Style="{StaticResource StandardTextBlock}" 
                 Text="Сокращенное &#x0a;наименование" 
                 Margin="5" />
         </StackPanel>
         <StackPanel Grid.Row="5"
                 Grid.Column="1" 
                 HorizontalAlignment="Left">
-            <TextBox Style="{StaticResource BaseTextBox}"
+            <TextBox Style="{StaticResource StandardTextBox}"
                 Width="300" 
                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
-                DataContext="{Binding SelectedItem}"/>
+                DataContext="{Binding SelectedItem}"                 
+                Margin="5" />
 
-            <TextBox Style="{StaticResource BaseTextBox}" 
+            <TextBox Style="{StaticResource StandardTextBox}" 
                 Width="300"
-                Margin="0 12"
+                Margin="5 9 5 5"
                 Text="{Binding ShortName, UpdateSourceTrigger=PropertyChanged}" 
                 DataContext="{Binding SelectedItem}"/>
         </StackPanel>
-        <Button Grid.Row="6" Grid.ColumnSpan="2"
-                Style="{StaticResource BaseButton}" 
+        <Button Grid.Row="6" 
+                Grid.ColumnSpan="2" 
+                Grid.Column="0"
+                Style="{StaticResource StandardButton}" 
                 Width="100" 
                 Content="Сохранить" 
                 Margin="10" 

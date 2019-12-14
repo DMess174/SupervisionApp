@@ -11,6 +11,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using DataLayer.Entities.Detailing.CastGateValveDetails;
+using DataLayer.Entities.Detailing.ReverseShutterDetails;
+using Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter;
+using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
@@ -163,11 +167,22 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                     {
                         if (SelectedItem != null)
                         {
-                            var wn = new CastingCaseEditView();
-                            var vm = new CastingCaseEditVM<TEntity, Inspector, TEntityTCP, TEntityJournal>(SelectedItem.Id);
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
+                            if (SelectedItem is ReverseShutterCase)
+                            {
+                                var wn = new ReverseShutterCaseEditView();
+                                var vm = new ReverseShutterCaseEditVM(SelectedItem.Id);
+                                wn.DataContext = vm;
+                                w?.Close();
+                                wn.ShowDialog();
+                            }
+                            if (SelectedItem is CastGateValveCase)
+                            {
+                                var wn = new CastingCaseEditView();
+                                var vm = new CastingCaseEditVM<TEntity, Inspector, TEntityTCP, TEntityJournal>(SelectedItem.Id);
+                                wn.DataContext = vm;
+                                w?.Close();
+                                wn.ShowDialog();
+                            }
                         }
                         else MessageBox.Show("Объект не выбран", "Ошибка");
                     }));

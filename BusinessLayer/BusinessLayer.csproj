@@ -24,4 +24,9 @@
     <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\Implementations\Entities\AssemblyUnits\" />
+    <Folder Include="Repository\Interfaces\Entities\AssemblyUnits\" />
+  </ItemGroup>
+
 </Project>

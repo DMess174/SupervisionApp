@@ -1,9 +1,7 @@
 ﻿namespace DataLayer.Entities
 {
-    public class BaseEntity : BasePropertyChanged
+    public class BaseEntity : BaseTable
     {
-        public int Id { get; set; }
-
         public string Number { get; set; }
 
         public string Drawing { get; set; }

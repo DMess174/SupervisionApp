@@ -74,44 +74,16 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyViewModels
             {
                 return addShutterReverse ??
                     (
-                    addShutterReverse = new DelegateCommand
-                        (
-                            () =>
+                    addShutterReverse = new DelegateCommand(() =>
                             {
                                 ReverseShutter shutterReverse= new ReverseShutter() { };
-                                db.ShutterReverses.Add(shutterReverse);
+                                db.ReverseShutters.Add(shutterReverse);
                                 db.SaveChanges();
                                 SelectedShutterReverse = shutterReverse;
                             })
                     );
             }
         }
-
-        //public RelayCommand SaveShutterReverse
-        //{
-        //    get
-        //    {
-        //        return saveShutterReverse ??
-        //            (
-        //            saveShutterReverse = new RelayCommand
-        //                (
-        //                    () =>
-        //                    {
-        //                        ShutterReverse shutterReverse = SelectedShutterReverse;
-        //                        if (shutterReverse != null)
-        //                        {
-        //                            db.ShutterReverses.Update(shutterReverse);
-        //                            db.SaveChanges();
-        //                            SelectedShutterReverse = shutterReverse;
-        //                        }
-        //                        else
-        //                        {
-        //                            MessageBox.Show("Объект не выбран!", "Ошибка");
-        //                        }
-        //                    })
-        //            );
-        //    }
-        //}
 
         public ICommand RemoveShutterReverse
         {
@@ -126,7 +98,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyViewModels
                                 ReverseShutter shutterReverse = SelectedShutterReverse;
                                 if (shutterReverse != null)
                                 {
-                                    db.ShutterReverses.Remove(shutterReverse);
+                                    db.ReverseShutters.Remove(shutterReverse);
                                     db.SaveChanges();
                                 }
                                 else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -170,8 +142,8 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyViewModels
         public ReverseShutterViewModel()
         {
             db = new DataContext();
-            db.ShutterReverses.Load();
-            ShutterReverses = db.ShutterReverses.Local.ToObservableCollection();
+            db.ReverseShutters.Load();
+            ShutterReverses = db.ReverseShutters.Local.ToObservableCollection();
             //Departments = Inspectors.Select(d => d.Department).Distinct().ToList();
             //Subdivisions = Inspectors.Select(s => s.Subdivision).Distinct().ToList();
             ShutterReversesView = CollectionViewSource.GetDefaultView(ShutterReverses);

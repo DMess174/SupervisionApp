@@ -57,12 +57,92 @@ namespace DataLayer.Migrations
                     b.HasIndex("GateId")
                         .IsUnique();
 
+                    b.HasIndex("PIDId");
+
                     b.HasIndex("ShutterId")
                         .IsUnique();
 
                     b.ToTable("BaseValve");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("BaseValve");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValveWithScrewNut", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BaseValveId");
+
+                    b.Property<int>("ScrewNutAmount");
+
+                    b.Property<int>("ScrewNutId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaseValveId");
+
+                    b.HasIndex("ScrewNutId");
+
+                    b.ToTable("BaseValveWithScrewNuts");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValveWithScrewStud", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BaseValveId");
+
+                    b.Property<int>("ScrewStudAmount");
+
+                    b.Property<int>("ScrewStudId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaseValveId");
+
+                    b.HasIndex("ScrewStudId");
+
+                    b.ToTable("BaseValveWithScrewStuds");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValveWithSealing", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AssemblyUnitSealingId");
+
+                    b.Property<int>("BaseValveId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssemblyUnitSealingId");
+
+                    b.HasIndex("BaseValveId");
+
+                    b.ToTable("BaseValveWithSeals");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValveWithSpring", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BaseValveId");
+
+                    b.Property<int>("SpringAmount");
+
+                    b.Property<int>("SpringId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaseValveId");
+
+                    b.HasIndex("SpringId");
+
+                    b.ToTable("BaseValveWithSprings");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.ReverseShutter", b =>
@@ -100,6 +180,64 @@ namespace DataLayer.Migrations
                         .IsUnique();
 
                     b.ToTable("ShutterReverses");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.AssemblyUnitSealing", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("Amount");
+
+                    b.Property<int?>("AmountUsed");
+
+                    b.Property<string>("Batch");
+
+                    b.Property<string>("Certificate");
+
+                    b.Property<string>("Drawing");
+
+                    b.Property<string>("Material");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Number");
+
+                    b.Property<string>("Series");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AssemblyUnitSeals");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.BallValve", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("BaseValveId");
+
+                    b.Property<string>("Diameter");
+
+                    b.Property<string>("Drawing");
+
+                    b.Property<string>("Material");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Number");
+
+                    b.Property<string>("Pressure");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaseValveId");
+
+                    b.ToTable("BallValve");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.BaseCastingCase", b =>
@@ -260,6 +398,36 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CoverSealingRings");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.FrontalSaddleSealing", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("Amount");
+
+                    b.Property<int?>("AmountUsed");
+
+                    b.Property<string>("Batch");
+
+                    b.Property<string>("Certificate");
+
+                    b.Property<string>("Drawing");
+
+                    b.Property<string>("Material");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Number");
+
+                    b.Property<string>("Series");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FrontalSaddleSeals");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.Gate", b =>
@@ -504,6 +672,112 @@ namespace DataLayer.Migrations
                     b.ToTable("Saddles");
                 });
 
+            modelBuilder.Entity("DataLayer.Entities.Detailing.SaddleWithSealing", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("FrontalSaddleSealingId");
+
+                    b.Property<int>("SaddleId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FrontalSaddleSealingId");
+
+                    b.HasIndex("SaddleId");
+
+                    b.ToTable("SaddleWithSeals");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.ScrewNut", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Amount");
+
+                    b.Property<int>("AmountUsed");
+
+                    b.Property<string>("Batch");
+
+                    b.Property<string>("Certificate");
+
+                    b.Property<string>("Drawing");
+
+                    b.Property<string>("Material");
+
+                    b.Property<string>("Melt");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Number");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ScrewNuts");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.ScrewStud", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Amount");
+
+                    b.Property<int>("AmountUsed");
+
+                    b.Property<string>("Batch");
+
+                    b.Property<string>("Certificate");
+
+                    b.Property<string>("Drawing");
+
+                    b.Property<string>("Material");
+
+                    b.Property<string>("Melt");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Number");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ScrewStuds");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.ShearPin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("BaseValveId");
+
+                    b.Property<string>("Certificate");
+
+                    b.Property<string>("Drawing");
+
+                    b.Property<string>("Material");
+
+                    b.Property<string>("Melt");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Number");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaseValveId");
+
+                    b.ToTable("ShearPins");
+                });
+
             modelBuilder.Entity("DataLayer.Entities.Detailing.Spindle", b =>
                 {
                     b.Property<int>("Id")
@@ -526,6 +800,36 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Spindles");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.Spring", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Amount");
+
+                    b.Property<int>("AmountUsed");
+
+                    b.Property<string>("Batch");
+
+                    b.Property<string>("Certificate");
+
+                    b.Property<string>("Drawing");
+
+                    b.Property<string>("Material");
+
+                    b.Property<string>("Melt");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Number");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Springs");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.WeldGateValveDetails.CaseBottom", b =>
@@ -956,6 +1260,86 @@ namespace DataLayer.Migrations
                     b.ToTable("SheetGateValveJournals");
                 });
 
+            modelBuilder.Entity("DataLayer.Journals.Detailing.AssemblyUnitSealingJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("Remark");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("AssemblyUnitSealingJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.BallValveJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("Remark");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("BallValveJournal");
+                });
+
             modelBuilder.Entity("DataLayer.Journals.Detailing.CastGateValveDetails.CastGateValveCaseJournal", b =>
                 {
                     b.Property<int>("Id")
@@ -1198,6 +1582,46 @@ namespace DataLayer.Migrations
                     b.HasIndex("PointId");
 
                     b.ToTable("CoverSealingRingJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.FrontalSaddleSealingJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("Remark");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("FrontalSaddleSealingJournals");
                 });
 
             modelBuilder.Entity("DataLayer.Journals.Detailing.GateJournal", b =>
@@ -1600,6 +2024,126 @@ namespace DataLayer.Migrations
                     b.ToTable("SaddleJournals");
                 });
 
+            modelBuilder.Entity("DataLayer.Journals.Detailing.ScrewNutJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("Remark");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("ScrewNutJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.ScrewStudJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("Remark");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("ScrewStudJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.ShearPinJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("Remark");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("ShearPinJournals");
+                });
+
             modelBuilder.Entity("DataLayer.Journals.Detailing.SpindleJournal", b =>
                 {
                     b.Property<int>("Id")
@@ -1638,6 +2182,46 @@ namespace DataLayer.Migrations
                     b.HasIndex("PointId");
 
                     b.ToTable("SpindleJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.SpringJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("Remark");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("SpringJournals");
                 });
 
             modelBuilder.Entity("DataLayer.Journals.Detailing.WeldGateValveDetails.CaseBottomJournal", b =>
@@ -2232,6 +2816,38 @@ namespace DataLayer.Migrations
                     b.ToTable("SheetGateValveTCPs");
                 });
 
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.AssemblyUnitSealingTCP", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("OperationName");
+
+                    b.Property<string>("Point");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AssemblyUnitSealingTCPs");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.BallValveTCP", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("OperationName");
+
+                    b.Property<string>("Point");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BallValveTCP");
+                });
+
             modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.CastGateValveDetails.CastGateValveCaseTCP", b =>
                 {
                     b.Property<int>("Id")
@@ -2326,6 +2942,22 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CoverSealingRingTCPs");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.FrontalSaddleSealingTCP", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("OperationName");
+
+                    b.Property<string>("Point");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FrontalSaddleSealingTCPs");
                 });
 
             modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.GateTCP", b =>
@@ -2488,6 +3120,54 @@ namespace DataLayer.Migrations
                     b.ToTable("SaddleTCPs");
                 });
 
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.ScrewNutTCP", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("OperationName");
+
+                    b.Property<string>("Point");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ScrewNutTCPs");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.ScrewStudTCP", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("OperationName");
+
+                    b.Property<string>("Point");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ScrewStudTCPs");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.ShearPinTCP", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("OperationName");
+
+                    b.Property<string>("Point");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ShearPinTCPs");
+                });
+
             modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.SpindleTCP", b =>
                 {
                     b.Property<int>("Id")
@@ -2502,6 +3182,22 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SpindleTCPs");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.SpringTCP", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("OperationName");
+
+                    b.Property<string>("Point");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpringTCPs");
                 });
 
             modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails.CaseBottomTCP", b =>
@@ -2688,8 +3384,6 @@ namespace DataLayer.Migrations
 
                     b.Property<int?>("WeldGateValveCoverId");
 
-                    b.HasIndex("PIDId");
-
                     b.HasIndex("WeldGateValveCaseId")
                         .IsUnique();
 
@@ -2712,9 +3406,6 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("CastGateValveCoverId")
                         .IsUnique();
-
-                    b.HasIndex("PIDId")
-                        .HasName("IX_BaseValve_PIDId1");
 
                     b.HasDiscriminator().HasValue("CastGateValve");
                 });
@@ -2751,28 +3442,28 @@ namespace DataLayer.Migrations
                     b.HasDiscriminator().HasValue("CastGateValveCover");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Detailing.WeldGateValveDetails.CompactGateValveCase", b =>
+            modelBuilder.Entity("DataLayer.Entities.Detailing.CompactGateValveDetails.CompactGateValveCase", b =>
                 {
                     b.HasBaseType("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCase");
 
                     b.HasDiscriminator().HasValue("CompactGateValveCase");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Detailing.WeldGateValveDetails.SheetGateValveCase", b =>
+            modelBuilder.Entity("DataLayer.Entities.Detailing.SheetGateValveDetails.SheetGateValveCase", b =>
                 {
                     b.HasBaseType("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCase");
 
                     b.HasDiscriminator().HasValue("SheetGateValveCase");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Detailing.WeldGateValveDetails.CompactGateValveCover", b =>
+            modelBuilder.Entity("DataLayer.Entities.Detailing.CompactGateValveDetails.CompactGateValveCover", b =>
                 {
                     b.HasBaseType("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCover");
 
                     b.HasDiscriminator().HasValue("CompactGateValveCover");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Detailing.WeldGateValveDetails.SheetGateValveCover", b =>
+            modelBuilder.Entity("DataLayer.Entities.Detailing.SheetGateValveDetails.SheetGateValveCover", b =>
                 {
                     b.HasBaseType("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCover");
 
@@ -2799,9 +3490,65 @@ namespace DataLayer.Migrations
                         .WithOne("BaseValve")
                         .HasForeignKey("DataLayer.Entities.AssemblyUnits.BaseValve", "GateId");
 
+                    b.HasOne("DataLayer.PID", "PID")
+                        .WithMany("BaseValves")
+                        .HasForeignKey("PIDId");
+
                     b.HasOne("DataLayer.Entities.Detailing.CompactGateValveDetails.Shutter", "Shutter")
                         .WithOne("BaseValve")
                         .HasForeignKey("DataLayer.Entities.AssemblyUnits.BaseValve", "ShutterId");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValveWithScrewNut", b =>
+                {
+                    b.HasOne("DataLayer.Entities.AssemblyUnits.BaseValve", "BaseValve")
+                        .WithMany("BaseValveWithScrewNuts")
+                        .HasForeignKey("BaseValveId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DataLayer.Entities.Detailing.ScrewNut", "ScrewNut")
+                        .WithMany("BaseValveWithScrewNuts")
+                        .HasForeignKey("ScrewNutId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValveWithScrewStud", b =>
+                {
+                    b.HasOne("DataLayer.Entities.AssemblyUnits.BaseValve", "BaseValve")
+                        .WithMany("BaseValveWithScrewStuds")
+                        .HasForeignKey("BaseValveId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DataLayer.Entities.Detailing.ScrewStud", "ScrewStud")
+                        .WithMany("BaseValveWithScrewStuds")
+                        .HasForeignKey("ScrewStudId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValveWithSealing", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.AssemblyUnitSealing", "AssemblyUnitSealing")
+                        .WithMany("BaseValveWithSeals")
+                        .HasForeignKey("AssemblyUnitSealingId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DataLayer.Entities.AssemblyUnits.BaseValve", "BaseValve")
+                        .WithMany("BaseValveWithSeals")
+                        .HasForeignKey("BaseValveId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValveWithSpring", b =>
+                {
+                    b.HasOne("DataLayer.Entities.AssemblyUnits.BaseValve", "BaseValve")
+                        .WithMany("BaseValveWithSprings")
+                        .HasForeignKey("BaseValveId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DataLayer.Entities.Detailing.Spring", "Spring")
+                        .WithMany("BaseValveWithSprings")
+                        .HasForeignKey("SpringId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.ReverseShutter", b =>
@@ -2821,6 +3568,13 @@ namespace DataLayer.Migrations
                     b.HasOne("DataLayer.Entities.Detailing.ReverseShutterDetails.SlamShutter", "SlamShutter")
                         .WithOne("ReverseShutter")
                         .HasForeignKey("DataLayer.Entities.AssemblyUnits.ReverseShutter", "SlamShutterId");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.BallValve", b =>
+                {
+                    b.HasOne("DataLayer.Entities.AssemblyUnits.BaseValve", "BaseValve")
+                        .WithMany("BallValves")
+                        .HasForeignKey("BaseValveId");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.BaseValveCover", b =>
@@ -2880,6 +3634,26 @@ namespace DataLayer.Migrations
                 {
                     b.HasOne("DataLayer.Entities.AssemblyUnits.BaseValve", "BaseValve")
                         .WithMany("Saddles")
+                        .HasForeignKey("BaseValveId");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.SaddleWithSealing", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.FrontalSaddleSealing", "FrontalSaddleSealing")
+                        .WithMany("SaddleWithSealings")
+                        .HasForeignKey("FrontalSaddleSealingId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DataLayer.Entities.Detailing.Saddle", "Saddle")
+                        .WithMany("SaddleWithSealings")
+                        .HasForeignKey("SaddleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.ShearPin", b =>
+                {
+                    b.HasOne("DataLayer.Entities.AssemblyUnits.BaseValve", "BaseValve")
+                        .WithMany("ShearPins")
                         .HasForeignKey("BaseValveId");
                 });
 
@@ -2990,6 +3764,36 @@ namespace DataLayer.Migrations
                         .HasForeignKey("PointId");
                 });
 
+            modelBuilder.Entity("DataLayer.Journals.Detailing.AssemblyUnitSealingJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.AssemblyUnitSealing", "Entity")
+                        .WithMany("AssemblyUnitSealingJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany()
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Detailing.AssemblyUnitSealingTCP", "EntityTCP")
+                        .WithMany("AssemblyUnitSealingJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.BallValveJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.BallValve", "Entity")
+                        .WithMany("BallValveJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany()
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Detailing.BallValveTCP", "EntityTCP")
+                        .WithMany("BallValveJournals")
+                        .HasForeignKey("PointId");
+                });
+
             modelBuilder.Entity("DataLayer.Journals.Detailing.CastGateValveDetails.CastGateValveCaseJournal", b =>
                 {
                     b.HasOne("DataLayer.Entities.Detailing.CastGateValveDetails.CastGateValveCase", "Entity")
@@ -3081,6 +3885,21 @@ namespace DataLayer.Migrations
 
                     b.HasOne("DataLayer.TechnicalControlPlans.Detailing.CoverSealingRingTCP", "EntityTCP")
                         .WithMany("CoverSealingRingJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.FrontalSaddleSealingJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.FrontalSaddleSealing", "Entity")
+                        .WithMany("FrontalSaddleSealingJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany()
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Detailing.FrontalSaddleSealingTCP", "EntityTCP")
+                        .WithMany("FrontalSaddleSealingJournals")
                         .HasForeignKey("PointId");
                 });
 
@@ -3234,6 +4053,51 @@ namespace DataLayer.Migrations
                         .HasForeignKey("PointId");
                 });
 
+            modelBuilder.Entity("DataLayer.Journals.Detailing.ScrewNutJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.ScrewNut", "Entity")
+                        .WithMany("ScrewNutJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany()
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Detailing.ScrewNutTCP", "EntityTCP")
+                        .WithMany("ScrewNutJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.ScrewStudJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.ScrewStud", "Entity")
+                        .WithMany("ScrewStudJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany()
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Detailing.ScrewStudTCP", "EntityTCP")
+                        .WithMany("ScrewStudJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.ShearPinJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.ShearPin", "Entity")
+                        .WithMany("ShearPinJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany()
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Detailing.ShearPinTCP", "EntityTCP")
+                        .WithMany("ShearPinJournals")
+                        .HasForeignKey("PointId");
+                });
+
             modelBuilder.Entity("DataLayer.Journals.Detailing.SpindleJournal", b =>
                 {
                     b.HasOne("DataLayer.Entities.Detailing.Spindle", "Entity")
@@ -3246,6 +4110,21 @@ namespace DataLayer.Migrations
 
                     b.HasOne("DataLayer.TechnicalControlPlans.Detailing.SpindleTCP", "EntityTCP")
                         .WithMany("SpindleJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.SpringJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.Spring", "Entity")
+                        .WithMany("SpringJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany()
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Detailing.SpringTCP", "EntityTCP")
+                        .WithMany("SpringJournals")
                         .HasForeignKey("PointId");
                 });
 
@@ -3281,7 +4160,7 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Journals.Detailing.WeldGateValveDetails.CompactGateValveCaseJournal", b =>
                 {
-                    b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.CompactGateValveCase", "Entity")
+                    b.HasOne("DataLayer.Entities.Detailing.CompactGateValveDetails.CompactGateValveCase", "Entity")
                         .WithMany("CompactGateValveCaseJournals")
                         .HasForeignKey("DetailId");
 
@@ -3296,7 +4175,7 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Journals.Detailing.WeldGateValveDetails.CompactGateValveCoverJournal", b =>
                 {
-                    b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.CompactGateValveCover", "Entity")
+                    b.HasOne("DataLayer.Entities.Detailing.CompactGateValveDetails.CompactGateValveCover", "Entity")
                         .WithMany("CompactGateValveCoverJournals")
                         .HasForeignKey("DetailId");
 
@@ -3356,7 +4235,7 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Journals.Detailing.WeldGateValveDetails.SheetGateValveCaseJournal", b =>
                 {
-                    b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.SheetGateValveCase", "Entity")
+                    b.HasOne("DataLayer.Entities.Detailing.SheetGateValveDetails.SheetGateValveCase", "Entity")
                         .WithMany("SheetGateValveCaseJournals")
                         .HasForeignKey("DetailId");
 
@@ -3371,7 +4250,7 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Journals.Detailing.WeldGateValveDetails.SheetGateValveCoverJournal", b =>
                 {
-                    b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.SheetGateValveCover", "Entity")
+                    b.HasOne("DataLayer.Entities.Detailing.SheetGateValveDetails.SheetGateValveCover", "Entity")
                         .WithMany("SheetGateValveCoverJournals")
                         .HasForeignKey("DetailId");
 
@@ -3434,10 +4313,6 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseWeldValve", b =>
                 {
-                    b.HasOne("DataLayer.PID", "PID")
-                        .WithMany()
-                        .HasForeignKey("PIDId");
-
                     b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCase", "WeldGateValveCase")
                         .WithOne("BaseWeldValve")
                         .HasForeignKey("DataLayer.Entities.AssemblyUnits.BaseWeldValve", "WeldGateValveCaseId");
@@ -3456,11 +4331,6 @@ namespace DataLayer.Migrations
                     b.HasOne("DataLayer.Entities.Detailing.CastGateValveDetails.CastGateValveCover", "CastGateValveCover")
                         .WithOne("CastGateValve")
                         .HasForeignKey("DataLayer.Entities.AssemblyUnits.CastGateValve", "CastGateValveCoverId");
-
-                    b.HasOne("DataLayer.PID", "PID")
-                        .WithMany("CastGateValves")
-                        .HasForeignKey("PIDId")
-                        .HasConstraintName("FK_BaseValve_PIDs_PIDId1");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.CastGateValveDetails.CastGateValveCover", b =>

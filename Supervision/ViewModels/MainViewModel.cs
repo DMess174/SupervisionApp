@@ -19,6 +19,8 @@ using Supervision.ViewModels.TCPViewModels;
 using DataLayer.TechnicalControlPlans.AssemblyUnits;
 using DataLayer.TechnicalControlPlans.Detailing.CastGateValveDetails;
 using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
+using Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter;
+using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
 
 namespace Supervision.ViewModels
 {
@@ -46,45 +48,26 @@ namespace Supervision.ViewModels
             } 
         }
 
-        public ICommand BronzeSleeveShutterOpen
-        {
-            get
-            {
-                return new DelegateCommand
-                        (
-                            () =>
-                            {
-                                var w = new BaseDetailView();
-                                var vm = new BaseDetailVM<BronzeSleeveShutter, BronzeSleeveShutterTCP, BronzeSleeveShutterJournal>();
-                                w.DataContext = vm;
-                                w.ShowDialog();
-                            });
-            }
-        }
+        
 
         public ICommand CaseShutterOpen
         {
             get
             {
-                return new DelegateCommand
-                        (
-                            () =>
+                return new DelegateCommand(() =>
                             {
                                 var w = new CastingCaseView();
-                                var vm = new CastingCaseVM<ReverseShutterCase, ReverseShutterCaseTCP, ReverseShutterCaseJournal>();
+                                var vm = new ReverseShutterCaseVM();
                                 w.DataContext = vm;
                                 w.ShowDialog();
                             });
             }
         }
-
         public ICommand ValveCaseOpen
         {
             get
             {
-                return new DelegateCommand
-                        (
-                            () =>
+                return new DelegateCommand(() =>
                             {
                                 var w = new CastingCaseView();
                                 var vm = new CastingCaseVM<CastGateValveCase, CastGateValveCaseTCP, CastGateValveCaseJournal>();
@@ -98,9 +81,7 @@ namespace Supervision.ViewModels
         {
             get
             {
-                return new DelegateCommand
-                        (
-                            () =>
+                return new DelegateCommand(() =>
                             {
                                 var w = new NozzleView();
                                 var vm = new NozzleVM();
@@ -109,16 +90,28 @@ namespace Supervision.ViewModels
                             });
             }
         }
+
+        public ICommand BronzeSleeveShutterOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ReverseShutterDetailView();
+                    var vm = new ReverseShutterDetailVM<BronzeSleeveShutter, BronzeSleeveShutterTCP, BronzeSleeveShutterJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
         public ICommand ShaftShutterOpen
         {
             get
             {
-                return new DelegateCommand
-                        (
-                            () =>
+                return new DelegateCommand(() =>
                             {
-                                var w = new BaseDetailView();
-                                var vm = new BaseDetailVM<ShaftShutter, ShaftShutterTCP, ShaftShutterJournal>();
+                                var w = new ReverseShutterDetailView();
+                                var vm = new ReverseShutterDetailVM<ShaftShutter, ShaftShutterTCP, ShaftShutterJournal>();
                                 w.DataContext = vm;
                                 w.ShowDialog();
                             });
@@ -128,12 +121,10 @@ namespace Supervision.ViewModels
         {
             get
             {
-                return new DelegateCommand
-                        (
-                            () =>
+                return new DelegateCommand(() =>
                             {
-                                var w = new BaseDetailView();
-                                var vm = new BaseDetailVM<SlamShutter, SlamShutterTCP, SlamShutterJournal>();
+                                var w = new ReverseShutterDetailView();
+                                var vm = new ReverseShutterDetailVM<SlamShutter, SlamShutterTCP, SlamShutterJournal>();
                                 w.DataContext = vm;
                                 w.ShowDialog();
                             });
@@ -143,12 +134,10 @@ namespace Supervision.ViewModels
         {
             get
             {
-                return new DelegateCommand
-                        (
-                            () =>
+                return new DelegateCommand(() =>
                             {
-                                var w = new BaseDetailView();
-                                var vm = new BaseDetailVM<SteelSleeveShutter, SteelSleeveShutterTCP, SteelSleeveShutterJournal>();
+                                var w = new ReverseShutterDetailView();
+                                var vm = new ReverseShutterDetailVM<SteelSleeveShutter, SteelSleeveShutterTCP, SteelSleeveShutterJournal>();
                                 w.DataContext = vm;
                                 w.ShowDialog();
                             });
@@ -158,12 +147,10 @@ namespace Supervision.ViewModels
         {
             get
             {
-                return new DelegateCommand
-                        (
-                            () =>
+                return new DelegateCommand(() =>
                             {
-                                var w = new BaseDetailView();
-                                var vm = new BaseDetailVM<StubShutter, StubShutterTCP, StubShutterJournal>();
+                                var w = new ReverseShutterDetailView();
+                                var vm = new ReverseShutterDetailVM<StubShutter, StubShutterTCP, StubShutterJournal>();
                                 w.DataContext = vm;
                                 w.ShowDialog();
                             });
@@ -187,7 +174,6 @@ namespace Supervision.ViewModels
             }
         }
 
-
         public ICommand ShutterReverseTCPOpen
         {
             get
@@ -199,7 +185,6 @@ namespace Supervision.ViewModels
                 return new DelegateCommand(() => SlowOpacity(tcp));
             }
         }
-
         public ICommand BronzeSleeveShutterTCPOpen
         {
             get
@@ -306,11 +291,5 @@ namespace Supervision.ViewModels
                 }
             });
         }
-
-
-
     }
-
-
-
 }

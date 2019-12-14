@@ -6,10 +6,8 @@ using DataLayer.Journals.Detailing.ReverseShutterDetails;
 
 namespace DataLayer
 {
-    public class Inspector : BasePropertyChanged
+    public class Inspector : BaseTable
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         public string Subdivision { get; set; }

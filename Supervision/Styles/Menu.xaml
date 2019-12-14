@@ -18,8 +18,8 @@
     <Style x:Key="BaseTreeView" TargetType="TreeView">
         <Setter Property="FontFamily" Value="{StaticResource BaseFont}" />
         <Setter Property="FontSize" Value="{StaticResource Regular}" />
-        <Setter Property="Background" Value="LightGray"/>
-        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{StaticResource Foreground}" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="Margin" Value="2"/>

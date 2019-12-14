@@ -13,9 +13,12 @@ namespace DataLayer.Entities.AssemblyUnits
         public Shutter Shutter { get; set; }
 
         public IEnumerable<Saddle> Saddles { get; set; }
+        public IEnumerable<ShearPin> ShearPins { get; set; }
+        public IEnumerable<BallValve> BallValves { get; set; }
+
         public IEnumerable<BaseValveWithSealing> BaseValveWithSeals { get; set; }
         public IEnumerable<BaseValveWithScrewNut> BaseValveWithScrewNuts { get; set; }
         public IEnumerable<BaseValveWithScrewStud> BaseValveWithScrewStuds { get; set; }
-
+        public IEnumerable<BaseValveWithSpring> BaseValveWithSprings { get; set; }
     }
 }

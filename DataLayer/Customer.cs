@@ -2,9 +2,8 @@
 
 namespace DataLayer
 {
-    public class Customer : BasePropertyChanged
+    public class Customer : BaseTable
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
 

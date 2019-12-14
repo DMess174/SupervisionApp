@@ -348,13 +348,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Styles\ProjectStyles\CloseTabItemAction.cs" />
+    <Compile Include="ViewModels\EntityViewModels\BaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CastingCaseEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CastingCaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\NozzleEditVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\BaseDetailEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\NozzleVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\BaseDetailVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\IBaseDetailVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterCaseVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterCaseEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailEditVM.cs" />
     <Compile Include="ViewModels\ProductTypeViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyViewModels\ReverseShutterViewModel.cs" />
@@ -370,11 +373,14 @@
     <Compile Include="Views\EntityViews\DetailViews\NozzleView.xaml.cs">
       <DependentUpon>NozzleView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EntityViews\DetailViews\BaseDetailView.xaml.cs">
-      <DependentUpon>BaseDetailView.xaml</DependentUpon>
+    <Compile Include="Views\EntityViews\DetailViews\ReverseShutter\ReverseShutterDetailView.xaml.cs">
+      <DependentUpon>ReverseShutterDetailView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EntityViews\DetailViews\BaseDetailEditView.xaml.cs">
-      <DependentUpon>BaseDetailEditView.xaml</DependentUpon>
+    <Compile Include="Views\EntityViews\DetailViews\ReverseShutter\ReverseShutterCaseEditView.xaml.cs">
+      <DependentUpon>ReverseShutterCaseEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\ReverseShutter\ReverseShutterDetailEditView.xaml.cs">
+      <DependentUpon>ReverseShutterDetailEditView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\ProductTypeView.xaml.cs">
       <DependentUpon>ProductTypeView.xaml</DependentUpon>
@@ -382,6 +388,66 @@
     <Compile Include="Views\TCPViews\TCPView.xaml.cs">
       <DependentUpon>TCPView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Styles\ProjectStyles\ButtonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\ComboBoxStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\DataGridStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\GroupBoxStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\DatePickerStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\ListBoxStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\TreeViewStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\MenuStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\MetroWindowResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\Resources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\ScrollBarStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\LabelStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\TextBlockStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\PageStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Separators.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\ListBoxes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -422,6 +488,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Styles\ProjectStyles\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\TabControlStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\TextBoxStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ProjectStyles\WindowStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\DetailViews\CastingCaseView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -438,11 +520,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\EntityViews\DetailViews\BaseDetailView.xaml">
+    <Page Include="Views\EntityViews\DetailViews\ReverseShutter\ReverseShutterDetailView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\EntityViews\DetailViews\BaseDetailEditView.xaml">
+    <Page Include="Views\EntityViews\DetailViews\ReverseShutter\ReverseShutterCaseEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\ReverseShutter\ReverseShutterDetailEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
