@@ -10,8 +10,8 @@ namespace BusinessLayer.Repository.Interfaces.Entities.Detailing
     {
         Task<Nozzle> GetInclude(int id);
 
-        IEnumerable<NozzleJournal> GetJournal(Nozzle nozzle);
+        Task<IEnumerable<NozzleJournal>> GetJournal(Nozzle nozzle);
 
-        IEnumerable<NozzleTCP> GetPoints();
+        Task<IEnumerable<NozzleTCP>> GetPoints();
     }
 }

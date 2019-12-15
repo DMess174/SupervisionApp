@@ -16,7 +16,6 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
         public MetalMaterial MetalMaterial { get; set; }
 
         public int? ReverseShutterId { get; set; }
-        public ReverseShutter ReverseShutter { get; set; }
 
         public IEnumerable<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
     }

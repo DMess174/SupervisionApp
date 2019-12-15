@@ -24,14 +24,14 @@ namespace BusinessLayer.Repository.Implementations.Entities.Detailing
             return await DbEntity.Include(i => i.CastingCase).SingleOrDefaultAsync(i => i.Id == id);
         }
 
-        public IEnumerable<NozzleJournal> GetJournal(Nozzle nozzle)
+        public async Task<IEnumerable<NozzleJournal>> GetJournal(Nozzle nozzle)
         {
-            return DbJournal.Where(i => i.DetailId == nozzle.Id).ToList();
+            return await DbJournal.Where(i => i.DetailId == nozzle.Id).ToListAsync();
         }
 
-        public IEnumerable<NozzleTCP> GetPoints()
+        public async Task<IEnumerable<NozzleTCP>> GetPoints()
         {
-            return DbTCP.ToList();
+            return await DbTCP.ToListAsync();
         }
     }
 }
