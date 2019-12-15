@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Style="{StaticResource StandardWindow}"
-        Title="Главное меню" Height="800" Width="1200"
+        Title="Главное меню" Height="700" Width="1200"
         WindowStartupLocation="CenterScreen"
                       WindowStyle="ThreeDBorderWindow">
     <Grid>

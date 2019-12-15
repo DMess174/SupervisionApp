@@ -15,6 +15,7 @@ namespace DataLayer.Entities.AssemblyUnits
         public IEnumerable<Saddle> Saddles { get; set; }
         public IEnumerable<ShearPin> ShearPins { get; set; }
         public IEnumerable<BallValve> BallValves { get; set; }
+        public IEnumerable<CounterFlange> CounterFlanges { get; set; }
 
         public IEnumerable<BaseValveWithSealing> BaseValveWithSeals { get; set; }
         public IEnumerable<BaseValveWithScrewNut> BaseValveWithScrewNuts { get; set; }

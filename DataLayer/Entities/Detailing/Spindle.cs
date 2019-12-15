@@ -1,4 +1,5 @@
-﻿using DataLayer.Journals.Detailing;
+﻿using DataLayer.Entities.Materials;
+using DataLayer.Journals.Detailing;
 using System.Collections.Generic;
 
 namespace DataLayer.Entities.Detailing
@@ -9,6 +10,9 @@ namespace DataLayer.Entities.Detailing
         {
             Name = "Шпиндель";
         }
+
+        public int? MetalMaterialId { get; set; }
+        public MetalMaterial MetalMaterial { get; set; }
 
         public BaseValveCover BaseValveCover { get; set; }
 

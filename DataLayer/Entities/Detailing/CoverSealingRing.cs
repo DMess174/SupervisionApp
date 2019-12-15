@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DataLayer.Entities.Detailing.CastGateValveDetails;
 using DataLayer.Entities.Detailing.WeldGateValveDetails;
+using DataLayer.Entities.Materials;
 
 namespace DataLayer.Entities.Detailing
 {
@@ -11,6 +12,9 @@ namespace DataLayer.Entities.Detailing
         {
             Name = "Уплотнительное кольцо";
         }
+
+        public int? MetalMaterialId { get; set; }
+        public MetalMaterial MetalMaterial { get; set; }
 
         public CastGateValveCover CastGateValveCover{ get; set; }
         public CoverSleeve CoverSleeve { get; set; }

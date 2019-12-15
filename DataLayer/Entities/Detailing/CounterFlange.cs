@@ -5,21 +5,19 @@ using System.Collections.Generic;
 
 namespace DataLayer.Entities.Detailing
 {
-    public class Saddle : BaseDetail
+    public class CounterFlange : BaseDetail
     {
-        public Saddle()
+        public CounterFlange()
         {
-            Name = "Седло";
+            Name = "Фланец ответный";
         }
 
         public int? MetalMaterialId { get; set; }
         public MetalMaterial MetalMaterial { get; set; }
 
-        public int? BaseValveId{ get; set; }
+        public int? BaseValveId { get; set; }
         public BaseValve BaseValve { get; set; }
 
-        public IEnumerable<SaddleWithSealing> SaddleWithSealings { get; set; }
-
-        public IEnumerable<SaddleJournal> SaddleJournals { get; set; }
+        public IEnumerable<CounterFlangeJournal> CounterFlangeJournals { get; set; }
     }
 }

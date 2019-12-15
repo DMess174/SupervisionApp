@@ -20,6 +20,9 @@ using DataLayer.Journals.Detailing.CompactGateValveDetails;
 using DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 using DataLayer.TechnicalControlPlans.Detailing.CompactGateValveDetails;
+using DataLayer.Entities.Materials;
+using DataLayer.TechnicalControlPlans.Materials;
+using DataLayer.Journals.Materials;
 
 namespace DataLayer
 {
@@ -189,10 +192,28 @@ namespace DataLayer
         public DbSet<ShearPinTCP> ShearPinTCPs { get; set; }
         public DbSet<ShearPinJournal> ShearPinJournals { get; set; }
 
+        public DbSet<CounterFlange> CounterFlanges { get; set; }
+        public DbSet<CounterFlangeTCP> CounterFlangeTCPs { get; set; }
+        public DbSet<CounterFlangeJournal> CounterFlangeJournals { get; set; }
+
+        public DbSet<MetalMaterialTCP> MetalMaterialTCPs { get; set; }
+        public DbSet<SheetMaterial> SheetMaterials { get; set; }
+        public DbSet<SheetMaterialJournal> SheetMaterialJournals { get; set; }
+
+        public DbSet<ForgingMaterial> ForgingMaterials { get; set; }
+        public DbSet<ForgingMaterialJournal> ForgingMaterialJournals { get; set; }
+
+        public DbSet<RolledMaterial> RolledMaterials { get; set; }
+        public DbSet<RolledMaterialJournal> RolledMaterialJournals { get; set; }
+
+        public DbSet<PipeMaterial> PipeMaterials { get; set; }
+        public DbSet<PipeMaterialJournal> PipeMaterialJournals { get; set; }
+
         //TODO: Не забываем добавлять все таблицы
 
         public DataContext()
         {
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
             //Database.Migrate();
         }

@@ -119,10 +119,6 @@
                 Grid.Column="0" 
                 RowHeight="20"
                 IsReadOnly="True"
-                CanUserAddRows="False"
-                CanUserDeleteRows="False"
-                SelectionMode="Single"
-                SelectionUnit="FullRow"
                 ItemsSource="{Binding AllInstancesView}"
                 SelectedItem="{Binding SelectedItem}">
             <DataGrid.InputBindings>
