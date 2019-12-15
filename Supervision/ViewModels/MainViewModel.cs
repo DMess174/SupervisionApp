@@ -21,6 +21,8 @@ using DataLayer.TechnicalControlPlans.Detailing.CastGateValveDetails;
 using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter;
 using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
+using Supervision.Views.EntityViews.MaterialViews;
+using Supervision.ViewModels.EntityViewModels.Materials;
 
 namespace Supervision.ViewModels
 {
@@ -48,7 +50,19 @@ namespace Supervision.ViewModels
             } 
         }
 
-        
+        public ICommand SheetMaterialOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new SheetMaterialView();
+                    var vm = new SheetMaterialVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
 
         public ICommand CaseShutterOpen
         {

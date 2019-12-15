@@ -88,6 +88,19 @@
                 <MenuItem Header="Шпиндель" />
             </MenuItem>
 
+            <MenuItem Header="Материалы">
+                <MenuItem Header="Металл">
+                    <MenuItem Header="Лист"
+                              Command="{Binding SheetMaterialOpen}"/>
+                    <MenuItem Header="Поковка"
+                              Command="{Binding ForgingMaterialOpen}"/>
+                    <MenuItem Header="Прокат"
+                              Command="{Binding RolledMaterialOpen}"/>
+                    <MenuItem Header="Труба"
+                              Command="{Binding PipeMaterialOpen}"/>
+                </MenuItem>
+            </MenuItem>
+
             <MenuItem Header="Персонал"
                       Command="{Binding InspectorOpen}"/>
 

@@ -196,7 +196,9 @@ namespace DataLayer
         public DbSet<CounterFlangeTCP> CounterFlangeTCPs { get; set; }
         public DbSet<CounterFlangeJournal> CounterFlangeJournals { get; set; }
 
+        public DbSet<MetalMaterial> MetalMaterials { get; set; }
         public DbSet<MetalMaterialTCP> MetalMaterialTCPs { get; set; }
+
         public DbSet<SheetMaterial> SheetMaterials { get; set; }
         public DbSet<SheetMaterialJournal> SheetMaterialJournals { get; set; }
 
