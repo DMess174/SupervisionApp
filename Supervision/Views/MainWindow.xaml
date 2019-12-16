@@ -121,6 +121,15 @@
                     <MenuItem Header="Ось" Command="{Binding ShaftShutterTCPOpen}" />
                 </MenuItem>
 
+                <MenuItem Header="Материалы">
+                    <MenuItem Header="АКП">
+                        <MenuItem Header="Грунт"/>
+                        <MenuItem Header="Эмаль"/>
+                    </MenuItem>
+                    <MenuItem Header="Металл" Command="{Binding MetalMaterialTCPOpen}"/>
+                    <MenuItem Header="Сварочные материалы"/>
+                </MenuItem>
+
                 <MenuItem Header="Шибер" />
             </MenuItem>
         </Menu>

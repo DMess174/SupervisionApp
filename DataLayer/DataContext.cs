@@ -28,6 +28,7 @@ namespace DataLayer
 {
     public sealed class DataContext : DbContext
     {
+        public DbSet<OperationType> OperationTypes { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Specification> Specifications{ get; set; }
@@ -219,6 +220,17 @@ namespace DataLayer
             Database.EnsureCreated();
             //Database.Migrate();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<OperationType>().HasData(new OperationType[]
+                {
+                new OperationType { Id=1, Name="Входной контроль"},
+                new OperationType { Id=2, Name="Механическая обработка"},
+                new OperationType { Id=3, Name="УЗК"}
+                });
+        }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

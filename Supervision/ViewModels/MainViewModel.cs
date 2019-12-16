@@ -23,6 +23,7 @@ using Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter;
 using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
 using Supervision.Views.EntityViews.MaterialViews;
 using Supervision.ViewModels.EntityViewModels.Materials;
+using DataLayer.TechnicalControlPlans.Materials;
 
 namespace Supervision.ViewModels
 {
@@ -58,6 +59,19 @@ namespace Supervision.ViewModels
                 {
                     var w = new SheetMaterialView();
                     var vm = new SheetMaterialVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand PipeMaterialOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new PipeMaterialView();
+                    var vm = new PipeMaterialVM();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });
@@ -272,6 +286,18 @@ namespace Supervision.ViewModels
                 Page tcp = new TCPView
                 {
                     DataContext = new TCPViewModel<ReverseShutterCaseTCP>()
+                };
+                return new DelegateCommand(() => SlowOpacity(tcp));
+            }
+        }
+
+        public ICommand MetalMaterialTCPOpen
+        {
+            get
+            {
+                Page tcp = new TCPView
+                {
+                    DataContext = new TCPViewModel<MetalMaterialTCP>()
                 };
                 return new DelegateCommand(() => SlowOpacity(tcp));
             }

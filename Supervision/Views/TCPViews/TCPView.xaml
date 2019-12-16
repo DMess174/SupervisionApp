@@ -74,7 +74,7 @@
 
                 <DataGridTextColumn Header="Наименование" 
                                     Width="150*" 
-                                    Binding="{Binding Path= OperationName}">
+                                    Binding="{Binding Path= OperationType.Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="TextWrapping" Value="Wrap"/>
@@ -124,11 +124,11 @@
 
                 <TextBlock Style="{StaticResource StandardTextBlock}"
                            Text="Наименование операции:" 
-                           Margin="5" />
+                           Margin="5 10 5 5" />
 
                 <TextBlock Style="{StaticResource StandardTextBlock}"
                            Text="Описание:" 
-                           Margin="5"  />
+                           Margin="5 10 5 5"  />
             </StackPanel>
 
             <StackPanel Orientation="Vertical" 
@@ -140,10 +140,12 @@
                          DataContext="{Binding SelectedPoint}"
                          Margin="5"/>
 
-                <TextBox Style="{StaticResource StandardTextBox}" 
+                <ComboBox Style="{StaticResource StandardComboBox}" 
                          Width="560" 
-                         Text="{Binding OperationName, UpdateSourceTrigger=PropertyChanged}" 
-                         DataContext="{Binding SelectedPoint}"
+                         ItemsSource="{Binding OperationTypes}"
+                         DisplayMemberPath="Name"
+                         SelectedValue="Id"
+                         SelectedValuePath="SelectedItem.OperationNameId"
                          Margin="5"/>
 
                 <TextBox Style="{StaticResource StandardTextBox}" 

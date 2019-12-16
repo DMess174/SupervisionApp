@@ -358,7 +358,9 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterCaseEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\PipeMaterialEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\SheetMaterialEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\PipeMaterialVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\SheetMaterialVM.cs" />
     <Compile Include="ViewModels\ProductTypeViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
@@ -384,8 +386,14 @@
     <Compile Include="Views\EntityViews\DetailViews\ReverseShutter\ReverseShutterDetailEditView.xaml.cs">
       <DependentUpon>ReverseShutterDetailEditView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EntityViews\MaterialViews\PipeMaterialEditView.xaml.cs">
+      <DependentUpon>PipeMaterialEditView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\MaterialViews\SheetMaterialEditView.xaml.cs">
       <DependentUpon>SheetMaterialEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\MaterialViews\PipeMaterialView.xaml.cs">
+      <DependentUpon>PipeMaterialView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\MaterialViews\SheetMaterialView.xaml.cs">
       <DependentUpon>SheetMaterialView.xaml</DependentUpon>
@@ -540,7 +548,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\MaterialViews\PipeMaterialEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\MaterialViews\SheetMaterialEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\MaterialViews\PipeMaterialView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

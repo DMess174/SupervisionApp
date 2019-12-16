@@ -11,7 +11,7 @@ using Supervision.Views.EntityViews.MaterialViews;
 
 namespace Supervision.ViewModels.EntityViewModels.Materials
 {
-    public class SheetMaterialEditVM : BasePropertyChanged
+    public class PipeMaterialEditVM : BasePropertyChanged
     {
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
@@ -21,16 +21,16 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
         private IEnumerable<string> thirdSize;
         private IEnumerable<MetalMaterialTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<SheetMaterialJournal> journal;
+        private IEnumerable<PipeMaterialJournal> journal;
         private readonly BaseTable parentEntity;
         private MetalMaterialTCP selectedTCPPoint;
 
-        private SheetMaterial selectedItem;
+        private PipeMaterial selectedItem;
         private ICommand saveItem;
         private ICommand closeWindow;
         private ICommand addOperation;
 
-        public SheetMaterial SelectedItem
+        public PipeMaterial SelectedItem
         {
             get => selectedItem;
             set
@@ -40,7 +40,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public IEnumerable<SheetMaterialJournal> Journal
+        public IEnumerable<PipeMaterialJournal> Journal
         {
             get => journal;
             set
@@ -77,7 +77,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         if (SelectedItem != null)
                         {
-                            db.SheetMaterials.Update(SelectedItem);
+                            db.PipeMaterials.Update(SelectedItem);
                             db.SaveChanges();
                             if (Journal != null)
                             {
@@ -85,7 +85,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                                 {
                                     i.DetailNumber = SelectedItem.Number;
                                 }
-                                db.SheetMaterialJournals.UpdateRange(Journal);
+                                db.PipeMaterialJournals.UpdateRange(Journal);
                             }
                             db.SaveChanges();
                         }
@@ -100,11 +100,11 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        if (!(parentEntity is SheetMaterial)) w?.Close();
+                        if (!(parentEntity is PipeMaterial)) w?.Close();
                         else
                         {
-                            var wn = new SheetMaterialView();
-                            var vm = new SheetMaterialVM();
+                            var wn = new PipeMaterialView();
+                            var vm = new PipeMaterialVM();
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -122,7 +122,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                         if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
                         else
                         {
-                            var item = new SheetMaterialJournal()
+                            var item = new PipeMaterialJournal()
                             {
                                 DetailNumber = SelectedItem.Number,
                                 DetailName = SelectedItem.Name,
@@ -131,9 +131,9 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                                 Description = SelectedTCPPoint.Description,
                                 PointId = SelectedTCPPoint.Id,
                             };
-                            db.SheetMaterialJournals.Add(item);
+                            db.PipeMaterialJournals.Add(item);
                             db.SaveChanges();
-                            Journal = db.SheetMaterialJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            Journal = db.PipeMaterialJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
                         }
                     }));
             }
@@ -198,17 +198,17 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public SheetMaterialEditVM(int id, BaseTable entity)
+        public PipeMaterialEditVM(int id, BaseTable entity)
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.SheetMaterials.Find(id);
-            Journal = db.Set<SheetMaterialJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+            SelectedItem = db.PipeMaterials.Find(id);
+            Journal = db.Set<PipeMaterialJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Select(i => i.Number).Distinct().ToList();
-            Materials = db.SheetMaterials.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            FirstSize = db.SheetMaterials.Select(t => t.FirstSize).Distinct().OrderBy(x => x).ToList();
-            SecondSize = db.SheetMaterials.Select(t => t.SecondSize).Distinct().OrderBy(x => x).ToList();
-            ThirdSize = db.SheetMaterials.Select(d => d.ThirdSize).Distinct().OrderBy(x => x).ToList();
+            Materials = db.PipeMaterials.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
+            FirstSize = db.PipeMaterials.Select(t => t.FirstSize).Distinct().OrderBy(x => x).ToList();
+            SecondSize = db.PipeMaterials.Select(t => t.SecondSize).Distinct().OrderBy(x => x).ToList();
+            ThirdSize = db.PipeMaterials.Select(d => d.ThirdSize).Distinct().OrderBy(x => x).ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.MetalMaterialTCPs.ToList();
         }

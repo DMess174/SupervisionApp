@@ -7,6 +7,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Collections.Generic;
 using DataLayer.TechnicalControlPlans;
+using System.Linq;
 
 namespace Supervision.ViewModels.TCPViewModels
 {
@@ -15,6 +16,7 @@ namespace Supervision.ViewModels.TCPViewModels
     {
         private readonly DataContext db;
 
+        private IEnumerable<OperationType> operationTypes;
         private IEnumerable<TEntityTCP> tCPs;
         private ICollectionView tCPsView;
         private TEntityTCP selectedPoint;
@@ -188,6 +190,16 @@ namespace Supervision.ViewModels.TCPViewModels
             }
         }
 
+        public IEnumerable<OperationType> OperationTypes
+        {
+            get => operationTypes;
+            set
+            {
+                operationTypes = value;
+                RaisePropertyChanged("OperationTypes");
+            }
+        }
+
         public ICollectionView TCPsView
         {
             get => tCPsView;
@@ -201,9 +213,10 @@ namespace Supervision.ViewModels.TCPViewModels
         public TCPViewModel()
         {
             db = new DataContext();
-            db.Set<TEntityTCP>().Load();
+            db.Set<TEntityTCP>().Include(i => i.OperationType).Load();
             TCPs = db.Set<TEntityTCP>().Local.ToObservableCollection();
             TCPsView = CollectionViewSource.GetDefaultView(TCPs);
+            OperationTypes = db.OperationTypes.ToList();
         }
     }
 }
