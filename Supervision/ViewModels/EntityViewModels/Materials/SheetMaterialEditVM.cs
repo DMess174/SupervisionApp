@@ -7,6 +7,7 @@ using System.Windows.Input;
 using DataLayer.TechnicalControlPlans.Materials;
 using DataLayer.Journals.Materials;
 using DataLayer.Entities.Materials;
+using Microsoft.EntityFrameworkCore;
 using Supervision.Views.EntityViews.MaterialViews;
 
 namespace Supervision.ViewModels.EntityViewModels.Materials
@@ -134,6 +135,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                             db.SheetMaterialJournals.Add(item);
                             db.SaveChanges();
                             Journal = db.SheetMaterialJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            SelectedTCPPoint = null;
                         }
                     }));
             }
@@ -210,7 +212,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             SecondSize = db.SheetMaterials.Select(t => t.SecondSize).Distinct().OrderBy(x => x).ToList();
             ThirdSize = db.SheetMaterials.Select(d => d.ThirdSize).Distinct().OrderBy(x => x).ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.MetalMaterialTCPs.ToList();
+            Points = db.MetalMaterialTCPs.Include(i => i.OperationType).ToList();
         }
     }
 }

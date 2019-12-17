@@ -300,9 +300,7 @@
                 Grid.Column="0" 
                 MinRowHeight="50"
                 ItemsSource="{Binding Journal}"
-                IsReadOnly="False" 
-                CanUserAddRows="False"
-                CanUserDeleteRows="False">
+                IsReadOnly="False">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="100" Header="Дата">
                     <DataGridTemplateColumn.CellTemplate>
@@ -367,8 +365,9 @@
                             <ComboBox 
                                       Height="50" 
                                       IsEditable="True"
-                                      Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" 
-                                      SelectedItem= "{Binding Status}">
+                                      SelectedItem="{Binding Status}"
+                                      SelectedValue= "{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedValuePath="Content">
                                 <ComboBoxItem Content="Соответствует"/>
                                 <ComboBoxItem Content="Не соответствует"/>
                             </ComboBox>

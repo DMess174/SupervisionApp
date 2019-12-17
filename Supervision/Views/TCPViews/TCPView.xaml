@@ -6,167 +6,115 @@
       mc:Ignorable="d"
       Style="{StaticResource StandardPage}"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Персонал">
+      Title="ПТК">
+    <Page.Resources>
+        <CollectionViewSource x:Key="OperationTypes" Source="{Binding OperationTypes}"/>
+    </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition />
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="5" />
-            <RowDefinition Height="152"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5 5 0 0">
-            <TextBlock Style="{StaticResource StandardTextBlock}" 
-                       Text="Пункт ПТК" 
-                       Margin="5 0 5 0" 
-                       VerticalAlignment="Center"/>
-            <TextBox Style="{StaticResource StandardTextBox}" 
-                     Width="100"
-                     Text="{Binding PointTCP, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Style="{StaticResource StandardTextBlock}"
-                       Text="Наименование операии" 
-                       Margin="5 0 5 0" 
-                       VerticalAlignment="Center"/>
-            <TextBox Style="{StaticResource StandardTextBox}" 
-                     Width="100"
-                     Text="{Binding OperationName, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Style="{StaticResource StandardTextBlock}"
-                       Text="Описание" 
-                       Margin="5 0 5 0" 
-                       VerticalAlignment="Center"/>
-            <TextBox Style="{StaticResource StandardTextBox}" 
-                     Width="100" 
-                     AcceptsReturn="True" 
-                     TextWrapping="Wrap"
-                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
-        </StackPanel>
-        <Separator Style="{StaticResource HorizontalSeparator}" 
-                   Grid.Row="1"/>
         <DataGrid Style="{StaticResource StandardDataGrid}"
-                Margin="5"
-                MinRowHeight="15"
-                Grid.Row="2" 
-                AlternationCount="2"
-                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                RowDetailsVisibilityMode="VisibleWhenSelected"
-                ItemsSource="{Binding TCPsView, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding SelectedPoint}"
-                IsReadOnly="True" 
-                Height="auto" 
-                HorizontalContentAlignment="Stretch">
+                  Margin="5"
+                  MinRowHeight="15"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ItemsSource="{Binding TCPsView, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding SelectedPoint}"
+                  Height="auto" 
+                  HorizontalContentAlignment="Stretch">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" 
                                     Width="20*" 
-                                    Binding="{Binding Path = Id}" 
+                                    Binding="{Binding Path = Id}"
                                     TextBlock.TextAlignment="Center">
-                </DataGridTextColumn>
-
-                <DataGridTextColumn Header="Пункт" 
-                                    Width="50*" 
-                                    Binding="{Binding Path = Point}" 
-                                    TextBlock.TextAlignment="Center" >
-                </DataGridTextColumn>
-
-                <DataGridTextColumn Header="Наименование" 
-                                    Width="150*" 
-                                    Binding="{Binding Path= OperationType.Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
-                            <Setter Property="TextWrapping" Value="Wrap"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Описание" 
+                <DataGridTextColumn Header="Пункт" 
+                                    Width="70" 
+                                    Binding="{Binding Path = Point}" 
+                                    TextBlock.TextAlignment="Center" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTemplateColumn 
+                    Header="Наименование операции"
+                    Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox  VerticalContentAlignment="Center"
+                                       IsEditable="True"
+                                       ItemsSource="{Binding Path=DataContext.OperationTypes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                                       SelectedValuePath="Id"
+                                       SelectedValue="{Binding Path=OperationNameId, UpdateSourceTrigger=PropertyChanged}"
+                                       DisplayMemberPath="Name">
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Контролируемые параметры" 
                                     Width="300*"  
                                     Binding ="{Binding Path = Description}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
                             <Setter Property="TextWrapping" Value="Wrap"/>
+                            <Setter Property="TextAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
 
-        <DockPanel Grid.Row="3"  Height="50" VerticalAlignment="Bottom" Margin="0,1" >
-            <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-                <Button Style="{StaticResource StandardButton}"
-                    Content="Добавить" Margin="10" Command="{Binding AddPoint}" />
-
-                <Button Style="{StaticResource StandardButton}" 
-                    Content="Удалить" Margin="10" Command="{Binding RemovePoint}"
-                    CommandParameter="{Binding ElementName=TCPs, Path=SelectedItem}"  />
-            </StackPanel>
-        </DockPanel>
-
         <Separator Style="{StaticResource HorizontalSeparator}" 
-                   Grid.Row="4"/>
-        <Grid Grid.Row="5" 
-              Grid.Column="0" 
-              Margin="5,0,5,5" 
-              Height="142" 
-              VerticalAlignment="Bottom">
+                   Grid.Row="1"/>
+
+        <Grid Grid.Row="2"  Height="50" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Vertical" 
-                        Margin="5">
-                <TextBlock Style="{StaticResource StandardTextBlock}" 
-                           Text="Пункт:" 
-                           Margin="5" />
+            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                <Button Style="{StaticResource StandardButton}"
+                    Content="Добавить" Margin="10" Command="{Binding AddPoint}"
+                    Width="100"/>
 
-                <TextBlock Style="{StaticResource StandardTextBlock}"
-                           Text="Наименование операции:" 
-                           Margin="5 10 5 5" />
-
-                <TextBlock Style="{StaticResource StandardTextBlock}"
-                           Text="Описание:" 
-                           Margin="5 10 5 5"  />
-            </StackPanel>
-
-            <StackPanel Orientation="Vertical" 
-                        Grid.Column="1" 
-                        Margin="5">
-                <TextBox Style="{StaticResource StandardTextBox}" 
-                         Width="560" 
-                         Text="{Binding Point, UpdateSourceTrigger=PropertyChanged}" 
-                         DataContext="{Binding SelectedPoint}"
-                         Margin="5"/>
-
-                <ComboBox Style="{StaticResource StandardComboBox}" 
-                         Width="560" 
-                         ItemsSource="{Binding OperationTypes}"
-                         DisplayMemberPath="Name"
-                         SelectedValue="Id"
-                         SelectedValuePath="SelectedItem.OperationNameId"
-                         Margin="5"/>
-
-                <TextBox Style="{StaticResource StandardTextBox}" 
-                         Width="560" 
-                         Height="75" 
-                         TextWrapping="Wrap" 
-                         VerticalScrollBarVisibility="Auto"
-                         AcceptsReturn="True" 
-                         Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
-                         DataContext="{Binding SelectedPoint}"
-                         Margin="5"/>
-            </StackPanel>
-        </Grid>
-
-        <StackPanel Grid.Row="6">
-            <Button Style="{StaticResource StandardButton}"
+                <Button
+                    Style="{StaticResource StandardButton}"
                     Width="100"
                     Content="Сохранить" Margin="10" 
                     Command="{Binding SavePoint}" 
                     CommandParameter="{Binding ElementName=TCPs, Path=SelectedItem}" />
-        </StackPanel>
+            </StackPanel>
+
+            <Button Grid.Column="1" Style="{StaticResource StandardButton}" 
+                    Content="Удалить" Margin="10" Command="{Binding RemovePoint}"
+                    CommandParameter="{Binding ElementName=TCPs, Path=SelectedItem}"
+                    Width="100"
+                    HorizontalAlignment="Right"/>
+            
+        </Grid>
+
+
+
+
     </Grid>
 
 </Page>

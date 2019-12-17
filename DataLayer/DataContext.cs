@@ -217,7 +217,7 @@ namespace DataLayer
         public DataContext()
         {
             //Database.EnsureDeleted();
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
             //Database.Migrate();
         }
 
