@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DataLayer.Entities.Detailing
 {
-    public class Spindle : BaseDetail
+    public class Spindle : BaseEntity
     {
         public Spindle()
         {

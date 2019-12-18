@@ -30,9 +30,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         private string number = "";
         private string drawing = "";
         private string status = "";
-        private string material = "";
         private string certificate = "";
-        private string melt = "";
 
         #region Filter
         public string Number 
@@ -86,23 +84,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 };
             }
         }
-        public string Material
-        {
-            get => material;
-            set
-            {
-                material= value;
-                RaisePropertyChanged("Material");
-                allInstancesView.Filter += (obj) =>
-                {
-                    if (obj is Nozzle item && item.Material != null)
-                    {
-                        return item.Material.ToLower().Contains(Material.ToLower());
-                    }
-                    else return false;
-                };
-            }
-        }
+
         public string Certificate
         {
             get => certificate;
@@ -115,23 +97,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                     if (obj is Nozzle item && item.Certificate != null)
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
-                    }
-                    else return false;
-                };
-            }
-        }
-        public string Melt
-        {
-            get => melt;
-            set
-            {
-                melt = value;
-                RaisePropertyChanged("Melt");
-                allInstancesView.Filter += (obj) =>
-                {
-                    if (obj is Nozzle item && item.Melt != null)
-                    {
-                        return item.Melt.ToLower().Contains(Melt.ToLower());
                     }
                     else return false;
                 };
@@ -184,8 +149,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                             {
                                 Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
                                 Drawing = SelectedItem.Drawing,
-                                Material = SelectedItem.Material,
-                                Melt = SelectedItem.Melt,
                                 Certificate = SelectedItem.Certificate,
                                 Status = SelectedItem.Status,
                                 Name = SelectedItem.Name,

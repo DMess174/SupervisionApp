@@ -2,14 +2,8 @@
 
 namespace DataLayer.Entities.Detailing
 {
-    public class BaseCastingCase : BaseCase
+    public class BaseCastingCase : BaseDetail
     {
-        public string Material { get; set; }
-
-        public string Certificate { get; set; }
-
-        public string Melt { get; set; }
-
         public IEnumerable<Nozzle> Nozzles { get; set; }
     }
 }

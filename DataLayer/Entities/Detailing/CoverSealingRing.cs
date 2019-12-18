@@ -6,7 +6,7 @@ using DataLayer.Entities.Materials;
 
 namespace DataLayer.Entities.Detailing
 {
-    public class CoverSealingRing : BaseDetail
+    public class CoverSealingRing : BaseEntity
     {
         public CoverSealingRing()
         {

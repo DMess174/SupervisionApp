@@ -4,7 +4,7 @@ using DataLayer.Journals.Detailing.CompactGateValveDetails;
 
 namespace DataLayer.Entities.Detailing.CompactGateValveDetails
 {
-    public class ShutterGuide : BaseDetail
+    public class ShutterGuide : BaseEntity
     {
         public ShutterGuide()
         {

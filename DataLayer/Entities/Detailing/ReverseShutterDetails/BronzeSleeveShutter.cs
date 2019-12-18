@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Entities.Materials;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
 
@@ -12,8 +11,8 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
             Name = "Втулка бронзовая";
         }
 
-        public int? MetalMaterialId { get; set; }
-        public MetalMaterial MetalMaterial { get; set; }
+        public string Material { get; set; }
+        public string Melt { get; set; }
 
         public int? ReverseShutterId { get; set; }
 

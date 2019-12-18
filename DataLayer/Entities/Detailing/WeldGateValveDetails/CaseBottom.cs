@@ -4,7 +4,7 @@ using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
 namespace DataLayer.Entities.Detailing.WeldGateValveDetails
 {
-    public class CaseBottom : BaseDetail
+    public class CaseBottom : BaseEntity
     {
         public CaseBottom()
         {

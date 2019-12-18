@@ -4,7 +4,7 @@ using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
 namespace DataLayer.Entities.Detailing.WeldGateValveDetails
 {
-    public class CoverFlange : BaseDetail
+    public class CoverFlange : BaseEntity
     {
         public CoverFlange ()
         {

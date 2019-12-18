@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DataLayer.Entities.Detailing
 {
-    public class CounterFlange : BaseDetail
+    public class CounterFlange : BaseEntity
     {
         public CounterFlange()
         {

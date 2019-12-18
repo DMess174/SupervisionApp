@@ -3,6 +3,7 @@ using DataLayer.Entities.Detailing.CompactGateValveDetails;
 using DataLayer.Entities.Detailing.ReverseShutterDetails;
 using DataLayer.Entities.Detailing.WeldGateValveDetails;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Entities.Materials
 {
@@ -19,6 +20,9 @@ namespace DataLayer.Entities.Materials
         public string FirstSize { get; set; }
         public string SecondSize { get; set; }
         public string ThirdSize { get; set; }
+
+        [NotMapped] 
+        public string FullName => string.Format($"{Name}/{Number}/{Material}/{Melt}");
 
         public IEnumerable<Spindle> Spindles { get; set; }
         public IEnumerable<Saddle> Saddles { get; set; }

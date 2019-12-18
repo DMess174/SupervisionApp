@@ -11,6 +11,9 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
             Name = "Захлопка";
         }
 
+        public string Material { get; set; }
+        public string Melt { get; set; }
+
         public IEnumerable<SlamShutterJournal> SlamShutterJournals { get; set; }
     }
 }

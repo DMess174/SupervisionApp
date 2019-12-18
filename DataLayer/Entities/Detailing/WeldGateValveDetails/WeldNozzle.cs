@@ -4,7 +4,7 @@ using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
 namespace DataLayer.Entities.Detailing.WeldGateValveDetails
 {
-    public class WeldNozzle : BaseDetail
+    public class WeldNozzle : BaseEntity
     {
         public WeldNozzle()
         {

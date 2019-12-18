@@ -8,8 +8,6 @@
 
         public string Series { get; set; }
 
-        public string Certificate { get; set; }
-
         public int? Amount { get; set; }
 
         public int? AmountUsed { get; set; } = 0;

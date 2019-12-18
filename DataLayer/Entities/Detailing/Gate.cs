@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DataLayer.Entities.Detailing
 {
-    public class Gate : BaseDetail
+    public class Gate : BaseEntity
     {
         public Gate()
         {

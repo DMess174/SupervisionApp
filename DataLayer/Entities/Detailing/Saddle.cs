@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DataLayer.Entities.Detailing
 {
-    public class Saddle : BaseDetail
+    public class Saddle : BaseEntity
     {
         public Saddle()
         {

@@ -12,9 +12,6 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
             Name = "Втулка стальная";
         }
 
-        public int? MetalMaterialId { get; set; }
-        public MetalMaterial MetalMaterial { get; set; }
-
         public int? ReverseShutterId { get; set; }
 
         public IEnumerable<SteelSleeveShutterJournal> SteelSleeveShutterJournals{ get; set; }

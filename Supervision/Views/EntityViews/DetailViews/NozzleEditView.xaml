@@ -117,14 +117,16 @@
                               SelectedIndex= "{Binding SelectedItem.MetalMaterialId}"
                               SelectedValue="{Binding SelectedItem.MetalMaterialId}"
                               SelectedValuePath="Id"
-                              DisplayMemberPath="Number"/>
+                              DisplayMemberPath="FullName">
+                        
+                    </ComboBox>
                     
-                    <TextBox Style="{StaticResource StandardTextBox}" 
-                             Grid.Row="1" 
-                             Width="auto" 
-                             Margin="5 0 5 0" 
-                             VerticalAlignment="Center"
-                             Text="{Binding SelectedItem.MetalMaterial.Melt, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Style="{StaticResource StandardTextBlock}" 
+                               Grid.Row="1" 
+                               Width="auto" 
+                               Margin="5 0 5 0" 
+                               VerticalAlignment="Center"
+                               Text="{Binding SelectedItem.MetalMaterial.Melt, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
                 
                 <Grid Grid.Column="4">
@@ -149,12 +151,12 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <TextBox Style="{StaticResource StandardTextBox}" 
+                    <TextBlock Style="{StaticResource StandardTextBlock}" 
                              Grid.Row="0" 
                              Width="auto" 
                              Margin="5 0 5 0" 
                              VerticalAlignment="Center"
-                             Text="{Binding SelectedItem.Certificate, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding SelectedItem.MetalMaterial.Certificate, UpdateSourceTrigger=PropertyChanged}"/>
                     
                     <ComboBox Style="{StaticResource StandardComboBox}" 
                               Grid.Row="1" 

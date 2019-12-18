@@ -4,7 +4,7 @@ using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
 namespace DataLayer.Entities.Detailing.WeldGateValveDetails
 {
-    public class SideWall : BaseDetail
+    public class SideWall : BaseEntity
     {
         public SideWall()
         {

@@ -9,6 +9,7 @@ namespace DataLayer.Entities.Detailing
         public string Material { get; set; }
         public string Diameter { get; set; }
         public string Pressure { get; set; }
+        public string Designation { get; set; }
 
         public BallValve()
         {

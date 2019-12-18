@@ -11,9 +11,6 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
             Name = "Заглушка затвора";
         }
 
-        public int? MetalMaterialId { get; set; }
-        public MetalMaterial MetalMaterial { get; set; }
-
         public int? ReverseShutterId { get; set; }
 
         public IEnumerable<StubShutterJournal> StubShutterJournals { get; set; }
