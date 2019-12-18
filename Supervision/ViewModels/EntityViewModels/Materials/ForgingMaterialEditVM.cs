@@ -11,7 +11,7 @@ using Supervision.Views.EntityViews.MaterialViews;
 
 namespace Supervision.ViewModels.EntityViewModels.Materials
 {
-    public class PipeMaterialEditVM : BasePropertyChanged
+    public class ForgingMaterialEditVM : BasePropertyChanged
     {
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
@@ -21,16 +21,16 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
         private IEnumerable<string> thirdSize;
         private IEnumerable<MetalMaterialTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<PipeMaterialJournal> journal;
+        private IEnumerable<ForgingMaterialJournal> journal;
         private readonly BaseTable parentEntity;
         private MetalMaterialTCP selectedTCPPoint;
 
-        private PipeMaterial selectedItem;
+        private ForgingMaterial selectedItem;
         private ICommand saveItem;
         private ICommand closeWindow;
         private ICommand addOperation;
 
-        public PipeMaterial SelectedItem
+        public ForgingMaterial SelectedItem
         {
             get => selectedItem;
             set
@@ -40,7 +40,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public IEnumerable<PipeMaterialJournal> Journal
+        public IEnumerable<ForgingMaterialJournal> Journal
         {
             get => journal;
             set
@@ -77,7 +77,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         if (SelectedItem != null)
                         {
-                            db.PipeMaterials.Update(SelectedItem);
+                            db.ForgingMaterials.Update(SelectedItem);
                             db.SaveChanges();
                             if (Journal != null)
                             {
@@ -85,7 +85,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                                 {
                                     i.DetailNumber = SelectedItem.Number;
                                 }
-                                db.PipeMaterialJournals.UpdateRange(Journal);
+                                db.ForgingMaterialJournals.UpdateRange(Journal);
                             }
                             db.SaveChanges();
                         }
@@ -100,11 +100,11 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        if (!(parentEntity is PipeMaterial)) w?.Close();
+                        if (!(parentEntity is ForgingMaterial)) w?.Close();
                         else
                         {
-                            var wn = new PipeMaterialView();
-                            var vm = new PipeMaterialVM();
+                            var wn = new ForgingMaterialView();
+                            var vm = new ForgingMaterialVM();
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -122,7 +122,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                         if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
                         else
                         {
-                            var item = new PipeMaterialJournal()
+                            var item = new ForgingMaterialJournal()
                             {
                                 DetailNumber = SelectedItem.Number,
                                 DetailName = SelectedItem.Name,
@@ -131,9 +131,9 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                                 Description = SelectedTCPPoint.Description,
                                 PointId = SelectedTCPPoint.Id,
                             };
-                            db.PipeMaterialJournals.Add(item);
+                            db.ForgingMaterialJournals.Add(item);
                             db.SaveChanges();
-                            Journal = db.PipeMaterialJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            Journal = db.ForgingMaterialJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
                         }
                     }));
             }
@@ -198,17 +198,17 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public PipeMaterialEditVM(int id, BaseTable entity)
+        public ForgingMaterialEditVM(int id, BaseTable entity)
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.PipeMaterials.Find(id);
-            Journal = db.Set<PipeMaterialJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+            SelectedItem = db.ForgingMaterials.Find(id);
+            Journal = db.Set<ForgingMaterialJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Materials = db.PipeMaterials.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            FirstSize = db.PipeMaterials.Select(t => t.FirstSize).Distinct().OrderBy(x => x).ToList();
-            SecondSize = db.PipeMaterials.Select(t => t.SecondSize).Distinct().OrderBy(x => x).ToList();
-            ThirdSize = db.PipeMaterials.Select(d => d.ThirdSize).Distinct().OrderBy(x => x).ToList();
+            Materials = db.ForgingMaterials.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
+            FirstSize = db.ForgingMaterials.Select(t => t.FirstSize).Distinct().OrderBy(x => x).ToList();
+            SecondSize = db.ForgingMaterials.Select(t => t.SecondSize).Distinct().OrderBy(x => x).ToList();
+            ThirdSize = db.ForgingMaterials.Select(d => d.ThirdSize).Distinct().OrderBy(x => x).ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.MetalMaterialTCPs.ToList();
         }

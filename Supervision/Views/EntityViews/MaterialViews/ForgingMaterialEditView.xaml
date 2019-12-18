@@ -1,4 +1,4 @@
-﻿<Window x:Class="Supervision.Views.EntityViews.MaterialViews.PipeMaterialEditView"
+﻿<Window x:Class="Supervision.Views.EntityViews.MaterialViews.ForgingMaterialEditView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -88,12 +88,12 @@
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
-                    
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
-                               Text="Номер трубы:" 
+                               Grid.Row="0" 
+                               Text="садка:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
-                    
+
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
                                Grid.Row="1" 
                                Text="Сертификат:" 
@@ -111,8 +111,8 @@
                              Width="auto" 
                              Margin="5 0 5 0" 
                              VerticalAlignment="Center"
-                             Text="{Binding SelectedItem.MaterialCertificateNumber, UpdateSourceTrigger=PropertyChanged}"/>
-                    
+                             Text="{Binding SelectedItem.MetalCharge, UpdateSourceTrigger=PropertyChanged}"/>
+                   
                     <TextBox Style="{StaticResource StandardTextBox}" 
                              Grid.Row="1" 
                              Width="auto" 
@@ -164,7 +164,7 @@
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
-                               Text="Диаметр:" 
+                               Text="Ширина:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
 
@@ -207,7 +207,7 @@
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
-                               Text="Толщина&#x0a;  стенки:" 
+                               Text="Толщина:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
 
@@ -476,26 +476,29 @@
 
         <Separator Style="{StaticResource HorizontalSeparator}" 
                    Grid.Row="4"/>
+        
+            <Grid Grid.Row="5">
 
-        <Grid Grid.Row="5">
-            <StackPanel Orientation="Horizontal" 
-                HorizontalAlignment="Right" 
-                VerticalAlignment="Center"
-                Height="35">
-                <Button Style="{StaticResource StandardButton}" 
-                        Width="70"
-                        Content="Сохранить" 
-                        Margin="10 2 10 2" 
-                        Command="{Binding SaveItem}" 
-                        CommandParameter="{Binding SelectedItem}"/>
 
-                <Button Style="{StaticResource StandardButton}" 
-                        Width="70"
-                        Content="Закрыть" 
-                        Margin="10 2 10 2" 
-                        Command="{Binding CloseWindow}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-            </StackPanel>
-        </Grid>
+
+                <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Center"
+                        Height="35">
+                    <Button Style="{StaticResource StandardButton}" 
+                            Width="70"
+                            Content="Сохранить" 
+                            Margin="10 2 10 2" 
+                            Command="{Binding SaveItem}" 
+                            CommandParameter="{Binding SelectedItem}"/>
+
+                    <Button Style="{StaticResource StandardButton}" 
+                            Width="70"
+                            Content="Закрыть" 
+                            Margin="10 2 10 2" 
+                            Command="{Binding CloseWindow}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                </StackPanel>
+            </Grid>
     </Grid>
 </Window>

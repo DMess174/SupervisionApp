@@ -358,11 +358,16 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterCaseEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\ForgingMaterialEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\RolledMaterialEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\PipeMaterialEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\ForgingMaterialVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\RolledMaterialVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\SheetMaterialEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\PipeMaterialVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\SheetMaterialVM.cs" />
     <Compile Include="ViewModels\ProductTypeViewModel.cs" />
+    <Compile Include="ViewModels\JournalNumbersViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyViewModels\ReverseShutterViewModel.cs" />
     <Compile Include="Views\EntityViews\DetailViews\CastingCaseView.xaml.cs">
@@ -389,17 +394,32 @@
     <Compile Include="Views\EntityViews\MaterialViews\PipeMaterialEditView.xaml.cs">
       <DependentUpon>PipeMaterialEditView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EntityViews\MaterialViews\ForgingMaterialEditView.xaml.cs">
+      <DependentUpon>ForgingMaterialEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\MaterialViews\RolledMaterialEditView.xaml.cs">
+      <DependentUpon>RolledMaterialEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\MaterialViews\ForgingMaterialView.xaml.cs">
+      <DependentUpon>ForgingMaterialView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\MaterialViews\SheetMaterialEditView.xaml.cs">
       <DependentUpon>SheetMaterialEditView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\MaterialViews\PipeMaterialView.xaml.cs">
       <DependentUpon>PipeMaterialView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EntityViews\MaterialViews\RolledMaterialView.xaml.cs">
+      <DependentUpon>RolledMaterialView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\MaterialViews\SheetMaterialView.xaml.cs">
       <DependentUpon>SheetMaterialView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\ProductTypeView.xaml.cs">
       <DependentUpon>ProductTypeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\JournalNumbersView.xaml.cs">
+      <DependentUpon>JournalNumbersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TCPViews\TCPView.xaml.cs">
       <DependentUpon>TCPView.xaml</DependentUpon>
@@ -552,6 +572,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\MaterialViews\ForgingMaterialEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\MaterialViews\RolledMaterialEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\MaterialViews\ForgingMaterialView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\MaterialViews\SheetMaterialEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -560,11 +592,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\MaterialViews\RolledMaterialView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\MaterialViews\SheetMaterialView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EntityViews\ProductTypeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\JournalNumbersView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

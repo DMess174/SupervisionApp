@@ -227,7 +227,7 @@ namespace DataLayer
                 {
                 new OperationType { Id=1, Name="Входной контроль"},
                 new OperationType { Id=2, Name="Механическая обработка"},
-                new OperationType { Id=3, Name="УЗК"}
+                new OperationType { Id=3, Name="НК"}
                 });
         }
 

@@ -26,9 +26,7 @@ namespace Supervision.ViewModels
             {
                 return addItem ??
                     (
-                    addItem = new DelegateCommand
-                        (
-                            () =>
+                    addItem = new DelegateCommand(() =>
                             {
                                 ProductType item = new ProductType();
                                 db.ProductTypes.Add(item);
@@ -44,12 +42,13 @@ namespace Supervision.ViewModels
             {
                 return saveItem ??
                     (
-                    saveItem = new DelegateCommand
-                        (
-                            () =>
+                    saveItem = new DelegateCommand(() =>
                             {
-                                db.ProductTypes.UpdateRange(AllInstances);
-                                db.SaveChanges();
+                                if (AllInstances != null)
+                                {
+                                    db.ProductTypes.UpdateRange(AllInstances);
+                                    db.SaveChanges();
+                                }
                             })
                     );
             }
@@ -60,9 +59,7 @@ namespace Supervision.ViewModels
             {
                 return removeItem ??
                     (
-                    removeItem = new DelegateCommand
-                        (
-                            () =>
+                    removeItem = new DelegateCommand(() =>
                             {
                                 if (SelectedItem != null)
                                 {

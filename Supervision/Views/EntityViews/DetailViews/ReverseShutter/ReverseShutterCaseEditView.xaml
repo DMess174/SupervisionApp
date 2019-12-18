@@ -329,36 +329,52 @@
                             <RowDefinition Height="50"/>
                         </Grid.RowDefinitions>
                         <DataGrid Style="{StaticResource StandardDataGrid}"
-                Grid.Row="0"
-                Grid.RowSpan="3"
-                Grid.Column="0" 
-                MinRowHeight="50"
-                ItemsSource="{Binding Journal}"
-                IsReadOnly="False" 
-                CanUserAddRows="False"
-                CanUserDeleteRows="False">
+                                  Grid.Row="0"
+                                  Grid.RowSpan="3"
+                                  Grid.Column="0" 
+                                  MinRowHeight="50"
+                                  ItemsSource="{Binding Journal}"
+                                  IsReadOnly="False">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Width="100" Header="Дата">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
-                                                        SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
 
-                                <DataGridTextColumn 
+                                <DataGridTemplateColumn 
                     Header="Пункт"
                     MinWidth="70"
-                    Width="auto"
-                    IsReadOnly="True"
-                    Binding ="{Binding Path = Point}">
-                                </DataGridTextColumn>
+                    Width="auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Point}"
+                                           FontSize="{StaticResource Hi}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
-                                <DataGridTextColumn 
-                    Header="Операция" 
-                    Width="350*" 
-                    Binding ="{Binding Path = Description}"/>
+                                <DataGridTemplateColumn Header="Операция" 
+                                    Width="350*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
                                 <DataGridTemplateColumn 
                     Header="Инспектор"
@@ -419,10 +435,22 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
 
-                                <DataGridTextColumn Header="Примечание" 
-                                    Width="350*" 
-                                    Binding ="{Binding Path = Remark}"/>
-
+                                <DataGridTemplateColumn Header="Примечание" 
+                                    Width="350*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Path = Remark, UpdateSourceTrigger=PropertyChanged}"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
 

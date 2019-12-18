@@ -1,9 +1,9 @@
-﻿<Window x:Class="Supervision.Views.EntityViews.DetailViews.CastingCaseView"
+﻿<Window x:Class="Supervision.Views.EntityViews.MaterialViews.ForgingMaterialView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="450" d:DesignWidth="800"
       WindowStartupLocation="CenterScreen"
@@ -17,7 +17,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="5"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition />
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
@@ -39,7 +39,7 @@
                            VerticalAlignment="Center"/>
 
                 <TextBlock Style="{StaticResource StandardTextBlock}" 
-                           Text="Чертеж" 
+                           Text="Материал" 
                            Margin="5" 
                            VerticalAlignment="Center"/>
             </StackPanel>
@@ -54,16 +54,16 @@
 
                 <TextBox Style="{StaticResource StandardTextBox}" 
                          VerticalAlignment="Center" 
-                         Text="{Binding Drawing, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding Material, UpdateSourceTrigger=PropertyChanged}"
                          Margin="5"/>
             </StackPanel>
 
             <StackPanel Grid.Column="3" Orientation="Vertical" Margin="5">
-                <TextBlock Style="{StaticResource StandardTextBlock}" 
-                           Text="Материал" 
+                <TextBlock Style="{StaticResource StandardTextBlock}"  
+                           Text="Садка" 
                            Margin="5" 
                            VerticalAlignment="Center"/>
-
+                
                 <TextBlock Style="{StaticResource StandardTextBlock}"  
                            Text="Сертификат" 
                            Margin="5" 
@@ -76,8 +76,8 @@
                 <TextBox Style="{StaticResource StandardTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
-                         Text="{Binding Material, UpdateSourceTrigger=PropertyChanged}" />
-
+                         Text="{Binding MetalCharge, UpdateSourceTrigger=PropertyChanged}" />
+                
                 <TextBox Style="{StaticResource StandardTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
@@ -92,8 +92,7 @@
                            VerticalAlignment="Center"/>
 
                 <TextBlock Style="{StaticResource StandardTextBlock}"  
-                           Text="Статус" 
-                           Margin="5" 
+                           Text="Партия" Margin="5" 
                            VerticalAlignment="Center"/>
             </StackPanel>
 
@@ -108,20 +107,18 @@
                 <TextBox Style="{StaticResource StandardTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
-                         Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" />
+                         Text="{Binding Batch, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </Grid>
 
         <Separator Style="{StaticResource HorizontalSeparator}" 
                    Grid.Row="1"/>
 
-        <DataGrid
-                Style="{StaticResource StandardDataGrid}"
+        <DataGrid Style="{StaticResource StandardDataGrid}"
                 Grid.Row="2" 
                 Grid.Column="0" 
-            IsReadOnly="True"
-            SelectionMode="Single"
-            SelectionUnit="FullRow"
+                RowHeight="20"
+                IsReadOnly="True"
                 ItemsSource="{Binding AllInstancesView}"
                 SelectedItem="{Binding SelectedItem}">
             <DataGrid.InputBindings>
@@ -132,7 +129,7 @@
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" 
-                                    Width="35*" 
+                                    Width="50*" 
                                     Binding="{Binding Path = Id}" 
                                     TextBlock.TextAlignment="Center" />
 
@@ -140,10 +137,6 @@
                                     Width="200*" 
                                     Binding="{Binding Path = Number}" 
                                     TextBlock.TextAlignment="Center" />
-
-                <DataGridTextColumn Header="Чертеж" 
-                                    Width="200*" 
-                                    Binding="{Binding Path= Drawing}" />
 
                 <DataGridTextColumn Header="Материал" 
                                     Width="150*" 
@@ -154,8 +147,16 @@
                                     Binding ="{Binding Path = Certificate}" />
 
                 <DataGridTextColumn Header="Плавка" 
-                                    Width="150*" 
+                                    Width="100*" 
                                     Binding ="{Binding Path = Melt}" />
+
+                <DataGridTextColumn Header="Партия" 
+                                    Width="100*" 
+                                    Binding ="{Binding Path = Batch}" />
+
+                <DataGridTextColumn Header="Садка" 
+                                    Width="100*" 
+                                    Binding ="{Binding Path = MetalCharge}" />
 
                 <DataGridTextColumn Header="Статус" 
                                     Width="100*" 

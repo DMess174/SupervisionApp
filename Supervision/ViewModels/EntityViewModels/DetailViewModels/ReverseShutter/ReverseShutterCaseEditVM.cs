@@ -110,8 +110,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             var wn = new NozzleEditView();
                             var vm = new NozzleEditVM(SelectedNozzleFromList.Id, SelectedItem);
                             wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
+                            wn.Show();
                         }
                         else MessageBox.Show("Объект не выбран", "Ошибка");
                     }));
@@ -302,13 +301,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     .Where(i => i.DetailId == SelectedItem.Id)
                     .OrderBy(x => x.PointId).ToList();
             }
-            JournalNumbers = db.JournalNumbers.Select(i => i.Number).Distinct().ToList();
+            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Materials = db.ReverseShutterCases.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
             Drawings = db.ReverseShutterCases.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.ReverseShutterCaseTCPs.ToList();
             Nozzles = db.Nozzles.Local.Where(i => i.CastingCaseId == null).ToObservableCollection();
-
         }
     }
 }

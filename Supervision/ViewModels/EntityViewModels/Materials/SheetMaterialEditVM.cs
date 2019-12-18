@@ -206,7 +206,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             db = new DataContext();
             SelectedItem = db.SheetMaterials.Find(id);
             Journal = db.Set<SheetMaterialJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Select(i => i.Number).Distinct().ToList();
+            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Materials = db.SheetMaterials.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
             FirstSize = db.SheetMaterials.Select(t => t.FirstSize).Distinct().OrderBy(x => x).ToList();
             SecondSize = db.SheetMaterials.Select(t => t.SecondSize).Distinct().OrderBy(x => x).ToList();

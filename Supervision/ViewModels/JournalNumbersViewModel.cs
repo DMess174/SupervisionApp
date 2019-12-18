@@ -8,18 +8,17 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using DataLayer.TechnicalControlPlans;
 using System.Linq;
+using DataLayer.Journals;
 
 namespace Supervision.ViewModels.TCPViewModels
 {
-    class TCPViewModel<TEntityTCP> : BasePropertyChanged
-        where TEntityTCP : BaseTCP, new()
+    public class JournalNumbersViewModel : BasePropertyChanged
     {
         private readonly DataContext db;
 
-        private IEnumerable<OperationType> operationTypes;
-        private IEnumerable<TEntityTCP> tCPs;
-        private ICollectionView tCPsView;
-        private TEntityTCP selectedPoint;
+        private IEnumerable<JournalNumber> allInstances;
+        private ICollectionView allInstancesView;
+        private JournalNumber selectedPoint;
         private ICommand addPoint;
         private ICommand savePoint;
         private ICommand removePoint;
@@ -32,8 +31,8 @@ namespace Supervision.ViewModels.TCPViewModels
                     (
                     addPoint = new DelegateCommand(() =>
                             {
-                                TEntityTCP point = new TEntityTCP();
-                                db.Set<TEntityTCP>().Add(point);
+                                JournalNumber point = new JournalNumber();
+                                db.Set<JournalNumber>().Add(point);
                                 db.SaveChanges();
                                 SelectedPoint = point;
                             })
@@ -49,9 +48,9 @@ namespace Supervision.ViewModels.TCPViewModels
                     (
                     savePoint = new DelegateCommand(() =>
                             {
-                                if (TCPs != null)
+                                if (AllInstances != null)
                                 {
-                                    db.Set<TEntityTCP>().UpdateRange(TCPs);
+                                    db.Set<JournalNumber>().UpdateRange(AllInstances);
                                     db.SaveChanges();
                                 }
                                 else
@@ -71,10 +70,10 @@ namespace Supervision.ViewModels.TCPViewModels
                     (
                     removePoint = new DelegateCommand(() =>
                             {
-                                TEntityTCP point = SelectedPoint;
+                                JournalNumber point = SelectedPoint;
                                 if (point != null)
                                 {
-                                    db.Set<TEntityTCP>().Remove(point);
+                                    db.Set<JournalNumber>().Remove(point);
                                     db.SaveChanges();
                                 }
                                 else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -83,7 +82,7 @@ namespace Supervision.ViewModels.TCPViewModels
             }
         }
 
-        public TEntityTCP SelectedPoint
+        public JournalNumber SelectedPoint
         {
             get => selectedPoint;
             set
@@ -93,43 +92,32 @@ namespace Supervision.ViewModels.TCPViewModels
             }
         }
 
-        public IEnumerable<TEntityTCP> TCPs
+        public IEnumerable<JournalNumber> AllInstances
         {
-            get => tCPs;
+            get => allInstances;
             set
             {
-                tCPs = value;
+                allInstances = value;
                 RaisePropertyChanged("TCPs");
             }
         }
 
-        public IEnumerable<OperationType> OperationTypes
+        public ICollectionView AllInstancesView
         {
-            get => operationTypes;
+            get => allInstancesView;
             set
             {
-                operationTypes = value;
-                RaisePropertyChanged("OperationTypes");
-            }
-        }
-
-        public ICollectionView TCPsView
-        {
-            get => tCPsView;
-            set
-            {
-                tCPsView = value;
+                allInstancesView = value;
                 RaisePropertyChanged("TCPsView");
             }
         }
 
-        public TCPViewModel()
+        public JournalNumbersViewModel()
         {
             db = new DataContext();
-            db.Set<TEntityTCP>().Include(i => i.OperationType).Load();
-            TCPs = db.Set<TEntityTCP>().Local.ToObservableCollection();
-            TCPsView = CollectionViewSource.GetDefaultView(TCPs);
-            OperationTypes = db.OperationTypes.ToList();
+            db.Set<JournalNumber>().Load();
+            AllInstances = db.Set<JournalNumber>().Local.ToObservableCollection();
+            AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
         }
     }
 }

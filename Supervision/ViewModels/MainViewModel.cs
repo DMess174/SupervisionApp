@@ -202,6 +202,18 @@ namespace Supervision.ViewModels
             }
         }
 
+        public ICommand JournalNumbersOpen
+        {
+            get
+            {
+                Page journal = new JournalNumbersView
+                {
+                    DataContext = new JournalNumbersViewModel()
+                };
+                return new DelegateCommand(() => SlowOpacity(journal));
+            }
+        }
+
         public ICommand ShutterReverseTCPOpen
         {
             get

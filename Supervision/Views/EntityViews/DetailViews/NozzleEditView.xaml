@@ -114,14 +114,17 @@
                               VerticalAlignment="Center" 
                               Text="{Binding SelectedItem.Material, UpdateSourceTrigger=PropertyChanged}" 
                               ItemsSource="{Binding Materials}" 
-                              SelectedItem= "{Binding SelectedItem.Material}"/>
+                              SelectedIndex= "{Binding SelectedItem.MetalMaterialId}"
+                              SelectedValue="{Binding SelectedItem.MetalMaterialId}"
+                              SelectedValuePath="Id"
+                              DisplayMemberPath="Number"/>
                     
                     <TextBox Style="{StaticResource StandardTextBox}" 
                              Grid.Row="1" 
                              Width="auto" 
                              Margin="5 0 5 0" 
                              VerticalAlignment="Center"
-                             Text="{Binding SelectedItem.Melt, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding SelectedItem.MetalMaterial.Melt, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
                 
                 <Grid Grid.Column="4">
@@ -325,10 +328,22 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                <DataGridTextColumn 
-                    Header="Операция" 
-                    Width="350*" 
-                    Binding ="{Binding Path = Description}"/>
+                <DataGridTemplateColumn Header="Операция" 
+                                    Width="350*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn 
                     Header="Инспектор"
@@ -389,10 +404,22 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Примечание" 
-                                    Width="350*" 
-                                    Binding ="{Binding Path = Remark}"/>
-
+                <DataGridTemplateColumn Header="Примечание" 
+                                    Width="350*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Path = Remark, UpdateSourceTrigger=PropertyChanged}"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 

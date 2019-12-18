@@ -13,12 +13,12 @@ using DataLayer.Journals.Materials;
 
 namespace Supervision.ViewModels.EntityViewModels.Materials
 {
-    public class PipeMaterialVM : BasePropertyChanged
+    public class RolledMaterialVM : BasePropertyChanged
     {
         private readonly DataContext db;
-        private IEnumerable<PipeMaterial> allInstances;
+        private IEnumerable<RolledMaterial> allInstances;
         private ICollectionView allInstancesView;
-        private PipeMaterial selectedItem;
+        private RolledMaterial selectedItem;
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
@@ -43,7 +43,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged("Number");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is PipeMaterial item && item.Number != null)
+                    if (obj is RolledMaterial item && item.Number != null)
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
@@ -60,7 +60,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged("SheetNumber");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is PipeMaterial item && item.MaterialCertificateNumber != null)
+                    if (obj is RolledMaterial item && item.MaterialCertificateNumber != null)
                     {
                         return item.MaterialCertificateNumber.ToLower().Contains(PipeNumber.ToLower());
                     }
@@ -77,7 +77,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged("Batch");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is PipeMaterial item && item.Status != null)
+                    if (obj is RolledMaterial item && item.Status != null)
                     {
                         return item.Batch.ToLower().Contains(Batch.ToLower());
                     }
@@ -94,7 +94,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged("Material");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is PipeMaterial item && item.Material != null)
+                    if (obj is RolledMaterial item && item.Material != null)
                     {
                         return item.Material.ToLower().Contains(Material.ToLower());
                     }
@@ -111,7 +111,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged("Certificate");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is PipeMaterial item && item.Certificate != null)
+                    if (obj is RolledMaterial item && item.Certificate != null)
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
@@ -128,7 +128,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged("Melt");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is PipeMaterial item && item.Melt != null)
+                    if (obj is RolledMaterial item && item.Melt != null)
                     {
                         return item.Melt.ToLower().Contains(Melt.ToLower());
                     }
@@ -159,8 +159,8 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         if (SelectedItem != null)
                         {
-                            var wn = new PipeMaterialEditView();
-                            var vm = new PipeMaterialEditVM(SelectedItem.Id, SelectedItem);
+                            var wn = new RolledMaterialEditView();
+                            var vm = new RolledMaterialEditVM(SelectedItem.Id, SelectedItem);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -179,7 +179,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         if (SelectedItem != null)
                         {
-                            var item = new PipeMaterial()
+                            var item = new RolledMaterial()
                             {
                                 Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
                                 MaterialCertificateNumber = SelectedItem.MaterialCertificateNumber,
@@ -193,12 +193,12 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                                 SecondSize = SelectedItem.SecondSize,
                                 ThirdSize = SelectedItem.ThirdSize
                             };
-                            db.PipeMaterials.Add(item);
+                            db.RolledMaterials.Add(item);
                             db.SaveChanges();
-                            var journal = db.PipeMaterialJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
+                            var journal = db.RolledMaterialJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
                             foreach (var record in journal)
                             {
-                                var Record = new PipeMaterialJournal()
+                                var Record = new RolledMaterialJournal()
                                 {
                                     Date = record.Date,
                                     DetailId = item.Id,
@@ -212,7 +212,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                                     Status = record.Status,
                                     JournalNumber = record.JournalNumber
                                 };
-                                db.PipeMaterialJournals.Add(Record);
+                                db.RolledMaterialJournals.Add(Record);
                                 db.SaveChanges();
                             }
                         }
@@ -228,14 +228,14 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 return addItem ?? (
                     addItem = new DelegateCommand<Window>((w) =>
                     {
-                        var item = new PipeMaterial();
-                        db.PipeMaterials.Add(item);
+                        var item = new RolledMaterial();
+                        db.RolledMaterials.Add(item);
                         db.SaveChanges();
                         SelectedItem = item;
                         var tcpPoints = db.MetalMaterialTCPs.ToList();
                         foreach (var i in tcpPoints)
                         {
-                            var journal = new PipeMaterialJournal()
+                            var journal = new RolledMaterialJournal()
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
@@ -246,12 +246,12 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                             };
                             if (journal != null)
                             {
-                                db.PipeMaterialJournals.Add(journal);
+                                db.RolledMaterialJournals.Add(journal);
                                 db.SaveChanges();
                             }
                         }
-                        var wn = new PipeMaterialEditView();
-                        var vm = new PipeMaterialEditVM(SelectedItem.Id, SelectedItem);
+                        var wn = new RolledMaterialEditView();
+                        var vm = new RolledMaterialEditVM(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
@@ -267,7 +267,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         if (SelectedItem != null)
                         {
-                            db.PipeMaterials.Remove(SelectedItem);
+                            db.RolledMaterials.Remove(SelectedItem);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -286,7 +286,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public PipeMaterial SelectedItem
+        public RolledMaterial SelectedItem
         {
             get => selectedItem;
             set
@@ -296,7 +296,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public IEnumerable<PipeMaterial> AllInstances
+        public IEnumerable<RolledMaterial> AllInstances
         {
             get => allInstances;
             set
@@ -315,11 +315,11 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public PipeMaterialVM()
+        public RolledMaterialVM()
         {
             db = new DataContext();
-            db.PipeMaterials.Load();
-            AllInstances = db.PipeMaterials.Local.ToObservableCollection();
+            db.RolledMaterials.Load();
+            AllInstances = db.RolledMaterials.Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             if (AllInstances.Count() != 0)
             {

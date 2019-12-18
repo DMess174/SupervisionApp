@@ -10,6 +10,7 @@
         <Style.Resources>
             <Style TargetType="{x:Type ListBoxItem}">
                 <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
                 <Setter Property="Background" Value="{StaticResource BackgroundNormal}"/>
                 <Setter Property="BorderBrush" Value="Transparent"/>
                 <Setter Property="Template">

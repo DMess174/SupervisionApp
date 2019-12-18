@@ -1,5 +1,4 @@
 ﻿using DataLayer;
-using DataLayer.Entities;
 using DataLayer.Entities.Detailing;
 using DataLayer.Journals.Detailing;
 using DataLayer.TechnicalControlPlans.Detailing;
@@ -9,20 +8,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using DataLayer.Entities.Detailing.CastGateValveDetails;
-using DataLayer.Entities.Detailing.ReverseShutterDetails;
-using DataLayer.Journals.Detailing.CastGateValveDetails;
-using DataLayer.Journals.Detailing.ReverseShutterDetails;
-using DataLayer.TechnicalControlPlans.Detailing.CastGateValveDetails;
-using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
 using Microsoft.EntityFrameworkCore;
+using DataLayer.Entities.Materials;
+
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
     public class NozzleEditVM : BasePropertyChanged
     {
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
-        private IEnumerable<string> materials;
+        //private IEnumerable<string> materials;
         private IEnumerable<string> drawings;
         private IEnumerable<string> thickness;
         private IEnumerable<string> thicknessJoin;
@@ -30,8 +25,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         private IEnumerable<NozzleTCP> points;
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<NozzleJournal> journal;
-        private readonly BaseEntity parentEntity;
+        private readonly BaseTable parentEntity;
         private NozzleTCP selectedTCPPoint;
+        private IEnumerable<MetalMaterial> materials;
 
         private Nozzle selectedItem;
         private ICommand saveItem;
@@ -45,6 +41,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             {
                 selectedItem = value;
                 RaisePropertyChanged("SelectedItem");
+            }
+        }
+        public IEnumerable<MetalMaterial> Materials
+        {
+            get => materials;
+            set
+            {
+                materials = value;
+                RaisePropertyChanged("Material");
             }
         }
 
@@ -115,23 +120,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        if (parentEntity is ReverseShutterCase)
-                        {
-                            var wn = new CastingCaseEditView();
-                            var vm = new CastingCaseEditVM<ReverseShutterCase, Inspector, ReverseShutterCaseTCP, ReverseShutterCaseJournal>(parentEntity.Id);
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else if (parentEntity is CastGateValveCase)
-                        {
-                            var wn = new CastingCaseEditView();
-                            var vm = new CastingCaseEditVM<CastGateValveCase, Inspector, CastGateValveCaseTCP, CastGateValveCaseJournal>(parentEntity.Id);
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else if (parentEntity is Nozzle)
+                        if (parentEntity is Nozzle)
                         {
                             var wn = new NozzleView();
                             var vm = new NozzleVM();
@@ -139,6 +128,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                             w?.Close();
                             wn.ShowDialog();
                         }
+                        else w?.Close();
                     }));
             }
         }
@@ -170,15 +160,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public IEnumerable<string> Materials
-        {
-            get => materials;
-            set
-            {
-                materials = value;
-                RaisePropertyChanged("Materials");
-            }
-        }
+        //public IEnumerable<string> Materials
+        //{
+        //    get => materials;
+        //    set
+        //    {
+        //        materials = value;
+        //        RaisePropertyChanged("Materials");
+        //    }
+        //}
         public IEnumerable<string> Drawings
         {
             get => drawings;
@@ -238,14 +228,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public NozzleEditVM(int id, BaseEntity entity)
+        public NozzleEditVM(int id, BaseTable entity)
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.Nozzles.Include(i => i.CastingCase).SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.Nozzles.Include(i => i.CastingCase).Include(i => i.MetalMaterial).SingleOrDefault(i => i.Id == id);
             Journal = db.Set<NozzleJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Select(i => i.Number).Distinct().ToList();
-            Materials = db.Nozzles.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
+            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
+            Materials = db.MetalMaterials.ToList();
+            //Materials = db.Nozzles.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
             Drawings = db.Nozzles.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Thickness = db.Nozzles.Select(t => t.Thickness).Distinct().OrderBy(x => x).ToList();
             ThicknessJoin = db.Nozzles.Select(t => t.ThicknessJoin).Distinct().OrderBy(x => x).ToList();

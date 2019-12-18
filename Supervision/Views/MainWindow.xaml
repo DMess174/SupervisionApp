@@ -132,6 +132,8 @@
 
                 <MenuItem Header="Шибер" />
             </MenuItem>
+
+            <MenuItem Header="Журналы" Command="{Binding JournalNumbersOpen}"/>
         </Menu>
         
         <Separator Style="{StaticResource HorizontalSeparator}" 

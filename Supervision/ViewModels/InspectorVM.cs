@@ -122,12 +122,13 @@ namespace Supervision.ViewModels
             {
                 return saveItem ??
                     (
-                    saveItem = new DelegateCommand
-                        (
-                            () =>
+                    saveItem = new DelegateCommand(() =>
                             {
-                                db.Inspectors.UpdateRange(AllInstances);
-                                db.SaveChanges();
+                                if (AllInstances != null)
+                                {
+                                    db.Inspectors.UpdateRange(AllInstances);
+                                    db.SaveChanges();
+                                }
                             })
                     );
             }
@@ -138,9 +139,7 @@ namespace Supervision.ViewModels
             {
                 return removeItem ??
                     (
-                    removeItem = new DelegateCommand
-                        (
-                            () =>
+                    removeItem = new DelegateCommand(() =>
                             {
                                 if (SelectedItem != null)
                                 {

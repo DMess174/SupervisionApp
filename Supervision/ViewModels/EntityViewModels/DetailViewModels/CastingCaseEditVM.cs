@@ -293,7 +293,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             db.Nozzles.Load();
             SelectedItem.Nozzles = db.Nozzles.Local.Where(i => i.CastingCaseId == SelectedItem.Id).ToObservableCollection();
             Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Select(i => i.Number).Distinct().ToList();
+            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Materials = db.Set<TEntity>().Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
             Drawings = db.Set<TEntity>().Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Inspectors = db.Set<TUser>().OrderBy(i => i.Name).ToList();

@@ -32,7 +32,7 @@
                 <ColumnDefinition Width="13*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Vertical" Margin="5,5,5,4.8">
+            <StackPanel Grid.Column="0" Orientation="Vertical" Margin="5">
                 <TextBlock Style="{StaticResource StandardTextBlock}" 
                            Text="Номер" 
                            Margin="5" 
@@ -58,7 +58,7 @@
                          Margin="5"/>
             </StackPanel>
 
-            <StackPanel Grid.Column="3" Orientation="Vertical" Margin="4.6,5,4.6,4.8">
+            <StackPanel Grid.Column="3" Orientation="Vertical" Margin="5">
                 <TextBlock Style="{StaticResource StandardTextBlock}" 
                            Text="Номер листа" 
                            Margin="5" 
@@ -72,7 +72,7 @@
 
             <StackPanel Grid.Column="4" 
                         Orientation="Vertical" 
-                        Margin="5.4,5,5,4.8">
+                        Margin="5">
                 <TextBox Style="{StaticResource StandardTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
@@ -86,7 +86,7 @@
 
             <StackPanel Grid.Column="5" 
                         Orientation="Vertical" 
-                        Margin="5,5,5.2,4.8">
+                        Margin="5">
                 <TextBlock Style="{StaticResource StandardTextBlock}" 
                            Text="Плавка" Margin="5" 
                            VerticalAlignment="Center"/>
@@ -98,7 +98,7 @@
 
             <StackPanel Grid.Column="6" 
                         Orientation="Vertical" 
-                        Margin="4.8,5,4.6,4.8">
+                        Margin="5">
                 <TextBox Style="{StaticResource StandardTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
@@ -192,7 +192,6 @@
 
                 <StackPanel  DockPanel.Dock="Bottom"
                          Grid.Column="1"
-                         Grid.ColumnSpan="2"
                          Orientation="Horizontal" 
                          HorizontalAlignment="Center" 
                          VerticalAlignment="Bottom">
