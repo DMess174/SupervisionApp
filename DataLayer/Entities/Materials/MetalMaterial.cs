@@ -22,7 +22,7 @@ namespace DataLayer.Entities.Materials
         public string ThirdSize { get; set; }
 
         [NotMapped] 
-        public string FullName => string.Format($"{Name}/{Number}/{Material}/{Melt}");
+        public string FullName => string.Format($"{Number}/{Material}/{Melt}/{Name}");
 
         public IEnumerable<Spindle> Spindles { get; set; }
         public IEnumerable<Saddle> Saddles { get; set; }

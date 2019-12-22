@@ -90,7 +90,7 @@
                     </Grid.RowDefinitions>
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
                                Grid.Row="0" 
-                               Text="садка:" 
+                               Text="Садка:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
 
@@ -359,22 +359,11 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox  VerticalContentAlignment="Center"
-                                       IsEditable="True"
+                                      IsEditable="True"
                                       ItemsSource="{Binding Path=DataContext.Inspectors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                                       SelectedValuePath="Id"
-                                      SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock>
-                                            <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} - {1}">
-                                                    <Binding Path="Name"/>
-                                                    <Binding Path="Department"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
+                                      SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}"
+                                      DisplayMemberPath="FullName">
                             </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

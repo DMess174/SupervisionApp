@@ -205,7 +205,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                                     InspectorId = record.InspectorId,
                                     Point = record.Point,
                                     PointId = record.PointId,
-                                    Remark = record.Remark,
+                                    RemarkIssued = record.RemarkIssued,
+                                    RemarkClosed = record.RemarkClosed,
+                                    Comment = record.Comment,
                                     Status = record.Status,
                                     JournalNumber = record.JournalNumber
                                 };

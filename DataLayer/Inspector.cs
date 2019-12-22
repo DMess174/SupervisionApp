@@ -1,5 +1,7 @@
-﻿using DataLayer.Journals.Detailing;
+﻿using System;
+using DataLayer.Journals.Detailing;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using DataLayer.Journals.AssemblyUnits;
 using DataLayer.Journals.Detailing.CastGateValveDetails;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
@@ -13,6 +15,8 @@ namespace DataLayer
         public string Subdivision { get; set; }
 
         public string Department { get; set; }
+
+        [NotMapped] public string FullName => string.Format($"{Name}\n{Department}\n{Subdivision}");
 
         public IEnumerable<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
         public IEnumerable<ReverseShutterCaseJournal> ReverseShutterCaseJournals { get; set; }

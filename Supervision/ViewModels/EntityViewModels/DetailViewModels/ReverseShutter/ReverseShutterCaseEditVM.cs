@@ -293,7 +293,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 .SingleOrDefault(i => i.Id == id);
             if (SelectedItem != null)
             {
-                db.Nozzles.Load();
+                db.Nozzles.Include(i => i.MetalMaterial).Load();
                 SelectedItem.Nozzles = db.Nozzles.Local
                     .Where(i => i.CastingCaseId == SelectedItem.Id)
                     .ToObservableCollection();

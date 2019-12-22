@@ -360,21 +360,10 @@
                         <DataTemplate>
                             <ComboBox  VerticalContentAlignment="Center"
                                        IsEditable="True"
-                                      ItemsSource="{Binding Path=DataContext.Inspectors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                      SelectedValuePath="Id"
-                                      SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock>
-                                            <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} - {1}">
-                                                    <Binding Path="Name"/>
-                                                    <Binding Path="Department"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
+                                       ItemsSource="{Binding Path=DataContext.Inspectors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                       SelectedValuePath="Id"
+                                       SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}"
+                                       DisplayMemberPath="FullName">
                             </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

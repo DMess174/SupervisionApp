@@ -5,11 +5,14 @@ using DataLayer.TechnicalControlPlans.Detailing;
 using DevExpress.Mvvm;
 using Supervision.Views.EntityViews.DetailViews;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.EntityFrameworkCore;
 using DataLayer.Entities.Materials;
+using Supervision.ViewModels.EntityViewModels.Materials;
+using Supervision.Views.EntityViews.MaterialViews;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
@@ -17,11 +20,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
     {
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
-        //private IEnumerable<string> materials;
         private IEnumerable<string> drawings;
-        private IEnumerable<string> thickness;
         private IEnumerable<string> thicknessJoin;
-        private IEnumerable<string> diameter;
         private IEnumerable<NozzleTCP> points;
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<NozzleJournal> journal;
@@ -33,6 +33,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         private ICommand saveItem;
         private ICommand closeWindow;
         private ICommand addOperation;
+        private ICommand editMaterial;
 
         public Nozzle SelectedItem
         {
@@ -159,16 +160,49 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                     }));
             }
         }
+        public ICommand EditMaterial
+        {
+            get
+            {
+                return editMaterial ?? (
+                           editMaterial = new DelegateCommand<Window>((w) =>
+                           {
+                               if (SelectedItem.MetalMaterial is PipeMaterial)
+                               {
+                                   var wn = new PipeMaterialEditView();
+                                   var vm = new PipeMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
+                                   wn.DataContext = vm;
+                                   wn.Show();
+                               }
+                               else if (SelectedItem.MetalMaterial != null)
+                               {
+                                   if (SelectedItem.MetalMaterial is SheetMaterial)
+                                   {
+                                       var wn = new SheetMaterialEditView();
+                                       var vm = new SheetMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
+                                       wn.DataContext = vm;
+                                       wn.Show();
+                                   }
+                                   else if (SelectedItem.MetalMaterial is ForgingMaterial)
+                                   {
+                                       var wn = new ForgingMaterialEditView();
+                                       var vm = new ForgingMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
+                                       wn.DataContext = vm;
+                                       wn.Show();
+                                   }
+                                   else if (SelectedItem.MetalMaterial is RolledMaterial)
+                                   {
+                                       var wn = new RolledMaterialEditView();
+                                       var vm = new RolledMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
+                                       wn.DataContext = vm;
+                                       wn.Show();
+                                   }
+                               }
+                               else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
+                           }));
+            }
+        }
 
-        //public IEnumerable<string> Materials
-        //{
-        //    get => materials;
-        //    set
-        //    {
-        //        materials = value;
-        //        RaisePropertyChanged("Materials");
-        //    }
-        //}
         public IEnumerable<string> Drawings
         {
             get => drawings;
@@ -188,16 +222,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public IEnumerable<string> Thickness
-        {
-            get => thickness;
-            set
-            {
-                thickness = value;
-                RaisePropertyChanged("Thickness");
-            }
-        }
-
         public IEnumerable<string> ThicknessJoin
         {
             get => thicknessJoin;
@@ -205,16 +229,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             {
                 thicknessJoin = value;
                 RaisePropertyChanged("ThicknessJoin");
-            }
-        }
-
-        public IEnumerable<string> Diameter
-        {
-            get => diameter;
-            set
-            {
-                diameter = value;
-                RaisePropertyChanged("Diameter");
             }
         }
 
@@ -236,11 +250,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             Journal = db.Set<NozzleJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Materials = db.MetalMaterials.ToList();
-            //Materials = db.Nozzles.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
             Drawings = db.Nozzles.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            Thickness = db.Nozzles.Select(t => t.Thickness).Distinct().OrderBy(x => x).ToList();
             ThicknessJoin = db.Nozzles.Select(t => t.ThicknessJoin).Distinct().OrderBy(x => x).ToList();
-            Diameter = db.Nozzles.Select(d => d.Diameter).Distinct().OrderBy(x => x).ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.NozzleTCPs.ToList();
         }
