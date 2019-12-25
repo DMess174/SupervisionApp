@@ -310,9 +310,12 @@
                 Grid.Column="0" 
                 MinRowHeight="50"
                 ItemsSource="{Binding Journal}"
-                IsReadOnly="False">
+                IsReadOnly="False"
+                HorizontalScrollBarVisibility="Visible">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="100" Header="Дата">
+                <DataGridTemplateColumn Header="Дата"
+                                        MinWidth="100"
+                                        Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
@@ -336,7 +339,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Операция" 
-                                    Width="350*">
+                                    Width="250">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
@@ -386,7 +389,43 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Номер журнала" Width="130">
+                <DataGridTemplateColumn Header="Замечание&#x0a;   выдано"
+                                        Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Замечание&#x0a;   закрыто"
+                                        Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Номер журнала" 
+                                        MinWidth="100"
+                                        Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox Height="50" 
@@ -401,10 +440,11 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Примечание" 
-                                    Width="350*">
+                                        MinWidth="200"
+                                        Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Path = Remark, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
                                      AcceptsTab="True"
@@ -418,6 +458,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
 
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <TextBlock Text="Выбор пункта:"

@@ -118,7 +118,8 @@
         <DataGrid
                 Style="{StaticResource StandardDataGrid}"
                 Grid.Row="2" 
-                Grid.Column="0" 
+                Grid.Column="0"
+            RowHeight="20"
             IsReadOnly="True"
             SelectionMode="Single"
             SelectionUnit="FullRow"

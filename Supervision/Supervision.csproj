@@ -354,6 +354,8 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CastingCaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\NozzleEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\NozzleVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\SlamShutterEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\SlamShutterVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterCaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterCaseEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailVM.cs" />
@@ -381,6 +383,12 @@
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\NozzleView.xaml.cs">
       <DependentUpon>NozzleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\ReverseShutter\SlamShutterEditView.xaml.cs">
+      <DependentUpon>SlamShutterEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\ReverseShutter\SlamShutterView.xaml.cs">
+      <DependentUpon>SlamShutterView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\ReverseShutter\ReverseShutterDetailView.xaml.cs">
       <DependentUpon>ReverseShutterDetailView.xaml</DependentUpon>
@@ -553,6 +561,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EntityViews\DetailViews\NozzleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\ReverseShutter\SlamShutterEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\ReverseShutter\SlamShutterView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

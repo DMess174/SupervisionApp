@@ -145,19 +145,19 @@ namespace Supervision.ViewModels
                             });
             }
         }
-        public ICommand SlamShutterOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                            {
-                                var w = new ReverseShutterDetailView();
-                                var vm = new ReverseShutterDetailVM<SlamShutter, SlamShutterTCP, SlamShutterJournal>();
-                                w.DataContext = vm;
-                                w.ShowDialog();
-                            });
-            }
-        }
+        //public ICommand SlamShutterOpen
+        //{
+        //    get
+        //    {
+        //        return new DelegateCommand(() =>
+        //                    {
+        //                        var w = new ReverseShutterDetailView();
+        //                        var vm = new ReverseShutterDetailVM<SlamShutter, SlamShutterTCP, SlamShutterJournal>();
+        //                        w.DataContext = vm;
+        //                        w.ShowDialog();
+        //                    });
+        //    }
+        //}
         public ICommand SteelSleeveShutterOpen
         {
             get

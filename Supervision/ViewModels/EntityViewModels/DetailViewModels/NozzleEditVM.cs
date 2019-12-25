@@ -5,7 +5,6 @@ using DataLayer.TechnicalControlPlans.Detailing;
 using DevExpress.Mvvm;
 using Supervision.Views.EntityViews.DetailViews;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -50,7 +49,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 materials = value;
-                RaisePropertyChanged("Material");
+                RaisePropertyChanged("Materials");
             }
         }
 
@@ -100,17 +99,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                                     i.DetailNumber = SelectedItem.Number;
                                     i.DetailDrawing = SelectedItem.Drawing;
                                 }
-
                                 db.NozzleJournals.UpdateRange(Journal);
                             }
                             db.SaveChanges();
-                            
                         }
-                        else
-                        {
-                            MessageBox.Show("Объект не найден!", "Ошибка");
-                        }
-
+                        else MessageBox.Show("Объект не найден!", "Ошибка");
                     }));
             }
         }

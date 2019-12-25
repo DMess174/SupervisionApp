@@ -154,7 +154,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                                 Name = SelectedItem.Name,
                                 Diameter = SelectedItem.Diameter,
                                 Thickness = SelectedItem.Thickness,
-                                ThicknessJoin = SelectedItem.ThicknessJoin
+                                ThicknessJoin = SelectedItem.ThicknessJoin,
+                                MetalMaterialId = SelectedItem.MetalMaterialId
                             };
                             db.Nozzles.Add(item);
                             db.SaveChanges();

@@ -4,12 +4,14 @@ using System.Windows;
 using System.Windows.Input;
 using DataLayer;
 using DataLayer.Entities.Detailing.ReverseShutterDetails;
+using DataLayer.Entities.Materials;
 using DataLayer.Journals;
 using DataLayer.TechnicalControlPlans;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
-using Supervision.Views.EntityViews.DetailViews;
+using Supervision.ViewModels.EntityViewModels.Materials;
 using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
+using Supervision.Views.EntityViews.MaterialViews;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter
 {
@@ -21,18 +23,19 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
 
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
-        private IEnumerable<string> materials;
+        private IEnumerable<MetalMaterial> materials;
         private IEnumerable<string> drawings;
         private IEnumerable<TEntityTCP> points;
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<TEntityJournal> journal;
-
+        private readonly BaseTable parentEntity;
         private TEntity selectedItem;
         private TEntityTCP selectedTCPPoint;
 
         private ICommand saveItem;
         private ICommand closeWindow;
         private ICommand addOperation;
+        private ICommand editMaterial;
 
         public TEntity SelectedItem
         {
@@ -90,13 +93,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             }
                             db.Set<TEntityJournal>().UpdateRange(Journal);
                             db.SaveChanges();
-                            
                         }
-                        else
-                        {
-                            MessageBox.Show("Объект не найден!", "Ошибка");
-                        }
-
+                        else MessageBox.Show("Объект не найден!", "Ошибка");
                     }));
             }
         }
@@ -107,11 +105,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        var wn = new ReverseShutterDetailView();
-                        var vm = new ReverseShutterDetailVM<TEntity, TEntityTCP, TEntityJournal>();
-                        wn.DataContext = vm;
-                        w?.Close();
-                        wn.ShowDialog();
+                        if (parentEntity is ReverseShutterDetail)
+                        {
+                            var wn = new ReverseShutterDetailView();
+                            var vm = new ReverseShutterDetailVM<TEntity, TEntityTCP, TEntityJournal>();
+                            wn.DataContext = vm;
+                            w?.Close();
+                            wn.ShowDialog();
+                        }
+                        else w?.Close();
                     }));
             }
         }
@@ -142,8 +144,50 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     }));
             }
         }
+        public ICommand EditMaterial
+        {
+            get
+            {
+                return editMaterial ?? (
+                           editMaterial = new DelegateCommand<Window>((w) =>
+                           {
+                               if (SelectedItem.MetalMaterial is PipeMaterial)
+                               {
+                                   var wn = new PipeMaterialEditView();
+                                   var vm = new PipeMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
+                                   wn.DataContext = vm;
+                                   wn.Show();
+                               }
+                               else if (SelectedItem.MetalMaterial != null)
+                               {
+                                   if (SelectedItem.MetalMaterial is SheetMaterial)
+                                   {
+                                       var wn = new SheetMaterialEditView();
+                                       var vm = new SheetMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
+                                       wn.DataContext = vm;
+                                       wn.Show();
+                                   }
+                                   else if (SelectedItem.MetalMaterial is ForgingMaterial)
+                                   {
+                                       var wn = new ForgingMaterialEditView();
+                                       var vm = new ForgingMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
+                                       wn.DataContext = vm;
+                                       wn.Show();
+                                   }
+                                   else if (SelectedItem.MetalMaterial is RolledMaterial)
+                                   {
+                                       var wn = new RolledMaterialEditView();
+                                       var vm = new RolledMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
+                                       wn.DataContext = vm;
+                                       wn.Show();
+                                   }
+                               }
+                               else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
+                           }));
+            }
+        }
 
-        public IEnumerable<string> Materials
+        public IEnumerable<MetalMaterial> Materials
         {
             get => materials;
             set
@@ -181,13 +225,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ReverseShutterDetailEditVM(int id)
+        public ReverseShutterDetailEditVM(int id, BaseTable entity)
         {
+            parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.Set<TEntity>().Include(i => i.ReverseShutter).Include(i => i.MetalMaterial).SingleOrDefault(i => i.Id == id);
             Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.Set<TEntity>().Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
+            Materials = db.MetalMaterials.ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.Set<TEntityTCP>().ToList();
         }

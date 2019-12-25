@@ -13,11 +13,13 @@
         <CollectionViewSource x:Key="Points" Source="{Binding Points}" />
         <CollectionViewSource x:Key="JournalNumbers" Source="{Binding JournalNumbers}"/>
     </Window.Resources>
-    
-    <Grid>
+
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="auto"/>
@@ -29,10 +31,8 @@
                 <RowDefinition Height="80"/>
             </Grid.RowDefinitions>
             <Label Style="{StaticResource StandardLabel}" 
-                   FontSize="16" 
-                   FontWeight="DemiBold" 
+                   FontSize="{StaticResource Hi}"
                    Content="Характеристики" 
-                   Margin="5 0 0 0" 
                    VerticalAlignment="Center"/>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -54,7 +54,7 @@
                                Text="Номер:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
-                    
+
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
                                Grid.Row="1" 
                                Text="Чертеж:" 
@@ -71,7 +71,7 @@
                              Margin="5 0 5 0" 
                              VerticalAlignment="Center"
                              Text="{Binding SelectedItem.Number, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    
+
                     <ComboBox Style="{StaticResource StandardComboBox}" 
                               Grid.Row="1" 
                               Width="auto" 
@@ -82,48 +82,46 @@
                               ItemsSource="{Binding Drawings}" 
                               SelectedItem= "{Binding SelectedItem.Drawing}"/>
                 </Grid>
-                
+
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
-                    
+
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
-                               Text="Материал:" 
+                               Text="Марка&#x0a;материала:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
-                    
+
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
                                Grid.Row="1" 
                                Text="Плавка:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
                 </Grid>
-                
+
                 <Grid Grid.Column="3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <ComboBox Style="{StaticResource StandardComboBox}" 
+                    <TextBlock Style="{StaticResource StandardTextBlock}" 
                               Grid.Row="0" 
                               Width="auto" 
                               Margin="5 0 5 0" 
-                              IsEditable="True" 
                               VerticalAlignment="Center" 
-                              Text="{Binding SelectedItem.Material, UpdateSourceTrigger=PropertyChanged}" 
-                              ItemsSource="{Binding Materials}" 
-                              SelectedItem= "{Binding SelectedItem.Material}"/>
-                    
-                    <TextBox Style="{StaticResource StandardTextBox}" 
-                             Grid.Row="1" 
-                             Width="auto" 
-                             Margin="5 0 5 0" 
-                             VerticalAlignment="Center"
-                             Text="{Binding SelectedItem.Melt, UpdateSourceTrigger=PropertyChanged}"/>
+                              Text="{Binding SelectedItem.MetalMaterial.Material, UpdateSourceTrigger=PropertyChanged}">
+                    </TextBlock>
+
+                    <TextBlock Style="{StaticResource StandardTextBlock}" 
+                               Grid.Row="1" 
+                               Width="auto" 
+                               Margin="5 0 5 0" 
+                               VerticalAlignment="Center"
+                               Text="{Binding SelectedItem.MetalMaterial.Melt, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
-                
+
                 <Grid Grid.Column="4">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
@@ -133,26 +131,26 @@
                                Text="Сертификат:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
-                    
+
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
                                Grid.Row="1" 
                                Text="Статус:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
                 </Grid>
-                
+
                 <Grid Grid.Column="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <TextBox Style="{StaticResource StandardTextBox}" 
+                    <TextBlock Style="{StaticResource StandardTextBlock}" 
                              Grid.Row="0" 
                              Width="auto" 
                              Margin="5 0 5 0" 
                              VerticalAlignment="Center"
-                             Text="{Binding SelectedItem.Certificate, UpdateSourceTrigger=PropertyChanged}"/>
-                    
+                             Text="{Binding SelectedItem.MetalMaterial.Certificate, UpdateSourceTrigger=PropertyChanged}"/>
+
                     <ComboBox Style="{StaticResource StandardComboBox}" 
                               Grid.Row="1" 
                               Width="auto" 
@@ -190,8 +188,7 @@
                             VerticalAlignment="Center"
                             Text="В сборке:">
                             <TextBlock.Style>
-                                <Style TargetType="TextBlock" 
-                                       BasedOn="{StaticResource StandardTextBlock}">
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource StandardTextBlock}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding SelectedItem.ReverseShutter}"
                                                      Value="{x:Null}">
@@ -223,16 +220,59 @@
             </Grid>
         </Grid>
 
-        <Separator Style="{StaticResource HorizontalSeparator}"
+        <Separator Style="{StaticResource HorizontalSeparator}" 
                    Grid.Row="1"/>
 
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Style="{StaticResource StandardLabel}" 
+                   FontSize="{StaticResource Hi}"
+                   Content="Материал:" 
+                   VerticalAlignment="Center"/>
+
+            <ComboBox Style="{StaticResource StandardComboBox}" 
+                      Grid.Column="1"
+                      Width="300" 
+                      Margin="5 0 5 0" 
+                      IsEditable="True" 
+                      VerticalAlignment="Center" 
+                      ItemsSource="{Binding Materials}" 
+                      SelectedItem= "{Binding SelectedItem.MetalMaterial}"
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding SelectedItem.MetalMaterialId}"
+                      DisplayMemberPath="FullName"/>
+
+            <Button Style="{StaticResource StandardButton}"
+                        Grid.Column="2"
+                        Height="30"
+                        Margin="5 0 5 0"
+                        Content="Открыть"
+                        Command="{Binding EditMaterial}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+        </Grid>
+
+        <Separator Style="{StaticResource HorizontalSeparator}" 
+                       Grid.Row="3"/>
+
         <DataGrid Style="{StaticResource StandardDataGrid}"
-                Grid.Row="2" 
+                Grid.Row="4" 
+                Grid.Column="0" 
                 MinRowHeight="50"
                 ItemsSource="{Binding Journal}"
-                IsReadOnly="False">
+                IsReadOnly="False"
+                HorizontalScrollBarVisibility="Visible">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="100" Header="Дата">
+                <DataGridTemplateColumn Header="Дата"
+                                        MinWidth="100"
+                                        Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
@@ -256,7 +296,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Операция" 
-                                    Width="350*">
+                                    Width="250">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
@@ -280,21 +320,10 @@
                         <DataTemplate>
                             <ComboBox  VerticalContentAlignment="Center"
                                        IsEditable="True"
-                                      ItemsSource="{Binding Path=DataContext.Inspectors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                      SelectedValuePath="Id"
-                                      SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock>
-                                            <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} - {1}">
-                                                    <Binding Path="Name"/>
-                                                    <Binding Path="Department"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
+                                       ItemsSource="{Binding Path=DataContext.Inspectors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                       SelectedValuePath="Id"
+                                       SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}"
+                                       DisplayMemberPath="FullName">
                             </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -317,7 +346,43 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Номер журнала" Width="130">
+                <DataGridTemplateColumn Header="Замечание&#x0a;   выдано"
+                                        Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Замечание&#x0a;   закрыто"
+                                        Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Номер журнала" 
+                                        MinWidth="100"
+                                        Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox Height="50" 
@@ -332,10 +397,11 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Примечание" 
-                                    Width="350*">
+                                        MinWidth="200"
+                                        Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Path = Remark, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
                                      AcceptsTab="True"
@@ -350,17 +416,16 @@
             </DataGrid.Columns>
         </DataGrid>
 
-
-        <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <Label Content="Добавление операции:"
-                   Margin="0 0 10 0"
-                   FontSize="{StaticResource Big}"
-                   Style="{StaticResource StandardLabel}"
-                   VerticalContentAlignment="Center"/>
+        <StackPanel Grid.Row="5" Orientation="Horizontal">
+            <TextBlock Text="Выбор пункта:"
+                   Margin="5 0 10 0"
+                   FontSize="{StaticResource Hi}"
+                   Style="{StaticResource StandardTextBlock}"
+                   VerticalAlignment="Center"/>
 
             <ComboBox Style="{StaticResource StandardComboBox}" 
                       VerticalContentAlignment="Center" 
-                      ItemsSource="{Binding Path=DataContext.Points, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                      ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
                       MinWidth="300"
@@ -396,24 +461,27 @@
         </StackPanel>
 
         <Separator Style="{StaticResource HorizontalSeparator}" 
-                   Grid.Row="4"/>
+                   Grid.Row="6"/>
 
-        <StackPanel Grid.Row="5"
-                    Orientation="Horizontal" 
-                    HorizontalAlignment="Right" 
-                    VerticalAlignment="Bottom">
+        <Grid Grid.Row="7">
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Center"
+                        Height="35">
+                <Button Style="{StaticResource StandardButton}" 
+                            Width="70"
+                            Content="Сохранить" 
+                            Margin="10 2 10 2" 
+                            Command="{Binding SaveItem}" 
+                            CommandParameter="{Binding SelectedItem}"/>
 
-            <Button Style="{StaticResource StandardButton}" 
-                    Content="Сохранить" 
-                    Margin="10" 
-                    Command="{Binding SaveItem}" 
-                    CommandParameter="{Binding SelectedItem}"/>
-
-            <Button Style="{StaticResource StandardButton}" 
-                    Content="Закрыть" 
-                    Margin="10" 
-                    Command="{Binding CloseWindow}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-        </StackPanel>
+                <Button Style="{StaticResource StandardButton}" 
+                            Width="70"
+                            Content="Закрыть" 
+                            Margin="10 2 10 2" 
+                            Command="{Binding CloseWindow}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
