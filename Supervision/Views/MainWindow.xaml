@@ -85,7 +85,7 @@
                           Command="{Binding ShaftShutterOpen}"/>
                 <MenuItem Header="Седло" />
                 <MenuItem Header="Шибер" />
-                <MenuItem Header="Шпиндель" />
+                <MenuItem Header="Шпиндель" Command="{Binding SpindleOpen}"/>
             </MenuItem>
 
             <MenuItem Header="Материалы">
@@ -167,7 +167,7 @@
                 <TreeViewItem Header="Деталировка"
                               Style="{StaticResource TreeViewItemStandard}"
                               Margin="2">
-                    <TreeViewItem Header="Затвор обратный"
+                    <TreeViewItem Header="Затвор обратный (ЗО)"
                                   Style="{StaticResource TreeViewItemStandard}">
                         <Button Style="{StaticResource TreeViewButton}"
                                 Command="{Binding BronzeSleeveShutterOpen}" 
@@ -191,7 +191,7 @@
                                 Command="{Binding ShaftShutterOpen}" 
                                 Content="Ось" />
                     </TreeViewItem>
-                    <TreeViewItem Header="Задвижка шиберная"
+                    <TreeViewItem Header="Задвижка шиберная (ЗШ)"
                                   Style="{StaticResource TreeViewItemStandard}">
                         <Button Style="{StaticResource TreeViewButton}"
                                 Command="{Binding ValveCaseOpen}"
@@ -199,6 +199,7 @@
                         <Button Style="{StaticResource TreeViewButton}" 
                                 Content="Крышка" />
                         <Button Style="{StaticResource TreeViewButton}" 
+                                Command="{Binding SpindleOpen}"
                                 Content="Шпиндель" />
                     </TreeViewItem>
                 </TreeViewItem>

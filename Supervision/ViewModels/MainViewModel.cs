@@ -24,6 +24,8 @@ using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
 using Supervision.Views.EntityViews.MaterialViews;
 using Supervision.ViewModels.EntityViewModels.Materials;
 using DataLayer.TechnicalControlPlans.Materials;
+using Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve;
+using Supervision.Views.EntityViews.DetailViews.Valve;
 
 namespace Supervision.ViewModels
 {
@@ -77,6 +79,32 @@ namespace Supervision.ViewModels
                 });
             }
         }
+        public ICommand ForgingMaterialOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ForgingMaterialView();
+                    var vm = new ForgingMaterialVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand RolledMaterialOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new RolledMaterialView();
+                    var vm = new RolledMaterialVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
 
         public ICommand CaseShutterOpen
         {
@@ -118,6 +146,21 @@ namespace Supervision.ViewModels
                             });
             }
         }
+        public ICommand SpindleOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new SpindleView();
+                    var vm = new SpindleVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+
+
 
         public ICommand BronzeSleeveShutterOpen
         {
@@ -145,19 +188,19 @@ namespace Supervision.ViewModels
                             });
             }
         }
-        //public ICommand SlamShutterOpen
-        //{
-        //    get
-        //    {
-        //        return new DelegateCommand(() =>
-        //                    {
-        //                        var w = new ReverseShutterDetailView();
-        //                        var vm = new ReverseShutterDetailVM<SlamShutter, SlamShutterTCP, SlamShutterJournal>();
-        //                        w.DataContext = vm;
-        //                        w.ShowDialog();
-        //                    });
-        //    }
-        //}
+        public ICommand SlamShutterOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                            {
+                                var w = new SlamShutterView();
+                                var vm = new SlamShutterVM();
+                                w.DataContext = vm;
+                                w.ShowDialog();
+                            });
+            }
+        }
         public ICommand SteelSleeveShutterOpen
         {
             get

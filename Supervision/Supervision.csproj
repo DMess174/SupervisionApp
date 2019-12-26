@@ -360,6 +360,10 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterCaseEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SpindleEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SpindleVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CaseBottomEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CaseBottomVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\ForgingMaterialEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\RolledMaterialEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\PipeMaterialEditVM.cs" />
@@ -398,6 +402,18 @@
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\ReverseShutter\ReverseShutterDetailEditView.xaml.cs">
       <DependentUpon>ReverseShutterDetailEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\SpindleEditView.xaml.cs">
+      <DependentUpon>SpindleEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\SpindleView.xaml.cs">
+      <DependentUpon>SpindleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CaseBottomEditView.xaml.cs">
+      <DependentUpon>CaseBottomEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CaseBottomView.xaml.cs">
+      <DependentUpon>CaseBottomView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\MaterialViews\PipeMaterialEditView.xaml.cs">
       <DependentUpon>PipeMaterialEditView.xaml</DependentUpon>
@@ -581,6 +597,22 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EntityViews\DetailViews\ReverseShutter\ReverseShutterDetailEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\SpindleEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\SpindleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CaseBottomEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CaseBottomView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
