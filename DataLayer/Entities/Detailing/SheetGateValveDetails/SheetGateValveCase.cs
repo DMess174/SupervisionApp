@@ -8,7 +8,7 @@ namespace DataLayer.Entities.Detailing.SheetGateValveDetails
     {
         public SheetGateValveCase()
         {
-            Name = "Корпус";
+            Name = "Корпус ЗШЛ";
         }
 
         public IEnumerable<SheetGateValveCaseJournal> SheetGateValveCaseJournals { get; set; }

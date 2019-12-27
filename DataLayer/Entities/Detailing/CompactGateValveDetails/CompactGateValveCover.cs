@@ -8,7 +8,7 @@ namespace DataLayer.Entities.Detailing.CompactGateValveDetails
     {
         public CompactGateValveCover()
         {
-            Name = "Крышка";
+            Name = "Крышка ЗШК";
         }
 
         public IEnumerable<CompactGateValveCoverJournal> CompactGateValveCoverJournals { get; set; }

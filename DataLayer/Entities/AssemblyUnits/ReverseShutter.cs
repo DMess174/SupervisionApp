@@ -8,7 +8,7 @@ namespace DataLayer.Entities.AssemblyUnits
     {
         public ReverseShutter()
         {
-            Name = "Затвор обратный";
+            Name = "ЗО";
         }
 
         public int? ReverseShutterCaseId { get; set; }

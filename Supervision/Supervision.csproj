@@ -362,7 +362,15 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SpindleEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SpindleVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\SideWallEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\SideWallVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldNozzleEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CaseFlangeEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CaseBottomEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldNozzleVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CaseFlangeVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CaseBottomVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\ForgingMaterialEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\RolledMaterialEditVM.cs" />
@@ -409,8 +417,32 @@
     <Compile Include="Views\EntityViews\DetailViews\Valve\SpindleView.xaml.cs">
       <DependentUpon>SpindleView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverFlangeEditView.xaml.cs">
+      <DependentUpon>CoverFlangeEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverFlangeView.xaml.cs">
+      <DependentUpon>CoverFlangeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\SideWallEditView.xaml.cs">
+      <DependentUpon>SideWallEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\SideWallView.xaml.cs">
+      <DependentUpon>SideWallView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\WeldNozzleEditView.xaml.cs">
+      <DependentUpon>WeldNozzleEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CaseFlangeEditView.xaml.cs">
+      <DependentUpon>CaseFlangeEditView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CaseBottomEditView.xaml.cs">
       <DependentUpon>CaseBottomEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\WeldNozzleView.xaml.cs">
+      <DependentUpon>WeldNozzleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CaseFlangeView.xaml.cs">
+      <DependentUpon>CaseFlangeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CaseBottomView.xaml.cs">
       <DependentUpon>CaseBottomView.xaml</DependentUpon>
@@ -608,7 +640,39 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CoverFlangeEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CoverFlangeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\SideWallEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\SideWallView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\WeldNozzleEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CaseFlangeEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CaseBottomEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\WeldNozzleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CaseFlangeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

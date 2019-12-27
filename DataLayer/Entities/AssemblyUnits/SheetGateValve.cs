@@ -7,7 +7,7 @@ namespace DataLayer.Entities.AssemblyUnits
     {
         public SheetGateValve()
         {
-            Name = "Задвижка шиберная листовая";
+            Name = "ЗШЛ";
         }
 
         public IEnumerable<SheetGateValveJournal> SheetGateValveJournals { get; set; }

@@ -15,7 +15,7 @@ namespace DataLayer.Entities.Detailing.WeldGateValveDetails
         public MetalMaterial MetalMaterial { get; set; }
 
         public int? WeldGateValveCaseId { get; set; }
-        public WeldGateValveCase GetWeldGateValveCase { get; set; }
+        public WeldGateValveCase WeldGateValveCase { get; set; }
 
         public IEnumerable<SideWallJournal> SideWallJournals { get; set; }
     }

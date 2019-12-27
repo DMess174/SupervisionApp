@@ -2,7 +2,7 @@
 
 namespace DataLayer.Entities.Detailing.WeldGateValveDetails
 {
-    public class WeldGateValveCover : BaseEntity
+    public class WeldGateValveCover : BaseValveCover
     {
         public int? CoverFlangeId { get; set; }
         public CoverFlange CoverFlange { get; set; }

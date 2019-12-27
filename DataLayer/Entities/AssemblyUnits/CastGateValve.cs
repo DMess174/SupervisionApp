@@ -8,7 +8,7 @@ namespace DataLayer.Entities.AssemblyUnits
     {
         public CastGateValve()
         {
-            Name = "Задвижка шиберная";
+            Name = "ЗШ";
         }
 
         public int? CastGateValveCaseId { get; set; }

@@ -7,7 +7,7 @@ namespace DataLayer.Entities.AssemblyUnits
     {
         public CompactGateValve()
         {
-            Name = "Задвижка компактная";
+            Name = "ЗШК";
         }
 
         public IEnumerable<CompactGateValveJournal> CompactGateValveJournals { get; set; }
