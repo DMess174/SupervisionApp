@@ -5,24 +5,20 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using DataLayer;
-using DataLayer.Entities.Detailing.ReverseShutterDetails;
-using DataLayer.Journals;
-using DataLayer.TechnicalControlPlans;
+using DataLayer.Entities.Detailing.CastGateValveDetails;
+using DataLayer.Journals.Detailing.CastGateValveDetails;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
 using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
 
-namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter
+namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGateValve
 {
-    public class ReverseShutterDetailVM<TEntity, TEntityTCP, TEntityJournal> : BasePropertyChanged
-        where TEntity : ReverseShutterDetail, new()
-        where TEntityJournal : BaseJournal<TEntity,TEntityTCP>, new()
-        where TEntityTCP : BaseTCP
+    public class CastGateValveCaseVM : BasePropertyChanged
     {
         private readonly DataContext db;
-        private IEnumerable<TEntity> allInstances;
+        private IEnumerable<CastGateValveCase> allInstances;
         private ICollectionView allInstancesView;
-        private TEntity selectedItem;
+        private CastGateValveCase selectedItem;
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
@@ -33,7 +29,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
         private string number = "";
         private string drawing = "";
         private string status = "";
+        private string material = "";
         private string certificate = "";
+        private string melt = "";
 
         #region Filter
         public string Number 
@@ -45,7 +43,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged("Number");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.Number != null)
+                    if (obj is CastGateValveCase item && item.Number != null)
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
@@ -62,7 +60,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged("Drawing");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.Drawing != null)
+                    if (obj is CastGateValveCase item && item.Drawing != null)
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
@@ -79,9 +77,26 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged("Status");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.Status != null)
+                    if (obj is CastGateValveCase item && item.Status != null)
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
+                    }
+                    else return false;
+                };
+            }
+        }
+        public string Material
+        {
+            get => material;
+            set
+            {
+                material= value;
+                RaisePropertyChanged("Material");
+                allInstancesView.Filter += (obj) =>
+                {
+                    if (obj is CastGateValveCase item && item.Material != null)
+                    {
+                        return item.Material.ToLower().Contains(Material.ToLower());
                     }
                     else return false;
                 };
@@ -96,9 +111,26 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged("Certificate");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.Certificate != null)
+                    if (obj is CastGateValveCase item && item.Certificate != null)
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
+                    }
+                    else return false;
+                };
+            }
+        }
+        public string Melt
+        {
+            get => melt;
+            set
+            {
+                melt = value;
+                RaisePropertyChanged("Melt");
+                allInstancesView.Filter += (obj) =>
+                {
+                    if (obj is CastGateValveCase item && item.Melt != null)
+                    {
+                        return item.Melt.ToLower().Contains(Melt.ToLower());
                     }
                     else return false;
                 };
@@ -127,8 +159,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            var wn = new ReverseShutterDetailEditView();
-                            var vm = new ReverseShutterDetailEditVM<TEntity, TEntityTCP, TEntityJournal>(SelectedItem.Id, SelectedItem);
+                            var wn = new ReverseShutterCaseEditView();
+                            var vm = new CastGateValveCaseEditVM(SelectedItem.Id);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -147,21 +179,22 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            var item = new TEntity()
+                            var item = new CastGateValveCase()
                             {
                                 Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
                                 Drawing = SelectedItem.Drawing,
+                                Material = SelectedItem.Material,
+                                Melt = SelectedItem.Melt,
                                 Certificate = SelectedItem.Certificate,
                                 Status = SelectedItem.Status,
-                                Name = SelectedItem.Name,
-                                MetalMaterialId = SelectedItem.MetalMaterialId
+                                Name = SelectedItem.Name
                             };
-                            db.Set<TEntity>().Add(item);
+                            db.CastGateValveCases.Add(item);
                             db.SaveChanges();
-                            var Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).ToList();
-                            foreach (var record in Journal)
+                            var journal = db.CastGateValveCaseJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
+                            foreach (var record in journal)
                             {
-                                var Record = new TEntityJournal()
+                                var Record = new CastGateValveCaseJournal()
                                 {
                                     Date = record.Date,
                                     DetailId = item.Id,
@@ -178,7 +211,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                                     Status = record.Status,
                                     JournalNumber = record.JournalNumber
                                 };
-                                db.Set<TEntityJournal>().Add(Record);
+                                db.CastGateValveCaseJournals.Add(Record);
                                 db.SaveChanges();
                             }
 
@@ -195,14 +228,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 return addItem ?? (
                     addItem = new DelegateCommand<Window>((w) =>
                     {
-                        var item = new TEntity();
-                        db.Set<TEntity>().Add(item);
+                        var item = new CastGateValveCase();
+                        db.CastGateValveCases.Add(item);
                         db.SaveChanges();
                         SelectedItem = item;
-                        var tcpPoints = db.Set<TEntityTCP>().ToList();
+                        var tcpPoints = db.CastGateValveCaseTCPs.ToList();
                         foreach (var i in tcpPoints)
                         {
-                            var journal = new TEntityJournal()
+                            var journal = new CastGateValveCaseJournal()
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
@@ -214,12 +247,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             };
                             if (journal != null)
                             {
-                                db.Set<TEntityJournal>().Add(journal);
+                                db.CastGateValveCaseJournals.Add(journal);
                                 db.SaveChanges();
                             }
                         }
-                        var wn = new ReverseShutterDetailEditView();
-                        var vm = new ReverseShutterDetailEditVM<TEntity, TEntityTCP, TEntityJournal>(SelectedItem.Id, SelectedItem);
+                        var wn = new ReverseShutterCaseEditView();
+                        var vm = new CastGateValveCaseEditVM(SelectedItem.Id);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
@@ -235,7 +268,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            db.Set<TEntity>().Remove(SelectedItem);
+                            db.CastGateValveCases.Remove(SelectedItem);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -254,7 +287,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public TEntity SelectedItem
+        public CastGateValveCase SelectedItem
         {
             get => selectedItem;
             set
@@ -264,7 +297,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public IEnumerable<TEntity> AllInstances
+        public IEnumerable<CastGateValveCase> AllInstances
         {
             get => allInstances;
             set
@@ -283,11 +316,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ReverseShutterDetailVM()
+        public CastGateValveCaseVM()
         {
             db = new DataContext();
-            db.Set<TEntity>().Include(i => i.MetalMaterial).Load();
-            AllInstances = db.Set<TEntity>().Local.ToObservableCollection();
+            db.CastGateValveCases.Load();
+            AllInstances = db.CastGateValveCases.Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             if (AllInstances.Count() != 0)
             {

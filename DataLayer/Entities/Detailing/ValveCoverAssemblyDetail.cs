@@ -10,6 +10,5 @@ namespace DataLayer.Entities.Detailing
         public MetalMaterial MetalMaterial { get; set; }
 
         public BaseValveCover BaseValveCover { get; set; }
-
     }
 }

@@ -1,4 +1,4 @@
-﻿<Window x:Class="Supervision.Views.EntityViews.DetailViews.NozzleView"
+﻿<Window x:Class="Supervision.Views.EntityViews.DetailViews.WeldGateValve.CoverSleeveView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -129,7 +129,7 @@
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" 
-                                    Width="50*" 
+                                    Width="35*" 
                                     Binding="{Binding Path = Id}" 
                                     TextBlock.TextAlignment="Center" />
 
@@ -157,18 +157,6 @@
                 <DataGridTextColumn Header="Статус" 
                                     Width="100*" 
                                     Binding ="{Binding Path = Status}" />
-
-                <DataGridTextColumn Header="DN" 
-                                    Width="70" 
-                                    Binding ="{Binding Path = MetalMaterial.FirstSize}" />
-
-                <DataGridTextColumn Header="ST" 
-                                    Width="60" 
-                                    Binding ="{Binding Path = MetalMaterial.ThirdSize}" />
-
-                <DataGridTextColumn Header="    ST&#x0a;кромки" 
-                                    Width="60" 
-                                    Binding ="{Binding Path = ThicknessJoin}" />
             </DataGrid.Columns>
         </DataGrid>
 
@@ -196,7 +184,6 @@
 
                 <StackPanel  DockPanel.Dock="Bottom"
                          Grid.Column="1"
-                         Grid.ColumnSpan="2"
                          Orientation="Horizontal" 
                          HorizontalAlignment="Center" 
                          VerticalAlignment="Bottom">

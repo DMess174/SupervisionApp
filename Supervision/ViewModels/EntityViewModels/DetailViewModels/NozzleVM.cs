@@ -287,7 +287,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         public NozzleVM()
         {
             db = new DataContext();
-            db.Nozzles.Load();
+            db.Nozzles.Include(i => i.MetalMaterial).Load();
             AllInstances = db.Nozzles.Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             if (AllInstances.Count() != 0)

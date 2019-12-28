@@ -55,7 +55,8 @@
                               Command="{Binding BronzeSleeveShutterOpen}"/>
                     <MenuItem Header="Втулка стальная (ЗО)"
                               Command="{Binding SteelSleeveShutterOpen}" />
-                    <MenuItem Header="Втулка крышки (ЗШЛ, ЗШК)" />
+                    <MenuItem Header="Втулка крышки (ЗШЛ, ЗШК)"
+                              Command="{Binding CoverSleeveOpen}"/>
                     <MenuItem Header="Втулка ходовая (ЗШ, ЗШЛ, ЗШК)" />
                 </MenuItem>
 
@@ -85,7 +86,8 @@
                           Command="{Binding ShaftShutterOpen}"/>
                 <MenuItem Header="Седло" />
                 <MenuItem Header="Шибер" />
-                <MenuItem Header="Шпиндель" Command="{Binding SpindleOpen}"/>
+                <MenuItem Header="Шпиндель" 
+                          Command="{Binding SpindleOpen}"/>
             </MenuItem>
 
             <MenuItem Header="Материалы">
@@ -194,13 +196,86 @@
                     <TreeViewItem Header="Задвижка шиберная (ЗШ)"
                                   Style="{StaticResource TreeViewItemStandard}">
                         <Button Style="{StaticResource TreeViewButton}"
+                                Command="{Binding NozzleOpen}" 
+                                Content="Катушка" />
+                        <Button Style="{StaticResource TreeViewButton}"
                                 Command="{Binding ValveCaseOpen}"
                                 Content="Корпус" />
                         <Button Style="{StaticResource TreeViewButton}" 
                                 Content="Крышка" />
+                        <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CoverSealingRingOpen}"
+                                    Content="Кольцо уплотнительное"/>
                         <Button Style="{StaticResource TreeViewButton}" 
                                 Command="{Binding SpindleOpen}"
                                 Content="Шпиндель" />
+                    </TreeViewItem>
+                    <TreeViewItem Header="Задвижка шиберная листовая (ЗШЛ)"
+                                  Style="{StaticResource TreeViewItemStandard}">
+                        <TreeViewItem Header="Детали корпуса"
+                                      Style="{StaticResource TreeViewItemStandard}">
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding WeldNozzleOpen}"
+                                    Content="Патрубок"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding FrontWallOpen}"
+                                    Content="Стенка лицевая"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding SideWallOpen}"
+                                    Content="Стенка боковая"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CaseBottomOpen}"
+                                    Content="Днище"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CaseFlangeOpen}"
+                                    Content="Фланец"/>
+                        </TreeViewItem>
+                        <TreeViewItem Header="Детали крышки"
+                                      Style="{StaticResource TreeViewItemStandard}">
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CoverFlangeOpen}"
+                                    Content="Фланец"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CoverSleeveOpen}"
+                                    Content="Втулка"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CoverSealingRingOpen}"
+                                    Content="Кольцо уплотнительное"/>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                    
+                    <TreeViewItem Header="Задвижка компактная (ЗШК)"
+                                  Style="{StaticResource TreeViewItemStandard}">
+                        <TreeViewItem Header="Детали корпуса"
+                                      Style="{StaticResource TreeViewItemStandard}">
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding WeldNozzleOpen}"
+                                    Content="Патрубок"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding FrontWallOpen}"
+                                    Content="Стенка лицевая"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding SideWallOpen}"
+                                    Content="Стенка боковая"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CaseBottomOpen}"
+                                    Content="Днище"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CaseFlangeOpen}"
+                                    Content="Фланец"/>
+                        </TreeViewItem>
+                        <TreeViewItem Header="Детали крышки"
+                                      Style="{StaticResource TreeViewItemStandard}">
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CoverFlangeOpen}"
+                                    Content="Фланец"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CoverSleeveOpen}"
+                                    Content="Втулка"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CoverSealingRingOpen}"
+                                    Content="Кольцо уплотнительное"/>
+                        </TreeViewItem>
                     </TreeViewItem>
                 </TreeViewItem>
             </TreeView>

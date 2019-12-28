@@ -5,24 +5,24 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using DataLayer;
-using DataLayer.Entities.Detailing.ReverseShutterDetails;
-using DataLayer.Journals;
-using DataLayer.TechnicalControlPlans;
+using DataLayer.Entities.Detailing;
+using DataLayer.Entities.Detailing.WeldGateValveDetails;
+using DataLayer.Journals.Detailing;
+using DataLayer.Journals.Detailing.WeldGateValveDetails;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
-using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
+using Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve;
+using Supervision.Views.EntityViews.DetailViews.Valve;
+using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
 
-namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter
+namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
 {
-    public class ReverseShutterDetailVM<TEntity, TEntityTCP, TEntityJournal> : BasePropertyChanged
-        where TEntity : ReverseShutterDetail, new()
-        where TEntityJournal : BaseJournal<TEntity,TEntityTCP>, new()
-        where TEntityTCP : BaseTCP
+    public class CoverSealingRingVM : BasePropertyChanged
     {
         private readonly DataContext db;
-        private IEnumerable<TEntity> allInstances;
+        private IEnumerable<CoverSealingRing> allInstances;
         private ICollectionView allInstancesView;
-        private TEntity selectedItem;
+        private CoverSealingRing selectedItem;
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
@@ -45,7 +45,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged("Number");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.Number != null)
+                    if (obj is CoverSealingRing item && item.Number != null)
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
@@ -62,7 +62,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged("Drawing");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.Drawing != null)
+                    if (obj is CoverSealingRing item && item.Drawing != null)
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
@@ -79,7 +79,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged("Status");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.Status != null)
+                    if (obj is CoverSealingRing item && item.Status != null)
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
@@ -96,7 +96,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged("Certificate");
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.Certificate != null)
+                    if (obj is CoverSealingRing item && item.Certificate != null)
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
@@ -127,8 +127,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            var wn = new ReverseShutterDetailEditView();
-                            var vm = new ReverseShutterDetailEditVM<TEntity, TEntityTCP, TEntityJournal>(SelectedItem.Id, SelectedItem);
+                            var wn = new CoverSealingRingEditView();
+                            var vm = new CoverSealingRingEditVM(SelectedItem.Id, SelectedItem);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -147,7 +147,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            var item = new TEntity()
+                            var item = new CoverSealingRing()
                             {
                                 Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
                                 Drawing = SelectedItem.Drawing,
@@ -156,12 +156,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                                 Name = SelectedItem.Name,
                                 MetalMaterialId = SelectedItem.MetalMaterialId
                             };
-                            db.Set<TEntity>().Add(item);
+                            db.CoverSealingRings.Add(item);
                             db.SaveChanges();
-                            var Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).ToList();
+                            var Journal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
                             foreach (var record in Journal)
                             {
-                                var Record = new TEntityJournal()
+                                var Record = new CoverSealingRingJournal()
                                 {
                                     Date = record.Date,
                                     DetailId = item.Id,
@@ -178,7 +178,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                                     Status = record.Status,
                                     JournalNumber = record.JournalNumber
                                 };
-                                db.Set<TEntityJournal>().Add(Record);
+                                db.CoverSealingRingJournals.Add(Record);
                                 db.SaveChanges();
                             }
 
@@ -195,14 +195,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 return addItem ?? (
                     addItem = new DelegateCommand<Window>((w) =>
                     {
-                        var item = new TEntity();
-                        db.Set<TEntity>().Add(item);
+                        var item = new CoverSealingRing();
+                        db.CoverSealingRings.Add(item);
                         db.SaveChanges();
                         SelectedItem = item;
-                        var tcpPoints = db.Set<TEntityTCP>().ToList();
+                        var tcpPoints = db.CoverSealingRingTCPs.ToList();
                         foreach (var i in tcpPoints)
                         {
-                            var journal = new TEntityJournal()
+                            var journal = new CoverSealingRingJournal()
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
@@ -214,12 +214,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             };
                             if (journal != null)
                             {
-                                db.Set<TEntityJournal>().Add(journal);
+                                db.CoverSealingRingJournals.Add(journal);
                                 db.SaveChanges();
                             }
                         }
-                        var wn = new ReverseShutterDetailEditView();
-                        var vm = new ReverseShutterDetailEditVM<TEntity, TEntityTCP, TEntityJournal>(SelectedItem.Id, SelectedItem);
+                        var wn = new CoverSealingRingEditView();
+                        var vm = new CoverSealingRingEditVM(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
@@ -235,7 +235,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            db.Set<TEntity>().Remove(SelectedItem);
+                            db.CoverSealingRings.Remove(SelectedItem);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -254,7 +254,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public TEntity SelectedItem
+        public CoverSealingRing SelectedItem
         {
             get => selectedItem;
             set
@@ -264,7 +264,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public IEnumerable<TEntity> AllInstances
+        public IEnumerable<CoverSealingRing> AllInstances
         {
             get => allInstances;
             set
@@ -283,11 +283,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ReverseShutterDetailVM()
+        public CoverSealingRingVM()
         {
             db = new DataContext();
-            db.Set<TEntity>().Include(i => i.MetalMaterial).Load();
-            AllInstances = db.Set<TEntity>().Local.ToObservableCollection();
+            db.CoverSealingRings.Include(i => i.MetalMaterial).Load();
+            AllInstances = db.CoverSealingRings.Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             if (AllInstances.Count() != 0)
             {

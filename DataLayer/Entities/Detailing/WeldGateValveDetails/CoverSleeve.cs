@@ -17,6 +17,8 @@ namespace DataLayer.Entities.Detailing.WeldGateValveDetails
         public int? CoverSealingRingId { get; set; }
         public CoverSealingRing CoverSealingRing { get; set; }
 
+        public WeldGateValveCover WeldGateValveCover { get; set; }
+
         public IEnumerable<CoverSleeveJournal> CoverSleeveJournals { get; set; }
     }
 }

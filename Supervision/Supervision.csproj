@@ -360,11 +360,19 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterCaseEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\CastGateValve\CastGateValveCaseEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\CastGateValve\CastGateValveCaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SpindleEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SpindleVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSealingRingEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSleeveEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSealingRingVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\FrontWallEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSleeveVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\SideWallEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\FrontWallVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\SideWallVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldNozzleEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CaseFlangeEditVM.cs" />
@@ -423,8 +431,26 @@
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverFlangeView.xaml.cs">
       <DependentUpon>CoverFlangeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSealingRingEditView.xaml.cs">
+      <DependentUpon>CoverSealingRingEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSleeveEditView.xaml.cs">
+      <DependentUpon>CoverSleeveEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSealingRingView.xaml.cs">
+      <DependentUpon>CoverSealingRingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\FrontWallEditView.xaml.cs">
+      <DependentUpon>FrontWallEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSleeveView.xaml.cs">
+      <DependentUpon>CoverSleeveView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\SideWallEditView.xaml.cs">
       <DependentUpon>SideWallEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\FrontWallView.xaml.cs">
+      <DependentUpon>FrontWallView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\SideWallView.xaml.cs">
       <DependentUpon>SideWallView.xaml</DependentUpon>
@@ -648,7 +674,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSealingRingEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSleeveEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSealingRingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\FrontWallEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSleeveView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\DetailViews\WeldGateValve\SideWallEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\FrontWallView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
