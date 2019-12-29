@@ -231,7 +231,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.CoverFlanges.Include(i => i.WeldGateValveCover).Include(i => i.MetalMaterial).SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.CoverFlanges.Include(i => i.WeldGateValveCover).SingleOrDefault(i => i.Id == id);
             Journal = db.CoverFlangeJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.CoverFlanges.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();

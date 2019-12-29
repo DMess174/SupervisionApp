@@ -3,18 +3,13 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using DataLayer;
-using DataLayer.Entities.Detailing;
 using DataLayer.Entities.Detailing.WeldGateValveDetails;
 using DataLayer.Entities.Materials;
-using DataLayer.Journals.Detailing;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
-using DataLayer.TechnicalControlPlans.Detailing;
 using DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
-using Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve;
 using Supervision.ViewModels.EntityViewModels.Materials;
-using Supervision.Views.EntityViews.DetailViews.Valve;
 using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
 using Supervision.Views.EntityViews.MaterialViews;
 
@@ -231,7 +226,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.SideWalls.Include(i => i.WeldGateValveCase).Include(i => i.MetalMaterial).SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.SideWalls.Include(i => i.WeldGateValveCase).SingleOrDefault(i => i.Id == id);
             Journal = db.SideWallJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.SideWalls.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();

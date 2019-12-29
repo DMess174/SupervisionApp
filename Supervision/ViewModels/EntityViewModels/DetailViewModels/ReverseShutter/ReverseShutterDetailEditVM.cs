@@ -229,7 +229,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.Set<TEntity>().Include(i => i.ReverseShutter).Include(i => i.MetalMaterial).SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.Set<TEntity>().Include(i => i.ReverseShutter).SingleOrDefault(i => i.Id == id);
             Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.Set<TEntity>().Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();

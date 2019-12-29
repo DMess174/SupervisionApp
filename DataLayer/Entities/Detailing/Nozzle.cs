@@ -25,6 +25,6 @@ namespace DataLayer.Entities.Detailing
         public IEnumerable<NozzleJournal> NozzleJournals { get; set; }
 
         [NotMapped]
-        public string FullName => string.Format($"{Name}/{Number}/{Diameter}/{Thickness}");
+        public new string FullName => string.Format($"{Name}/{Number}/{Diameter}/{Thickness}");
     }
 }

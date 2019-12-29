@@ -228,7 +228,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.CoverSealingRings.Include(i => i.CastGateValveCover).Include(i => i.CoverSleeve).Include(i => i.MetalMaterial).SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.CoverSealingRings.Include(i => i.CastGateValveCover).Include(i => i.CoverSleeve).SingleOrDefault(i => i.Id == id);
             Journal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.CoverSealingRings.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();

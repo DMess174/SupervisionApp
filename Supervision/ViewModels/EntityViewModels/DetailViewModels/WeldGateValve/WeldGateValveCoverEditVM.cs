@@ -5,19 +5,14 @@ using System.Windows.Input;
 using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Entities.Detailing.WeldGateValveDetails;
-using DataLayer.Entities.Materials;
 using DataLayer.Journals;
-using DataLayer.Journals.Detailing.WeldGateValveDetails;
 using DataLayer.TechnicalControlPlans;
-using DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve;
-using Supervision.ViewModels.EntityViewModels.Materials;
 using Supervision.Views.EntityViews.DetailViews;
 using Supervision.Views.EntityViews.DetailViews.Valve;
 using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
-using Supervision.Views.EntityViews.MaterialViews;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
 {
@@ -98,40 +93,48 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                             if (SelectedItem.CoverFlangeId != null)
                             {
                                 var detail = db.CoverFlanges.Include(i => i.WeldGateValveCover).SingleOrDefault(i => i.Id == SelectedItem.CoverFlangeId);
-                                if (detail.WeldGateValveCover != null)
-                                    MessageBox.Show($"Фланец применен в крышке № {detail.WeldGateValveCover.Number}", "Ошибка");
-                                return;
+                                if (detail?.WeldGateValveCover != null && detail.WeldGateValveCover.Id != SelectedItem.Id)
+                                {
+                                    MessageBox.Show($"Фланец применен в {detail.WeldGateValveCover.Name} № {detail.WeldGateValveCover.Number}", "Ошибка");
+                                    return;
+                                }
                             }
                             if (SelectedItem.CoverSleeveId != null)
                             {
                                 var detail = db.CoverSleeves.Include(i => i.WeldGateValveCover).SingleOrDefault(i => i.Id == SelectedItem.CoverSleeveId);
-                                if (detail.WeldGateValveCover != null)
-                                    MessageBox.Show($"Втулка применена в крышке № {detail.WeldGateValveCover.Number}", "Ошибка");
-                                return;
+                                if (detail?.WeldGateValveCover != null && detail.WeldGateValveCover.Id != SelectedItem.Id)
+                                {
+                                    MessageBox.Show($"Втулка применена в {detail.WeldGateValveCover.Name} № {detail.WeldGateValveCover.Number}", "Ошибка");
+                                    return;
+                                }
                             }
                             if (SelectedItem.SpindleId != null)
                             {
                                 var detail = db.Spindles.Include(i => i.BaseValveCover).SingleOrDefault(i => i.Id == SelectedItem.SpindleId);
-                                if (detail.BaseValveCover != null)
-                                    MessageBox.Show($"Шпиндель применен в крышке № {detail.BaseValveCover.Number}", "Ошибка");
-                                return;
+                                if (detail?.BaseValveCover != null && detail.BaseValveCover.Id != SelectedItem.Id)
+                                {
+                                    MessageBox.Show($"Шпиндель применен в {detail.BaseValveCover.Name} № {detail.BaseValveCover.Number}", "Ошибка");
+                                    return;
+                                }
                             }
                             if (SelectedItem.RunningSleeveId != null)
                             {
                                 var detail = db.RunningSleeves.Include(i => i.BaseValveCover).SingleOrDefault(i => i.Id == SelectedItem.RunningSleeveId);
-                                if (detail.BaseValveCover != null)
-                                    MessageBox.Show($"Втулка ходовая применена в крышке № {detail.BaseValveCover.Number}", "Ошибка");
-                                return;
+                                if (detail?.BaseValveCover != null && detail.BaseValveCover.Id != SelectedItem.Id)
+                                {
+                                    MessageBox.Show($"Втулка ходовая применена в {detail.BaseValveCover.Name} № {detail.BaseValveCover.Number}", "Ошибка");
+                                    return;
+                                }
                             }
-                        db.Set<TEntity>().Update(SelectedItem);
-                        db.SaveChanges();
-                        foreach (var i in Journal)
-                        {
-                            i.DetailNumber = SelectedItem.Number;
-                            i.DetailDrawing = SelectedItem.Drawing;
-                        }
-                        db.Set<TEntityJournal>().UpdateRange(Journal);
-                        db.SaveChanges();
+                            db.Set<TEntity>().Update(SelectedItem);
+                            db.SaveChanges();
+                            foreach (var i in Journal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.Set<TEntityJournal>().UpdateRange(Journal);
+                            db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
                     }));
@@ -325,11 +328,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.Set<TEntity>().Include(i => i.CoverFlange)
-                .Include(i => i.CoverSleeve)
-                .Include(i => i.Spindle)
-                .Include(i => i.RunningSleeve)
-                .SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.Set<TEntity>().Include(i => i.BaseWeldValve).SingleOrDefault(i => i.Id == id);
             Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.Set<TEntity>().Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();

@@ -239,7 +239,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.Nozzles.Include(i => i.CastingCase).Include(i => i.MetalMaterial).SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.Nozzles.Include(i => i.CastingCase).SingleOrDefault(i => i.Id == id);
             Journal = db.Set<NozzleJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Materials = db.MetalMaterials.ToList();

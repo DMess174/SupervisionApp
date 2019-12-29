@@ -16,19 +16,19 @@
 
     <Grid >
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="80"/>
+                <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <Label Style="{StaticResource StandardLabel}" 
                    FontSize="{StaticResource Hi}"
@@ -48,22 +48,15 @@
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
                                Text="Номер:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
-
-                    <TextBlock Style="{StaticResource StandardTextBlock}" 
-                               Grid.Row="1" 
-                               Text="Чертеж:" 
-                               Margin="5 0 5 0" 
-                               VerticalAlignment="Center"/>
                 </Grid>
+
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
                     <TextBox Style="{StaticResource StandardTextBox}" 
@@ -71,9 +64,25 @@
                              Margin="5 0 5 0" 
                              VerticalAlignment="Center"
                              Text="{Binding SelectedItem.Number, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                </Grid>
 
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Style="{StaticResource StandardTextBlock}" 
+                               Text="Чертеж:" 
+                               Margin="5 0 5 0" 
+                               VerticalAlignment="Center"/>
+                </Grid>
+
+                <Grid Grid.Column="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
                     <ComboBox Style="{StaticResource StandardComboBox}" 
-                              Grid.Row="1" 
+                              Grid.Row="0" 
                               Width="auto" 
                               Margin="5 0 5 0" 
                               IsEditable="True" 
@@ -83,57 +92,11 @@
                               SelectedItem= "{Binding SelectedItem.Drawing}"/>
                 </Grid>
 
-                <Grid Grid.Column="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Style="{StaticResource StandardTextBlock}" 
-                               Text="Марка&#x0a;материала:" 
-                               Margin="5 0 5 0" 
-                               VerticalAlignment="Center"/>
-
-                    <TextBlock Style="{StaticResource StandardTextBlock}" 
-                               Grid.Row="1" 
-                               Text="Плавка:" 
-                               Margin="5 0 5 0" 
-                               VerticalAlignment="Center"/>
-                </Grid>
-
-                <Grid Grid.Column="3">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Style="{StaticResource StandardTextBlock}" 
-                              Grid.Row="0" 
-                              Width="auto" 
-                              Margin="5 0 5 0" 
-                              VerticalAlignment="Center" 
-                              Text="{Binding SelectedItem.MetalMaterial.Material, UpdateSourceTrigger=PropertyChanged}">
-                    </TextBlock>
-
-                    <TextBlock Style="{StaticResource StandardTextBlock}" 
-                               Grid.Row="1" 
-                               Width="auto" 
-                               Margin="5 0 5 0" 
-                               VerticalAlignment="Center"
-                               Text="{Binding SelectedItem.MetalMaterial.Melt, UpdateSourceTrigger=PropertyChanged}"/>
-                </Grid>
-
                 <Grid Grid.Column="4">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
-                               Text="Сертификат:" 
-                               Margin="5 0 5 0" 
-                               VerticalAlignment="Center"/>
-
-                    <TextBlock Style="{StaticResource StandardTextBlock}" 
-                               Grid.Row="1" 
                                Text="Статус:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
@@ -142,17 +105,9 @@
                 <Grid Grid.Column="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Style="{StaticResource StandardTextBlock}" 
-                             Grid.Row="0" 
-                             Width="auto" 
-                             Margin="5 0 5 0" 
-                             VerticalAlignment="Center"
-                             Text="{Binding SelectedItem.MetalMaterial.Certificate, UpdateSourceTrigger=PropertyChanged}"/>
-
                     <ComboBox Style="{StaticResource StandardComboBox}" 
-                              Grid.Row="1" 
+                              Grid.Row="0" 
                               Width="auto" 
                               Margin="5 0 5 0" 
                               IsEditable="True" 
@@ -170,7 +125,7 @@
                     <Separator.Style>
                         <Style TargetType="Separator" BasedOn="{StaticResource VerticalSeparator}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedItem.WeldGateValveCover}"
+                                <DataTrigger Binding="{Binding SelectedItem.BaseWeldValve}"
                                              Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
@@ -190,7 +145,7 @@
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource StandardTextBlock}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedItem.WeldGateValveCover}"
+                                        <DataTrigger Binding="{Binding SelectedItem.BaseWeldValve}"
                                                      Value="{x:Null}">
                                             <Setter Property="Visibility" Value="Collapsed">
                                             </Setter>
@@ -201,7 +156,7 @@
                         </TextBlock>
                         <TextBlock Style="{StaticResource StandardTextBlock}"
                                    Margin="5 0 5 0" 
-                                   Text="{Binding SelectedItem.WeldGateValveCover.Name}"></TextBlock>
+                                   Text="{Binding SelectedItem.BaseWeldValve.Name}"></TextBlock>
                         <TextBlock Name="Number"
                                Width="auto" 
                                Margin="5 5 5 0" 
@@ -211,7 +166,7 @@
                             </TextBlock.Style>
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}№ {0}">
-                                    <Binding Path="SelectedItem.WeldGateValveCover.Number"/>
+                                    <Binding Path="SelectedItem.BaseWeldValve.Number"/>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -248,10 +203,10 @@
                       Margin="5 0 5 0" 
                       IsEditable="True" 
                       VerticalAlignment="Center" 
-                      ItemsSource="{Binding Materials}" 
-                      SelectedItem= "{Binding SelectedItem.MetalMaterial}"
+                      ItemsSource="{Binding CoverFlanges}" 
+                      SelectedItem= "{Binding SelectedItem.CoverFlange}"
                       SelectedValuePath="Id"
-                      SelectedValue="{Binding SelectedItem.MetalMaterialId}"
+                      SelectedValue="{Binding SelectedItem.CoverFlangeId}"
                       DisplayMemberPath="FullName"/>
 
             <Button Style="{StaticResource StandardButton}"
@@ -259,13 +214,41 @@
                         Height="30"
                         Margin="5 0 5 0"
                         Content="Открыть"
-                        Command="{Binding EditMaterial}"
+                        Command="{Binding EditCoverFlange}"
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
             <Label Style="{StaticResource StandardLabel}" 
                    FontSize="{StaticResource Hi}"
+                   Content="Втулка:" 
+                   VerticalAlignment="Center"
+                   Grid.Row="1"/>
+
+            <ComboBox Style="{StaticResource StandardComboBox}" 
+                      Grid.Column="1"
+                      Width="300" 
+                      Margin="5 0 5 0" 
+                      IsEditable="True" 
+                      VerticalAlignment="Center" 
+                      ItemsSource="{Binding CoverSleeves}" 
+                      SelectedItem= "{Binding SelectedItem.CoverSleeve}"
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding SelectedItem.CoverSleeveId}"
+                      DisplayMemberPath="FullName"
+                      Grid.Row="1"/>
+
+            <Button Style="{StaticResource StandardButton}"
+                    Grid.Column="2"
+                    Grid.Row="1"
+                    Height="30"
+                    Margin="5 0 5 0"
+                    Content="Открыть"
+                    Command="{Binding EditCoverSleeve}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+            <Label Style="{StaticResource StandardLabel}" 
+                   FontSize="{StaticResource Hi}"
                    Grid.Column="4"
-                   Content="Уплотнительное кольцо:" 
+                   Content="Шпиндель:" 
                    VerticalAlignment="Center"/>
 
             <ComboBox Style="{StaticResource StandardComboBox}" 
@@ -274,10 +257,10 @@
                       Margin="5 0 5 0" 
                       IsEditable="True" 
                       VerticalAlignment="Center" 
-                      ItemsSource="{Binding CoverSealingRings}" 
-                      SelectedItem= "{Binding SelectedItem.CoverSealingRing}"
+                      ItemsSource="{Binding Spindles}" 
+                      SelectedItem= "{Binding SelectedItem.Spindle}"
                       SelectedValuePath="Id"
-                      SelectedValue="{Binding SelectedItem.CoverSealingRingId}"
+                      SelectedValue="{Binding SelectedItem.SpindleId}"
                       DisplayMemberPath="FullName"/>
 
             <Button Style="{StaticResource StandardButton}"
@@ -285,8 +268,37 @@
                         Height="30"
                         Margin="5 0 5 0"
                         Content="Открыть"
-                        Command="{Binding EditCoverSealingRing}"
+                        Command="{Binding EditSpindle}"
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+            <Label Style="{StaticResource StandardLabel}" 
+                   FontSize="{StaticResource Hi}"
+                   Content="Втулка ходовая:" 
+                   VerticalAlignment="Center"
+                   Grid.Row="1"
+                   Grid.Column="4"/>
+
+            <ComboBox Style="{StaticResource StandardComboBox}" 
+                      Grid.Column="5"
+                      Grid.Row="1"
+                      Width="300" 
+                      Margin="5 0 5 0" 
+                      IsEditable="True" 
+                      VerticalAlignment="Center" 
+                      ItemsSource="{Binding RunningSleeves}" 
+                      SelectedItem= "{Binding SelectedItem.RunningSleeve}"
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding SelectedItem.RunningSleeveId}"
+                      DisplayMemberPath="FullName"/>
+
+            <Button Style="{StaticResource StandardButton}"
+                    Grid.Column="6"
+                    Grid.Row="1"
+                    Height="30"
+                    Margin="5 0 5 0"
+                    Content="Открыть"
+                    Command="{Binding EditRunningSleeve}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
         </Grid>
 
         <Separator Style="{StaticResource HorizontalSeparator}" 

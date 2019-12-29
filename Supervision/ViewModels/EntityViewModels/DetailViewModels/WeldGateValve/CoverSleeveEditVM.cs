@@ -83,23 +83,24 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                     {
                         if (SelectedItem != null)
                         {
-                            if (db.CoverSleeves.Any(i => i.CoverSealingRingId == SelectedItem.CoverSealingRingId && i.Id != SelectedItem.Id)) //TODO: Большая дыра, связанная с возможностью привязки к двум объектам
+                            if (SelectedItem.CoverSealingRing != null)
                             {
-                                var item = db.CoverSleeves.First(i => i.CoverSealingRingId == SelectedItem.CoverSealingRingId);
-                                MessageBox.Show($"Втулка применена в крышке № {item.Number}", "Ошибка");
-                            }
-                            else
-                            {
-                                db.CoverSleeves.Update(SelectedItem);
-                                db.SaveChanges();
-                                foreach (var i in Journal)
+                                var detail = db.CoverSealingRings.Include(i => i.CoverSleeve).SingleOrDefault(i => i.Id == SelectedItem.CoverSealingRingId);
+                                if (detail?.CoverSleeve != null && detail.CoverSleeve.Id != SelectedItem.Id)
                                 {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
+                                    MessageBox.Show($"Кольцо уплотнительное собрано с {detail.CoverSleeve.Name} № {detail.CoverSleeve.Number}", "Ошибка");
+                                    return;
                                 }
-                                db.CoverSleeveJournals.UpdateRange(Journal);
-                                db.SaveChanges();
                             }
+                            db.CoverSleeves.Update(SelectedItem);
+                            db.SaveChanges();
+                            foreach (var i in Journal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.CoverSleeveJournals.UpdateRange(Journal);
+                            db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
                     }));
@@ -263,7 +264,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.CoverSleeves.Include(i => i.WeldGateValveCover).Include(i => i.CoverSealingRing).Include(i => i.MetalMaterial).SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.CoverSleeves.Include(i => i.WeldGateValveCover).SingleOrDefault(i => i.Id == id);
             Journal = db.CoverSleeveJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.CoverSleeves.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();

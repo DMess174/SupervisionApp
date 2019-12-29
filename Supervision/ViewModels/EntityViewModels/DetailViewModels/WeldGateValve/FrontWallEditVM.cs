@@ -82,23 +82,24 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                     {
                         if (SelectedItem != null)
                         {
-                            if (db.FrontWalls.Any(i => i.WeldNozzleId == SelectedItem.WeldNozzleId && i.Id != SelectedItem.Id))
+                            if (SelectedItem.WeldNozzle != null)
                             {
-                                var wall = db.FrontWalls.First(i => i.WeldNozzleId == SelectedItem.WeldNozzleId);
-                                MessageBox.Show($"Патрубок собран со стенкой № {wall.Number}", "Ошибка");
-                            }
-                            else
-                            {
-                                db.FrontWalls.Update(SelectedItem);
-                                db.SaveChanges();
-                                foreach (var i in Journal)
+                                var detail = db.WeldNozzles.Include(i => i.FrontWall).SingleOrDefault(i => i.Id == SelectedItem.WeldNozzleId);
+                                if (detail?.FrontWall != null && detail.FrontWall.Id != SelectedItem.Id)
                                 {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
+                                    MessageBox.Show($"Патрубок собран с {detail.FrontWall.Name} № {detail.FrontWall.Number}", "Ошибка");
+                                    return;
                                 }
-                                db.FrontWallJournals.UpdateRange(Journal);
-                                db.SaveChanges();
                             }
+                            db.FrontWalls.Update(SelectedItem);
+                            db.SaveChanges();
+                            foreach (var i in Journal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.FrontWallJournals.UpdateRange(Journal);
+                            db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
                     }));
@@ -262,7 +263,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.FrontWalls.Include(i => i.WeldGateValveCase).Include(i => i.WeldNozzle).Include(i => i.MetalMaterial).SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.FrontWalls.Include(i => i.WeldGateValveCase).SingleOrDefault(i => i.Id == id);
             Journal = db.FrontWallJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.FrontWalls.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
