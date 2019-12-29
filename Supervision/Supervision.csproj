@@ -354,6 +354,8 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CastingCaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\NozzleEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\NozzleVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\RunningSleeveEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\RunningSleeveVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\SlamShutterEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\SlamShutterVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterCaseVM.cs" />
@@ -367,8 +369,10 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSealingRingEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldGateValveCoverEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSleeveEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSealingRingVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldGateValveCoverVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\FrontWallEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSleeveVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\SideWallEditVM.cs" />
@@ -392,6 +396,9 @@
     <Compile Include="ViewModels\JournalNumbersViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyViewModels\ReverseShutterViewModel.cs" />
+    <Compile Include="Views\EntityViews\DetailViews\RunningSleeveView.xaml.cs">
+      <DependentUpon>RunningSleeveView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\DetailViews\CastingCaseView.xaml.cs">
       <DependentUpon>CastingCaseView.xaml</DependentUpon>
     </Compile>
@@ -403,6 +410,9 @@
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\NozzleView.xaml.cs">
       <DependentUpon>NozzleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\RunningSleeveEditView.xaml.cs">
+      <DependentUpon>RunningSleeveEditView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\ReverseShutter\SlamShutterEditView.xaml.cs">
       <DependentUpon>SlamShutterEditView.xaml</DependentUpon>
@@ -434,11 +444,17 @@
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSealingRingEditView.xaml.cs">
       <DependentUpon>CoverSealingRingEditView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\WeldGateValveCoverEditView.xaml.cs">
+      <DependentUpon>WeldGateValveCoverEditView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSleeveEditView.xaml.cs">
       <DependentUpon>CoverSleeveEditView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSealingRingView.xaml.cs">
       <DependentUpon>CoverSealingRingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\WeldGateValveCoverView.xaml.cs">
+      <DependentUpon>WeldGateValveCoverView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\FrontWallEditView.xaml.cs">
       <DependentUpon>FrontWallEditView.xaml</DependentUpon>
@@ -622,6 +638,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\DetailViews\RunningSleeveView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\DetailViews\CastingCaseView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -635,6 +655,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EntityViews\DetailViews\NozzleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\RunningSleeveEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -678,11 +702,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\WeldGateValveCoverEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSleeveEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSealingRingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\WeldGateValveCoverView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

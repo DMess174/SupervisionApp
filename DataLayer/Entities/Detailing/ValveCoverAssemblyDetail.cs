@@ -1,6 +1,4 @@
 ﻿using DataLayer.Entities.Materials;
-using DataLayer.Journals.Detailing;
-using System.Collections.Generic;
 
 namespace DataLayer.Entities.Detailing
 {

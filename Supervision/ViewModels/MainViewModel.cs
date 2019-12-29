@@ -26,6 +26,10 @@ using Supervision.Views.EntityViews.DetailViews.Valve;
 using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGateValve;
+using DataLayer.Entities.Detailing.SheetGateValveDetails;
+using DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails;
+using DataLayer.Journals.Detailing.WeldGateValveDetails;
+using DataLayer.Entities.Detailing.CompactGateValveDetails;
 
 namespace Supervision.ViewModels
 {
@@ -149,6 +153,20 @@ namespace Supervision.ViewModels
                 });
             }
         }
+        public ICommand RunningSleeveOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new RunningSleeveView();
+                    var vm = new RunningSleeveVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+
 
         #region ReverseShutter
         public ICommand CaseShutterOpen
@@ -297,6 +315,34 @@ namespace Supervision.ViewModels
                 });
             }
         }
+        public ICommand SheetGateValveCoverOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new WeldGateValveCoverView();
+                    var vm = new WeldGateValveCoverVM<SheetGateValveCover, SheetGateValveCoverTCP, SheetGateValveCoverJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CompactGateValveCoverOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new WeldGateValveCoverView();
+                    var vm = new WeldGateValveCoverVM<CompactGateValveCover, CompactGateValveCoverTCP, CompactGateValveCoverJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+
+
         #endregion
 
         #region WeldCoverDetails

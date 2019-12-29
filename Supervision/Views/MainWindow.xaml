@@ -51,13 +51,10 @@
 
             <MenuItem Header="Деталировка" >
                 <MenuItem Header="Втулка" >
-                    <MenuItem Header="Втулка бронзовая (ЗО)"
-                              Command="{Binding BronzeSleeveShutterOpen}"/>
-                    <MenuItem Header="Втулка стальная (ЗО)"
-                              Command="{Binding SteelSleeveShutterOpen}" />
-                    <MenuItem Header="Втулка крышки (ЗШЛ, ЗШК)"
-                              Command="{Binding CoverSleeveOpen}"/>
-                    <MenuItem Header="Втулка ходовая (ЗШ, ЗШЛ, ЗШК)" />
+                    <MenuItem Header="Втулка бронзовая (ЗО)" Command="{Binding BronzeSleeveShutterOpen}"/>
+                    <MenuItem Header="Втулка стальная (ЗО)" Command="{Binding SteelSleeveShutterOpen}" />
+                    <MenuItem Header="Втулка крышки (ЗШЛ, ЗШК)" Command="{Binding CoverSleeveOpen}"/>
+                    <MenuItem Header="Втулка ходовая (ЗШ, ЗШЛ, ЗШК)" Command="{Binding RunningSleeveOpen}" />
                 </MenuItem>
 
                 <MenuItem Header="Заглушка (ЗО)"
@@ -78,8 +75,8 @@
                 
                 <MenuItem Header="Крышка" >
                     <MenuItem Header="ЗШ" />
-                    <MenuItem Header="ЗШЛ" />
-                    <MenuItem Header="ЗШК" />
+                    <MenuItem Header="ЗШЛ" Command="{Binding SheetGateValveCoverOpen}" />
+                    <MenuItem Header="ЗШК" Command="{Binding CompactGateValveCoverOpen}" />
                 </MenuItem>
 
                 <MenuItem Header="Ось (ЗО)"
