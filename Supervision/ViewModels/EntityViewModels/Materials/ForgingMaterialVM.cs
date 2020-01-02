@@ -40,7 +40,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 number = value;
-                RaisePropertyChanged("Number");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is ForgingMaterial item && item.Number != null)
@@ -74,7 +74,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 batch = value;
-                RaisePropertyChanged("Batch");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is ForgingMaterial item && item.Status != null)
@@ -91,7 +91,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 material= value;
-                RaisePropertyChanged("Material");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is ForgingMaterial item && item.Material != null)
@@ -108,7 +108,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 certificate = value;
-                RaisePropertyChanged("Certificate");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is ForgingMaterial item && item.Certificate != null)
@@ -125,7 +125,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 melt = value;
-                RaisePropertyChanged("Melt");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is ForgingMaterial item && item.Melt != null)
@@ -282,7 +282,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 name = value;
-                RaisePropertyChanged("Name");
+                RaisePropertyChanged();
             }
         }
 
@@ -292,7 +292,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -302,7 +302,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 allInstances = value;
-                RaisePropertyChanged("AllInstances");
+                RaisePropertyChanged();
             }
         }
         public ICollectionView AllInstancesView
@@ -311,7 +311,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 allInstancesView = value;
-                RaisePropertyChanged("AllInstancesView");
+                RaisePropertyChanged();
             }
         }
 

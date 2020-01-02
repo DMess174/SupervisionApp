@@ -158,7 +158,7 @@ namespace Supervision.ViewModels
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -168,7 +168,7 @@ namespace Supervision.ViewModels
             set
             {
                 allInstances = value;
-                RaisePropertyChanged("AllInstances");
+                RaisePropertyChanged();
             }
         }
 
@@ -178,7 +178,7 @@ namespace Supervision.ViewModels
             set
             {
                 allInstancesView = value;
-                RaisePropertyChanged("AllInstancesView");
+                RaisePropertyChanged();
             }
         }
 
@@ -188,7 +188,7 @@ namespace Supervision.ViewModels
             set
             {
                 departments = value;
-                RaisePropertyChanged("Departments");
+                RaisePropertyChanged();
             }
         }
 
@@ -198,7 +198,7 @@ namespace Supervision.ViewModels
             set
             {
                 subdivisions = value;
-                RaisePropertyChanged("Subdivisions");
+                RaisePropertyChanged();
             }
         }
 

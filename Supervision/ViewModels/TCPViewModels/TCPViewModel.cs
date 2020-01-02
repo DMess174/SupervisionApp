@@ -89,7 +89,7 @@ namespace Supervision.ViewModels.TCPViewModels
             set
             {
                 selectedPoint = value;
-                RaisePropertyChanged("SelectedPoint");
+                RaisePropertyChanged();
             }
         }
 
@@ -99,7 +99,7 @@ namespace Supervision.ViewModels.TCPViewModels
             set
             {
                 tCPs = value;
-                RaisePropertyChanged("TCPs");
+                RaisePropertyChanged();
             }
         }
 
@@ -109,7 +109,7 @@ namespace Supervision.ViewModels.TCPViewModels
             set
             {
                 operationTypes = value;
-                RaisePropertyChanged("OperationTypes");
+                RaisePropertyChanged();
             }
         }
 
@@ -119,7 +119,7 @@ namespace Supervision.ViewModels.TCPViewModels
             set
             {
                 tCPsView = value;
-                RaisePropertyChanged("TCPsView");
+                RaisePropertyChanged();
             }
         }
 

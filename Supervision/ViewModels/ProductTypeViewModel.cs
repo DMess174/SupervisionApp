@@ -78,7 +78,7 @@ namespace Supervision.ViewModels
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -88,7 +88,7 @@ namespace Supervision.ViewModels
             set
             {
                 allInstances = value;
-                RaisePropertyChanged("AllInstances");
+                RaisePropertyChanged();
             }
         }
 
@@ -98,7 +98,7 @@ namespace Supervision.ViewModels
             set
             {
                 allInstancesView = value;
-                RaisePropertyChanged("AllInstancesView");
+                RaisePropertyChanged();
             }
         }
 

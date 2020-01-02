@@ -5,24 +5,24 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using DataLayer;
-using DataLayer.Entities.Detailing;
 using DataLayer.Entities.Detailing.WeldGateValveDetails;
-using DataLayer.Journals.Detailing;
-using DataLayer.Journals.Detailing.WeldGateValveDetails;
+using DataLayer.Journals;
+using DataLayer.TechnicalControlPlans;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
-using Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve;
-using Supervision.Views.EntityViews.DetailViews.Valve;
 using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
 {
-    public class CoverSealingRingVM : BasePropertyChanged
+    public class WeldGateValveCaseVM<TEntity, TEntityTCP, TEntityJournal> : BasePropertyChanged
+        where TEntity : WeldGateValveCase, new()
+        where TEntityTCP : BaseTCP
+        where TEntityJournal : BaseJournal<TEntity, TEntityTCP>, new()
     {
         private readonly DataContext db;
-        private IEnumerable<CoverSealingRing> allInstances;
+        private IEnumerable<TEntity> allInstances;
         private ICollectionView allInstancesView;
-        private CoverSealingRing selectedItem;
+        private TEntity selectedItem;
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
@@ -33,7 +33,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         private string number = "";
         private string drawing = "";
         private string status = "";
-        private string certificate = "";
 
         #region Filter
         public string Number 
@@ -45,7 +44,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is CoverSealingRing item && item.Number != null)
+                    if (obj is TEntity item && item.Number != null)
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
@@ -62,7 +61,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is CoverSealingRing item && item.Drawing != null)
+                    if (obj is TEntity item && item.Drawing != null)
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
@@ -79,26 +78,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is CoverSealingRing item && item.Status != null)
+                    if (obj is TEntity item && item.Status != null)
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
-                    }
-                    else return false;
-                };
-            }
-        }
-        public string Certificate
-        {
-            get => certificate;
-            set
-            {
-                certificate = value;
-                RaisePropertyChanged();
-                allInstancesView.Filter += (obj) =>
-                {
-                    if (obj is CoverSealingRing item && item.Certificate != null)
-                    {
-                        return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
                     else return false;
                 };
@@ -127,8 +109,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                     {
                         if (SelectedItem != null)
                         {
-                            var wn = new CoverSealingRingEditView();
-                            var vm = new CoverSealingRingEditVM(SelectedItem.Id, SelectedItem);
+                            var wn = new WeldGateValveCaseEditView();
+                            var vm = new WeldGateValveCaseEditVM<TEntity, TEntityTCP, TEntityJournal>(SelectedItem.Id, SelectedItem);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -147,21 +129,19 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                     {
                         if (SelectedItem != null)
                         {
-                            var item = new CoverSealingRing()
+                            var item = new TEntity()
                             {
-                                Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
+                                Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер:"),
                                 Drawing = SelectedItem.Drawing,
-                                Certificate = SelectedItem.Certificate,
                                 Status = SelectedItem.Status,
                                 Name = SelectedItem.Name,
-                                MetalMaterialId = SelectedItem.MetalMaterialId
                             };
-                            db.CoverSealingRings.Add(item);
+                            db.Set<TEntity>().Add(item);
                             db.SaveChanges();
-                            var Journal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
+                            var Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).ToList();
                             foreach (var record in Journal)
                             {
-                                var Record = new CoverSealingRingJournal()
+                                var Record = new TEntityJournal()
                                 {
                                     Date = record.Date,
                                     DetailId = item.Id,
@@ -178,10 +158,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                                     Status = record.Status,
                                     JournalNumber = record.JournalNumber
                                 };
-                                db.CoverSealingRingJournals.Add(Record);
+                                db.Set<TEntityJournal>().Add(Record);
                                 db.SaveChanges();
                             }
-
                         }
                         else MessageBox.Show("Объект не выбран", "Ошибка");
                     }));
@@ -195,14 +174,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 return addItem ?? (
                     addItem = new DelegateCommand<Window>((w) =>
                     {
-                        var item = new CoverSealingRing();
-                        db.CoverSealingRings.Add(item);
+                        var item = new TEntity();
+                        db.Set<TEntity>().Add(item);
                         db.SaveChanges();
                         SelectedItem = item;
-                        var tcpPoints = db.CoverSealingRingTCPs.ToList();
+                        var tcpPoints = db.Set<TEntityTCP>().ToList();
                         foreach (var i in tcpPoints)
                         {
-                            var journal = new CoverSealingRingJournal()
+                            var journal = new TEntityJournal()
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
@@ -214,12 +193,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                             };
                             if (journal != null)
                             {
-                                db.CoverSealingRingJournals.Add(journal);
+                                db.Set<TEntityJournal>().Add(journal);
                                 db.SaveChanges();
                             }
                         }
-                        var wn = new CoverSealingRingEditView();
-                        var vm = new CoverSealingRingEditVM(SelectedItem.Id, SelectedItem);
+                        var wn = new WeldGateValveCaseEditView();
+                        var vm = new WeldGateValveCaseEditVM<TEntity, TEntityTCP, TEntityJournal>(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
@@ -235,7 +214,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                     {
                         if (SelectedItem != null)
                         {
-                            db.CoverSealingRings.Remove(SelectedItem);
+                            db.Set<TEntity>().Remove(SelectedItem);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -254,7 +233,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             }
         }
 
-        public CoverSealingRing SelectedItem
+        public TEntity SelectedItem
         {
             get => selectedItem;
             set
@@ -264,7 +243,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             }
         }
 
-        public IEnumerable<CoverSealingRing> AllInstances
+        public IEnumerable<TEntity> AllInstances
         {
             get => allInstances;
             set
@@ -283,11 +262,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             }
         }
 
-        public CoverSealingRingVM()
+        public WeldGateValveCaseVM()
         {
             db = new DataContext();
-            db.CoverSealingRings.Include(i => i.MetalMaterial).Load();
-            AllInstances = db.CoverSealingRings.Local.ToObservableCollection();
+            db.Set<TEntity>().Load();
+            AllInstances = db.Set<TEntity>().Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             if (AllInstances.Count() != 0)
             {

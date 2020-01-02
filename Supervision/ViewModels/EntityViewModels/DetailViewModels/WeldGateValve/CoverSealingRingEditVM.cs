@@ -43,7 +43,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -53,7 +53,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 journal = value;
-                RaisePropertyChanged("Journal");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<CoverSealingRingTCP> Points
@@ -62,7 +62,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 points = value;
-                RaisePropertyChanged("Points");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<Inspector> Inspectors
@@ -71,7 +71,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 inspectors = value;
-                RaisePropertyChanged("Inspectors");
+                RaisePropertyChanged();
             }
         }
         public ICommand SaveItem
@@ -192,7 +192,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 materials = value;
-                RaisePropertyChanged("Materials");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<string> Drawings
@@ -201,7 +201,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 drawings = value;
-                RaisePropertyChanged("Drawings");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<string> JournalNumbers
@@ -210,7 +210,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 journalNumbers = value;
-                RaisePropertyChanged("JournalNumbers");
+                RaisePropertyChanged();
             }
         }
 
@@ -220,7 +220,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 selectedTCPPoint = value;
-                RaisePropertyChanged("SelectedTCPPoint");
+                RaisePropertyChanged();
             }
         }
 

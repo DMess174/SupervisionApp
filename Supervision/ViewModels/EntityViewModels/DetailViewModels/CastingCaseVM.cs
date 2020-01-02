@@ -48,7 +48,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 number = value;
-                RaisePropertyChanged("Number");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is TEntity item && item.Number != null)
@@ -65,7 +65,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 drawing = value;
-                RaisePropertyChanged("Drawing");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is TEntity item && item.Drawing != null)
@@ -82,7 +82,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 status = value;
-                RaisePropertyChanged("Status");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is TEntity item && item.Status != null)
@@ -99,7 +99,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 material= value;
-                RaisePropertyChanged("Material");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is TEntity item && item.Material != null)
@@ -116,7 +116,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 certificate = value;
-                RaisePropertyChanged("Certificate");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is TEntity item && item.Certificate != null)
@@ -133,7 +133,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 melt = value;
-                RaisePropertyChanged("Melt");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is TEntity item && item.Melt != null)
@@ -302,7 +302,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 name = value;
-                RaisePropertyChanged("Name");
+                RaisePropertyChanged();
             }
         }
 
@@ -312,7 +312,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -322,7 +322,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 allInstances = value;
-                RaisePropertyChanged("AllInstances");
+                RaisePropertyChanged();
             }
         }
         public ICollectionView AllInstancesView
@@ -331,7 +331,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 allInstancesView = value;
-                RaisePropertyChanged("AllInstancesView");
+                RaisePropertyChanged();
             }
         }
 

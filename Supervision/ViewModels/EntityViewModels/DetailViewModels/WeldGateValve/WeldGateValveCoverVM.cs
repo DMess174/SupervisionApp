@@ -41,7 +41,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 number = value;
-                RaisePropertyChanged("Number");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is TEntity item && item.Number != null)
@@ -58,7 +58,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 drawing = value;
-                RaisePropertyChanged("Drawing");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is TEntity item && item.Drawing != null)
@@ -75,7 +75,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 status = value;
-                RaisePropertyChanged("Status");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is TEntity item && item.Status != null)
@@ -229,7 +229,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 name = value;
-                RaisePropertyChanged("Name");
+                RaisePropertyChanged();
             }
         }
 
@@ -239,7 +239,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -249,7 +249,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 allInstances = value;
-                RaisePropertyChanged("AllInstances");
+                RaisePropertyChanged();
             }
         }
         public ICollectionView AllInstancesView
@@ -258,7 +258,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 allInstancesView = value;
-                RaisePropertyChanged("AllInstancesView");
+                RaisePropertyChanged();
             }
         }
 

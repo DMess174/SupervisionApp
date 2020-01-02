@@ -36,7 +36,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -46,7 +46,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 journal = value;
-                RaisePropertyChanged("Journal");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<RunningSleeveTCP> Points
@@ -55,7 +55,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 points = value;
-                RaisePropertyChanged("Points");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<Inspector> Inspectors
@@ -64,7 +64,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 inspectors = value;
-                RaisePropertyChanged("Inspectors");
+                RaisePropertyChanged();
             }
         }
 
@@ -152,7 +152,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 selectedTCPPoint = value;
-                RaisePropertyChanged("SelectedTCPPoint");
+                RaisePropertyChanged();
             }
         }
 
@@ -162,7 +162,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 materials = value;
-                RaisePropertyChanged("Materials");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<string> Drawings
@@ -171,7 +171,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 drawings = value;
-                RaisePropertyChanged("Drawings");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<string> JournalNumbers
@@ -180,7 +180,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 journalNumbers = value;
-                RaisePropertyChanged("JournalNumbers");
+                RaisePropertyChanged();
             }
         }
 

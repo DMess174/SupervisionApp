@@ -50,7 +50,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -60,7 +60,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 journal = value;
-                RaisePropertyChanged("Journal");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<TEntityTCP> Points
@@ -69,7 +69,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 points = value;
-                RaisePropertyChanged("Points");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<Inspector> Inspectors
@@ -78,7 +78,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 inspectors = value;
-                RaisePropertyChanged("Inspectors");
+                RaisePropertyChanged();
             }
         }
         public ICommand SaveItem
@@ -193,7 +193,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 return editCoverFlange ?? (
                            editCoverFlange = new DelegateCommand<Window>((w) =>
                            {
-                               if (SelectedItem.CoverFlange is CoverFlange)
+                               if (SelectedItem.CoverFlange != null)
                                {
                                    var wn = new CoverFlangeEditView();
                                    var vm = new CoverFlangeEditVM(SelectedItem.CoverFlange.Id, SelectedItem);
@@ -211,7 +211,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 return editCoverSleeve ?? (
                            editCoverSleeve = new DelegateCommand<Window>((w) =>
                            {
-                               if (SelectedItem.CoverSleeve is CoverSleeve)
+                               if (SelectedItem.CoverSleeve != null)
                                {
                                    var wn = new CoverSleeveEditView();
                                    var vm = new CoverSleeveEditVM(SelectedItem.CoverSleeve.Id, SelectedItem);
@@ -229,7 +229,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 return editSpindle ?? (
                            editSpindle = new DelegateCommand<Window>((w) =>
                            {
-                               if (SelectedItem.Spindle is Spindle)
+                               if (SelectedItem.Spindle != null)
                                {
                                    var wn = new SpindleEditView();
                                    var vm = new SpindleEditVM(SelectedItem.Spindle.Id, SelectedItem);
@@ -247,7 +247,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 return editRunningSleeve ?? (
                            editRunningSleeve = new DelegateCommand<Window>((w) =>
                            {
-                               if (SelectedItem.RunningSleeve is RunningSleeve)
+                               if (SelectedItem.RunningSleeve != null)
                                {
                                    var wn = new RunningSleeveEditView();
                                    var vm = new RunningSleeveEditVM(SelectedItem.RunningSleeve.Id, SelectedItem);
@@ -265,7 +265,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 coverFlanges = value;
-                RaisePropertyChanged("CoverFlanges");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<CoverSleeve> CoverSleeves
@@ -274,7 +274,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 coverSleeves = value;
-                RaisePropertyChanged("CoverSleeves");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<Spindle> Spindles
@@ -283,7 +283,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 spindles = value;
-                RaisePropertyChanged("Spindles");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<RunningSleeve> RunningSleeves
@@ -292,7 +292,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 runningSleeves = value;
-                RaisePropertyChanged("RunningSleeves");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<string> Drawings
@@ -301,7 +301,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 drawings = value;
-                RaisePropertyChanged("Drawings");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<string> JournalNumbers
@@ -310,7 +310,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 journalNumbers = value;
-                RaisePropertyChanged("JournalNumbers");
+                RaisePropertyChanged();
             }
         }
 
@@ -320,7 +320,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 selectedTCPPoint = value;
-                RaisePropertyChanged("SelectedTCPPoint");
+                RaisePropertyChanged();
             }
         }
 

@@ -42,7 +42,7 @@ namespace Supervision.ViewModels
             set 
             { 
                 currentPage = value;
-                RaisePropertyChanged("CurrentPage");
+                RaisePropertyChanged();
             } 
         }
 
@@ -315,34 +315,32 @@ namespace Supervision.ViewModels
                 });
             }
         }
-        public ICommand SheetGateValveCoverOpen
+        public ICommand SheetGateValveCaseOpen
         {
             get
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new WeldGateValveCoverView();
-                    var vm = new WeldGateValveCoverVM<SheetGateValveCover, SheetGateValveCoverTCP, SheetGateValveCoverJournal>();
+                    var w = new WeldGateValveCaseView();
+                    var vm = new WeldGateValveCaseVM<SheetGateValveCase, SheetGateValveCaseTCP, SheetGateValveCaseJournal>();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });
             }
         }
-        public ICommand CompactGateValveCoverOpen
+        public ICommand CompactGateValveCaseOpen
         {
             get
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new WeldGateValveCoverView();
-                    var vm = new WeldGateValveCoverVM<CompactGateValveCover, CompactGateValveCoverTCP, CompactGateValveCoverJournal>();
+                    var w = new WeldGateValveCaseView();
+                    var vm = new WeldGateValveCaseVM<CompactGateValveCase, CompactGateValveCaseTCP, CompactGateValveCaseJournal>();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });
             }
         }
-
-
         #endregion
 
         #region WeldCoverDetails
@@ -380,6 +378,32 @@ namespace Supervision.ViewModels
                 {
                     var w = new CoverSealingRingView();
                     var vm = new CoverSealingRingVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SheetGateValveCoverOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new WeldGateValveCoverView();
+                    var vm = new WeldGateValveCoverVM<SheetGateValveCover, SheetGateValveCoverTCP, SheetGateValveCoverJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CompactGateValveCoverOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new WeldGateValveCoverView();
+                    var vm = new WeldGateValveCoverVM<CompactGateValveCover, CompactGateValveCoverTCP, CompactGateValveCoverJournal>();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });

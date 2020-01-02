@@ -369,9 +369,11 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSealingRingEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldGateValveCaseEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldGateValveCoverEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSleeveEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSealingRingVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldGateValveCaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldGateValveCoverVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\FrontWallEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSleeveVM.cs" />
@@ -444,6 +446,9 @@
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSealingRingEditView.xaml.cs">
       <DependentUpon>CoverSealingRingEditView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\WeldGateValveCaseEditView.xaml.cs">
+      <DependentUpon>WeldGateValveCaseEditView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\WeldGateValveCoverEditView.xaml.cs">
       <DependentUpon>WeldGateValveCoverEditView.xaml</DependentUpon>
     </Compile>
@@ -452,6 +457,9 @@
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSealingRingView.xaml.cs">
       <DependentUpon>CoverSealingRingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\WeldGateValveCaseView.xaml.cs">
+      <DependentUpon>WeldGateValveCaseView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\WeldGateValveCoverView.xaml.cs">
       <DependentUpon>WeldGateValveCoverView.xaml</DependentUpon>
@@ -702,6 +710,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\WeldGateValveCaseEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\DetailViews\WeldGateValve\WeldGateValveCoverEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -711,6 +723,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CoverSealingRingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\WeldGateValveCaseView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -30,7 +30,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyViewModels
             set
             {
                 shutterReverseNumber = value;
-                RaisePropertyChanged("ShutterReverseNumber");
+                RaisePropertyChanged();
 
             }
         }
@@ -40,7 +40,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyViewModels
             set
             {
                 shutterReverseDrawing = value;
-                RaisePropertyChanged("ShutterReverseDrawing");
+                RaisePropertyChanged();
 
             }
         }
@@ -50,7 +50,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyViewModels
             set
             {
                 shutterReversePID = value;
-                RaisePropertyChanged("ShutterReversePID");
+                RaisePropertyChanged();
 
             }
         }
@@ -61,7 +61,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyViewModels
             set
             {
                 shutterReverseStatus = value;
-                RaisePropertyChanged("ShutterReverseStatus");
+                RaisePropertyChanged();
 
             }
         }
@@ -115,7 +115,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyViewModels
             set
             {
                 selectedShutterReverse = value;
-                RaisePropertyChanged("SelectedShutterReverse");
+                RaisePropertyChanged();
             }
         }
 
@@ -125,7 +125,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyViewModels
             set
             {
                 shutterReverses = value;
-                RaisePropertyChanged("ShutterReverses");
+                RaisePropertyChanged();
             }
         }
 
@@ -135,7 +135,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyViewModels
             set
             {
                 shutterReversesView = value;
-                RaisePropertyChanged("ShutterReversesView");
+                RaisePropertyChanged();
             }
         }
 

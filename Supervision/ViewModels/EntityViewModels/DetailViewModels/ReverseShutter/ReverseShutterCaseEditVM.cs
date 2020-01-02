@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Entities.Detailing.ReverseShutterDetails;
-using DataLayer.Journals;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
-using DataLayer.TechnicalControlPlans;
 using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.Native;
@@ -46,7 +43,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -56,7 +53,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 journal = value;
-                RaisePropertyChanged("Journal");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<ReverseShutterCaseTCP> Points
@@ -65,7 +62,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 points = value;
-                RaisePropertyChanged("Points");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<Inspector> Inspectors
@@ -74,7 +71,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 inspectors = value;
-                RaisePropertyChanged("Inspectors");
+                RaisePropertyChanged();
             }
         }
 
@@ -84,7 +81,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 selectedNozzle = value;
-                RaisePropertyChanged("SelectedNozzle");
+                RaisePropertyChanged();
             }
         }
 
@@ -94,7 +91,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 selectedNozzleFromList = value;
-                RaisePropertyChanged("SelectedNozzleFromList");
+                RaisePropertyChanged();
             }
         }
 
@@ -218,7 +215,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 selectedTCPPoint = value;
-                RaisePropertyChanged("SelectedTCPPoint");
+                RaisePropertyChanged();
             }
         }
 
@@ -253,7 +250,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 materials = value;
-                RaisePropertyChanged("Materials");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<string> Drawings
@@ -262,7 +259,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 drawings = value;
-                RaisePropertyChanged("Drawings");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<string> JournalNumbers
@@ -271,7 +268,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 journalNumbers = value;
-                RaisePropertyChanged("JournalNumbers");
+                RaisePropertyChanged();
             }
         }
 
@@ -281,7 +278,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 nozzles = value;
-                RaisePropertyChanged("Nozzles");
+                RaisePropertyChanged();
             }
         }
 

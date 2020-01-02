@@ -39,7 +39,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 number = value;
-                RaisePropertyChanged("Number");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is Nozzle item && item.Number != null)
@@ -56,7 +56,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 drawing = value;
-                RaisePropertyChanged("Drawing");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is Nozzle item && item.Drawing != null)
@@ -73,7 +73,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 status = value;
-                RaisePropertyChanged("Status");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is Nozzle item && item.Status != null)
@@ -91,7 +91,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 certificate = value;
-                RaisePropertyChanged("Certificate");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is Nozzle item && item.Certificate != null)
@@ -251,7 +251,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 name = value;
-                RaisePropertyChanged("Name");
+                RaisePropertyChanged();
             }
         }
 
@@ -261,7 +261,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -271,7 +271,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 allInstances = value;
-                RaisePropertyChanged("AllInstances");
+                RaisePropertyChanged();
             }
         }
         public ICollectionView AllInstancesView
@@ -280,7 +280,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             set
             {
                 allInstancesView = value;
-                RaisePropertyChanged("AllInstancesView");
+                RaisePropertyChanged();
             }
         }
 

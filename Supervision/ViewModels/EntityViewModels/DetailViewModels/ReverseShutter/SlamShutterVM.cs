@@ -40,7 +40,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 number = value;
-                RaisePropertyChanged("Number");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is SlamShutter item && item.Number != null)
@@ -57,7 +57,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 drawing = value;
-                RaisePropertyChanged("Drawing");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is SlamShutter item && item.Drawing != null)
@@ -74,7 +74,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 status = value;
-                RaisePropertyChanged("Status");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is SlamShutter item && item.Status != null)
@@ -91,7 +91,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 material= value;
-                RaisePropertyChanged("Material");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is SlamShutter item && item.Material != null)
@@ -108,7 +108,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 certificate = value;
-                RaisePropertyChanged("Certificate");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is SlamShutter item && item.Certificate != null)
@@ -125,7 +125,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 melt = value;
-                RaisePropertyChanged("Melt");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is SlamShutter item && item.Melt != null)
@@ -282,7 +282,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 name = value;
-                RaisePropertyChanged("Name");
+                RaisePropertyChanged();
             }
         }
 
@@ -292,7 +292,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -302,7 +302,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 allInstances = value;
-                RaisePropertyChanged("AllInstances");
+                RaisePropertyChanged();
             }
         }
         public ICollectionView AllInstancesView
@@ -311,7 +311,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             set
             {
                 allInstancesView = value;
-                RaisePropertyChanged("AllInstancesView");
+                RaisePropertyChanged();
             }
         }
 

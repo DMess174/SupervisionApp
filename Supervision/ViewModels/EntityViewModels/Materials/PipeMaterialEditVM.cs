@@ -36,7 +36,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -46,7 +46,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 journal = value;
-                RaisePropertyChanged("Journal");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<MetalMaterialTCP> Points
@@ -55,7 +55,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 points = value;
-                RaisePropertyChanged("Points");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<Inspector> Inspectors
@@ -64,7 +64,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 inspectors = value;
-                RaisePropertyChanged("Inspectors");
+                RaisePropertyChanged();
             }
         }
 
@@ -145,7 +145,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 materials = value;
-                RaisePropertyChanged("Materials");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<string> JournalNumbers
@@ -154,7 +154,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 journalNumbers = value;
-                RaisePropertyChanged("JournalNumbers");
+                RaisePropertyChanged();
             }
         }
 
@@ -164,7 +164,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 firstSize = value;
-                RaisePropertyChanged("FirstSize");
+                RaisePropertyChanged();
             }
         }
 
@@ -174,7 +174,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 secondSize = value;
-                RaisePropertyChanged("SecondSize");
+                RaisePropertyChanged();
             }
         }
 
@@ -184,7 +184,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 thirdSize = value;
-                RaisePropertyChanged("ThirdSize");
+                RaisePropertyChanged();
             }
         }
 
@@ -194,7 +194,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 selectedTCPPoint = value;
-                RaisePropertyChanged("SelectedTCPPoint");
+                RaisePropertyChanged();
             }
         }
 

@@ -88,7 +88,7 @@ namespace Supervision.ViewModels.TCPViewModels
             set
             {
                 selectedPoint = value;
-                RaisePropertyChanged("SelectedPoint");
+                RaisePropertyChanged();
             }
         }
 

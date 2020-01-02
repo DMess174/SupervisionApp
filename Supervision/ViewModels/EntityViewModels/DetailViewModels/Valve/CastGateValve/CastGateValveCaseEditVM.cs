@@ -43,7 +43,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
@@ -53,7 +53,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             set
             {
                 journal = value;
-                RaisePropertyChanged("Journal");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<CastGateValveCaseTCP> Points
@@ -62,7 +62,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             set
             {
                 points = value;
-                RaisePropertyChanged("Points");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<Inspector> Inspectors
@@ -71,7 +71,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             set
             {
                 inspectors = value;
-                RaisePropertyChanged("Inspectors");
+                RaisePropertyChanged();
             }
         }
 
@@ -81,7 +81,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             set
             {
                 selectedNozzle = value;
-                RaisePropertyChanged("SelectedNozzle");
+                RaisePropertyChanged();
             }
         }
 
@@ -91,7 +91,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             set
             {
                 selectedNozzleFromList = value;
-                RaisePropertyChanged("SelectedNozzleFromList");
+                RaisePropertyChanged();
             }
         }
 
@@ -215,7 +215,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             set
             {
                 selectedTCPPoint = value;
-                RaisePropertyChanged("SelectedTCPPoint");
+                RaisePropertyChanged();
             }
         }
 
@@ -250,7 +250,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             set
             {
                 materials = value;
-                RaisePropertyChanged("Materials");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<string> Drawings
@@ -259,7 +259,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             set
             {
                 drawings = value;
-                RaisePropertyChanged("Drawings");
+                RaisePropertyChanged();
             }
         }
         public IEnumerable<string> JournalNumbers
@@ -268,7 +268,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             set
             {
                 journalNumbers = value;
-                RaisePropertyChanged("JournalNumbers");
+                RaisePropertyChanged();
             }
         }
 
@@ -278,7 +278,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             set
             {
                 nozzles = value;
-                RaisePropertyChanged("Nozzles");
+                RaisePropertyChanged();
             }
         }
 

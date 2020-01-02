@@ -68,8 +68,8 @@
 
                 <MenuItem Header="Корпус" >
                     <MenuItem Header="ЗШ" Command="{Binding ValveCaseOpen}" />
-                    <MenuItem Header="ЗШЛ" />
-                    <MenuItem Header="ЗШК" />
+                    <MenuItem Header="ЗШЛ" Command="{Binding SheetGateValveCaseOpen}"/>
+                    <MenuItem Header="ЗШК" Command="{Binding CompactGateValveCaseOpen}"/>
                     <MenuItem Header="ЗО" Command="{Binding CaseShutterOpen}" />
                 </MenuItem>
                 
