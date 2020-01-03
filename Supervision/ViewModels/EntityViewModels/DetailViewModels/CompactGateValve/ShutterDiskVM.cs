@@ -5,20 +5,20 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using DataLayer;
-using DataLayer.Entities.Detailing.ReverseShutterDetails;
-using DataLayer.Journals.Detailing.ReverseShutterDetails;
+using DataLayer.Entities.Detailing.CompactGateValveDetails;
+using DataLayer.Journals.Detailing.CompactGateValveDetails;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
-using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
+using Supervision.Views.EntityViews.DetailViews.CompactGateValve;
 
-namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter
+namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateValve
 {
-    public class ReverseShutterCaseVM : BasePropertyChanged
+    public class ShutterDiskVM : BasePropertyChanged
     {
         private readonly DataContext db;
-        private IEnumerable<ReverseShutterCase> allInstances;
+        private IEnumerable<ShutterDisk> allInstances;
         private ICollectionView allInstancesView;
-        private ReverseShutterCase selectedItem;
+        private ShutterDisk selectedItem;
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
@@ -29,9 +29,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
         private string number = "";
         private string drawing = "";
         private string status = "";
-        private string material = "";
         private string certificate = "";
-        private string melt = "";
 
         #region Filter
         public string Number 
@@ -43,7 +41,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Number != null)
+                    if (obj is ShutterDisk item && item.Number != null)
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
@@ -60,7 +58,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Drawing != null)
+                    if (obj is ShutterDisk item && item.Drawing != null)
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
@@ -77,26 +75,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Status != null)
+                    if (obj is ShutterDisk item && item.Status != null)
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
-                    }
-                    else return false;
-                };
-            }
-        }
-        public string Material
-        {
-            get => material;
-            set
-            {
-                material= value;
-                RaisePropertyChanged();
-                allInstancesView.Filter += (obj) =>
-                {
-                    if (obj is ReverseShutterCase item && item.Material != null)
-                    {
-                        return item.Material.ToLower().Contains(Material.ToLower());
                     }
                     else return false;
                 };
@@ -111,26 +92,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Certificate != null)
+                    if (obj is ShutterDisk item && item.Certificate != null)
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
-                    }
-                    else return false;
-                };
-            }
-        }
-        public string Melt
-        {
-            get => melt;
-            set
-            {
-                melt = value;
-                RaisePropertyChanged();
-                allInstancesView.Filter += (obj) =>
-                {
-                    if (obj is ReverseShutterCase item && item.Melt != null)
-                    {
-                        return item.Melt.ToLower().Contains(Melt.ToLower());
                     }
                     else return false;
                 };
@@ -159,8 +123,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            var wn = new ReverseShutterCaseEditView();
-                            var vm = new ReverseShutterCaseEditVM(SelectedItem.Id, SelectedItem);
+                            var wn = new ShutterDiskEditView();
+                            var vm = new ShutterDiskEditVM(SelectedItem.Id, SelectedItem);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -179,22 +143,21 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            var item = new ReverseShutterCase()
+                            var item = new ShutterDisk()
                             {
                                 Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
                                 Drawing = SelectedItem.Drawing,
-                                Material = SelectedItem.Material,
-                                Melt = SelectedItem.Melt,
                                 Certificate = SelectedItem.Certificate,
                                 Status = SelectedItem.Status,
-                                Name = SelectedItem.Name
+                                Name = SelectedItem.Name,
+                                MetalMaterialId = SelectedItem.MetalMaterialId
                             };
-                            db.ReverseShutterCases.Add(item);
+                            db.ShutterDisks.Add(item);
                             db.SaveChanges();
-                            var journal = db.ReverseShutterCaseJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
-                            foreach (var record in journal)
+                            var Journal = db.ShutterDiskJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
+                            foreach (var record in Journal)
                             {
-                                var Record = new ReverseShutterCaseJournal()
+                                var Record = new ShutterDiskJournal()
                                 {
                                     Date = record.Date,
                                     DetailId = item.Id,
@@ -211,7 +174,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                                     Status = record.Status,
                                     JournalNumber = record.JournalNumber
                                 };
-                                db.ReverseShutterCaseJournals.Add(Record);
+                                db.ShutterDiskJournals.Add(Record);
                                 db.SaveChanges();
                             }
 
@@ -228,14 +191,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 return addItem ?? (
                     addItem = new DelegateCommand<Window>((w) =>
                     {
-                        var item = new ReverseShutterCase();
-                        db.ReverseShutterCases.Add(item);
+                        var item = new ShutterDisk();
+                        db.ShutterDisks.Add(item);
                         db.SaveChanges();
                         SelectedItem = item;
-                        var tcpPoints = db.ReverseShutterCaseTCPs.ToList();
+                        var tcpPoints = db.ShutterDiskTCPs.ToList();
                         foreach (var i in tcpPoints)
                         {
-                            var journal = new ReverseShutterCaseJournal()
+                            var journal = new ShutterDiskJournal()
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
@@ -247,12 +210,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             };
                             if (journal != null)
                             {
-                                db.ReverseShutterCaseJournals.Add(journal);
+                                db.ShutterDiskJournals.Add(journal);
                                 db.SaveChanges();
                             }
                         }
-                        var wn = new ReverseShutterCaseEditView();
-                        var vm = new ReverseShutterCaseEditVM(SelectedItem.Id, SelectedItem);
+                        var wn = new ShutterDiskEditView();
+                        var vm = new ShutterDiskEditVM(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
@@ -268,7 +231,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            db.ReverseShutterCases.Remove(SelectedItem);
+                            db.ShutterDisks.Remove(SelectedItem);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -287,7 +250,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ReverseShutterCase SelectedItem
+        public ShutterDisk SelectedItem
         {
             get => selectedItem;
             set
@@ -297,7 +260,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public IEnumerable<ReverseShutterCase> AllInstances
+        public IEnumerable<ShutterDisk> AllInstances
         {
             get => allInstances;
             set
@@ -316,11 +279,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ReverseShutterCaseVM()
+        public ShutterDiskVM()
         {
             db = new DataContext();
-            db.ReverseShutterCases.Load();
-            AllInstances = db.ReverseShutterCases.Local.ToObservableCollection();
+            db.ShutterDisks.Include(i => i.MetalMaterial).Load();
+            AllInstances = db.ShutterDisks.Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             if (AllInstances.Count() != 0)
             {

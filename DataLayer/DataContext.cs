@@ -197,6 +197,10 @@ namespace DataLayer
         public DbSet<CounterFlangeTCP> CounterFlangeTCPs { get; set; }
         public DbSet<CounterFlangeJournal> CounterFlangeJournals { get; set; }
 
+        public DbSet<BallValve> BallValves { get; set; }
+        public DbSet<BallValveTCP> BallValveTCPs { get; set; }
+        public DbSet<BallValveJournal> BallValveJournals{ get; set; }
+
         public DbSet<MetalMaterial> MetalMaterials { get; set; }
         public DbSet<MetalMaterialTCP> MetalMaterialTCPs { get; set; }
 

@@ -5,20 +5,20 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using DataLayer;
-using DataLayer.Entities.Detailing.ReverseShutterDetails;
-using DataLayer.Journals.Detailing.ReverseShutterDetails;
+using DataLayer.Entities.Detailing.CastGateValveDetails;
+using DataLayer.Journals.Detailing.CastGateValveDetails;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
-using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
+using Supervision.Views.EntityViews.DetailViews;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter
 {
-    public class ReverseShutterCaseVM : BasePropertyChanged
+    public class CastGateValveCoverVM : BasePropertyChanged
     {
         private readonly DataContext db;
-        private IEnumerable<ReverseShutterCase> allInstances;
+        private IEnumerable<CastGateValveCover> allInstances;
         private ICollectionView allInstancesView;
-        private ReverseShutterCase selectedItem;
+        private CastGateValveCover selectedItem;
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
@@ -43,7 +43,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Number != null)
+                    if (obj is CastGateValveCover item && item.Number != null)
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
@@ -60,7 +60,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Drawing != null)
+                    if (obj is CastGateValveCover item && item.Drawing != null)
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
@@ -77,7 +77,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Status != null)
+                    if (obj is CastGateValveCover item && item.Status != null)
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
@@ -94,7 +94,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Material != null)
+                    if (obj is CastGateValveCover item && item.Material != null)
                     {
                         return item.Material.ToLower().Contains(Material.ToLower());
                     }
@@ -111,7 +111,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Certificate != null)
+                    if (obj is CastGateValveCover item && item.Certificate != null)
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
@@ -128,7 +128,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Melt != null)
+                    if (obj is CastGateValveCover item && item.Melt != null)
                     {
                         return item.Melt.ToLower().Contains(Melt.ToLower());
                     }
@@ -159,8 +159,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            var wn = new ReverseShutterCaseEditView();
-                            var vm = new ReverseShutterCaseEditVM(SelectedItem.Id, SelectedItem);
+                            var wn = new CastingCoverEditView();
+                            var vm = new CastGateValveCoverEditVM(SelectedItem.Id, SelectedItem);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -179,7 +179,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            var item = new ReverseShutterCase()
+                            var item = new CastGateValveCover()
                             {
                                 Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
                                 Drawing = SelectedItem.Drawing,
@@ -189,12 +189,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                                 Status = SelectedItem.Status,
                                 Name = SelectedItem.Name
                             };
-                            db.ReverseShutterCases.Add(item);
+                            db.CastGateValveCovers.Add(item);
                             db.SaveChanges();
-                            var journal = db.ReverseShutterCaseJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
+                            var journal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
                             foreach (var record in journal)
                             {
-                                var Record = new ReverseShutterCaseJournal()
+                                var Record = new CastGateValveCoverJournal()
                                 {
                                     Date = record.Date,
                                     DetailId = item.Id,
@@ -211,7 +211,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                                     Status = record.Status,
                                     JournalNumber = record.JournalNumber
                                 };
-                                db.ReverseShutterCaseJournals.Add(Record);
+                                db.CastGateValveCoverJournals.Add(Record);
                                 db.SaveChanges();
                             }
 
@@ -228,14 +228,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 return addItem ?? (
                     addItem = new DelegateCommand<Window>((w) =>
                     {
-                        var item = new ReverseShutterCase();
-                        db.ReverseShutterCases.Add(item);
+                        var item = new CastGateValveCover();
+                        db.CastGateValveCovers.Add(item);
                         db.SaveChanges();
                         SelectedItem = item;
-                        var tcpPoints = db.ReverseShutterCaseTCPs.ToList();
+                        var tcpPoints = db.CastGateValveCoverTCPs.ToList();
                         foreach (var i in tcpPoints)
                         {
-                            var journal = new ReverseShutterCaseJournal()
+                            var journal = new CastGateValveCoverJournal()
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
@@ -247,12 +247,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             };
                             if (journal != null)
                             {
-                                db.ReverseShutterCaseJournals.Add(journal);
+                                db.CastGateValveCoverJournals.Add(journal);
                                 db.SaveChanges();
                             }
                         }
-                        var wn = new ReverseShutterCaseEditView();
-                        var vm = new ReverseShutterCaseEditVM(SelectedItem.Id, SelectedItem);
+                        var wn = new CastingCoverEditView();
+                        var vm = new CastGateValveCoverEditVM(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
@@ -268,7 +268,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            db.ReverseShutterCases.Remove(SelectedItem);
+                            db.CastGateValveCovers.Remove(SelectedItem);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -287,7 +287,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ReverseShutterCase SelectedItem
+        public CastGateValveCover SelectedItem
         {
             get => selectedItem;
             set
@@ -297,7 +297,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public IEnumerable<ReverseShutterCase> AllInstances
+        public IEnumerable<CastGateValveCover> AllInstances
         {
             get => allInstances;
             set
@@ -316,11 +316,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ReverseShutterCaseVM()
+        public CastGateValveCoverVM()
         {
             db = new DataContext();
-            db.ReverseShutterCases.Load();
-            AllInstances = db.ReverseShutterCases.Local.ToObservableCollection();
+            db.CastGateValveCovers.Load();
+            AllInstances = db.CastGateValveCovers.Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             if (AllInstances.Count() != 0)
             {

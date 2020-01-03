@@ -352,6 +352,12 @@
     <Compile Include="ViewModels\EntityViewModels\BaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CastingCaseEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CastingCaseVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CompactGateValve\ShutterGuideEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CompactGateValve\ShutterDiskEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CompactGateValve\ShutterGuideVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CompactGateValve\ShutterDiskVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CompactGateValve\ShutterEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CompactGateValve\ShutterVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\NozzleEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\NozzleVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\RunningSleeveEditVM.cs" />
@@ -364,7 +370,17 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\CastGateValve\CastGateValveCaseEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\CastGateValve\CastGateValveCaseVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\CastGateValve\CastGateValveCoverEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\CastGateValve\CastGateValveCoverVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\CounterFlangeEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\BallValveEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SpringEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\ShearPinEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\BallValveVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SpringVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SpindleEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\CounterFlangeVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\ShearPinVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SpindleVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeVM.cs" />
@@ -398,6 +414,30 @@
     <Compile Include="ViewModels\JournalNumbersViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyViewModels\ReverseShutterViewModel.cs" />
+    <Compile Include="Views\EntityViews\DetailViews\CastingCoverView.xaml.cs">
+      <DependentUpon>CastingCoverView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\CastingCoverEditView.xaml.cs">
+      <DependentUpon>CastingCoverEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\CompactGateValve\ShutterGuideEditView.xaml.cs">
+      <DependentUpon>ShutterGuideEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\CompactGateValve\ShutterDiskEditView.xaml.cs">
+      <DependentUpon>ShutterDiskEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\CompactGateValve\ShutterGuideView.xaml.cs">
+      <DependentUpon>ShutterGuideView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\CompactGateValve\ShutterDiskView.xaml.cs">
+      <DependentUpon>ShutterDiskView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\CompactGateValve\ShutterEditView.xaml.cs">
+      <DependentUpon>ShutterEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\CompactGateValve\ShutterView.xaml.cs">
+      <DependentUpon>ShutterView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\DetailViews\RunningSleeveView.xaml.cs">
       <DependentUpon>RunningSleeveView.xaml</DependentUpon>
     </Compile>
@@ -431,8 +471,32 @@
     <Compile Include="Views\EntityViews\DetailViews\ReverseShutter\ReverseShutterDetailEditView.xaml.cs">
       <DependentUpon>ReverseShutterDetailEditView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\CounterFangeEditView.xaml.cs">
+      <DependentUpon>CounterFangeEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\BallValveEditView.xaml.cs">
+      <DependentUpon>BallValveEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\SpringEditView.xaml.cs">
+      <DependentUpon>SpringEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\ShearPinEditView.xaml.cs">
+      <DependentUpon>ShearPinEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\BallValveView.xaml.cs">
+      <DependentUpon>BallValveView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\SpringView.xaml.cs">
+      <DependentUpon>SpringView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\DetailViews\Valve\SpindleEditView.xaml.cs">
       <DependentUpon>SpindleEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\CounterFlangeView.xaml.cs">
+      <DependentUpon>CounterFlangeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\ShearPinView.xaml.cs">
+      <DependentUpon>ShearPinView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\Valve\SpindleView.xaml.cs">
       <DependentUpon>SpindleView.xaml</DependentUpon>
@@ -646,6 +710,38 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\DetailViews\CastingCoverView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\CastingCoverEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\CompactGateValve\ShutterGuideEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\CompactGateValve\ShutterDiskEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\CompactGateValve\ShutterGuideView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\CompactGateValve\ShutterDiskView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\CompactGateValve\ShutterEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\CompactGateValve\ShutterView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\DetailViews\RunningSleeveView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -690,7 +786,39 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\CounterFangeEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\BallValveEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\SpringEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\ShearPinEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\BallValveView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\SpringView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\DetailViews\Valve\SpindleEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\CounterFlangeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\ShearPinView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

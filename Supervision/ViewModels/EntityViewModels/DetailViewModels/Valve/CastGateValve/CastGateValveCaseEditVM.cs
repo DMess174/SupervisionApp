@@ -16,7 +16,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
 {
     public class CastGateValveCaseEditVM : BasePropertyChanged
     {
-
+        private readonly BaseTable parentEntity;
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
@@ -282,8 +282,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             }
         }
 
-        public CastGateValveCaseEditVM(int id)
+        public CastGateValveCaseEditVM(int id, BaseTable entity)
         {
+            parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.CastGateValveCases
                 .Include(i => i.CastGateValve)

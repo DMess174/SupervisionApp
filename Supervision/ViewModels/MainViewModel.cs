@@ -113,7 +113,7 @@ namespace Supervision.ViewModels
         #endregion
 
 
-        public ICommand ValveCaseOpen
+        public ICommand CastValveCaseOpen
         {
             get
             {
@@ -124,6 +124,19 @@ namespace Supervision.ViewModels
                                 w.DataContext = vm;
                                 w.ShowDialog();
                             });
+            }
+        }
+        public ICommand CastValveCoverOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new CastingCoverView();
+                    var vm = new CastGateValveCoverVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
 
@@ -166,7 +179,19 @@ namespace Supervision.ViewModels
                 });
             }
         }
-
+        public ICommand CounterFlangeOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new CounterFlangeView();
+                    var vm = new CounterFlangeVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
 
         #region ReverseShutter
         public ICommand CaseShutterOpen

@@ -170,7 +170,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                             if (SelectedItem is ReverseShutterCase)
                             {
                                 var wn = new ReverseShutterCaseEditView();
-                                var vm = new ReverseShutterCaseEditVM(SelectedItem.Id);
+                                var vm = new ReverseShutterCaseEditVM(SelectedItem.Id, SelectedItem);
                                 wn.DataContext = vm;
                                 w?.Close();
                                 wn.ShowDialog();
@@ -178,7 +178,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                             if (SelectedItem is CastGateValveCase)
                             {
                                 var wn = new CastingCaseEditView();
-                                var vm = new CastingCaseEditVM<TEntity, Inspector, TEntityTCP, TEntityJournal>(SelectedItem.Id);
+                                var vm = new CastingCaseEditVM<TEntity, Inspector, TEntityTCP, TEntityJournal>(SelectedItem.Id, SelectedItem);
                                 wn.DataContext = vm;
                                 w?.Close();
                                 wn.ShowDialog();
@@ -271,7 +271,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                             }
                         }
                         var wn = new CastingCaseEditView();
-                        var vm = new CastingCaseEditVM<TEntity, Inspector, TEntityTCP, TEntityJournal>(SelectedItem.Id);
+                        var vm = new CastingCaseEditVM<TEntity, Inspector, TEntityTCP, TEntityJournal>(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();

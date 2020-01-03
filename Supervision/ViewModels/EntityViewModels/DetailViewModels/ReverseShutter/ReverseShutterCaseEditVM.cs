@@ -16,7 +16,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
 {
     public class ReverseShutterCaseEditVM : BasePropertyChanged
     {
-
+        private readonly BaseTable parentEntity;
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
@@ -173,11 +173,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        var wn = new CastingCaseView();
-                        var vm = new ReverseShutterCaseVM();
-                        wn.DataContext = vm;
-                        w?.Close();
-                        wn.ShowDialog();
+                        if (parentEntity is ReverseShutterCase)
+                        {
+                            var wn = new CastingCaseView();
+                            var vm = new ReverseShutterCaseVM();
+                            wn.DataContext = vm;
+                            w?.Close();
+                            wn.ShowDialog();
+                        }
+                        else w?.Close();
                     }));
             }
         }
@@ -282,8 +286,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ReverseShutterCaseEditVM(int id)
+        public ReverseShutterCaseEditVM(int id, BaseTable entity)
         {
+            parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.ReverseShutterCases
                 .Include(i => i.ReverseShutter)

@@ -5,20 +5,20 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using DataLayer;
-using DataLayer.Entities.Detailing.ReverseShutterDetails;
-using DataLayer.Journals.Detailing.ReverseShutterDetails;
+using DataLayer.Entities.Detailing;
+using DataLayer.Journals.Detailing;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
-using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
+using Supervision.Views.EntityViews.DetailViews.Valve;
 
-namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter
+namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 {
-    public class ReverseShutterCaseVM : BasePropertyChanged
+    public class ShearPinVM : BasePropertyChanged
     {
         private readonly DataContext db;
-        private IEnumerable<ReverseShutterCase> allInstances;
+        private IEnumerable<ShearPin> allInstances;
         private ICollectionView allInstancesView;
-        private ReverseShutterCase selectedItem;
+        private ShearPin selectedItem;
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
@@ -29,9 +29,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
         private string number = "";
         private string drawing = "";
         private string status = "";
-        private string material = "";
         private string certificate = "";
-        private string melt = "";
 
         #region Filter
         public string Number 
@@ -43,7 +41,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Number != null)
+                    if (obj is ShearPin item && item.Number != null)
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
@@ -60,7 +58,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Drawing != null)
+                    if (obj is ShearPin item && item.Drawing != null)
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
@@ -77,26 +75,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Status != null)
+                    if (obj is ShearPin item && item.Status != null)
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
-                    }
-                    else return false;
-                };
-            }
-        }
-        public string Material
-        {
-            get => material;
-            set
-            {
-                material= value;
-                RaisePropertyChanged();
-                allInstancesView.Filter += (obj) =>
-                {
-                    if (obj is ReverseShutterCase item && item.Material != null)
-                    {
-                        return item.Material.ToLower().Contains(Material.ToLower());
                     }
                     else return false;
                 };
@@ -111,26 +92,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutterCase item && item.Certificate != null)
+                    if (obj is ShearPin item && item.Certificate != null)
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
-                    }
-                    else return false;
-                };
-            }
-        }
-        public string Melt
-        {
-            get => melt;
-            set
-            {
-                melt = value;
-                RaisePropertyChanged();
-                allInstancesView.Filter += (obj) =>
-                {
-                    if (obj is ReverseShutterCase item && item.Melt != null)
-                    {
-                        return item.Melt.ToLower().Contains(Melt.ToLower());
                     }
                     else return false;
                 };
@@ -159,8 +123,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            var wn = new ReverseShutterCaseEditView();
-                            var vm = new ReverseShutterCaseEditVM(SelectedItem.Id, SelectedItem);
+                            var wn = new ShearPinEditView();
+                            var vm = new ShearPinEditVM(SelectedItem.Id, SelectedItem);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -179,22 +143,22 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            var item = new ReverseShutterCase()
+                            var item = new ShearPin()
                             {
                                 Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
                                 Drawing = SelectedItem.Drawing,
-                                Material = SelectedItem.Material,
-                                Melt = SelectedItem.Melt,
                                 Certificate = SelectedItem.Certificate,
                                 Status = SelectedItem.Status,
-                                Name = SelectedItem.Name
+                                Name = SelectedItem.Name,
+                                Material = SelectedItem.Material,
+                                Melt = SelectedItem.Melt,
                             };
-                            db.ReverseShutterCases.Add(item);
+                            db.ShearPins.Add(item);
                             db.SaveChanges();
-                            var journal = db.ReverseShutterCaseJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
-                            foreach (var record in journal)
+                            var Journal = db.ShearPinJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
+                            foreach (var record in Journal)
                             {
-                                var Record = new ReverseShutterCaseJournal()
+                                var Record = new ShearPinJournal()
                                 {
                                     Date = record.Date,
                                     DetailId = item.Id,
@@ -211,7 +175,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                                     Status = record.Status,
                                     JournalNumber = record.JournalNumber
                                 };
-                                db.ReverseShutterCaseJournals.Add(Record);
+                                db.ShearPinJournals.Add(Record);
                                 db.SaveChanges();
                             }
 
@@ -228,14 +192,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 return addItem ?? (
                     addItem = new DelegateCommand<Window>((w) =>
                     {
-                        var item = new ReverseShutterCase();
-                        db.ReverseShutterCases.Add(item);
+                        var item = new ShearPin();
+                        db.ShearPins.Add(item);
                         db.SaveChanges();
                         SelectedItem = item;
-                        var tcpPoints = db.ReverseShutterCaseTCPs.ToList();
+                        var tcpPoints = db.ShearPinTCPs.ToList();
                         foreach (var i in tcpPoints)
                         {
-                            var journal = new ReverseShutterCaseJournal()
+                            var journal = new ShearPinJournal()
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
@@ -247,12 +211,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             };
                             if (journal != null)
                             {
-                                db.ReverseShutterCaseJournals.Add(journal);
+                                db.ShearPinJournals.Add(journal);
                                 db.SaveChanges();
                             }
                         }
-                        var wn = new ReverseShutterCaseEditView();
-                        var vm = new ReverseShutterCaseEditVM(SelectedItem.Id, SelectedItem);
+                        var wn = new ShearPinEditView();
+                        var vm = new ShearPinEditVM(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
@@ -268,7 +232,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         if (SelectedItem != null)
                         {
-                            db.ReverseShutterCases.Remove(SelectedItem);
+                            db.ShearPins.Remove(SelectedItem);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -287,7 +251,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ReverseShutterCase SelectedItem
+        public ShearPin SelectedItem
         {
             get => selectedItem;
             set
@@ -297,7 +261,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public IEnumerable<ReverseShutterCase> AllInstances
+        public IEnumerable<ShearPin> AllInstances
         {
             get => allInstances;
             set
@@ -316,11 +280,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ReverseShutterCaseVM()
+        public ShearPinVM()
         {
             db = new DataContext();
-            db.ReverseShutterCases.Load();
-            AllInstances = db.ReverseShutterCases.Local.ToObservableCollection();
+            db.ShearPins.Load();
+            AllInstances = db.ShearPins.Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             if (AllInstances.Count() != 0)
             {

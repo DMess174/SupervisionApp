@@ -4,40 +4,37 @@ using System.Windows;
 using System.Windows.Input;
 using DataLayer;
 using DataLayer.Entities.Detailing;
-using DataLayer.Entities.Detailing.WeldGateValveDetails;
 using DataLayer.Entities.Materials;
-using DataLayer.Journals.Detailing.WeldGateValveDetails;
-using DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails;
+using DataLayer.Journals.Detailing;
+using DataLayer.TechnicalControlPlans.Detailing;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
 using Supervision.ViewModels.EntityViewModels.Materials;
-using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
+using Supervision.Views.EntityViews.DetailViews.Valve;
 using Supervision.Views.EntityViews.MaterialViews;
 
-namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
+namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 {
-    public class CoverSleeveEditVM: BasePropertyChanged
+    public class CounterFlangeEditVM: BasePropertyChanged
     {
 
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<MetalMaterial> materials;
-        private IEnumerable<CoverSealingRing> coverSealingRings;
         private IEnumerable<string> drawings;
-        private IEnumerable<CoverSleeveTCP> points;
+        private IEnumerable<CounterFlangeTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<CoverSleeveJournal> journal;
+        private IEnumerable<CounterFlangeJournal> journal;
         private readonly BaseTable parentEntity;
-        private CoverSleeve selectedItem;
-        private CoverSleeveTCP selectedTCPPoint;
+        private CounterFlange selectedItem;
+        private CounterFlangeTCP selectedTCPPoint;
 
         private ICommand saveItem;
         private ICommand closeWindow;
         private ICommand addOperation;
         private ICommand editMaterial;
-        private ICommand editCoverSealingRing;
 
-        public CoverSleeve SelectedItem
+        public CounterFlange SelectedItem
         {
             get => selectedItem;
             set
@@ -47,7 +44,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             }
         }
 
-        public IEnumerable<CoverSleeveJournal> Journal
+        public IEnumerable<CounterFlangeJournal> Journal
         {
             get => journal;
             set
@@ -56,7 +53,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<CoverSleeveTCP> Points
+        public IEnumerable<CounterFlangeTCP> Points
         {
             get => points;
             set
@@ -74,6 +71,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 RaisePropertyChanged();
             }
         }
+
         public ICommand SaveItem
         {
             get
@@ -83,28 +81,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                     {
                         if (SelectedItem != null)
                         {
-                            if (SelectedItem.CoverSealingRing != null)
-                            {
-                                var detail = db.CoverSealingRings.Include(i => i.CoverSleeve).Include(i => i.CastGateValveCover).SingleOrDefault(i => i.Id == SelectedItem.CoverSealingRingId);
-                                if (detail?.CoverSleeve != null && detail.CoverSleeve.Id != SelectedItem.Id)
-                                {
-                                    MessageBox.Show($"Кольцо уплотнительное собрано с {detail.CoverSleeve.Name} № {detail.CoverSleeve.Number}", "Ошибка");
-                                    return;
-                                }
-                                else if (detail?.CastGateValveCover != null)
-                                {
-                                    MessageBox.Show($"Кольцо уплотнительное собрано с {detail.CastGateValveCover.Name} № {detail.CastGateValveCover.Number}", "Ошибка");
-                                    return;
-                                }
-                            }
-                            db.CoverSleeves.Update(SelectedItem);
+                            db.CounterFlanges.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach (var i in Journal)
+                            foreach(var i in Journal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.CoverSleeveJournals.UpdateRange(Journal);
+                            db.CounterFlangeJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
@@ -118,10 +102,10 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        if (parentEntity is CoverSleeve)
+                        if (parentEntity is CounterFlange)
                         {
-                            var wn = new CoverSleeveView();
-                            var vm = new CoverSleeveVM();
+                            var wn = new CounterFlangeView();
+                            var vm = new CounterFlangeVM();
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -140,7 +124,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                         if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
                         else
                         {
-                            var item = new CoverSleeveJournal()
+                            var item = new CounterFlangeJournal()
                             {
                                 DetailDrawing = SelectedItem.Drawing,
                                 DetailNumber = SelectedItem.Number,
@@ -150,9 +134,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                                 Description = SelectedTCPPoint.Description,
                                 PointId = SelectedTCPPoint.Id,
                             };
-                            db.CoverSleeveJournals.Add(item);
+                            db.CounterFlangeJournals.Add(item);
                             db.SaveChanges();
-                            Journal = db.CoverSleeveJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            Journal = db.CounterFlangeJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
                         }
                     }));
             }
@@ -199,24 +183,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                            }));
             }
         }
-        public ICommand EditCoverSealingRing
-        {
-            get
-            {
-                return editCoverSealingRing ?? (
-                           editCoverSealingRing = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.CoverSealingRing != null)
-                               {
-                                   var wn = new CoverSealingRingEditView();
-                                   var vm = new CoverSealingRingEditVM(SelectedItem.CoverSealingRing.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
-                           }));
-            }
-        }
 
         public IEnumerable<MetalMaterial> Materials
         {
@@ -224,15 +190,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 materials = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<CoverSealingRing> CoverSealingRings
-        {
-            get => coverSealingRings;
-            set
-            {
-                coverSealingRings = value;
                 RaisePropertyChanged();
             }
         }
@@ -255,7 +212,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             }
         }
 
-        public CoverSleeveTCP SelectedTCPPoint
+        public CounterFlangeTCP SelectedTCPPoint
         {
             get => selectedTCPPoint;
             set
@@ -265,18 +222,17 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             }
         }
 
-        public CoverSleeveEditVM(int id, BaseTable entity)
+        public CounterFlangeEditVM(int id, BaseTable entity)
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.CoverSleeves.Include(i => i.WeldGateValveCover).SingleOrDefault(i => i.Id == id);
-            Journal = db.CoverSleeveJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+            SelectedItem = db.CounterFlanges.Include(i => i.BaseValve).SingleOrDefault(i => i.Id == id);
+            Journal = db.CounterFlangeJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Drawings = db.CoverSleeves.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
+            Drawings = db.CounterFlanges.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Materials = db.MetalMaterials.ToList();
-            CoverSealingRings = db.CoverSealingRings.ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<CoverSleeveTCP>().ToList();
+            Points = db.Set<CounterFlangeTCP>().ToList();
         }
     }
 }
