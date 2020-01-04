@@ -36,7 +36,6 @@ namespace BusinessLayer.Repository.Services
         public async Task<QueryResult<NozzleJournal>> CreateJournalAsync(Nozzle nozzle)
         { 
             throw new NotImplementedException();
-
         }
 
         public Task<QueryResult<Nozzle>> EditItemAsync(Nozzle edit)

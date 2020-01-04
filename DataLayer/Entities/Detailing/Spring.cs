@@ -15,7 +15,7 @@ namespace DataLayer.Entities.Detailing
 
         public int Amount { get; set; }
 
-        public int AmountUsed { get; set; } //TODO: переименовать
+        public int? AmountRemaining { get; set; }
 
         public IEnumerable<BaseValveWithSpring> BaseValveWithSprings { get; set; }
 

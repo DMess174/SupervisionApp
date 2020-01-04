@@ -160,7 +160,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                         if (SelectedItem != null)
                         {
                             var wn = new ReverseShutterCaseEditView();
-                            var vm = new CastGateValveCaseEditVM(SelectedItem.Id);
+                            var vm = new CastGateValveCaseEditVM(SelectedItem.Id, SelectedItem);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -252,7 +252,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                             }
                         }
                         var wn = new ReverseShutterCaseEditView();
-                        var vm = new CastGateValveCaseEditVM(SelectedItem.Id);
+                        var vm = new CastGateValveCaseEditVM(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();

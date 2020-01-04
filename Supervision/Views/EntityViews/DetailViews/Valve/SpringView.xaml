@@ -154,6 +154,10 @@
                                     Width="150*" 
                                     Binding ="{Binding Path = Melt}" />
 
+                <DataGridTextColumn Header="Партия" 
+                                    Width="150*" 
+                                    Binding ="{Binding Path = Batch}" />
+
                 <DataGridTextColumn Header="Статус" 
                                     Width="100*" 
                                     Binding ="{Binding Path = Status}" />

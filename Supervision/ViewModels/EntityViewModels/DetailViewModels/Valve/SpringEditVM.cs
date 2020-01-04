@@ -4,35 +4,32 @@ using System.Windows;
 using System.Windows.Input;
 using DataLayer;
 using DataLayer.Entities.Detailing;
-using DataLayer.Entities.Materials;
 using DataLayer.Journals.Detailing;
 using DataLayer.TechnicalControlPlans.Detailing;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
-using Supervision.ViewModels.EntityViewModels.Materials;
 using Supervision.Views.EntityViews.DetailViews.Valve;
-using Supervision.Views.EntityViews.MaterialViews;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 {
-    public class ShearPinEditVM: BasePropertyChanged
+    public class SpringEditVM: BasePropertyChanged
     {
-
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
         private IEnumerable<string> drawings;
-        private IEnumerable<ShearPinTCP> points;
+        private IEnumerable<SpringTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<ShearPinJournal> journal;
+        private IEnumerable<SpringJournal> castJournal;
+        private IEnumerable<SpringJournal> sheetJournal;
         private readonly BaseTable parentEntity;
-        private ShearPin selectedItem;
-        private ShearPinTCP selectedTCPPoint;
+        private Spring selectedItem;
+        private SpringTCP selectedTCPPoint;
 
         private ICommand saveItem;
         private ICommand closeWindow;
         private ICommand addOperation;
-        public ShearPin SelectedItem
+        public Spring SelectedItem
         {
             get => selectedItem;
             set
@@ -41,17 +38,27 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
             }
         }
-
-        public IEnumerable<ShearPinJournal> Journal
+        public IEnumerable<SpringJournal> CastJournal
         {
-            get => journal;
+            get => castJournal;
             set
             {
-                journal = value;
+                castJournal = value;
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<ShearPinTCP> Points
+        public IEnumerable<SpringJournal> SheetJournal
+        {
+            get => sheetJournal;
+            set
+            {
+                sheetJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public IEnumerable<SpringTCP> Points
         {
             get => points;
             set
@@ -79,14 +86,21 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         if (SelectedItem != null)
                         {
-                            db.ShearPins.Update(SelectedItem);
+                            db.Springs.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
+                            foreach(var i in CastJournal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.ShearPinJournals.UpdateRange(Journal);
+                            db.SpringJournals.UpdateRange(CastJournal);
+                            db.SaveChanges();
+                            foreach (var i in SheetJournal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.SpringJournals.UpdateRange(SheetJournal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
@@ -100,10 +114,10 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        if (parentEntity is ShearPin)
+                        if (parentEntity is Spring)
                         {
-                            var wn = new ShearPinView();
-                            var vm = new ShearPinVM();
+                            var wn = new SpringView();
+                            var vm = new SpringVM();
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -122,7 +136,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                         if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
                         else
                         {
-                            var item = new ShearPinJournal()
+                            var item = new SpringJournal()
                             {
                                 DetailDrawing = SelectedItem.Drawing,
                                 DetailNumber = SelectedItem.Number,
@@ -132,9 +146,10 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                                 Description = SelectedTCPPoint.Description,
                                 PointId = SelectedTCPPoint.Id,
                             };
-                            db.ShearPinJournals.Add(item);
+                            db.SpringJournals.Add(item);
                             db.SaveChanges();
-                            Journal = db.ShearPinJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            CastJournal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            SheetJournal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
                         }
                     }));
             }
@@ -168,7 +183,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public ShearPinTCP SelectedTCPPoint
+        public SpringTCP SelectedTCPPoint
         {
             get => selectedTCPPoint;
             set
@@ -178,17 +193,18 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public ShearPinEditVM(int id, BaseTable entity)
+        public SpringEditVM(int id, BaseTable entity)
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.ShearPins.Include(i => i.BaseValve).SingleOrDefault(i => i.Id == id);
-            Journal = db.ShearPinJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+            SelectedItem = db.Springs.Include(i => i.BaseValveWithSprings).SingleOrDefault(i => i.Id == id);
+            CastJournal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
+            SheetJournal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Drawings = db.ShearPins.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            Materials = db.ShearPins.Select(s => s.Material).Distinct().OrderBy(x => x).ToList();
+            Drawings = db.Springs.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
+            Materials = db.Springs.Select(s => s.Material).Distinct().OrderBy(x => x).ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<ShearPinTCP>().ToList();
+            Points = db.Set<SpringTCP>().ToList();
         }
     }
 }

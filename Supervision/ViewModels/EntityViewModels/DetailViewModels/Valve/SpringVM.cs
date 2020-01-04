@@ -13,12 +13,12 @@ using Supervision.Views.EntityViews.DetailViews.Valve;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 {
-    public class ShearPinVM : BasePropertyChanged
+    public class SpringVM : BasePropertyChanged
     {
         private readonly DataContext db;
-        private IEnumerable<ShearPin> allInstances;
+        private IEnumerable<Spring> allInstances;
         private ICollectionView allInstancesView;
-        private ShearPin selectedItem;
+        private Spring selectedItem;
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
@@ -41,7 +41,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ShearPin item && item.Number != null)
+                    if (obj is Spring item && item.Number != null)
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
@@ -58,7 +58,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ShearPin item && item.Drawing != null)
+                    if (obj is Spring item && item.Drawing != null)
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
@@ -75,7 +75,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ShearPin item && item.Status != null)
+                    if (obj is Spring item && item.Status != null)
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
@@ -92,7 +92,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ShearPin item && item.Certificate != null)
+                    if (obj is Spring item && item.Certificate != null)
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
@@ -123,8 +123,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         if (SelectedItem != null)
                         {
-                            var wn = new ShearPinEditView();
-                            var vm = new ShearPinEditVM(SelectedItem.Id, SelectedItem);
+                            var wn = new SpringEditView();
+                            var vm = new SpringEditVM(SelectedItem.Id, SelectedItem);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -143,7 +143,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         if (SelectedItem != null)
                         {
-                            var item = new ShearPin()
+                            var item = new Spring()
                             {
                                 Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
                                 Drawing = SelectedItem.Drawing,
@@ -152,13 +152,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                                 Name = SelectedItem.Name,
                                 Material = SelectedItem.Material,
                                 Melt = SelectedItem.Melt,
+                                Batch = SelectedItem.Batch,
                             };
-                            db.ShearPins.Add(item);
+                            db.Springs.Add(item);
                             db.SaveChanges();
-                            var Journal = db.ShearPinJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
+                            var Journal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
                             foreach (var record in Journal)
                             {
-                                var Record = new ShearPinJournal()
+                                var Record = new SpringJournal()
                                 {
                                     Date = record.Date,
                                     DetailId = item.Id,
@@ -173,9 +174,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                                     RemarkClosed = record.RemarkClosed,
                                     Comment = record.Comment,
                                     Status = record.Status,
-                                    JournalNumber = record.JournalNumber
+                                    JournalNumber = record.JournalNumber,
                                 };
-                                db.ShearPinJournals.Add(Record);
+                                db.SpringJournals.Add(Record);
                                 db.SaveChanges();
                             }
 
@@ -192,14 +193,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 return addItem ?? (
                     addItem = new DelegateCommand<Window>((w) =>
                     {
-                        var item = new ShearPin();
-                        db.ShearPins.Add(item);
+                        var item = new Spring();
+                        db.Springs.Add(item);
                         db.SaveChanges();
                         SelectedItem = item;
-                        var tcpPoints = db.ShearPinTCPs.ToList();
+                        var tcpPoints = db.SpringTCPs.ToList();
                         foreach (var i in tcpPoints)
                         {
-                            var journal = new ShearPinJournal()
+                            var journal = new SpringJournal()
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
@@ -207,16 +208,16 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                                 DetailNumber = SelectedItem.Number,
                                 DetailDrawing = SelectedItem.Drawing,
                                 Point = i.Point,
-                                Description = i.Description
+                                Description = i.Description,
                             };
                             if (journal != null)
                             {
-                                db.ShearPinJournals.Add(journal);
+                                db.SpringJournals.Add(journal);
                                 db.SaveChanges();
                             }
                         }
-                        var wn = new ShearPinEditView();
-                        var vm = new ShearPinEditVM(SelectedItem.Id, SelectedItem);
+                        var wn = new SpringEditView();
+                        var vm = new SpringEditVM(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
@@ -232,7 +233,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         if (SelectedItem != null)
                         {
-                            db.ShearPins.Remove(SelectedItem);
+                            db.Springs.Remove(SelectedItem);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -251,7 +252,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public ShearPin SelectedItem
+        public Spring SelectedItem
         {
             get => selectedItem;
             set
@@ -261,7 +262,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public IEnumerable<ShearPin> AllInstances
+        public IEnumerable<Spring> AllInstances
         {
             get => allInstances;
             set
@@ -280,11 +281,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public ShearPinVM()
+        public SpringVM()
         {
             db = new DataContext();
-            db.ShearPins.Load();
-            AllInstances = db.ShearPins.Local.ToObservableCollection();
+            db.Springs.Load();
+            AllInstances = db.Springs.Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             if (AllInstances.Count() != 0)
             {

@@ -9,6 +9,7 @@
       Title="ПТК">
     <Page.Resources>
         <CollectionViewSource x:Key="OperationTypes" Source="{Binding OperationTypes}"/>
+        <CollectionViewSource x:Key="ProductTypes" Source="{Binding ProductTypes}"/>
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -39,6 +40,22 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+
+                <DataGridTemplateColumn 
+                    Header="Наименование продукции"
+                    Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox  VerticalContentAlignment="Center"
+                                       IsEditable="True"
+                                       ItemsSource="{Binding Path=DataContext.ProductTypes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                                       SelectedValuePath="Id"
+                                       SelectedValue="{Binding Path=ProductTypeId, UpdateSourceTrigger=PropertyChanged}"
+                                       DisplayMemberPath="Name">
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Пункт" 
                                     Width="70" 

@@ -81,6 +81,7 @@
 
                 <MenuItem Header="Ось (ЗО)"
                           Command="{Binding ShaftShutterOpen}"/>
+                <MenuItem Header="Пружина" Command="{Binding SpringOpen}"/>
                 <MenuItem Header="Седло" />
                 <MenuItem Header="Фланец ответный" Command="{Binding CounterFlangeOpen}"/>
                 <MenuItem Header="Шибер" />
@@ -107,8 +108,10 @@
             <MenuItem Header="ПТК">
                 <MenuItem Header="Антикоррозионное покрытие (АКП)"  />
                 <MenuItem Header="Задвижка компактная с расширяющимся затвором (ЗШК)" />
-                <MenuItem Header="Задвижка шиберная (ЗШ)" />
-                <MenuItem Header="Задвижка шиберная листовая (ЗШЛ)" />
+                <MenuItem Header="Задвижка шиберная (ЗШ)">
+                    <MenuItem Header=" Пружина" Command="{Binding SpringTCPOpen}"/>
+                </MenuItem>
+                    <MenuItem Header="Задвижка шиберная листовая (ЗШЛ)" />
                 
                 <MenuItem Header="Затвор обратный (ЗО)" >
                     <MenuItem Header="Втулка бронзовая" Command="{Binding BronzeSleeveShutterTCPOpen}" />

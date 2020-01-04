@@ -11,5 +11,8 @@ namespace DataLayer.TechnicalControlPlans
         public int? OperationNameId { get; set; }
         [ForeignKey("OperationNameId")]
         public OperationType OperationType { get; set; }
+
+        public int? ProductTypeId { get; set; }
+        public ProductType ProductType { get; set; }
     }
 }

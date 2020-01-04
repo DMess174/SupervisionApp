@@ -15,7 +15,7 @@ namespace Supervision.ViewModels.TCPViewModels
         where TEntityTCP : BaseTCP, new()
     {
         private readonly DataContext db;
-
+        private IEnumerable<ProductType> productTypes;
         private IEnumerable<OperationType> operationTypes;
         private IEnumerable<TEntityTCP> tCPs;
         private ICollectionView tCPsView;
@@ -113,6 +113,16 @@ namespace Supervision.ViewModels.TCPViewModels
             }
         }
 
+        public IEnumerable<ProductType> ProductTypes
+        {
+            get => productTypes;
+            set
+            {
+                productTypes = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ICollectionView TCPsView
         {
             get => tCPsView;
@@ -130,6 +140,7 @@ namespace Supervision.ViewModels.TCPViewModels
             TCPs = db.Set<TEntityTCP>().Local.ToObservableCollection();
             TCPsView = CollectionViewSource.GetDefaultView(TCPs);
             OperationTypes = db.OperationTypes.ToList();
+            ProductTypes = db.ProductTypes.ToList();
         }
     }
 }

@@ -8,8 +8,8 @@
 
         public string Series { get; set; }
 
-        public int? Amount { get; set; }
+        public int Amount { get; set; }
 
-        public int? AmountUsed { get; set; } = 0;
+        public int? AmountRemaining { get; set; }
     }
 }

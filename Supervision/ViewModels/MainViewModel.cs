@@ -192,6 +192,19 @@ namespace Supervision.ViewModels
                 });
             }
         }
+        public ICommand SpringOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new SpringView();
+                    var vm = new SpringVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
 
         #region ReverseShutter
         public ICommand CaseShutterOpen
@@ -466,6 +479,17 @@ namespace Supervision.ViewModels
         }
 
         #region TCP
+        public ICommand SpringTCPOpen
+        {
+            get
+            {
+                Page tcp = new TCPView
+                {
+                    DataContext = new TCPViewModel<SpringTCP>()
+                };
+                return new DelegateCommand(() => SlowOpacity(tcp));
+            }
+        }
         public ICommand ShutterReverseTCPOpen
         {
             get

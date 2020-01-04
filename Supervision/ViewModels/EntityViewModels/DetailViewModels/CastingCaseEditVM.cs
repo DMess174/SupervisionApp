@@ -19,7 +19,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         where TEntityTCP : BaseTCP
         where TEntityJournal : BaseJournal<TEntity, TEntityTCP>, new()
     {
-
+        private readonly BaseTable parentEntity;
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
@@ -177,11 +177,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        var wn = new CastingCaseView();
-                        var vm = new CastingCaseVM<TEntity, TEntityTCP, TEntityJournal>();
-                        wn.DataContext = vm;
-                        w?.Close();
-                        wn.ShowDialog();
+                        if (parentEntity is TEntity)
+                        {
+                            var wn = new CastingCaseView();
+                            var vm = new CastingCaseVM<TEntity, TEntityTCP, TEntityJournal>();
+                            wn.DataContext = vm;
+                            w?.Close();
+                            wn.ShowDialog();
+                        }
+                        else w?.Close();
                     }));
             }
         }
@@ -286,8 +290,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public CastingCaseEditVM(int id)
+        public CastingCaseEditVM(int id, BaseTable entity)
         {
+            parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.Set<TEntity>().Find(id);
             db.Nozzles.Load();
