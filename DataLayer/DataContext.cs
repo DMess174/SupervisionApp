@@ -23,6 +23,10 @@ using DataLayer.TechnicalControlPlans.Detailing.CompactGateValveDetails;
 using DataLayer.Entities.Materials;
 using DataLayer.TechnicalControlPlans.Materials;
 using DataLayer.Journals.Materials;
+using DataLayer.Entities.Materials.AnticorrosiveCoating;
+using DataLayer.TechnicalControlPlans.Materials.AnticorrosiveCoating;
+using DataLayer.Journals.Materials.AnticorrosiveCoating;
+using DataLayer.TechnicalControlPlans;
 
 namespace DataLayer
 {
@@ -35,6 +39,7 @@ namespace DataLayer
         public DbSet<PID> PIDs { get; set; }
         public DbSet<Inspector> Inspectors { get; set; }
         public DbSet<JournalNumber> JournalNumbers { get; set; }
+        public DbSet<BaseJournal<BaseTable, BaseTCP>> BaseJournals { get; set; }
 
         public DbSet<BronzeSleeveShutter> BronzeSleeveShutters { get; set; }
         public DbSet<BronzeSleeveShutterTCP> BronzeSleeveShutterTCPs { get; set; }
@@ -215,6 +220,25 @@ namespace DataLayer
 
         public DbSet<PipeMaterial> PipeMaterials { get; set; }
         public DbSet<PipeMaterialJournal> PipeMaterialJournals { get; set; }
+
+        public DbSet<BaseAnticorrosiveCoating> BaseAnticorrosiveCoatings { get; set; }
+        public DbSet<AnticorrosiveCoatingTCP> AnticorrosiveCoatingTCPs { get; set; }
+
+        public DbSet<AbovegroundCoating> AbovegroundCoatings { get; set; }
+        public DbSet<AbovegroundCoatingJournal> AbovegroundCoatingJournals { get; set; }
+
+        public DbSet<AbrasiveMaterial> AbrasiveMaterials { get; set; }
+        public DbSet<AbrasiveMaterialJournal> AbrasiveMaterialJournals { get; set; }
+
+        public DbSet<Undercoat> Undercoats { get; set; }
+        public DbSet<UndercoatJournal> UndercoatJournals { get; set; }
+
+        public DbSet<UndergroundCoating> UndergroundCoatings { get; set; }
+        public DbSet<UndergroundCoatingJournal> UndergroundCoatingJournals { get; set; }
+
+        public DbSet<WeldingMaterial> WeldingMaterials { get; set; }
+        public DbSet<WeldingMaterialTCP> WeldingMaterialTCPs { get; set; }
+        public DbSet<WeldingMaterialJournal> WeldingMaterialJournals { get; set; }
 
         //TODO: Не забываем добавлять все таблицы
 

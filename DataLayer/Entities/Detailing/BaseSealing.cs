@@ -1,4 +1,6 @@
-﻿namespace DataLayer.Entities.Detailing
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DataLayer.Entities.Detailing
 {
     public class BaseSealing : BaseEntity
     {
@@ -11,5 +13,8 @@
         public int Amount { get; set; }
 
         public int? AmountRemaining { get; set; }
+
+        [NotMapped]
+        public new string FullName => string.Format($"{Certificate} - {Batch} - {Status}/{Name}");
     }
 }

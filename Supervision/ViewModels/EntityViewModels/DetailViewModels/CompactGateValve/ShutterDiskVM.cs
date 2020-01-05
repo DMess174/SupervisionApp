@@ -285,7 +285,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateVa
             db.ShutterDisks.Include(i => i.MetalMaterial).Load();
             AllInstances = db.ShutterDisks.Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
-            if (AllInstances.Count() != 0)
+            if (AllInstances.Any())
             {
                 Name = AllInstances.First().Name;
             }

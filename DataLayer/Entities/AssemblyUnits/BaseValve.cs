@@ -21,5 +21,6 @@ namespace DataLayer.Entities.AssemblyUnits
         public IEnumerable<BaseValveWithScrewNut> BaseValveWithScrewNuts { get; set; }
         public IEnumerable<BaseValveWithScrewStud> BaseValveWithScrewStuds { get; set; }
         public IEnumerable<BaseValveWithSpring> BaseValveWithSprings { get; set; }
+        public IEnumerable<BaseValveWithCoating> BaseValveWithCoatings { get; set; }
     }
 }

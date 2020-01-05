@@ -17,14 +17,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 {
     public class SpindleEditVM: BasePropertyChanged
     {
-
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<MetalMaterial> materials;
         private IEnumerable<string> drawings;
         private IEnumerable<SpindleTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<SpindleJournal> journal;
+        private IEnumerable<SpindleJournal> castJournal;
+        private IEnumerable<SpindleJournal> sheetJournal;
+        private IEnumerable<SpindleJournal> compactJournal;
         private readonly BaseTable parentEntity;
         private Spindle selectedItem;
         private SpindleTCP selectedTCPPoint;
@@ -44,12 +45,30 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public IEnumerable<SpindleJournal> Journal
+        public IEnumerable<SpindleJournal> CastJournal
         {
-            get => journal;
+            get => castJournal;
             set
             {
-                journal = value;
+                castJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<SpindleJournal> SheetJournal
+        {
+            get => sheetJournal;
+            set
+            {
+                sheetJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<SpindleJournal> CompactJournal
+        {
+            get => compactJournal;
+            set
+            {
+                compactJournal = value;
                 RaisePropertyChanged();
             }
         }
@@ -83,12 +102,26 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                         {
                             db.Spindles.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
+                            foreach(var i in CastJournal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.SpindleJournals.UpdateRange(Journal);
+                            db.SpindleJournals.UpdateRange(CastJournal);
+                            db.SaveChanges();
+                            foreach (var i in SheetJournal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.SpindleJournals.UpdateRange(SheetJournal);
+                            db.SaveChanges();
+                            foreach (var i in CompactJournal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.SpindleJournals.UpdateRange(CompactJournal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
@@ -136,7 +169,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                             };
                             db.SpindleJournals.Add(item);
                             db.SaveChanges();
-                            Journal = db.SpindleJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            CastJournal = db.SpindleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
+                            SheetJournal = db.SpindleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
+                            CompactJournal = db.SpindleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШК").OrderBy(x => x.PointId).ToList();
                         }
                     }));
             }
@@ -227,7 +262,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.Spindles.Include(i => i.BaseValveCover).SingleOrDefault(i => i.Id == id);
-            Journal = db.SpindleJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+            CastJournal = db.SpindleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
+            SheetJournal = db.SpindleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
+            CompactJournal = db.SpindleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШК").OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.Spindles.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Materials = db.MetalMaterials.ToList();

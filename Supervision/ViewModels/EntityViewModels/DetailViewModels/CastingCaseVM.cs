@@ -341,7 +341,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             db.Set<TEntity>().Load();
             AllInstances = db.Set<TEntity>().Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
-            if (AllInstances.Count() != 0)
+            if (AllInstances.Any())
             {
                 Name = AllInstances.First().Name;
             }

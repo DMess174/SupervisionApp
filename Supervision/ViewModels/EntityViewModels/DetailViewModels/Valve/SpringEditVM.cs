@@ -86,6 +86,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         if (SelectedItem != null)
                         {
+                            if (SelectedItem.AmountRemaining == null && SelectedItem.Amount > 0) SelectedItem.AmountRemaining = SelectedItem.Amount;
+                            else SelectedItem.AmountRemaining = SelectedItem.Amount - SelectedItem.BaseValveWithSprings?.Select(i => i.SpringAmount).Sum();
+
                             db.Springs.Update(SelectedItem);
                             db.SaveChanges();
                             foreach(var i in CastJournal)
@@ -148,8 +151,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                             };
                             db.SpringJournals.Add(item);
                             db.SaveChanges();
-                            CastJournal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                            SheetJournal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            CastJournal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
+                            SheetJournal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
                         }
                     }));
             }
@@ -204,7 +207,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             Drawings = db.Springs.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Materials = db.Springs.Select(s => s.Material).Distinct().OrderBy(x => x).ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<SpringTCP>().ToList();
+            Points = db.Set<SpringTCP>().Include(i => i.ProductType).ToList();
         }
     }
 }

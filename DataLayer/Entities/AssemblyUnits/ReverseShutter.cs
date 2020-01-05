@@ -23,6 +23,7 @@ namespace DataLayer.Entities.AssemblyUnits
         public IEnumerable<BronzeSleeveShutter> BronzeSleeveShutters { get; set; }
         public IEnumerable<SteelSleeveShutter> SteelSleeveShutters { get; set; }
         public IEnumerable<StubShutter> StubShutters { get; set; }
+        public IEnumerable<ReverseShutterWithCoating> ReverseShutterWithCoatings { get; set; }
 
         public IEnumerable<ReverseShutterJournal> ReverseShutterJournals { get; set; }
     }

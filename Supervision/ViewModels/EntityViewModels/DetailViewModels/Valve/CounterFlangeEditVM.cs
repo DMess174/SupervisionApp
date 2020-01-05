@@ -17,7 +17,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 {
     public class CounterFlangeEditVM: BasePropertyChanged
     {
-
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<MetalMaterial> materials;
