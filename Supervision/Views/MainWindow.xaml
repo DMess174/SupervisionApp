@@ -18,20 +18,14 @@
         </Grid.RowDefinitions>
         
         <Menu Style="{StaticResource StandardMenu}" 
-              MinHeight="25" 
-              MaxHeight="25" 
+              Height="25"
               VerticalAlignment="Top" 
               Grid.Row="0" >
             
             <MenuItem Header="Файл">
-                <MenuItem Header="New Project" />
-                <MenuItem Header="Open Project" >
-                    <MenuItem Header="WinForms" />
-                    <MenuItem Header="WPF" />
-                </MenuItem>
+                <MenuItem Header="Главное меню" Command="{Binding MainMenuOpen}"/>
                 <Separator />
-                <MenuItem Header="Выход" 
-                          Command="{Binding AppExit}"/>
+                <MenuItem Header="Выход" Command="{Binding AppExit}"/>
             </MenuItem>
 
             <MenuItem Header="Заказ" >
@@ -42,10 +36,14 @@
             <MenuItem Header="Изделие" >
                 <MenuItem Header="Тип"
                           Command="{Binding ProductTypeOpen}"/>
-                <MenuItem Header="Задвижка шиберная (ЗШ)" Command="{Binding CastGateValveOpen}" />
-                <MenuItem Header="Задвижка Шиберная Листовая (ЗШЛ)" Command="{Binding SheetGateValveOpen}" />
-                <MenuItem Header="Задвижка Компактная с расширяющимся затвором (ЗШК)" Command="{Binding CompactGateValveOpen}" />
-                <MenuItem Header="Затвор Обратный (ЗО)" Command="{Binding ReverseShutterOpen}" />
+                <MenuItem Header="Задвижка шиберная (ЗШ)" 
+                          Command="{Binding CastGateValveOpen}" />
+                <MenuItem Header="Задвижка шиберная листовая (ЗШЛ)" 
+                          Command="{Binding SheetGateValveOpen}" />
+                <MenuItem Header="Задвижка компактная с расширяющимся затвором (ЗШК)" 
+                          Command="{Binding CompactGateValveOpen}" />
+                <MenuItem Header="Затвор обратный (ЗО)" 
+                          Command="{Binding ReverseShutterOpen}" />
             </MenuItem>
 
             <MenuItem Header="Деталировка" >
@@ -61,6 +59,13 @@
                 <MenuItem Header="Заглушка (ЗО)" Command="{Binding StubShutterOpen}"/>
 
                 <MenuItem Header="Захлопка (ЗО)" Command="{Binding SlamShutterOpen}"/>
+
+                <MenuItem Header="Затвор (ЗШК)" Command="{Binding ShutterOpen}">
+                    <MenuItem Header="Диск затвора" Command="{Binding ShutterDiskOpen}"/>
+                    <MenuItem Header="Направляющая затвора" Command="{Binding ShutterGuideOpen}"/>
+                </MenuItem>
+
+                <MenuItem Header="Кран шаровой (ЗШ, ЗШЛ, ЗШК)" Command="{Binding BallValveOpen}"/>
 
                 <MenuItem Header="Катушка (ЗШ, ЗО)" Command="{Binding NozzleOpen}"/>
 
@@ -84,7 +89,9 @@
                 </MenuItem>
 
                 <MenuItem Header="Крышка" >
-                    <MenuItem Header="ЗШ" Command="{Binding CastValveCoverOpen}" />
+                    <MenuItem Header="ЗШ" Command="{Binding CastValveCoverOpen}">
+                        <MenuItem Header="Кольцо уплотнительное" Command="{Binding CoverSealingRingOpen}"/>
+                    </MenuItem>
                     <MenuItem Header="ЗШЛ" Command="{Binding SheetGateValveCoverOpen}">
                         <MenuItem Header="Втулка" Command="{Binding CoverSleeveOpen}"/>
                         <MenuItem Header="Кольцо уплотнительное" Command="{Binding CoverSealingRingOpen}"/>
@@ -107,11 +114,24 @@
             </MenuItem>
 
             <MenuItem Header="Материалы">
+                <MenuItem Header="АКП">
+                    <MenuItem Header="Дробь" Command="{Binding AbrasiveMaterialOpen}"/>
+                    <MenuItem Header="Надземное">
+                        <MenuItem Header="Грунт" Command="{Binding UndercoatOpen}"/>
+                        <MenuItem Header="Эмаль" Command="{Binding AbovegroundCoatingOpen}"/>
+                    </MenuItem>
+                    <MenuItem Header="Подземное" Command="{Binding UndergroundCoatingOpen}"/>
+                </MenuItem>
                 <MenuItem Header="Металл">
                     <MenuItem Header="Лист" Command="{Binding SheetMaterialOpen}"/>
                     <MenuItem Header="Поковка" Command="{Binding ForgingMaterialOpen}"/>
                     <MenuItem Header="Прокат" Command="{Binding RolledMaterialOpen}"/>
                     <MenuItem Header="Труба" Command="{Binding PipeMaterialOpen}"/>
+                </MenuItem>
+                <MenuItem Header="Сварочные материалы" Command="{Binding WeldingMaterialOpen}"/>
+                <MenuItem Header="Уплотнительные материалы">
+                    <MenuItem Header="Торцевое уплотнение (седло)" Command="{Binding FrontalSaddleSealingOpen}"/>
+                    <MenuItem Header="Уплотнения (графлекс, РТИ)" Command="{Binding AssemblyUnitSealingOpen}"/>
                 </MenuItem>
             </MenuItem>
 
@@ -396,6 +416,59 @@
                                 Command="{Binding ShearPinOpen}"
                                 Content="Штифт срезной" />
                     </TreeViewItem>
+                </TreeViewItem>
+                <TreeViewItem Header="Материалы"
+                              Style="{StaticResource TreeViewItemStandard}"
+                              Margin="2">
+                    <TreeViewItem Header="АКП"
+                                  Style="{StaticResource TreeViewItemStandard}"
+                                  Margin="2">
+                        <TreeViewItem Header="Надземное"
+                                  Style="{StaticResource TreeViewItemStandard}"
+                                  Margin="2">
+                            <Button Style="{StaticResource TreeViewButton}" 
+                                Command="{Binding UnderCoatOpen}"
+                                Content="Грунт" />
+                            <Button Style="{StaticResource TreeViewButton}" 
+                                Command="{Binding AbovegroundCoatingOpen}"
+                                Content="Эмаль" />
+                        </TreeViewItem>
+                        <Button Style="{StaticResource TreeViewButton}" 
+                                Command="{Binding UndergroungCoatingOpen}"
+                                Content="Подземное" />
+                        <Button Style="{StaticResource TreeViewButton}" 
+                                Command="{Binding AbrasiveMaterialOpen}"
+                                Content="Дробь" />
+                    </TreeViewItem>
+                    <TreeViewItem Header="Металл"
+                                  Style="{StaticResource TreeViewItemStandard}"
+                                  Margin="2">
+                        <Button Style="{StaticResource TreeViewButton}" 
+                                Content="Лист" 
+                                Command="{Binding SheetMaterialOpen}"/>
+                        <Button Style="{StaticResource TreeViewButton}" 
+                                Content="Поковка" 
+                                Command="{Binding ForgingMaterialOpen}"/>
+                        <Button Style="{StaticResource TreeViewButton}" 
+                                Content="Прокат" 
+                                Command="{Binding RolledMaterialOpen}"/>
+                        <Button Style="{StaticResource TreeViewButton}" 
+                                Content="Труба" 
+                                Command="{Binding PipeMaterialOpen}"/>
+                    </TreeViewItem>
+                    <TreeViewItem Header="Уплотнительные материалы"
+                                  Style="{StaticResource TreeViewItemStandard}"
+                                  Margin="2">
+                        <Button Style="{StaticResource TreeViewButton}" 
+                                Content="Торцевое уплотнение (седло)" 
+                                Command="{Binding FrontalSaddleSealingOpen}"/>
+                        <Button Style="{StaticResource TreeViewButton}" 
+                                Content="Уплотнения (графлекс, РТИ)" 
+                                Command="{Binding AssemblyUnitSealingOpen}"/>
+                    </TreeViewItem>
+                    <Button Style="{StaticResource TreeViewButton}" 
+                                Content="Сварочные материалы" 
+                                Command="{Binding WeldingMaterialOpen}"/>
                 </TreeViewItem>
             </TreeView>
             <GridSplitter 

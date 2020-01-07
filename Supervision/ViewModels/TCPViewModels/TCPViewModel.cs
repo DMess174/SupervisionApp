@@ -55,9 +55,7 @@ namespace Supervision.ViewModels.TCPViewModels
                                     db.SaveChanges();
                                 }
                                 else
-                                {
-                                    MessageBox.Show("Объект не выбран!", "Ошибка");
-                                }
+                                    MessageBox.Show("Записи отсутствуют!", "Ошибка");
                             })
                     );
             }

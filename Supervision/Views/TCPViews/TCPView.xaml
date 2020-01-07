@@ -1,20 +1,18 @@
-﻿<Page x:Class="Supervision.Views.TCPViews.TCPView"
+﻿<Window x:Class="Supervision.Views.TCPViews.TCPView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d"
-      Style="{StaticResource StandardPage}"
-      d:DesignHeight="450" d:DesignWidth="800"
+      Style="{StaticResource StandardWindow}"
+      d:DesignHeight="500" d:DesignWidth="800"
+      WindowStartupLocation="CenterScreen"
       Title="ПТК">
-    <Page.Resources>
+    <Window.Resources>
         <CollectionViewSource x:Key="OperationTypes" Source="{Binding OperationTypes}"/>
         <CollectionViewSource x:Key="ProductTypes" Source="{Binding ProductTypes}"/>
-    </Page.Resources>
+    </Window.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto" />
@@ -27,6 +25,7 @@
                   ItemsSource="{Binding TCPsView, UpdateSourceTrigger=PropertyChanged}"
                   SelectedItem="{Binding SelectedPoint}"
                   Height="auto" 
+                  IsReadOnly="False"
                   HorizontalContentAlignment="Stretch">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" 
@@ -48,7 +47,7 @@
                         <DataTemplate>
                             <ComboBox  VerticalContentAlignment="Center"
                                        IsEditable="True"
-                                       ItemsSource="{Binding Path=DataContext.ProductTypes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                                       ItemsSource="{Binding Path=DataContext.ProductTypes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                                        SelectedValuePath="Id"
                                        SelectedValue="{Binding Path=ProductTypeId, UpdateSourceTrigger=PropertyChanged}"
                                        DisplayMemberPath="Name">
@@ -76,7 +75,7 @@
                         <DataTemplate>
                             <ComboBox  VerticalContentAlignment="Center"
                                        IsEditable="True"
-                                       ItemsSource="{Binding Path=DataContext.OperationTypes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                                       ItemsSource="{Binding Path=DataContext.OperationTypes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                                        SelectedValuePath="Id"
                                        SelectedValue="{Binding Path=OperationNameId, UpdateSourceTrigger=PropertyChanged}"
                                        DisplayMemberPath="Name">
@@ -131,12 +130,7 @@
                     CommandParameter="{Binding ElementName=TCPs, Path=SelectedItem}"
                     Width="100"
                     HorizontalAlignment="Right"/>
-            
         </Grid>
-
-
-
-
     </Grid>
 
-</Page>
+</Window>

@@ -453,16 +453,26 @@ namespace Supervision.ViewModels
         {
             get
             {
-                Page inspector = new InspectorView();
-                return new DelegateCommand(() => SlowOpacity(inspector));
+                return new DelegateCommand(() =>
+                {
+                    var w = new InspectorView();
+                    var vm = new InspectorVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
         public ICommand ProductTypeOpen
         {
             get
             {
-                Page product = new ProductTypeView();
-                return new DelegateCommand(() => SlowOpacity(product));
+                return new DelegateCommand(() =>
+                {
+                    var w = new ProductTypeView();
+                    var vm = new ProductTypeViewModel();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
 
@@ -470,11 +480,13 @@ namespace Supervision.ViewModels
         {
             get
             {
-                Page journal = new JournalNumbersView
+                return new DelegateCommand(() =>
                 {
-                    DataContext = new JournalNumbersViewModel()
-                };
-                return new DelegateCommand(() => SlowOpacity(journal));
+                    var w = new JournalNumbersView();
+                    var vm = new JournalNumbersViewModel();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
 
@@ -483,110 +495,130 @@ namespace Supervision.ViewModels
         {
             get
             {
-                Page tcp = new TCPView
+                return new DelegateCommand(() =>
                 {
-                    DataContext = new TCPViewModel<SpringTCP>()
-                };
-                return new DelegateCommand(() => SlowOpacity(tcp));
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<SpringTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
         public ICommand ShutterReverseTCPOpen
         {
             get
             {
-                Page tcp = new TCPView
+                return new DelegateCommand(() =>
                 {
-                    DataContext = new TCPViewModel<ReverseShutterTCP>()
-                };
-                return new DelegateCommand(() => SlowOpacity(tcp));
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<ReverseShutterTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
         public ICommand BronzeSleeveShutterTCPOpen
         {
             get
             {
-                Page tcp = new TCPView
+                return new DelegateCommand(() =>
                 {
-                    DataContext = new TCPViewModel<BronzeSleeveShutterTCP>()
-                };
-                return new DelegateCommand(() => SlowOpacity(tcp));
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<BronzeSleeveShutterTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
         public ICommand ShaftShutterTCPOpen
         {
             get
             {
-                Page tcp = new TCPView
+                return new DelegateCommand(() =>
                 {
-                    DataContext = new TCPViewModel<ShaftShutterTCP>()
-                };
-                return new DelegateCommand(() => SlowOpacity(tcp));
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<ShaftShutterTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
         public ICommand SlamShutterTCPOpen
         {
             get
             {
-                Page tcp = new TCPView
+                return new DelegateCommand(() =>
                 {
-                    DataContext = new TCPViewModel<SlamShutterTCP>()
-                };
-                return new DelegateCommand(() => SlowOpacity(tcp));
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<SlamShutterTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
         public ICommand StubShutterTCPOpen
         {
             get
             {
-                Page tcp = new TCPView
+                return new DelegateCommand(() =>
                 {
-                    DataContext = new TCPViewModel<StubShutterTCP>()
-                };
-                return new DelegateCommand(() => SlowOpacity(tcp));
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<StubShutterTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
         public ICommand NozzleTCPOpen
         {
             get
             {
-                Page tcp = new TCPView
+                return new DelegateCommand(() =>
                 {
-                    DataContext = new TCPViewModel<NozzleTCP>()
-                };
-                return new DelegateCommand(() => SlowOpacity(tcp));
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<NozzleTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
         public ICommand SteelSleeveShutterTCPOpen
         {
             get
             {
-                Page tcp = new TCPView
+                return new DelegateCommand(() =>
                 {
-                    DataContext = new TCPViewModel<SteelSleeveShutterTCP>()
-                };
-                return new DelegateCommand(() => SlowOpacity(tcp));
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<SteelSleeveShutterTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
         public ICommand CaseShutterTCPOpen
         {
             get
             {
-                Page tcp = new TCPView
+                return new DelegateCommand(() =>
                 {
-                    DataContext = new TCPViewModel<ReverseShutterCaseTCP>()
-                };
-                return new DelegateCommand(() => SlowOpacity(tcp));
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<ReverseShutterCaseTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
         public ICommand MetalMaterialTCPOpen
         {
             get
             {
-                Page tcp = new TCPView
+                return new DelegateCommand(() =>
                 {
-                    DataContext = new TCPViewModel<MetalMaterialTCP>()
-                };
-                return new DelegateCommand(() => SlowOpacity(tcp));
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<MetalMaterialTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
         #endregion
@@ -617,7 +649,7 @@ namespace Supervision.ViewModels
                     FrameOpacity = i;
                     Thread.Sleep(50);
                 }
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace DataLayer.Entities.Materials.AnticorrosiveCoating
         public string Batch { get; set; }
         public string Amount { get; set; }
         public string Status { get; set; }
+        public string Comment { get; set; }
 
         [NotMapped] 
         public string FullName => string.Format($"{Batch}/{Name}");

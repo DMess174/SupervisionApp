@@ -429,6 +429,7 @@
     <Compile Include="ViewModels\EntityViewModels\Materials\SheetMaterialEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\PipeMaterialVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\SheetMaterialVM.cs" />
+    <Compile Include="ViewModels\SpecificationVM.cs" />
     <Compile Include="ViewModels\ProductTypeViewModel.cs" />
     <Compile Include="ViewModels\JournalNumbersViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
@@ -645,6 +646,9 @@
     </Compile>
     <Compile Include="Views\EntityViews\MaterialViews\SheetMaterialView.xaml.cs">
       <DependentUpon>SheetMaterialView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\SpecificationView.xaml.cs">
+      <DependentUpon>SpecificationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\ProductTypeView.xaml.cs">
       <DependentUpon>ProductTypeView.xaml</DependentUpon>
@@ -1052,6 +1056,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EntityViews\MaterialViews\SheetMaterialView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\SpecificationView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,17 +1,15 @@
-﻿using Supervision.ViewModels;
-using System.Windows.Controls;
+﻿using System.Windows;
 
 namespace Supervision.Views.EntityViews
 {
     /// <summary>
     /// Логика взаимодействия для Inspector.xaml
     /// </summary>
-    public partial class InspectorView : Page
+    public partial class InspectorView : Window
     {
         public InspectorView()
         {
             InitializeComponent();
-            DataContext = new InspectorVM();
         }
     }
 }

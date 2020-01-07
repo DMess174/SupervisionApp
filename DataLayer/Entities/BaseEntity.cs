@@ -14,6 +14,8 @@ namespace DataLayer.Entities
 
         public string Status { get; set; }
 
+        public string Comment { get; set; }
+
         [NotMapped]
         public string FullName => string.Format($"{Number} - {Status}");
     }

@@ -12,7 +12,7 @@ namespace Supervision.ViewModels
 {
     class ProductTypeViewModel : BasePropertyChanged
     {
-        private readonly DataContext db;
+        private DataContext db;
         private IEnumerable<ProductType> allInstances;
         private ICollectionView allInstancesView;
         private ProductType selectedItem;
@@ -48,7 +48,13 @@ namespace Supervision.ViewModels
                                 {
                                     db.ProductTypes.UpdateRange(AllInstances);
                                     db.SaveChanges();
+                                    db.Dispose();
+                                    db = new DataContext();
+                                    db.ProductTypes.OrderBy(i => i.Name).Load();
+                                    AllInstances = db.ProductTypes.Local.ToObservableCollection();
+                                    AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
                                 }
+                                else MessageBox.Show("Записи отсутствуют!", "Ошибка");
                             })
                     );
             }

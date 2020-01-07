@@ -20,6 +20,7 @@ namespace DataLayer.Entities.Materials
         public string FirstSize { get; set; }
         public string SecondSize { get; set; }
         public string ThirdSize { get; set; }
+        public string Comment { get; set; }
 
         [NotMapped] 
         public string FullName => string.Format($"{Number}/{Material}/{Melt}/{Name}");

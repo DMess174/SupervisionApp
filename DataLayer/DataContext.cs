@@ -39,7 +39,6 @@ namespace DataLayer
         public DbSet<PID> PIDs { get; set; }
         public DbSet<Inspector> Inspectors { get; set; }
         public DbSet<JournalNumber> JournalNumbers { get; set; }
-        public DbSet<BaseJournal<BaseTable, BaseTCP>> BaseJournals { get; set; }
 
         public DbSet<BronzeSleeveShutter> BronzeSleeveShutters { get; set; }
         public DbSet<BronzeSleeveShutterTCP> BronzeSleeveShutterTCPs { get; set; }

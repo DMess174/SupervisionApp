@@ -1,11 +1,11 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
 
 namespace Supervision.Views.TCPViews
 {
     /// <summary>
     /// Логика взаимодействия для Inspector.xaml
     /// </summary>
-    public partial class TCPView: Page
+    public partial class TCPView: Window
     {
         public TCPView()
         {

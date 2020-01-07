@@ -16,6 +16,7 @@ namespace DataLayer
         public string DriveType { get; set; }
         public string TechDocumentation { get; set; }
         public DateTime? ShippingDate { get; set; }
+        public string Comment { get; set; }
 
         public int? SpecificationId { get; set; }
         public Specification Specification { get; set; }
@@ -23,7 +24,6 @@ namespace DataLayer
         public int? ProductTypeId { get; set; }
         public ProductType ProductType { get; set; }
 
-        public IEnumerable<ReverseShutter> ReverseShutters { get; set; }
-        public IEnumerable<BaseValve> BaseValves { get; set; }
+        public IEnumerable<BaseAssemblyUnit> BaseAssemblyUnits { get; set; }
     }
 }
