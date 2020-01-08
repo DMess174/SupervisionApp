@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Generic;
 using DevExpress.Mvvm;
 using DataLayer;
 using System.ComponentModel;
@@ -11,12 +10,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Supervision.ViewModels
 {
-    class ProductTypeViewModel : BasePropertyChanged
+    class CustomerVM : BasePropertyChanged
     {
         private DataContext db;
-        private IEnumerable<ProductType> allInstances;
+        private IEnumerable<Customer> allInstances;
         private ICollectionView allInstancesView;
-        private ProductType selectedItem;
+        private Customer selectedItem;
         private ICommand addItem;
         private ICommand saveItem;
         private ICommand removeItem;
@@ -29,8 +28,8 @@ namespace Supervision.ViewModels
                     (
                     addItem = new DelegateCommand(() =>
                             {
-                                ProductType item = new ProductType();
-                                db.ProductTypes.Add(item);
+                                Customer item = new Customer();
+                                db.Customers.Add(item);
                                 db.SaveChanges();
                                 SelectedItem = item;
                             })
@@ -47,13 +46,8 @@ namespace Supervision.ViewModels
                             {
                                 if (AllInstances != null)
                                 {
-                                    db.ProductTypes.UpdateRange(AllInstances);
+                                    db.Customers.UpdateRange(AllInstances);
                                     db.SaveChanges();
-                                    db.Dispose();
-                                    db = new DataContext();
-                                    db.ProductTypes.OrderBy(i => i.Name).Load();
-                                    AllInstances = db.ProductTypes.Local.ToObservableCollection();
-                                    AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
                                 }
                                 else MessageBox.Show("Записи отсутствуют!", "Ошибка");
                             })
@@ -70,7 +64,7 @@ namespace Supervision.ViewModels
                             {
                                 if (SelectedItem != null)
                                 {
-                                    db.ProductTypes.Remove(SelectedItem);
+                                    db.Customers.Remove(SelectedItem);
                                     db.SaveChanges();
                                 }
                                 else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -79,7 +73,7 @@ namespace Supervision.ViewModels
             }
         }
 
-        public ProductType SelectedItem
+        public Customer SelectedItem
         {
             get => selectedItem;
             set
@@ -89,7 +83,7 @@ namespace Supervision.ViewModels
             }
         }
 
-        public IEnumerable<ProductType> AllInstances
+        public IEnumerable<Customer> AllInstances
         {
             get => allInstances;
             set
@@ -109,11 +103,11 @@ namespace Supervision.ViewModels
             }
         }
 
-        public ProductTypeViewModel()
+        public CustomerVM()
         {
             db = new DataContext();
-            db.ProductTypes.OrderBy(i => i.Name).Load();
-            AllInstances = db.ProductTypes.Local.ToObservableCollection();
+            db.Customers.OrderBy(i => i.Name).Load();
+            AllInstances = db.Customers.Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
         }
     }

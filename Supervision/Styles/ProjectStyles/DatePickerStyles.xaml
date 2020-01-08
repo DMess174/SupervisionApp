@@ -5,6 +5,7 @@
     </ResourceDictionary.MergedDictionaries>
     <Style x:Key="StandardDatepicker" TargetType="{x:Type DatePicker}" >
         <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="BorderBrush" Value="{StaticResource LightBackground}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="Background" Value="{StaticResource LightBackground}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>

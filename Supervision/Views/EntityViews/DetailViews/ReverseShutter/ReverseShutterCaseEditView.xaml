@@ -281,10 +281,8 @@
                                 <DataTemplate>
                                     <TextBlock>
                                         <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0} - {1} x {2} - {3}">
+                                            <MultiBinding StringFormat="{}{0} - {1}">
                                                 <Binding Path="Number"/>
-                                                <Binding Path="MetalMaterial.FirstSize"/>
-                                                <Binding Path="ThicknessJoin"/>
                                                 <Binding Path="Status"/>
                                             </MultiBinding>
                                         </TextBlock.Text>

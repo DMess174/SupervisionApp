@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       Style="{StaticResource StandardWindow}"
-      d:DesignHeight="500" d:DesignWidth="800"
+      d:DesignHeight="700" d:DesignWidth="800"
       WindowStartupLocation="CenterScreen" 
       Title="Спецификация">
     <Window.Resources>
@@ -24,7 +24,6 @@
         </Grid.RowDefinitions>
 
         <DataGrid Style="{StaticResource StandardDataGrid}"
-                MinRowHeight="10"
                 IsReadOnly="False"
                 Height="auto" 
                 HorizontalContentAlignment="Stretch"
@@ -124,66 +123,67 @@
 
         <DataGrid Style="{StaticResource StandardDataGrid}"
                   Grid.Row="5"
-                  MinRowHeight="10"
-                  IsReadOnly="False"
+                  MinRowHeight="5"
+                  RowHeight="20"
+                  IsReadOnly="True"
                   Height="auto" 
                   HorizontalContentAlignment="Stretch"
                   ItemsSource="{Binding SelectedItem.PIDs}"
                   SelectedItem="{Binding SelectedPID}">
+            <DataGrid.InputBindings>
+                <MouseBinding
+                    MouseAction="LeftDoubleClick"
+                    Command="{Binding EditPID}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID"
-                                    Width="35"
-                                    Binding="{Binding Path = Id}" 
-                                    TextBlock.TextAlignment="Center">
-                </DataGridTextColumn>
-
                 <DataGridTextColumn Header="Номер" 
-                                    Width="150" 
+                                    Width="120" 
                                     Binding="{Binding Path = Number}" 
                                     TextBlock.TextAlignment="Center" >
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Программа&#x0a;  поставки"
-                                    Width="85" 
-                                    Binding="{Binding Path= Program}"/>
+                <DataGridTextColumn Header="Наименование&#x0a;      изделия"
+                                    Width="5*" 
+                                    Binding="{Binding Path= ProductType.Name}"/>
 
-                <DataGridTemplateColumn 
-                    Header="Заказчик"
-                    Width="auto">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ComboBox  VerticalContentAlignment="Center"
-                                       IsEditable="True"
-                                       ItemsSource="{Binding Path=DataContext.Customers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                       SelectedValuePath="Id"
-                                       SelectedValue="{Binding Path=CustomerId, UpdateSourceTrigger=PropertyChanged}"
-                                       DisplayMemberPath="ShortName">
-                            </ComboBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Обозначение"
+                                    Width="10*" 
+                                    Binding="{Binding Path= Designation}"/>
 
-                <DataGridTextColumn Header="Объект"
-                                    Width="150*" 
-                                    Binding="{Binding Path= Facility}"/>
-
-                <DataGridTemplateColumn Header="Грузополучатель" 
-                                    Width="400*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding Path = Consignee, UpdateSourceTrigger=PropertyChanged}"
-                                     TextWrapping="Wrap"
-                                     AcceptsReturn="True"
-                                     AcceptsTab="True"
-                                     VerticalAlignment="Center"
-                                     MinLines="3"
-                                     MaxLines="50"
-                                     SpellCheck.IsEnabled="True"
-                                     Language="ru-ru"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Количество"
+                                    Width="100" 
+                                    Binding="{Binding Path= Amount}"/>
             </DataGrid.Columns>
         </DataGrid>
+
+        <Separator Style="{StaticResource HorizontalSeparator}"
+                   Grid.Row="6"/>
+
+        <Grid Grid.Row="7"  Height="50" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                <Button Style="{StaticResource StandardButton}"
+                    Content="Добавить" Margin="10" Command="{Binding AddPID}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                    Width="100"/>
+
+                <Button
+                    Style="{StaticResource StandardButton}"
+                    Width="100"
+                    Content="Изменить" Margin="10" 
+                    Command="{Binding EditPID}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+            </StackPanel>
+
+            <Button Grid.Column="1" Style="{StaticResource StandardButton}" 
+                    Content="Удалить" Margin="10" Command="{Binding RemovePID}"
+                    CommandParameter="{Binding ElementName=SelectedItem.PIDs, Path=SelectedPID}"
+                    Width="100"
+                    HorizontalAlignment="Right"/>
+        </Grid>
     </Grid>
 </Window>

@@ -29,13 +29,12 @@
             </MenuItem>
 
             <MenuItem Header="Заказ" >
-                <MenuItem Header="Спецификации" />
-                <MenuItem Header="PID" />
+                <MenuItem Header="Вид изделия" Command="{Binding ProductTypeOpen}"/>
+                <MenuItem Header="Заказчик" Command="{Binding CustomerOpen}"/>
+                <MenuItem Header="Спецификация" Command="{Binding SpecificationOpen}" />
             </MenuItem>
 
             <MenuItem Header="Изделие" >
-                <MenuItem Header="Тип"
-                          Command="{Binding ProductTypeOpen}"/>
                 <MenuItem Header="Задвижка шиберная (ЗШ)" 
                           Command="{Binding CastGateValveOpen}" />
                 <MenuItem Header="Задвижка шиберная листовая (ЗШЛ)" 
@@ -139,13 +138,15 @@
                       Command="{Binding InspectorOpen}"/>
 
             <MenuItem Header="ПТК">
-                <MenuItem Header="Антикоррозионное покрытие (АКП)"  />
+                <MenuItem Header="PID" Command="{Binding PIDTCPOpen}" />
+                <MenuItem Header="Антикоррозионное покрытие (нанесение АКП)" Command="{Binding CoatingTCPOpen}" />
                 <MenuItem Header="Задвижка компактная с расширяющимся затвором (ЗШК)" />
                 <MenuItem Header="Задвижка шиберная (ЗШ)">
                     <MenuItem Header=" Пружина" Command="{Binding SpringTCPOpen}"/>
                 </MenuItem>
                     <MenuItem Header="Задвижка шиберная листовая (ЗШЛ)" />
-                
+
+                <MenuItem Header="Затвор обратный (ЗО)" Command="{Binding ReverseShutterTCPOpen}" />
                 <MenuItem Header="Затвор обратный (ЗО)" >
                     <MenuItem Header="Втулка бронзовая" Command="{Binding BronzeSleeveShutterTCPOpen}" />
                     <MenuItem Header="Втулка стальная" Command="{Binding SteelSleeveShutterTCPOpen}" />
@@ -158,15 +159,12 @@
                 </MenuItem>
 
                 <MenuItem Header="Материалы">
-                    <MenuItem Header="АКП">
-                        <MenuItem Header="Грунт"/>
-                        <MenuItem Header="Эмаль"/>
-                    </MenuItem>
+                    <MenuItem Header="АКП" Command="{Binding AnticorrosiveMaterialTCPOpen}"/>
                     <MenuItem Header="Металл" Command="{Binding MetalMaterialTCPOpen}"/>
-                    <MenuItem Header="Сварочные материалы"/>
+                    <MenuItem Header="Сварочные материалы" Command="{Binding WeldingMaterialTCPOpen}"/>
                 </MenuItem>
 
-                <MenuItem Header="Шибер" />
+                <MenuItem Header="Шибер" Command="{Binding GateTCPOpen}" />
             </MenuItem>
 
             <MenuItem Header="Журналы" Command="{Binding JournalNumbersOpen}"/>
@@ -177,9 +175,9 @@
         
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="96*" MinWidth="200"/>
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="426*" MinWidth="500"/>
+                <ColumnDefinition Width="9*" MinWidth="200"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="30*" MinWidth="500"/>
             </Grid.ColumnDefinitions>
             <TreeView Background="{StaticResource LightBackground}"
                       Grid.Column="0"

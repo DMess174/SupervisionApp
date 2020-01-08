@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Entities.Materials;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
 

@@ -353,7 +353,7 @@ namespace DataLayer.Migrations
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -378,7 +378,7 @@ namespace DataLayer.Migrations
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -403,7 +403,7 @@ namespace DataLayer.Migrations
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -428,7 +428,7 @@ namespace DataLayer.Migrations
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -453,7 +453,7 @@ namespace DataLayer.Migrations
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -478,7 +478,7 @@ namespace DataLayer.Migrations
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -507,13 +507,13 @@ namespace DataLayer.Migrations
                         column: x => x.CastingCaseId,
                         principalTable: "BaseCastingCase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Nozzles_MetalMaterials_MetalMaterialId",
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -538,7 +538,7 @@ namespace DataLayer.Migrations
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -563,7 +563,7 @@ namespace DataLayer.Migrations
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -588,7 +588,7 @@ namespace DataLayer.Migrations
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -612,13 +612,13 @@ namespace DataLayer.Migrations
                         column: x => x.OperationNameId,
                         principalTable: "OperationTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BaseTCP_ProductTypes_ProductTypeId",
                         column: x => x.ProductTypeId,
                         principalTable: "ProductTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -644,13 +644,13 @@ namespace DataLayer.Migrations
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShutterDisks_Shutters_ShutterId",
                         column: x => x.ShutterId,
                         principalTable: "Shutters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -676,13 +676,13 @@ namespace DataLayer.Migrations
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShutterGuides_Shutters_ShutterId",
                         column: x => x.ShutterId,
                         principalTable: "Shutters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -692,7 +692,8 @@ namespace DataLayer.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Number = table.Column<string>(nullable: true),
-                    Amount = table.Column<string>(nullable: true),
+                    Amount = table.Column<int>(nullable: true),
+                    AmountShipped = table.Column<int>(nullable: true),
                     DN = table.Column<string>(nullable: true),
                     PN = table.Column<string>(nullable: true),
                     ConnectionType = table.Column<string>(nullable: true),
@@ -701,6 +702,7 @@ namespace DataLayer.Migrations
                     DriveType = table.Column<string>(nullable: true),
                     TechDocumentation = table.Column<string>(nullable: true),
                     ShippingDate = table.Column<DateTime>(nullable: true),
+                    Designation = table.Column<string>(nullable: true),
                     Comment = table.Column<string>(nullable: true),
                     SpecificationId = table.Column<int>(nullable: true),
                     ProductTypeId = table.Column<int>(nullable: true)
@@ -713,13 +715,13 @@ namespace DataLayer.Migrations
                         column: x => x.ProductTypeId,
                         principalTable: "ProductTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PIDs_Specifications_SpecificationId",
                         column: x => x.SpecificationId,
                         principalTable: "Specifications",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -748,13 +750,13 @@ namespace DataLayer.Migrations
                         column: x => x.CaseBottomId,
                         principalTable: "CaseBottoms",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_WeldGateValveCase_CaseFlanges_CaseFlangeId",
                         column: x => x.CaseFlangeId,
                         principalTable: "CaseFlanges",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -780,13 +782,13 @@ namespace DataLayer.Migrations
                         column: x => x.CoverSealingRingId,
                         principalTable: "CoverSealingRings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CoverSleeves_MetalMaterials_MetalMaterialId",
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -818,19 +820,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "BaseAnticorrosiveCoatings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AbovegroundCoatingJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AbovegroundCoatingJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -862,19 +864,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "BaseAnticorrosiveCoatings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AbrasiveMaterialJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AbrasiveMaterialJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -906,19 +908,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "AssemblyUnitSeals",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AssemblyUnitSealingJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AssemblyUnitSealingJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -950,19 +952,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "CaseBottoms",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CaseBottomJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CaseBottomJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -994,19 +996,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "CaseFlanges",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CaseFlangeJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CaseFlangeJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1038,19 +1040,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "BaseCastingCase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CastGateValveCaseJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CastGateValveCaseJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1082,19 +1084,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "CoverFlanges",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CoverFlangeJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CoverFlangeJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1126,19 +1128,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "CoverSealingRings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CoverSealingRingJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CoverSealingRingJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1170,19 +1172,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ForgingMaterialJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ForgingMaterialJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1214,19 +1216,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "FrontalSaddleSeals",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FrontalSaddleSealingJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FrontalSaddleSealingJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1258,19 +1260,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "Gates",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_GateJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_GateJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1302,19 +1304,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "Nozzles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_NozzleJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_NozzleJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1346,19 +1348,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PipeMaterialJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PipeMaterialJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1390,19 +1392,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "BaseCastingCase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ReverseShutterCaseJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ReverseShutterCaseJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1434,19 +1436,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RolledMaterialJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RolledMaterialJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1478,19 +1480,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "RunningSleeves",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RunningSleeveJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RunningSleeveJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1522,19 +1524,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "ScrewNuts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ScrewNutJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ScrewNutJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1566,19 +1568,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "ScrewStuds",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ScrewStudJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ScrewStudJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1610,19 +1612,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "ShaftShutters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShaftShutterJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShaftShutterJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1654,19 +1656,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SheetMaterialJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SheetMaterialJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1698,19 +1700,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "Shutters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShutterJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShutterJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1742,19 +1744,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "SlamShutters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SlamShutterJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SlamShutterJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1786,19 +1788,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "Spindles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SpindleJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SpindleJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1830,19 +1832,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "Springs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SpringJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SpringJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1874,19 +1876,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "BaseAnticorrosiveCoatings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UndercoatJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UndercoatJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1918,19 +1920,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "BaseAnticorrosiveCoatings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UndergroundCoatingJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UndergroundCoatingJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1962,19 +1964,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "WeldingMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_WeldingMaterialJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_WeldingMaterialJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2006,19 +2008,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "WeldNozzles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_WeldNozzleJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_WeldNozzleJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2050,19 +2052,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "ShutterDisks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShutterDiskJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShutterDiskJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2094,65 +2096,63 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "ShutterGuides",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShutterGuideJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShutterGuideJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReverseShutters",
+                name: "PIDJournals",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
-                    Number = table.Column<string>(nullable: true),
-                    Drawing = table.Column<string>(nullable: true),
-                    Certificate = table.Column<string>(nullable: true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
                     Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
                     Comment = table.Column<string>(nullable: true),
-                    PIDId = table.Column<int>(nullable: true),
-                    ReverseShutterCaseId = table.Column<int>(nullable: true),
-                    ShaftShutterId = table.Column<int>(nullable: true),
-                    SlamShutterId = table.Column<int>(nullable: true)
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ReverseShutters", x => x.Id);
+                    table.PrimaryKey("PK_PIDJournals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReverseShutters_PIDs_PIDId",
-                        column: x => x.PIDId,
+                        name: "FK_PIDJournals_PIDs_DetailId",
+                        column: x => x.DetailId,
                         principalTable: "PIDs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ReverseShutters_BaseCastingCase_ReverseShutterCaseId",
-                        column: x => x.ReverseShutterCaseId,
-                        principalTable: "BaseCastingCase",
+                        name: "FK_PIDJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ReverseShutters_ShaftShutters_ShaftShutterId",
-                        column: x => x.ShaftShutterId,
-                        principalTable: "ShaftShutters",
+                        name: "FK_PIDJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_ReverseShutters_SlamShutters_SlamShutterId",
-                        column: x => x.SlamShutterId,
-                        principalTable: "SlamShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2184,19 +2184,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "WeldGateValveCase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CompactGateValveCaseJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CompactGateValveCaseJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2223,19 +2223,19 @@ namespace DataLayer.Migrations
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FrontWalls_WeldGateValveCase_WeldGateValveCaseId",
                         column: x => x.WeldGateValveCaseId,
                         principalTable: "WeldGateValveCase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FrontWalls_WeldNozzles_WeldNozzleId",
                         column: x => x.WeldNozzleId,
                         principalTable: "WeldNozzles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2267,19 +2267,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "WeldGateValveCase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SheetGateValveCaseJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SheetGateValveCaseJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2305,13 +2305,13 @@ namespace DataLayer.Migrations
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SideWalls_WeldGateValveCase_WeldGateValveCaseId",
                         column: x => x.WeldGateValveCaseId,
                         principalTable: "WeldGateValveCase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2343,31 +2343,31 @@ namespace DataLayer.Migrations
                         column: x => x.RunningSleeveId,
                         principalTable: "RunningSleeves",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BaseValveCover_Spindles_SpindleId",
                         column: x => x.SpindleId,
                         principalTable: "Spindles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BaseValveCover_CoverSealingRings_CoverSealingRingId",
                         column: x => x.CoverSealingRingId,
                         principalTable: "CoverSealingRings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BaseValveCover_CoverFlanges_CoverFlangeId",
                         column: x => x.CoverFlangeId,
                         principalTable: "CoverFlanges",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BaseValveCover_CoverSleeves_CoverSleeveId",
                         column: x => x.CoverSleeveId,
                         principalTable: "CoverSleeves",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2399,187 +2399,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "CoverSleeves",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CoverSleeveJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CoverSleeveJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BronzeSleeveShutters",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
-                    Number = table.Column<string>(nullable: true),
-                    Drawing = table.Column<string>(nullable: true),
-                    Certificate = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    Comment = table.Column<string>(nullable: true),
-                    MetalMaterialId = table.Column<int>(nullable: true),
-                    Material = table.Column<string>(nullable: true),
-                    Melt = table.Column<string>(nullable: true),
-                    ReverseShutterId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BronzeSleeveShutters", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BronzeSleeveShutters_MetalMaterials_MetalMaterialId",
-                        column: x => x.MetalMaterialId,
-                        principalTable: "MetalMaterials",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_BronzeSleeveShutters_ReverseShutters_ReverseShutterId",
-                        column: x => x.ReverseShutterId,
-                        principalTable: "ReverseShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ReverseShutterJournals",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DetailName = table.Column<string>(nullable: true),
-                    DetailNumber = table.Column<string>(nullable: true),
-                    DetailDrawing = table.Column<string>(nullable: true),
-                    Point = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    JournalNumber = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    RemarkIssued = table.Column<string>(nullable: true),
-                    RemarkClosed = table.Column<string>(nullable: true),
-                    Comment = table.Column<string>(nullable: true),
-                    InspectorId = table.Column<int>(nullable: true),
-                    DetailId = table.Column<int>(nullable: true),
-                    PointId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReverseShutterJournals", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReverseShutterJournals_ReverseShutters_DetailId",
-                        column: x => x.DetailId,
-                        principalTable: "ReverseShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_ReverseShutterJournals_Inspectors_InspectorId",
-                        column: x => x.InspectorId,
-                        principalTable: "Inspectors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_ReverseShutterJournals_BaseTCP_PointId",
-                        column: x => x.PointId,
-                        principalTable: "BaseTCP",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ReverseShutterWithCoating",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ReverseShutterId = table.Column<int>(nullable: false),
-                    BaseAnticorrosiveCoatingId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReverseShutterWithCoating", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReverseShutterWithCoating_BaseAnticorrosiveCoatings_BaseAnticorrosiveCoatingId",
-                        column: x => x.BaseAnticorrosiveCoatingId,
-                        principalTable: "BaseAnticorrosiveCoatings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ReverseShutterWithCoating_ReverseShutters_ReverseShutterId",
-                        column: x => x.ReverseShutterId,
-                        principalTable: "ReverseShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SteelSleeveShutters",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
-                    Number = table.Column<string>(nullable: true),
-                    Drawing = table.Column<string>(nullable: true),
-                    Certificate = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    Comment = table.Column<string>(nullable: true),
-                    MetalMaterialId = table.Column<int>(nullable: true),
-                    ReverseShutterId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SteelSleeveShutters", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SteelSleeveShutters_MetalMaterials_MetalMaterialId",
-                        column: x => x.MetalMaterialId,
-                        principalTable: "MetalMaterials",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_SteelSleeveShutters_ReverseShutters_ReverseShutterId",
-                        column: x => x.ReverseShutterId,
-                        principalTable: "ReverseShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StubShutters",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
-                    Number = table.Column<string>(nullable: true),
-                    Drawing = table.Column<string>(nullable: true),
-                    Certificate = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    Comment = table.Column<string>(nullable: true),
-                    MetalMaterialId = table.Column<int>(nullable: true),
-                    ReverseShutterId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StubShutters", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_StubShutters_MetalMaterials_MetalMaterialId",
-                        column: x => x.MetalMaterialId,
-                        principalTable: "MetalMaterials",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_StubShutters_ReverseShutters_ReverseShutterId",
-                        column: x => x.ReverseShutterId,
-                        principalTable: "ReverseShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2611,19 +2443,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "FrontWalls",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FrontWallJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FrontWallJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2655,23 +2487,23 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "SideWalls",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SideWallJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SideWallJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BaseValve",
+                name: "BaseAssemblyUnit",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -2683,59 +2515,80 @@ namespace DataLayer.Migrations
                     Status = table.Column<string>(nullable: true),
                     Comment = table.Column<string>(nullable: true),
                     PIDId = table.Column<int>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false),
                     GateId = table.Column<int>(nullable: true),
                     ShutterId = table.Column<int>(nullable: true),
-                    Discriminator = table.Column<string>(nullable: false),
                     WeldGateValveCoverId = table.Column<int>(nullable: true),
                     WeldGateValveCaseId = table.Column<int>(nullable: true),
                     CastGateValveCaseId = table.Column<int>(nullable: true),
-                    CastGateValveCoverId = table.Column<int>(nullable: true)
+                    CastGateValveCoverId = table.Column<int>(nullable: true),
+                    ReverseShutterCaseId = table.Column<int>(nullable: true),
+                    ShaftShutterId = table.Column<int>(nullable: true),
+                    SlamShutterId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BaseValve", x => x.Id);
+                    table.PrimaryKey("PK_BaseAssemblyUnit", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BaseValve_Gates_GateId",
-                        column: x => x.GateId,
-                        principalTable: "Gates",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_BaseValve_PIDs_PIDId",
+                        name: "FK_BaseAssemblyUnit_PIDs_PIDId",
                         column: x => x.PIDId,
                         principalTable: "PIDs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BaseValve_Shutters_ShutterId",
+                        name: "FK_BaseAssemblyUnit_Gates_GateId",
+                        column: x => x.GateId,
+                        principalTable: "Gates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BaseAssemblyUnit_Shutters_ShutterId",
                         column: x => x.ShutterId,
                         principalTable: "Shutters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BaseValve_WeldGateValveCase_WeldGateValveCaseId",
+                        name: "FK_BaseAssemblyUnit_WeldGateValveCase_WeldGateValveCaseId",
                         column: x => x.WeldGateValveCaseId,
                         principalTable: "WeldGateValveCase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BaseValve_BaseValveCover_WeldGateValveCoverId",
+                        name: "FK_BaseAssemblyUnit_BaseValveCover_WeldGateValveCoverId",
                         column: x => x.WeldGateValveCoverId,
                         principalTable: "BaseValveCover",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BaseValve_BaseCastingCase_CastGateValveCaseId",
+                        name: "FK_BaseAssemblyUnit_BaseCastingCase_CastGateValveCaseId",
                         column: x => x.CastGateValveCaseId,
                         principalTable: "BaseCastingCase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BaseValve_BaseValveCover_CastGateValveCoverId",
+                        name: "FK_BaseAssemblyUnit_BaseValveCover_CastGateValveCoverId",
                         column: x => x.CastGateValveCoverId,
                         principalTable: "BaseValveCover",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BaseAssemblyUnit_BaseCastingCase_ReverseShutterCaseId",
+                        column: x => x.ReverseShutterCaseId,
+                        principalTable: "BaseCastingCase",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BaseAssemblyUnit_ShaftShutters_ShaftShutterId",
+                        column: x => x.ShaftShutterId,
+                        principalTable: "ShaftShutters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BaseAssemblyUnit_SlamShutters_SlamShutterId",
+                        column: x => x.SlamShutterId,
+                        principalTable: "SlamShutters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2768,25 +2621,25 @@ namespace DataLayer.Migrations
                         column: x => x.CastGateValveCoverTCPId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CastGateValveCoverJournals_BaseValveCover_DetailId",
                         column: x => x.DetailId,
                         principalTable: "BaseValveCover",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CastGateValveCoverJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CastGateValveCoverJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2818,19 +2671,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "BaseValveCover",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CompactGateValveCoverJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CompactGateValveCoverJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -2862,151 +2715,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "BaseValveCover",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SheetGateValveCoverJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SheetGateValveCoverJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BronzeSleeveShutterJournals",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DetailName = table.Column<string>(nullable: true),
-                    DetailNumber = table.Column<string>(nullable: true),
-                    DetailDrawing = table.Column<string>(nullable: true),
-                    Point = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    JournalNumber = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    RemarkIssued = table.Column<string>(nullable: true),
-                    RemarkClosed = table.Column<string>(nullable: true),
-                    Comment = table.Column<string>(nullable: true),
-                    InspectorId = table.Column<int>(nullable: true),
-                    DetailId = table.Column<int>(nullable: true),
-                    PointId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BronzeSleeveShutterJournals", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BronzeSleeveShutterJournals_BronzeSleeveShutters_DetailId",
-                        column: x => x.DetailId,
-                        principalTable: "BronzeSleeveShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_BronzeSleeveShutterJournals_Inspectors_InspectorId",
-                        column: x => x.InspectorId,
-                        principalTable: "Inspectors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_BronzeSleeveShutterJournals_BaseTCP_PointId",
-                        column: x => x.PointId,
-                        principalTable: "BaseTCP",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SteelSleeveShutterJournals",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DetailName = table.Column<string>(nullable: true),
-                    DetailNumber = table.Column<string>(nullable: true),
-                    DetailDrawing = table.Column<string>(nullable: true),
-                    Point = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    JournalNumber = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    RemarkIssued = table.Column<string>(nullable: true),
-                    RemarkClosed = table.Column<string>(nullable: true),
-                    Comment = table.Column<string>(nullable: true),
-                    InspectorId = table.Column<int>(nullable: true),
-                    DetailId = table.Column<int>(nullable: true),
-                    PointId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SteelSleeveShutterJournals", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SteelSleeveShutterJournals_SteelSleeveShutters_DetailId",
-                        column: x => x.DetailId,
-                        principalTable: "SteelSleeveShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_SteelSleeveShutterJournals_Inspectors_InspectorId",
-                        column: x => x.InspectorId,
-                        principalTable: "Inspectors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_SteelSleeveShutterJournals_BaseTCP_PointId",
-                        column: x => x.PointId,
-                        principalTable: "BaseTCP",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StubShutterJournals",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DetailName = table.Column<string>(nullable: true),
-                    DetailNumber = table.Column<string>(nullable: true),
-                    DetailDrawing = table.Column<string>(nullable: true),
-                    Point = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    JournalNumber = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    RemarkIssued = table.Column<string>(nullable: true),
-                    RemarkClosed = table.Column<string>(nullable: true),
-                    Comment = table.Column<string>(nullable: true),
-                    InspectorId = table.Column<int>(nullable: true),
-                    DetailId = table.Column<int>(nullable: true),
-                    PointId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StubShutterJournals", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_StubShutterJournals_StubShutters_DetailId",
-                        column: x => x.DetailId,
-                        principalTable: "StubShutters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_StubShutterJournals_Inspectors_InspectorId",
-                        column: x => x.InspectorId,
-                        principalTable: "Inspectors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_StubShutterJournals_BaseTCP_PointId",
-                        column: x => x.PointId,
-                        principalTable: "BaseTCP",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -3031,11 +2752,11 @@ namespace DataLayer.Migrations
                 {
                     table.PrimaryKey("PK_BallValves", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BallValves_BaseValve_BaseValveId",
+                        name: "FK_BallValves_BaseAssemblyUnit_BaseValveId",
                         column: x => x.BaseValveId,
-                        principalTable: "BaseValve",
+                        principalTable: "BaseAssemblyUnit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -3057,9 +2778,9 @@ namespace DataLayer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BaseValveWithCoating_BaseValve_BaseValveId",
+                        name: "FK_BaseValveWithCoating_BaseAssemblyUnit_BaseValveId",
                         column: x => x.BaseValveId,
-                        principalTable: "BaseValve",
+                        principalTable: "BaseAssemblyUnit",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -3078,9 +2799,9 @@ namespace DataLayer.Migrations
                 {
                     table.PrimaryKey("PK_BaseValveWithScrewNuts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BaseValveWithScrewNuts_BaseValve_BaseValveId",
+                        name: "FK_BaseValveWithScrewNuts_BaseAssemblyUnit_BaseValveId",
                         column: x => x.BaseValveId,
-                        principalTable: "BaseValve",
+                        principalTable: "BaseAssemblyUnit",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -3105,9 +2826,9 @@ namespace DataLayer.Migrations
                 {
                     table.PrimaryKey("PK_BaseValveWithScrewStuds", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BaseValveWithScrewStuds_BaseValve_BaseValveId",
+                        name: "FK_BaseValveWithScrewStuds_BaseAssemblyUnit_BaseValveId",
                         column: x => x.BaseValveId,
-                        principalTable: "BaseValve",
+                        principalTable: "BaseAssemblyUnit",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -3137,9 +2858,9 @@ namespace DataLayer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BaseValveWithSeals_BaseValve_BaseValveId",
+                        name: "FK_BaseValveWithSeals_BaseAssemblyUnit_BaseValveId",
                         column: x => x.BaseValveId,
-                        principalTable: "BaseValve",
+                        principalTable: "BaseAssemblyUnit",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -3158,9 +2879,9 @@ namespace DataLayer.Migrations
                 {
                     table.PrimaryKey("PK_BaseValveWithSprings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BaseValveWithSprings_BaseValve_BaseValveId",
+                        name: "FK_BaseValveWithSprings_BaseAssemblyUnit_BaseValveId",
                         column: x => x.BaseValveId,
-                        principalTable: "BaseValve",
+                        principalTable: "BaseAssemblyUnit",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -3169,6 +2890,40 @@ namespace DataLayer.Migrations
                         principalTable: "Springs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BronzeSleeveShutters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    Number = table.Column<string>(nullable: true),
+                    Drawing = table.Column<string>(nullable: true),
+                    Certificate = table.Column<string>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    MetalMaterialId = table.Column<int>(nullable: true),
+                    Material = table.Column<string>(nullable: true),
+                    Melt = table.Column<string>(nullable: true),
+                    ReverseShutterId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BronzeSleeveShutters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BronzeSleeveShutters_MetalMaterials_MetalMaterialId",
+                        column: x => x.MetalMaterialId,
+                        principalTable: "MetalMaterials",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BronzeSleeveShutters_BaseAssemblyUnit_ReverseShutterId",
+                        column: x => x.ReverseShutterId,
+                        principalTable: "BaseAssemblyUnit",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -3196,23 +2951,67 @@ namespace DataLayer.Migrations
                 {
                     table.PrimaryKey("PK_CastGateValveJournals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CastGateValveJournals_BaseValve_DetailId",
+                        name: "FK_CastGateValveJournals_BaseAssemblyUnit_DetailId",
                         column: x => x.DetailId,
-                        principalTable: "BaseValve",
+                        principalTable: "BaseAssemblyUnit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CastGateValveJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CastGateValveJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CoatingJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoatingJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CoatingJournals_BaseAssemblyUnit_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "BaseAssemblyUnit",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CoatingJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CoatingJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -3240,23 +3039,23 @@ namespace DataLayer.Migrations
                 {
                     table.PrimaryKey("PK_CompactGateValveJournals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CompactGateValveJournals_BaseValve_DetailId",
+                        name: "FK_CompactGateValveJournals_BaseAssemblyUnit_DetailId",
                         column: x => x.DetailId,
-                        principalTable: "BaseValve",
+                        principalTable: "BaseAssemblyUnit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CompactGateValveJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CompactGateValveJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -3278,17 +3077,87 @@ namespace DataLayer.Migrations
                 {
                     table.PrimaryKey("PK_CounterFlanges", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CounterFlanges_BaseValve_BaseValveId",
+                        name: "FK_CounterFlanges_BaseAssemblyUnit_BaseValveId",
                         column: x => x.BaseValveId,
-                        principalTable: "BaseValve",
+                        principalTable: "BaseAssemblyUnit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CounterFlanges_MetalMaterials_MetalMaterialId",
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReverseShutterJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReverseShutterJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReverseShutterJournals_BaseAssemblyUnit_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "BaseAssemblyUnit",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ReverseShutterJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ReverseShutterJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReverseShutterWithCoating",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ReverseShutterId = table.Column<int>(nullable: false),
+                    BaseAnticorrosiveCoatingId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReverseShutterWithCoating", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReverseShutterWithCoating_BaseAnticorrosiveCoatings_BaseAnticorrosiveCoatingId",
+                        column: x => x.BaseAnticorrosiveCoatingId,
+                        principalTable: "BaseAnticorrosiveCoatings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReverseShutterWithCoating_BaseAssemblyUnit_ReverseShutterId",
+                        column: x => x.ReverseShutterId,
+                        principalTable: "BaseAssemblyUnit",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -3310,17 +3179,17 @@ namespace DataLayer.Migrations
                 {
                     table.PrimaryKey("PK_Saddles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Saddles_BaseValve_BaseValveId",
+                        name: "FK_Saddles_BaseAssemblyUnit_BaseValveId",
                         column: x => x.BaseValveId,
-                        principalTable: "BaseValve",
+                        principalTable: "BaseAssemblyUnit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Saddles_MetalMaterials_MetalMaterialId",
                         column: x => x.MetalMaterialId,
                         principalTable: "MetalMaterials",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -3343,11 +3212,11 @@ namespace DataLayer.Migrations
                 {
                     table.PrimaryKey("PK_ShearPins", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShearPins_BaseValve_BaseValveId",
+                        name: "FK_ShearPins_BaseAssemblyUnit_BaseValveId",
                         column: x => x.BaseValveId,
-                        principalTable: "BaseValve",
+                        principalTable: "BaseAssemblyUnit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -3375,23 +3244,87 @@ namespace DataLayer.Migrations
                 {
                     table.PrimaryKey("PK_SheetGateValveJournals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SheetGateValveJournals_BaseValve_DetailId",
+                        name: "FK_SheetGateValveJournals_BaseAssemblyUnit_DetailId",
                         column: x => x.DetailId,
-                        principalTable: "BaseValve",
+                        principalTable: "BaseAssemblyUnit",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SheetGateValveJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SheetGateValveJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SteelSleeveShutters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    Number = table.Column<string>(nullable: true),
+                    Drawing = table.Column<string>(nullable: true),
+                    Certificate = table.Column<string>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    MetalMaterialId = table.Column<int>(nullable: true),
+                    ReverseShutterId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SteelSleeveShutters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SteelSleeveShutters_MetalMaterials_MetalMaterialId",
+                        column: x => x.MetalMaterialId,
+                        principalTable: "MetalMaterials",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SteelSleeveShutters_BaseAssemblyUnit_ReverseShutterId",
+                        column: x => x.ReverseShutterId,
+                        principalTable: "BaseAssemblyUnit",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StubShutters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    Number = table.Column<string>(nullable: true),
+                    Drawing = table.Column<string>(nullable: true),
+                    Certificate = table.Column<string>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    MetalMaterialId = table.Column<int>(nullable: true),
+                    ReverseShutterId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StubShutters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StubShutters_MetalMaterials_MetalMaterialId",
+                        column: x => x.MetalMaterialId,
+                        principalTable: "MetalMaterials",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StubShutters_BaseAssemblyUnit_ReverseShutterId",
+                        column: x => x.ReverseShutterId,
+                        principalTable: "BaseAssemblyUnit",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -3423,19 +3356,63 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "BallValves",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BallValveJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BallValveJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BronzeSleeveShutterJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BronzeSleeveShutterJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BronzeSleeveShutterJournals_BronzeSleeveShutters_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "BronzeSleeveShutters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BronzeSleeveShutterJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BronzeSleeveShutterJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -3467,19 +3444,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "CounterFlanges",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CounterFlangeJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CounterFlangeJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -3511,19 +3488,19 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "Saddles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SaddleJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SaddleJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -3581,19 +3558,107 @@ namespace DataLayer.Migrations
                         column: x => x.DetailId,
                         principalTable: "ShearPins",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShearPinJournals_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ShearPinJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SteelSleeveShutterJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SteelSleeveShutterJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SteelSleeveShutterJournals_SteelSleeveShutters_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "SteelSleeveShutters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SteelSleeveShutterJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SteelSleeveShutterJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StubShutterJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StubShutterJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StubShutterJournals_StubShutters_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "StubShutters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StubShutterJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StubShutterJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -3610,6 +3675,36 @@ namespace DataLayer.Migrations
                 table: "OperationTypes",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 3, "НК" });
+
+            migrationBuilder.InsertData(
+                table: "OperationTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 4, "Сборка" });
+
+            migrationBuilder.InsertData(
+                table: "OperationTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 5, "ПСИ" });
+
+            migrationBuilder.InsertData(
+                table: "OperationTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 6, "ВИК после ПСИ" });
+
+            migrationBuilder.InsertData(
+                table: "OperationTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 7, "АКП" });
+
+            migrationBuilder.InsertData(
+                table: "OperationTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 8, "Документация" });
+
+            migrationBuilder.InsertData(
+                table: "OperationTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 9, "Отгрузка" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbovegroundCoatingJournals_DetailId",
@@ -3677,6 +3772,65 @@ namespace DataLayer.Migrations
                 column: "BaseValveId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BaseAssemblyUnit_PIDId",
+                table: "BaseAssemblyUnit",
+                column: "PIDId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseAssemblyUnit_GateId",
+                table: "BaseAssemblyUnit",
+                column: "GateId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseAssemblyUnit_ShutterId",
+                table: "BaseAssemblyUnit",
+                column: "ShutterId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseAssemblyUnit_WeldGateValveCaseId",
+                table: "BaseAssemblyUnit",
+                column: "WeldGateValveCaseId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseAssemblyUnit_WeldGateValveCoverId",
+                table: "BaseAssemblyUnit",
+                column: "WeldGateValveCoverId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseAssemblyUnit_CastGateValveCaseId",
+                table: "BaseAssemblyUnit",
+                column: "CastGateValveCaseId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseAssemblyUnit_CastGateValveCoverId",
+                table: "BaseAssemblyUnit",
+                column: "CastGateValveCoverId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseAssemblyUnit_ReverseShutterCaseId",
+                table: "BaseAssemblyUnit",
+                column: "ReverseShutterCaseId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseAssemblyUnit_ShaftShutterId",
+                table: "BaseAssemblyUnit",
+                column: "ShaftShutterId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseAssemblyUnit_SlamShutterId",
+                table: "BaseAssemblyUnit",
+                column: "SlamShutterId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BaseTCP_OperationNameId",
                 table: "BaseTCP",
                 column: "OperationNameId");
@@ -3685,47 +3839,6 @@ namespace DataLayer.Migrations
                 name: "IX_BaseTCP_ProductTypeId",
                 table: "BaseTCP",
                 column: "ProductTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BaseValve_GateId",
-                table: "BaseValve",
-                column: "GateId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BaseValve_PIDId",
-                table: "BaseValve",
-                column: "PIDId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BaseValve_ShutterId",
-                table: "BaseValve",
-                column: "ShutterId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BaseValve_WeldGateValveCaseId",
-                table: "BaseValve",
-                column: "WeldGateValveCaseId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BaseValve_WeldGateValveCoverId",
-                table: "BaseValve",
-                column: "WeldGateValveCoverId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BaseValve_CastGateValveCaseId",
-                table: "BaseValve",
-                column: "CastGateValveCaseId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BaseValve_CastGateValveCoverId",
-                table: "BaseValve",
-                column: "CastGateValveCoverId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_BaseValveCover_RunningSleeveId",
@@ -3920,6 +4033,21 @@ namespace DataLayer.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CastGateValveJournals_PointId",
                 table: "CastGateValveJournals",
+                column: "PointId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoatingJournals_DetailId",
+                table: "CoatingJournals",
+                column: "DetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoatingJournals_InspectorId",
+                table: "CoatingJournals",
+                column: "InspectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoatingJournals_PointId",
+                table: "CoatingJournals",
                 column: "PointId");
 
             migrationBuilder.CreateIndex(
@@ -4165,6 +4293,21 @@ namespace DataLayer.Migrations
                 column: "MetalMaterialId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PIDJournals_DetailId",
+                table: "PIDJournals",
+                column: "DetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PIDJournals_InspectorId",
+                table: "PIDJournals",
+                column: "InspectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PIDJournals_PointId",
+                table: "PIDJournals",
+                column: "PointId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PIDs_ProductTypeId",
                 table: "PIDs",
                 column: "ProductTypeId");
@@ -4218,29 +4361,6 @@ namespace DataLayer.Migrations
                 name: "IX_ReverseShutterJournals_PointId",
                 table: "ReverseShutterJournals",
                 column: "PointId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReverseShutters_PIDId",
-                table: "ReverseShutters",
-                column: "PIDId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReverseShutters_ReverseShutterCaseId",
-                table: "ReverseShutters",
-                column: "ReverseShutterCaseId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReverseShutters_ShaftShutterId",
-                table: "ReverseShutters",
-                column: "ShaftShutterId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReverseShutters_SlamShutterId",
-                table: "ReverseShutters",
-                column: "SlamShutterId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReverseShutterWithCoating_BaseAnticorrosiveCoatingId",
@@ -4768,6 +4888,9 @@ namespace DataLayer.Migrations
                 name: "CastGateValveJournals");
 
             migrationBuilder.DropTable(
+                name: "CoatingJournals");
+
+            migrationBuilder.DropTable(
                 name: "CompactGateValveCaseJournals");
 
             migrationBuilder.DropTable(
@@ -4805,6 +4928,9 @@ namespace DataLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "NozzleJournals");
+
+            migrationBuilder.DropTable(
+                name: "PIDJournals");
 
             migrationBuilder.DropTable(
                 name: "PipeMaterialJournals");
@@ -4960,13 +5086,13 @@ namespace DataLayer.Migrations
                 name: "WeldNozzles");
 
             migrationBuilder.DropTable(
-                name: "BaseValve");
-
-            migrationBuilder.DropTable(
-                name: "ReverseShutters");
+                name: "BaseAssemblyUnit");
 
             migrationBuilder.DropTable(
                 name: "OperationTypes");
+
+            migrationBuilder.DropTable(
+                name: "PIDs");
 
             migrationBuilder.DropTable(
                 name: "Gates");
@@ -4981,9 +5107,6 @@ namespace DataLayer.Migrations
                 name: "BaseValveCover");
 
             migrationBuilder.DropTable(
-                name: "PIDs");
-
-            migrationBuilder.DropTable(
                 name: "BaseCastingCase");
 
             migrationBuilder.DropTable(
@@ -4991,6 +5114,12 @@ namespace DataLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "SlamShutters");
+
+            migrationBuilder.DropTable(
+                name: "ProductTypes");
+
+            migrationBuilder.DropTable(
+                name: "Specifications");
 
             migrationBuilder.DropTable(
                 name: "CaseBottoms");
@@ -5011,16 +5140,10 @@ namespace DataLayer.Migrations
                 name: "CoverSleeves");
 
             migrationBuilder.DropTable(
-                name: "ProductTypes");
-
-            migrationBuilder.DropTable(
-                name: "Specifications");
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "CoverSealingRings");
-
-            migrationBuilder.DropTable(
-                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "MetalMaterials");

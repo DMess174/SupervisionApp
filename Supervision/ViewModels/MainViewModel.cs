@@ -30,6 +30,9 @@ using DataLayer.Entities.Detailing.SheetGateValveDetails;
 using DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 using DataLayer.Entities.Detailing.CompactGateValveDetails;
+using Supervision.Views.EntityViews.AssemblyUnit;
+using Supervision.ViewModels.EntityViewModels.AssemblyUnit;
+using DataLayer.TechnicalControlPlans;
 
 namespace Supervision.ViewModels
 {
@@ -55,6 +58,33 @@ namespace Supervision.ViewModels
                 frameOpacity = value; 
                 RaisePropertyChanged(); 
             } 
+        }
+
+        public ICommand SpecificationOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new SpecificationView();
+                    var vm = new SpecificationVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CustomerOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new CustomerView();
+                    var vm = new CustomerVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
         }
 
         #region Materials
@@ -207,6 +237,19 @@ namespace Supervision.ViewModels
         }
 
         #region ReverseShutter
+        public ICommand ReverseShutterOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ReverseShutterView();
+                    var vm = new ReverseShutterVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
         public ICommand CaseShutterOpen
         {
             get
@@ -491,6 +534,45 @@ namespace Supervision.ViewModels
         }
 
         #region TCP
+        public ICommand PIDTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<PIDTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand ReverseShutterTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<ReverseShutterTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CoatingTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CoatingTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
         public ICommand SpringTCPOpen
         {
             get

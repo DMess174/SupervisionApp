@@ -37,8 +37,13 @@ namespace DataLayer
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Specification> Specifications{ get; set; }
         public DbSet<PID> PIDs { get; set; }
+        public DbSet<PIDTCP> PIDTCPs { get; set; }
+        public DbSet<PIDJournal> PIDJournals { get; set; }
         public DbSet<Inspector> Inspectors { get; set; }
         public DbSet<JournalNumber> JournalNumbers { get; set; }
+
+        public DbSet<CoatingTCP> CoatingTCPs { get; set; }
+        public DbSet<CoatingJournal> CoatingJournals { get; set; }
 
         public DbSet<BronzeSleeveShutter> BronzeSleeveShutters { get; set; }
         public DbSet<BronzeSleeveShutterTCP> BronzeSleeveShutterTCPs { get; set; }
@@ -254,7 +259,13 @@ namespace DataLayer
                 {
                 new OperationType { Id=1, Name="Входной контроль"},
                 new OperationType { Id=2, Name="Механическая обработка"},
-                new OperationType { Id=3, Name="НК"}
+                new OperationType { Id=3, Name="НК"},
+                new OperationType { Id=4, Name="Сборка"},
+                new OperationType { Id=5, Name="ПСИ"},
+                new OperationType { Id=6, Name="ВИК после ПСИ"},
+                new OperationType { Id=7, Name="АКП"},
+                new OperationType { Id=8, Name="Документация"},
+                new OperationType { Id=9, Name="Отгрузка"}
                 });
         }
 

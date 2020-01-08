@@ -30,7 +30,7 @@ namespace DataLayer.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValve", b =>
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseAssemblyUnit", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -44,31 +44,21 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Drawing");
 
-                    b.Property<int?>("GateId");
-
                     b.Property<string>("Name");
 
                     b.Property<string>("Number");
 
                     b.Property<int?>("PIDId");
 
-                    b.Property<int?>("ShutterId");
-
                     b.Property<string>("Status");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GateId")
-                        .IsUnique();
-
                     b.HasIndex("PIDId");
 
-                    b.HasIndex("ShutterId")
-                        .IsUnique();
+                    b.ToTable("BaseAssemblyUnit");
 
-                    b.ToTable("BaseValve");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseValve");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseAssemblyUnit");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValveWithCoating", b =>
@@ -165,47 +155,6 @@ namespace DataLayer.Migrations
                     b.HasIndex("SpringId");
 
                     b.ToTable("BaseValveWithSprings");
-                });
-
-            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.ReverseShutter", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Certificate");
-
-                    b.Property<string>("Comment");
-
-                    b.Property<string>("Drawing");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Number");
-
-                    b.Property<int?>("PIDId");
-
-                    b.Property<int?>("ReverseShutterCaseId");
-
-                    b.Property<int?>("ShaftShutterId");
-
-                    b.Property<int?>("SlamShutterId");
-
-                    b.Property<string>("Status");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PIDId");
-
-                    b.HasIndex("ReverseShutterCaseId")
-                        .IsUnique();
-
-                    b.HasIndex("ShaftShutterId")
-                        .IsUnique();
-
-                    b.HasIndex("SlamShutterId")
-                        .IsUnique();
-
-                    b.ToTable("ReverseShutters");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.ReverseShutterWithCoating", b =>
@@ -1347,6 +1296,50 @@ namespace DataLayer.Migrations
                     b.HasIndex("PointId");
 
                     b.ToTable("CastGateValveJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.AssemblyUnits.CoatingJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("RemarkClosed");
+
+                    b.Property<string>("RemarkIssued");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("CoatingJournals");
                 });
 
             modelBuilder.Entity("DataLayer.Journals.AssemblyUnits.CompactGateValveJournal", b =>
@@ -3479,6 +3472,50 @@ namespace DataLayer.Migrations
                     b.ToTable("WeldingMaterialJournals");
                 });
 
+            modelBuilder.Entity("DataLayer.Journals.PIDJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("RemarkClosed");
+
+                    b.Property<string>("RemarkIssued");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("PIDJournals");
+                });
+
             modelBuilder.Entity("DataLayer.OperationType", b =>
                 {
                     b.Property<int>("Id")
@@ -3505,6 +3542,36 @@ namespace DataLayer.Migrations
                         {
                             Id = 3,
                             Name = "НК"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Сборка"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "ПСИ"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "ВИК после ПСИ"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "АКП"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Документация"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Отгрузка"
                         });
                 });
 
@@ -3513,7 +3580,9 @@ namespace DataLayer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Amount");
+                    b.Property<int?>("Amount");
+
+                    b.Property<int?>("AmountShipped");
 
                     b.Property<string>("Climatic");
 
@@ -3522,6 +3591,8 @@ namespace DataLayer.Migrations
                     b.Property<string>("ConnectionType");
 
                     b.Property<string>("DN");
+
+                    b.Property<string>("Designation");
 
                     b.Property<string>("DriveType");
 
@@ -3613,38 +3684,43 @@ namespace DataLayer.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("BaseTCP");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseWeldValve", b =>
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValve", b =>
                 {
-                    b.HasBaseType("DataLayer.Entities.AssemblyUnits.BaseValve");
+                    b.HasBaseType("DataLayer.Entities.AssemblyUnits.BaseAssemblyUnit");
 
-                    b.Property<int?>("WeldGateValveCaseId");
+                    b.Property<int?>("GateId");
 
-                    b.Property<int?>("WeldGateValveCoverId");
+                    b.Property<int?>("ShutterId");
 
-                    b.HasIndex("WeldGateValveCaseId")
+                    b.HasIndex("GateId")
                         .IsUnique();
 
-                    b.HasIndex("WeldGateValveCoverId")
+                    b.HasIndex("ShutterId")
                         .IsUnique();
 
-                    b.HasDiscriminator().HasValue("BaseWeldValve");
+                    b.HasDiscriminator().HasValue("BaseValve");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.CastGateValve", b =>
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.ReverseShutter", b =>
                 {
-                    b.HasBaseType("DataLayer.Entities.AssemblyUnits.BaseValve");
+                    b.HasBaseType("DataLayer.Entities.AssemblyUnits.BaseAssemblyUnit");
 
-                    b.Property<int?>("CastGateValveCaseId");
+                    b.Property<int?>("ReverseShutterCaseId");
 
-                    b.Property<int?>("CastGateValveCoverId");
+                    b.Property<int?>("ShaftShutterId");
 
-                    b.HasIndex("CastGateValveCaseId")
+                    b.Property<int?>("SlamShutterId");
+
+                    b.HasIndex("ReverseShutterCaseId")
                         .IsUnique();
 
-                    b.HasIndex("CastGateValveCoverId")
+                    b.HasIndex("ShaftShutterId")
                         .IsUnique();
 
-                    b.HasDiscriminator().HasValue("CastGateValve");
+                    b.HasIndex("SlamShutterId")
+                        .IsUnique();
+
+                    b.HasDiscriminator().HasValue("ReverseShutter");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.CastGateValveDetails.CastGateValveCase", b =>
@@ -3773,6 +3849,13 @@ namespace DataLayer.Migrations
                     b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
 
                     b.HasDiscriminator().HasValue("CastGateValveTCP");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.AssemblyUnits.CoatingTCP", b =>
+                {
+                    b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
+
+                    b.HasDiscriminator().HasValue("CoatingTCP");
                 });
 
             modelBuilder.Entity("DataLayer.TechnicalControlPlans.AssemblyUnits.CompactGateValveTCP", b =>
@@ -4069,18 +4152,45 @@ namespace DataLayer.Migrations
                     b.HasDiscriminator().HasValue("WeldingMaterialTCP");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.CompactGateValve", b =>
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.PIDTCP", b =>
                 {
-                    b.HasBaseType("DataLayer.Entities.AssemblyUnits.BaseWeldValve");
+                    b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
 
-                    b.HasDiscriminator().HasValue("CompactGateValve");
+                    b.HasDiscriminator().HasValue("PIDTCP");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.SheetGateValve", b =>
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseWeldValve", b =>
                 {
-                    b.HasBaseType("DataLayer.Entities.AssemblyUnits.BaseWeldValve");
+                    b.HasBaseType("DataLayer.Entities.AssemblyUnits.BaseValve");
 
-                    b.HasDiscriminator().HasValue("SheetGateValve");
+                    b.Property<int?>("WeldGateValveCaseId");
+
+                    b.Property<int?>("WeldGateValveCoverId");
+
+                    b.HasIndex("WeldGateValveCaseId")
+                        .IsUnique();
+
+                    b.HasIndex("WeldGateValveCoverId")
+                        .IsUnique();
+
+                    b.HasDiscriminator().HasValue("BaseWeldValve");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.CastGateValve", b =>
+                {
+                    b.HasBaseType("DataLayer.Entities.AssemblyUnits.BaseValve");
+
+                    b.Property<int?>("CastGateValveCaseId");
+
+                    b.Property<int?>("CastGateValveCoverId");
+
+                    b.HasIndex("CastGateValveCaseId")
+                        .IsUnique();
+
+                    b.HasIndex("CastGateValveCoverId")
+                        .IsUnique();
+
+                    b.HasDiscriminator().HasValue("CastGateValve");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.CompactGateValveDetails.CompactGateValveCover", b =>
@@ -4097,19 +4207,25 @@ namespace DataLayer.Migrations
                     b.HasDiscriminator().HasValue("SheetGateValveCover");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValve", b =>
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.CompactGateValve", b =>
                 {
-                    b.HasOne("DataLayer.Entities.Detailing.Gate", "Gate")
-                        .WithOne("BaseValve")
-                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.BaseValve", "GateId");
+                    b.HasBaseType("DataLayer.Entities.AssemblyUnits.BaseWeldValve");
 
+                    b.HasDiscriminator().HasValue("CompactGateValve");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.SheetGateValve", b =>
+                {
+                    b.HasBaseType("DataLayer.Entities.AssemblyUnits.BaseWeldValve");
+
+                    b.HasDiscriminator().HasValue("SheetGateValve");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseAssemblyUnit", b =>
+                {
                     b.HasOne("DataLayer.PID", "PID")
-                        .WithMany("BaseValves")
+                        .WithMany("BaseAssemblyUnits")
                         .HasForeignKey("PIDId");
-
-                    b.HasOne("DataLayer.Entities.Detailing.CompactGateValveDetails.Shutter", "Shutter")
-                        .WithOne("BaseValve")
-                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.BaseValve", "ShutterId");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValveWithCoating", b =>
@@ -4175,25 +4291,6 @@ namespace DataLayer.Migrations
                         .WithMany("BaseValveWithSprings")
                         .HasForeignKey("SpringId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.ReverseShutter", b =>
-                {
-                    b.HasOne("DataLayer.PID", "PID")
-                        .WithMany("ReverseShutters")
-                        .HasForeignKey("PIDId");
-
-                    b.HasOne("DataLayer.Entities.Detailing.ReverseShutterDetails.ReverseShutterCase", "ReverseShutterCase")
-                        .WithOne("ReverseShutter")
-                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.ReverseShutter", "ReverseShutterCaseId");
-
-                    b.HasOne("DataLayer.Entities.Detailing.ReverseShutterDetails.ShaftShutter", "ShaftShutter")
-                        .WithOne("ReverseShutter")
-                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.ReverseShutter", "ShaftShutterId");
-
-                    b.HasOne("DataLayer.Entities.Detailing.ReverseShutterDetails.SlamShutter", "SlamShutter")
-                        .WithOne("ReverseShutter")
-                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.ReverseShutter", "SlamShutterId");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.ReverseShutterWithCoating", b =>
@@ -4451,6 +4548,21 @@ namespace DataLayer.Migrations
 
                     b.HasOne("DataLayer.TechnicalControlPlans.AssemblyUnits.CastGateValveTCP", "EntityTCP")
                         .WithMany("CastGateValveJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.AssemblyUnits.CoatingJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.AssemblyUnits.BaseAssemblyUnit", "Entity")
+                        .WithMany("CoatingJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany()
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.AssemblyUnits.CoatingTCP", "EntityTCP")
+                        .WithMany("CoatingJournals")
                         .HasForeignKey("PointId");
                 });
 
@@ -5178,6 +5290,21 @@ namespace DataLayer.Migrations
                         .HasForeignKey("PointId");
                 });
 
+            modelBuilder.Entity("DataLayer.Journals.PIDJournal", b =>
+                {
+                    b.HasOne("DataLayer.PID", "Entity")
+                        .WithMany("PIDJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany()
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.PIDTCP", "EntityTCP")
+                        .WithMany("PIDJournals")
+                        .HasForeignKey("PointId");
+                });
+
             modelBuilder.Entity("DataLayer.PID", b =>
                 {
                     b.HasOne("DataLayer.ProductType", "ProductType")
@@ -5207,6 +5334,50 @@ namespace DataLayer.Migrations
                         .HasForeignKey("ProductTypeId");
                 });
 
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValve", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.Gate", "Gate")
+                        .WithOne("BaseValve")
+                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.BaseValve", "GateId");
+
+                    b.HasOne("DataLayer.Entities.Detailing.CompactGateValveDetails.Shutter", "Shutter")
+                        .WithOne("BaseValve")
+                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.BaseValve", "ShutterId");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.ReverseShutter", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.ReverseShutterDetails.ReverseShutterCase", "ReverseShutterCase")
+                        .WithOne("ReverseShutter")
+                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.ReverseShutter", "ReverseShutterCaseId");
+
+                    b.HasOne("DataLayer.Entities.Detailing.ReverseShutterDetails.ShaftShutter", "ShaftShutter")
+                        .WithOne("ReverseShutter")
+                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.ReverseShutter", "ShaftShutterId");
+
+                    b.HasOne("DataLayer.Entities.Detailing.ReverseShutterDetails.SlamShutter", "SlamShutter")
+                        .WithOne("ReverseShutter")
+                        .HasForeignKey("DataLayer.Entities.AssemblyUnits.ReverseShutter", "SlamShutterId");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.CastGateValveDetails.CastGateValveCover", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.CoverSealingRing", "CoverSealingRing")
+                        .WithOne("CastGateValveCover")
+                        .HasForeignKey("DataLayer.Entities.Detailing.CastGateValveDetails.CastGateValveCover", "CoverSealingRingId");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCover", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.CoverFlange", "CoverFlange")
+                        .WithOne("WeldGateValveCover")
+                        .HasForeignKey("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCover", "CoverFlangeId");
+
+                    b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.CoverSleeve", "CoverSleeve")
+                        .WithOne("WeldGateValveCover")
+                        .HasForeignKey("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCover", "CoverSleeveId");
+                });
+
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseWeldValve", b =>
                 {
                     b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCase", "WeldGateValveCase")
@@ -5227,24 +5398,6 @@ namespace DataLayer.Migrations
                     b.HasOne("DataLayer.Entities.Detailing.CastGateValveDetails.CastGateValveCover", "CastGateValveCover")
                         .WithOne("CastGateValve")
                         .HasForeignKey("DataLayer.Entities.AssemblyUnits.CastGateValve", "CastGateValveCoverId");
-                });
-
-            modelBuilder.Entity("DataLayer.Entities.Detailing.CastGateValveDetails.CastGateValveCover", b =>
-                {
-                    b.HasOne("DataLayer.Entities.Detailing.CoverSealingRing", "CoverSealingRing")
-                        .WithOne("CastGateValveCover")
-                        .HasForeignKey("DataLayer.Entities.Detailing.CastGateValveDetails.CastGateValveCover", "CoverSealingRingId");
-                });
-
-            modelBuilder.Entity("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCover", b =>
-                {
-                    b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.CoverFlange", "CoverFlange")
-                        .WithOne("WeldGateValveCover")
-                        .HasForeignKey("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCover", "CoverFlangeId");
-
-                    b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.CoverSleeve", "CoverSleeve")
-                        .WithOne("WeldGateValveCover")
-                        .HasForeignKey("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCover", "CoverSleeveId");
                 });
 #pragma warning restore 612, 618
         }
