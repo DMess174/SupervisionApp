@@ -64,6 +64,7 @@ namespace DataLayer
         public DbSet<ReverseShutter> ReverseShutters { get; set; }
         public DbSet<ReverseShutterTCP> ReverseShutterTCPs { get; set; }
         public DbSet<ReverseShutterJournal> ReverseShutterJournals { get; set; }
+        public DbSet<ReverseShutterWithCoating> ReverseShutterWithCoatings { get; set; }
 
         public DbSet<SlamShutter> SlamShutters { get; set; }
         public DbSet<SlamShutterTCP> SlamShutterTCPs { get; set; }
@@ -84,6 +85,7 @@ namespace DataLayer
         public DbSet<CastGateValve> CastGateValves { get; set; }
         public DbSet<CastGateValveTCP> CastGateValveTCPs { get; set; }
         public DbSet<CastGateValveJournal> CastGateValveJournals { get; set; }
+        public DbSet<BaseValveWithCoating> BaseValveWithCoatings { get; set; }
 
         public DbSet<SheetGateValve> SheetGateValves { get; set; }
         public DbSet<SheetGateValveTCP> SheetGateValveTCPs { get; set; }

@@ -86,8 +86,10 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         if (SelectedItem != null)
                         {
-                            if (SelectedItem.AmountRemaining == null && SelectedItem.Amount > 0) SelectedItem.AmountRemaining = SelectedItem.Amount;
-                            else SelectedItem.AmountRemaining = SelectedItem.Amount - SelectedItem.BaseValveWithSprings?.Select(i => i.SpringAmount).Sum();
+                            if (SelectedItem.AmountRemaining == null && SelectedItem.Amount > 0) 
+                                SelectedItem.AmountRemaining = SelectedItem.Amount;
+                            else 
+                                SelectedItem.AmountRemaining = SelectedItem.Amount - SelectedItem.BaseValveWithSprings?.Select(i => i.SpringAmount).Sum();
 
                             db.Springs.Update(SelectedItem);
                             db.SaveChanges();

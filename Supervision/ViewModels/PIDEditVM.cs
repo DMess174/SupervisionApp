@@ -184,8 +184,9 @@ namespace Supervision.ViewModels
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.PIDs.Include(i => i.Specification).ThenInclude(i => i.Customer).SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.PIDs.Include(i => i.BaseAssemblyUnits).Include(i => i.Specification).ThenInclude(i => i.Customer).SingleOrDefault(i => i.Id == id);
             Designations = db.PIDs.Select(i => i.Designation).Distinct().OrderBy(i => i).ToList();
+            SelectedItem.AmountShipped = SelectedItem.BaseAssemblyUnits.Where(i => i.Status == "Отгружен").Count();
             Journal = db.Set<PIDJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             ProductTypes = db.ProductTypes.OrderBy(i => i.Name).ToList();

@@ -154,6 +154,10 @@
                 <DataGridTextColumn Header="Количество"
                                     Width="100" 
                                     Binding="{Binding Path= Amount}"/>
+                
+                <DataGridTextColumn Header="Отгружено"
+                                    Width="100" 
+                                    Binding="{Binding Path= AmountShipped}"/>
             </DataGrid.Columns>
         </DataGrid>
 

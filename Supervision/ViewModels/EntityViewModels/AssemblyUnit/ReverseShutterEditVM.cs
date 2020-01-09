@@ -4,6 +4,7 @@ using DataLayer.Entities.Detailing.ReverseShutterDetails;
 using DataLayer.Entities.Materials.AnticorrosiveCoating;
 using DataLayer.Journals.AssemblyUnits;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
+using DataLayer.Journals.Materials.AnticorrosiveCoating;
 using DataLayer.TechnicalControlPlans.AssemblyUnits;
 using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
 using DataLayer.TechnicalControlPlans.Materials.AnticorrosiveCoating;
@@ -11,9 +12,11 @@ using DevExpress.Mvvm;
 using DevExpress.Mvvm.Native;
 using Microsoft.EntityFrameworkCore;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter;
+using Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating;
 using Supervision.Views.EntityViews;
 using Supervision.Views.EntityViews.AssemblyUnit;
 using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
+using Supervision.Views.EntityViews.MaterialViews.AnticorrosiveCoating;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -43,7 +46,6 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         private ICommand deleteSteelSleeveFromShutter;
         private IEnumerable<string> drawings;
         private IEnumerable<ReverseShutterTCP> points;
-        private IEnumerable<AnticorrosiveCoatingTCP> anticorrosivePoints;
         private IEnumerable<ReverseShutterCase> cases;
         private IEnumerable<SlamShutter> slams;
         private IEnumerable<ShaftShutter> shafts;
@@ -69,6 +71,14 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         private ICommand deleteStubFromShutter;
         private ICommand editPID;
         private IEnumerable<PID> pIDs;
+        private CoatingTCP selectedCoatingTCPPoint;
+        private IEnumerable<CoatingTCP> coatingPoints;
+        private ICommand addCoatingOperation;
+        private BaseAnticorrosiveCoating selectedMaterial;
+        private ReverseShutterWithCoating selectedMaterialFromList;
+        private ICommand addMaterialToShutter;
+        private ICommand editMaterial;
+        private ICommand deleteMaterialFromShutter;
 
         public ReverseShutter SelectedItem
         {
@@ -140,6 +150,15 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             set
             {
                 points = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<CoatingTCP> CoatingPoints
+        {
+            get => coatingPoints;
+            set
+            {
+                coatingPoints = value;
                 RaisePropertyChanged();
             }
         }
@@ -283,6 +302,33 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                    AfterTestJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ВИК после ПСИ").OrderBy(x => x.PointId).ToList();
                                    DocumentationJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId).ToList();
                                    ShippingJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId).ToList();
+                               }
+                           }));
+            }
+        }
+        public ICommand AddCoatingOperation
+        {
+            get
+            {
+                return addCoatingOperation ?? (
+                           addCoatingOperation = new DelegateCommand(() =>
+                           {
+                               if (SelectedCoatingTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+                               else
+                               {
+                                   var item = new CoatingJournal()
+                                   {
+                                       DetailDrawing = SelectedItem.Drawing,
+                                       DetailNumber = SelectedItem.Number,
+                                       DetailName = SelectedItem.Name,
+                                       DetailId = SelectedItem.Id,
+                                       Point = SelectedCoatingTCPPoint.Point,
+                                       Description = SelectedCoatingTCPPoint.Description,
+                                       PointId = SelectedCoatingTCPPoint.Id,
+                                   };
+                                   db.Set<CoatingJournal>().Add(item);
+                                   db.SaveChanges();
+                                   CoatingJournal = db.Set<CoatingJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
                                }
                            }));
             }
@@ -534,6 +580,106 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                            }));
             }
         }
+        public BaseAnticorrosiveCoating SelectedMaterial
+        {
+            get => selectedMaterial;
+            set
+            {
+                selectedMaterial = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ReverseShutterWithCoating SelectedMaterialFromList
+        {
+            get => selectedMaterialFromList;
+            set
+            {
+                selectedMaterialFromList = value;
+                RaisePropertyChanged();
+            }
+        }
+        public ICommand AddMaterialToShutter
+        {
+            get
+            {
+                return addMaterialToShutter ?? (
+                           addMaterialToShutter = new DelegateCommand(() =>
+                           {
+                               if (SelectedMaterial != null)
+                               {
+                                   var item = new ReverseShutterWithCoating()
+                                   {
+                                       ReverseShutterId = SelectedItem.Id,
+                                       BaseAnticorrosiveCoatingId = SelectedMaterial.Id
+                                   };
+                                   db.ReverseShutterWithCoatings.Add(item);
+                                   db.SaveChanges();
+                               }
+                               else MessageBox.Show("Объект не выбран!", "Ошибка");
+                           }));
+            }
+        }
+        public ICommand EditMaterial
+        {
+            get
+            {
+                return editMaterial ?? (
+                           editMaterial = new DelegateCommand<Window>((w) =>
+                           {
+                               if (SelectedMaterialFromList != null)
+                               {
+                                   if (SelectedMaterialFromList is Undercoat)
+                                   {
+                                       var wn = new BaseAnticorrosiveCoatingEditView();
+                                       var vm = new BaseAnticorrosiveCoatingEditVM<Undercoat, AnticorrosiveCoatingTCP, UndercoatJournal>(SelectedMaterialFromList.Id, SelectedItem);
+                                       wn.DataContext = vm;
+                                       wn.Show();
+                                   }
+                                   if (SelectedMaterialFromList is AbovegroundCoating)
+                                   {
+                                       var wn = new BaseAnticorrosiveCoatingEditView();
+                                       var vm = new BaseAnticorrosiveCoatingEditVM<AbovegroundCoating, AnticorrosiveCoatingTCP, AbovegroundCoatingJournal>(SelectedMaterialFromList.Id, SelectedItem);
+                                       wn.DataContext = vm;
+                                       wn.Show();
+                                   }
+                                   if (SelectedMaterialFromList is UndergroundCoating)
+                                   {
+                                       var wn = new BaseAnticorrosiveCoatingEditView();
+                                       var vm = new BaseAnticorrosiveCoatingEditVM<UndergroundCoating, AnticorrosiveCoatingTCP, UndergroundCoatingJournal>(SelectedMaterialFromList.Id, SelectedItem);
+                                       wn.DataContext = vm;
+                                       wn.Show();
+                                   }
+                                   if (SelectedMaterialFromList is AbrasiveMaterial)
+                                   {
+                                       var wn = new BaseAnticorrosiveCoatingEditView();
+                                       var vm = new BaseAnticorrosiveCoatingEditVM<AbrasiveMaterial, AnticorrosiveCoatingTCP, AbrasiveMaterialJournal>(SelectedMaterialFromList.Id, SelectedItem);
+                                       wn.DataContext = vm;
+                                       wn.Show();
+                                   }
+                               }
+                               else MessageBox.Show("Объект не выбран", "Ошибка");
+                           }));
+            }
+        }
+
+        public ICommand DeleteMaterialFromShutter
+        {
+            get
+            {
+                return deleteMaterialFromShutter ?? (
+                           deleteMaterialFromShutter = new DelegateCommand(() =>
+                           {
+                               if (SelectedMaterialFromList != null)
+                               {
+                                   var item = db.ReverseShutterWithCoatings.SingleOrDefault(i => i.ReverseShutterId == SelectedItem.Id && i.BaseAnticorrosiveCoatingId == SelectedMaterialFromList.Id);
+                                   db.ReverseShutterWithCoatings.Remove(item);
+                                   db.SaveChanges();
+                               }
+                               else MessageBox.Show("Объект не выбран", "Ошибка");
+                           }));
+            }
+        }
         public ICommand EditCase
         {
             get
@@ -606,6 +752,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                            }));
             }
         }
+
         public IEnumerable<PID> PIDs
         {
             get => pIDs;
@@ -706,14 +853,21 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
+        public CoatingTCP SelectedCoatingTCPPoint
+        {
+            get => selectedCoatingTCPPoint;
+            set
+            {
+                selectedCoatingTCPPoint = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public ReverseShutterEditVM(int id, BaseTable entity)
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.Set<ReverseShutter>()
-                .Include(i => i.ReverseShutterWithCoatings) //TODO: Загрузить отдельным запросом
-                .SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.Set<ReverseShutter>().SingleOrDefault(i => i.Id == id);
             PIDs = db.PIDs.Include(i => i.Specification).ToList();
             AssemblyJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId).ToList();
             TestJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
@@ -729,14 +883,19 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             SelectedItem.SteelSleeveShutters = db.SteelSleeveShutters.Local.Where(i => i.ReverseShutterId == SelectedItem.Id).ToObservableCollection();
             db.StubShutters.Load();
             SelectedItem.StubShutters = db.StubShutters.Local.Where(i => i.ReverseShutterId == SelectedItem.Id).ToObservableCollection();
+            db.ReverseShutterWithCoatings.Load();
+            SelectedItem.ReverseShutterWithCoatings = db.ReverseShutterWithCoatings.Local.Where(i => i.ReverseShutterId == SelectedItem.Id).ToObservableCollection();
             Cases = db.ReverseShutterCases.ToList();
             Slams = db.SlamShutters.ToList();
             Shafts = db.ShaftShutters.ToList();
             BronzeSleeves = db.BronzeSleeveShutters.Local.Where(i => i.ReverseShutterId == null).ToObservableCollection();
             SteelSleeves = db.SteelSleeveShutters.Local.Where(i => i.ReverseShutterId == null).ToObservableCollection();
             Stubs = db.StubShutters.Local.Where(i => i.ReverseShutterId == null).ToObservableCollection();
+            db.BaseAnticorrosiveCoatings.Load();
+            AnticorrosiveMaterials = db.BaseAnticorrosiveCoatings.ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.Set<ReverseShutterTCP>().ToList();
+            CoatingPoints = db.CoatingTCPs.ToList();
         }
     }
 }

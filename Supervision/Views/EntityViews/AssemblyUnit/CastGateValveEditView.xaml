@@ -1,4 +1,4 @@
-﻿<Window x:Class="Supervision.Views.EntityViews.AssemblyUnit.ReverseShutterEditView"
+﻿<Window x:Class="Supervision.Views.EntityViews.AssemblyUnit.CastGateValveEditView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -200,249 +200,203 @@
                     Width="auto"
                     Margin="5">
             <TabItem Header="Комплектация">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Label Style="{StaticResource StandardLabel}"
+                <TabControl>
+                    <TabItem Header="Основные детали">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource StandardLabel}"
                            FontSize="{StaticResource Hi}"
                            Grid.Row="2"
-                           Content="Втулка бронзовая:"
+                           Content="Седло:"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"/>
-                    <ComboBox Style="{StaticResource StandardComboBox}" 
+                            <ComboBox Style="{StaticResource StandardComboBox}" 
                               Grid.Row="2"
                               Grid.Column="1"
                               Margin="5 0 5 0"
                               IsEditable="True"
                               VerticalAlignment="Center" 
-                              ItemsSource="{Binding BronzeSleeves}"
-                              SelectedItem="{Binding SelectedBronzeSleeve}"
+                              ItemsSource="{Binding Saddles}"
+                              SelectedItem="{Binding SelectedSaddle}"
                               DisplayMemberPath="FullName"
                               SelectedValuePath="Id"/>
-                    <ListBox  Style="{StaticResource StandardListBox}"
-                              ItemsSource="{Binding SelectedItem.BronzeSleeveShutters}" 
+                            <ListBox  Style="{StaticResource StandardListBox}"
+                              ItemsSource="{Binding SelectedItem.Saddles}" 
                               Margin="5"
                               Grid.ColumnSpan="2"
                               Grid.Row="3"
                               Grid.RowSpan="2"
-                              SelectedItem="{Binding SelectedBronzeSleeveFromList}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding EditBronzeSleeve}"
+                              SelectedItem="{Binding SelectedSaddleFromList}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding EditSaddle}"
                                                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock>
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} - {1}">
-                                            <Binding Path="Number"/>
-                                            <Binding Path="Status"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} - {1}">
+                                                    <Binding Path="Number"/>
+                                                    <Binding Path="Status"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
 
-                    <Button Style="{StaticResource StandardButton}"
+                            <Button Style="{StaticResource StandardButton}"
                             Grid.Row="3"
                             Grid.Column="2"
                             Height="30"
                             Margin="5"
                             Content="Открыть"
-                            Command="{Binding EditBronzeSleeve}"
+                            Command="{Binding EditSaddle}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Button Style="{StaticResource StandardButton}"
+                            <Button Style="{StaticResource StandardButton}"
                             Grid.Row="4"
                             Grid.Column="2"
                             Margin="5"
                             Height="30"
                             Content="Удалить"
-                            Command="{Binding DeleteBronzeSleeveFromShutter}"
+                            Command="{Binding DeleteSaddleFromValve}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Button Style="{StaticResource StandardButton}" 
+                            <Button Style="{StaticResource StandardButton}" 
                             Grid.Row="2"
                             Grid.Column="2"
                             Margin="5"
                             Height="30"
                             Content="Добавить"
-                            Command="{Binding AddBronzeSleeveToShutter}"
+                            Command="{Binding AddSaddleToValve}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Separator Style="{StaticResource VerticalSeparator}"
+                            <Separator Style="{StaticResource VerticalSeparator}"
                                Grid.Column="3"
                                Grid.RowSpan="9"/>
 
-                    <Label Style="{StaticResource StandardLabel}"
-                           FontSize="{StaticResource Hi}"
-                           Grid.Row="2"
-                           Content="Втулка стальная:"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Center"
-                           Grid.Column="4"/>
-                    <ComboBox Style="{StaticResource StandardComboBox}" 
-                           Grid.Row="2"
-                              Grid.Column="5"
-                              Margin="5 0 5 0"
-                              IsEditable="True"
-                              VerticalAlignment="Center" 
-                              ItemsSource="{Binding SteelSleeves}"
-                              SelectedItem="{Binding SelectedSteelSleeve}"
-                              DisplayMemberPath="FullName"
-                              SelectedValuePath="Id"/>
-                    <ListBox  Style="{StaticResource StandardListBox}"
-                              ItemsSource="{Binding SelectedItem.SteelSleeveShutters}" 
-                              Margin="5"
-                              Grid.Column="4"
-                              Grid.ColumnSpan="2"
-                              Grid.Row="3"
-                              Grid.RowSpan="2"
-                              SelectedItem="{Binding SelectedSteelSleeveFromList}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding EditSteelSleeve}"
-                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock>
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} - {1}">
-                                            <Binding Path="Number"/>
-                                            <Binding Path="Status"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                            <Label Style="{StaticResource StandardLabel}" 
+                                   FontSize="{StaticResource Hi}"
+                                   Content="Шпиндель:" 
+                                   VerticalAlignment="Center"
+                                   Grid.Column="4"
+                                   Grid.Row="2"/>
 
-                    <Button Style="{StaticResource StandardButton}"
-                            Grid.Row="3"
-                            Grid.Column="6"
-                            Height="30"
-                            Margin="5"
-                            Content="Открыть"
-                            Command="{Binding EditSteelSleeve}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            <TextBlock Style="{StaticResource StandardTextBlock}" 
+                                       Grid.Column="5"
+                                       Grid.Row="2"
+                                       Height="25"
+                                       Margin="5 0 5 0" 
+                                       VerticalAlignment="Center" 
+                                       Text="{Binding SelectedItem.CastgateValveCover.Spindle.FullName}"/>
 
-                    <Button Style="{StaticResource StandardButton}"
-                            Grid.Row="4"
-                            Grid.Column="6"
-                            Margin="5"
-                            Height="30"
-                            Content="Удалить"
-                            Command="{Binding DeleteSteelSleeveFromShutter}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            <Button Style="{StaticResource StandardButton}"
+                                    Grid.Column="6"
+                                    Grid.Row="2"
+                                    Height="30"
+                                    Margin="5 0 5 0"
+                                    Content="Открыть"
+                                    Command="{Binding EditSpindle}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Button Style="{StaticResource StandardButton}" 
-                            Grid.Row="2"
-                            Grid.Column="6"
-                            Margin="5"
-                            Height="30"
-                            Content="Добавить"
-                            Command="{Binding AddSteelSleeveToShutter}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-
-                    <Separator Style="{StaticResource VerticalSeparator}"
+                            <Separator Style="{StaticResource VerticalSeparator}"
                                Grid.Column="7"
                                Grid.RowSpan="9"/>
 
-                    <Label Style="{StaticResource StandardLabel}" 
+                            <Label Style="{StaticResource StandardLabel}" 
                            FontSize="{StaticResource Hi}"
-                           Content="Захлопка:" 
+                           Content="Крышка:" 
                            VerticalAlignment="Center"
                            Grid.Column="4"/>
 
-                    <ComboBox Style="{StaticResource StandardComboBox}" 
+                            <ComboBox Style="{StaticResource StandardComboBox}" 
                               Grid.Column="5"
                               Margin="5 0 5 0" 
                               IsEditable="True" 
                               VerticalAlignment="Center" 
-                              ItemsSource="{Binding Slams}" 
-                              SelectedItem= "{Binding SelectedItem.SlamShutter}"
+                              ItemsSource="{Binding Covers}" 
+                              SelectedItem= "{Binding SelectedItem.CastGateValveCover}"
                               SelectedValuePath="Id"
-                              SelectedValue="{Binding SelectedItem.SlamShutterId}"
+                              SelectedValue="{Binding SelectedItem.CastGateValveCoverId}"
                               DisplayMemberPath="FullName"/>
 
-                    <Button Style="{StaticResource StandardButton}"
+                            <Button Style="{StaticResource StandardButton}"
                             Grid.Column="6"
                             Height="30"
                             Margin="5 0 5 0"
                             Content="Открыть"
-                            Command="{Binding EditSlamShutter}"
+                            Command="{Binding EditCover}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Label Style="{StaticResource StandardLabel}" 
+                            <Label Style="{StaticResource StandardLabel}" 
                            FontSize="{StaticResource Hi}"
-                           Content="Ось:" 
+                           Content="Шибер:" 
                            VerticalAlignment="Center"
                            Grid.Column="8"/>
 
-                    <ComboBox Style="{StaticResource StandardComboBox}" 
+                            <ComboBox Style="{StaticResource StandardComboBox}" 
                               Grid.Column="9"
                               Margin="5 0 5 0" 
                               IsEditable="True" 
                               VerticalAlignment="Center" 
-                              ItemsSource="{Binding Shafts}" 
-                              SelectedItem= "{Binding SelectedItem.ShaftShutter}"
+                              ItemsSource="{Binding Gates}" 
+                              SelectedItem= "{Binding SelectedItem.Gate}"
                               SelectedValuePath="Id"
-                              SelectedValue="{Binding SelectedItem.ShaftShutterId}"
+                              SelectedValue="{Binding SelectedItem.GateId}"
                               DisplayMemberPath="FullName"/>
 
-                    <Button Style="{StaticResource StandardButton}"
+                            <Button Style="{StaticResource StandardButton}"
                             Grid.Column="10"
                             Height="30"
                             Margin="5 0 5 0"
                             Content="Открыть"
-                            Command="{Binding EditShaftShutter}"
+                            Command="{Binding EditGate}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Label Style="{StaticResource StandardLabel}" 
+                            <Label Style="{StaticResource StandardLabel}" 
                            FontSize="{StaticResource Hi}"
                            Grid.Column="0"
                            Content="Корпус:" 
                            VerticalAlignment="Center"/>
 
-                    <ComboBox Style="{StaticResource StandardComboBox}" 
+                            <ComboBox Style="{StaticResource StandardComboBox}" 
                               Grid.Column="1"
                               Margin="5 0 5 0" 
                               IsEditable="True" 
                               VerticalAlignment="Center" 
                               ItemsSource="{Binding Cases}" 
-                              SelectedItem= "{Binding SelectedItem.ReverseShutterCase}"
+                              SelectedItem= "{Binding SelectedItem.CastGateValveCase}"
                               SelectedValuePath="Id"
-                              SelectedValue="{Binding SelectedItem.ReverseShutterCaseId}"
+                              SelectedValue="{Binding SelectedItem.CastGateValveCaseId}"
                               DisplayMemberPath="FullName"/>
 
-                    <Button Style="{StaticResource StandardButton}"
+                            <Button Style="{StaticResource StandardButton}"
                             Grid.Column="2"
                             Height="30"
                             Margin="5 0 5 0"
@@ -450,98 +404,519 @@
                             Command="{Binding EditCase}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Separator Style="{StaticResource HorizontalSeparator}"
+                            <Separator Style="{StaticResource HorizontalSeparator}"
                                Grid.Row="1"
                                Grid.ColumnSpan="11"/>
 
-                    <Label Style="{StaticResource StandardLabel}"
+                            <Label Style="{StaticResource StandardLabel}"
                            FontSize="{StaticResource Hi}"
-                           Content="Заглушка:"
+                           Content="Штифт срезной:"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Grid.Row="2"
                            Grid.Column="8"/>
 
-                    <ComboBox Style="{StaticResource StandardComboBox}" 
+                            <ComboBox Style="{StaticResource StandardComboBox}" 
                            Grid.Row="2"
                               Grid.Column="9"
                               Margin="5 0 5 0"
                               IsEditable="True"
                               VerticalAlignment="Center" 
-                              ItemsSource="{Binding Stubs}"
-                              SelectedItem="{Binding SelectedStub}"
+                              ItemsSource="{Binding ShearPins}"
+                              SelectedItem="{Binding SelectedShearPin}"
                               DisplayMemberPath="FullName"
                               SelectedValuePath="Id"/>
 
-                    <ListBox  Style="{StaticResource StandardListBox}"
-                              ItemsSource="{Binding SelectedItem.StubShutters}" 
+                            <ListBox  Style="{StaticResource StandardListBox}"
+                              ItemsSource="{Binding SelectedItem.ShearPins}" 
                               Margin="5"
                               Grid.Column="8"
                               Grid.RowSpan="2"
                               Grid.ColumnSpan="2"
                               Grid.Row="3"
-                              SelectedItem="{Binding SelectedStubFromList}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding EditStub}"
+                              SelectedItem="{Binding SelectedShearPinFromList}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding EditShearPin}"
                                                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock>
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} - {1}">
-                                            <Binding Path="Number"/>
-                                            <Binding Path="Status"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} - {1}">
+                                                    <Binding Path="Number"/>
+                                                    <Binding Path="Status"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
 
-                    <Button Style="{StaticResource StandardButton}"
+                            <Button Style="{StaticResource StandardButton}"
                             Grid.Row="3"
                             Grid.Column="10"
                             Height="30"
                             Margin="5"
                             Content="Открыть"
-                            Command="{Binding EditStub}"
+                            Command="{Binding EditShearPin}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Button Style="{StaticResource StandardButton}"
+                            <Button Style="{StaticResource StandardButton}"
                             Grid.Row="4"
                             Grid.Column="10"
                             Margin="5"
                             Height="30"
                             Content="Удалить"
-                            Command="{Binding DeleteStubFromShutter}"
+                            Command="{Binding DeleteShearPinFromValve}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Button Style="{StaticResource StandardButton}" 
+                            <Button Style="{StaticResource StandardButton}" 
                             Grid.Row="2"
                             Grid.Column="10"
                             Margin="5"
                             Height="30"
                             Content="Добавить"
-                            Command="{Binding AddStubToShutter}"
+                            Command="{Binding AddShearPinToValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                        </Grid>
+                        
+                    </TabItem>
+                    
+                    <TabItem Header="Крепеж, пружины, краны, уплотнения">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource StandardLabel}"
+                           FontSize="{StaticResource Hi}"
+                           Grid.Row="0"
+                           Content="Шпилька:"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"/>
+                            <ComboBox Style="{StaticResource StandardComboBox}" 
+                              Grid.Row="0"
+                              Grid.Column="1"
+                              Margin="5 0 5 0"
+                              IsEditable="True"
+                              VerticalAlignment="Center" 
+                              ItemsSource="{Binding ScrewStuds}"
+                              SelectedItem="{Binding SelectedScrewStud}"
+                              DisplayMemberPath="FullName"
+                              SelectedValuePath="Id"/>
+                            <ListBox  Style="{StaticResource StandardListBox}"
+                              ItemsSource="{Binding SelectedItem.BaseValveWithScrewStuds}" 
+                              Margin="5"
+                              Grid.ColumnSpan="2"
+                              Grid.Row="1"
+                              Grid.RowSpan="2"
+                              SelectedItem="{Binding SelectedScrewStudFromList}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding EditScrewStud}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} - {1}">
+                                                    <Binding Path="Number"/>
+                                                    <Binding Path="Status"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Height="30"
+                            Margin="5"
+                            Content="Открыть"
+                            Command="{Binding EditScrewStud}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Separator Style="{StaticResource HorizontalSeparator}"
-                               Grid.Row="5"
-                               Grid.ColumnSpan="11"/>
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Margin="5"
+                            Height="30"
+                            Content="Удалить"
+                            Command="{Binding DeleteScrewStudFromValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Label Style="{StaticResource StandardLabel}"
+                            <Button Style="{StaticResource StandardButton}" 
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="5"
+                            Height="30"
+                            Content="Добавить"
+                            Command="{Binding AddScrewStudToValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Separator Style="{StaticResource VerticalSeparator}"
+                                       Grid.Column="3"
+                                       Grid.RowSpan="9"/>
+
+                            <Label Style="{StaticResource StandardLabel}"
+                           FontSize="{StaticResource Hi}"
+                           Grid.Row="0"
+                                   Grid.Column="4"
+                           Content="Гайка:"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"/>
+                            <ComboBox Style="{StaticResource StandardComboBox}" 
+                              Grid.Row="0"
+                              Grid.Column="5"
+                              Margin="5 0 5 0"
+                              IsEditable="True"
+                              VerticalAlignment="Center" 
+                              ItemsSource="{Binding ScrewNuts}"
+                              SelectedItem="{Binding SelectedScrewNut}"
+                              DisplayMemberPath="FullName"
+                              SelectedValuePath="Id"/>
+                            <ListBox  Style="{StaticResource StandardListBox}"
+                              ItemsSource="{Binding SelectedItem.BaseValveWithScrewNuts}" 
+                              Margin="5"
+                                      Grid.Column="4"
+                              Grid.ColumnSpan="2"
+                              Grid.Row="1"
+                              Grid.RowSpan="2"
+                              SelectedItem="{Binding SelectedScrewNutFromList}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding EditScrewNut}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} - {1}">
+                                                    <Binding Path="Number"/>
+                                                    <Binding Path="Status"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="1"
+                            Grid.Column="6"
+                            Height="30"
+                            Margin="5"
+                            Content="Открыть"
+                            Command="{Binding EditScrewNut}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="2"
+                            Grid.Column="6"
+                            Margin="5"
+                            Height="30"
+                            Content="Удалить"
+                            Command="{Binding DeleteScrewNutFromValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Button Style="{StaticResource StandardButton}" 
+                            Grid.Row="0"
+                            Grid.Column="6"
+                            Margin="5"
+                            Height="30"
+                            Content="Добавить"
+                            Command="{Binding AddScrewNutToValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Separator Style="{StaticResource VerticalSeparator}"
+                                       Grid.Column="7"
+                                       Grid.RowSpan="9"/>
+                            
+                            <Label Style="{StaticResource StandardLabel}"
+                           FontSize="{StaticResource Hi}"
+                           Grid.Row="0"
+                                   Grid.Column="8"
+                           Content="Пружина:"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"/>
+                            <ComboBox Style="{StaticResource StandardComboBox}" 
+                              Grid.Row="0"
+                              Grid.Column="9"
+                              Margin="5 0 5 0"
+                              IsEditable="True"
+                              VerticalAlignment="Center" 
+                              ItemsSource="{Binding Springs}"
+                              SelectedItem="{Binding SelectedSpring}"
+                              DisplayMemberPath="FullName"
+                              SelectedValuePath="Id"/>
+                            <ListBox  Style="{StaticResource StandardListBox}"
+                              ItemsSource="{Binding SelectedItem.BaseValveWithSprings}" 
+                              Margin="5"
+                                      Grid.Column="8"
+                              Grid.ColumnSpan="2"
+                              Grid.Row="1"
+                              Grid.RowSpan="2"
+                              SelectedItem="{Binding SelectedSpringFromList}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding EditSpring}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} - {1}">
+                                                    <Binding Path="Number"/>
+                                                    <Binding Path="Status"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="1"
+                            Grid.Column="10"
+                            Height="30"
+                            Margin="5"
+                            Content="Открыть"
+                            Command="{Binding EditSpring}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="2"
+                            Grid.Column="10"
+                            Margin="5"
+                            Height="30"
+                            Content="Удалить"
+                            Command="{Binding DeleteSpringFromValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Button Style="{StaticResource StandardButton}" 
+                            Grid.Row="0"
+                            Grid.Column="10"
+                            Margin="5"
+                            Height="30"
+                            Content="Добавить"
+                            Command="{Binding AddSpringToValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Separator Style="{StaticResource HorizontalSeparator}"
+                                       Grid.Row="3"
+                                       Grid.ColumnSpan="10"/>
+
+                            <Label Style="{StaticResource StandardLabel}"
+                           FontSize="{StaticResource Hi}"
+                           Grid.Row="4"
+                           Content="Уплотнительные материалы:"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"/>
+                            <ComboBox Style="{StaticResource StandardComboBox}" 
+                              Grid.Row="4"
+                              Grid.Column="1"
+                              Margin="5 0 5 0"
+                              IsEditable="True"
+                              VerticalAlignment="Center" 
+                              ItemsSource="{Binding Seals}"
+                              SelectedItem="{Binding SelectedSeal}"
+                              DisplayMemberPath="FullName"
+                              SelectedValuePath="Id"/>
+                            <ListBox  Style="{StaticResource StandardListBox}"
+                              ItemsSource="{Binding SelectedItem.BaseValveWithSeals}" 
+                              Margin="5"
+                              Grid.ColumnSpan="2"
+                              Grid.Row="5"
+                              Grid.RowSpan="2"
+                              SelectedItem="{Binding SelectedSealFromList}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding EditSeal}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} - {1}">
+                                                    <Binding Path="Number"/>
+                                                    <Binding Path="Status"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="5"
+                            Grid.Column="2"
+                            Height="30"
+                            Margin="5"
+                            Content="Открыть"
+                            Command="{Binding EditSeal}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="6"
+                            Grid.Column="2"
+                            Margin="5"
+                            Height="30"
+                            Content="Удалить"
+                            Command="{Binding DeleteSealFromValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Button Style="{StaticResource StandardButton}" 
+                            Grid.Row="4"
+                            Grid.Column="2"
+                            Margin="5"
+                            Height="30"
+                            Content="Добавить"
+                            Command="{Binding AddSealToValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Label Style="{StaticResource StandardLabel}"
+                           FontSize="{StaticResource Hi}"
+                           Grid.Row="4"
+                                   Grid.Column="4"
+                           Content="Кран шаровой:"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"/>
+                            <ComboBox Style="{StaticResource StandardComboBox}" 
+                              Grid.Row="4"
+                              Grid.Column="5"
+                              Margin="5 0 5 0"
+                              IsEditable="True"
+                              VerticalAlignment="Center" 
+                              ItemsSource="{Binding BallValves}"
+                              SelectedItem="{Binding SelectedBallValve}"
+                              DisplayMemberPath="FullName"
+                              SelectedValuePath="Id"/>
+                            <ListBox  Style="{StaticResource StandardListBox}"
+                              ItemsSource="{Binding SelectedItem.BallValves}" 
+                              Margin="5"
+                                      Grid.Column="4"
+                              Grid.ColumnSpan="2"
+                              Grid.Row="5"
+                              Grid.RowSpan="2"
+                              SelectedItem="{Binding SelectedBallValveFromList}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding EditBallValve}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} - {1}">
+                                                    <Binding Path="Number"/>
+                                                    <Binding Path="Status"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="5"
+                            Grid.Column="6"
+                            Height="30"
+                            Margin="5"
+                            Content="Открыть"
+                            Command="{Binding EditBallValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="6"
+                            Grid.Column="6"
+                            Margin="5"
+                            Height="30"
+                            Content="Удалить"
+                            Command="{Binding DeleteBallValveFromValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Button Style="{StaticResource StandardButton}" 
+                            Grid.Row="4"
+                            Grid.Column="6"
+                            Margin="5"
+                            Height="30"
+                            Content="Добавить"
+                            Command="{Binding AddBallValveToValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="АКП">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource StandardLabel}"
                            FontSize="{StaticResource Hi}"
                            Content="Материалы АКП:"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
-                           Grid.Row="6"
+                           Grid.Row="0"
                            Grid.Column="0"/>
 
-                    <ComboBox Style="{StaticResource StandardComboBox}" 
-                           Grid.Row="6"
+                            <ComboBox Style="{StaticResource StandardComboBox}" 
+                           Grid.Row="0"
                               Grid.Column="1"
                               Margin="5 0 5 0"
                               IsEditable="True"
@@ -551,37 +926,37 @@
                               DisplayMemberPath="FullName"
                               SelectedValuePath="Id"/>
 
-                    <ListBox  Style="{StaticResource StandardListBox}"
-                              ItemsSource="{Binding SelectedItem.ReverseShutterWithCoatings}" 
+                            <ListBox  Style="{StaticResource StandardListBox}"
+                              ItemsSource="{Binding SelectedItem.BaseValveWithCoatings}" 
                               Margin="5"
                               Grid.Column="0"
                               Grid.ColumnSpan="2"
                               Grid.RowSpan="2"
-                              Grid.Row="7"
+                              Grid.Row="1"
                               SelectedItem="{Binding SelectedMaterialFromList}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding EditMaterial}"
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding EditMaterial}"
                                                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock>
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} - {1} - {2}">
-                                            <Binding Path="Name"/>
-                                            <Binding Path="Number"/>
-                                            <Binding Path="Status"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} - {1} - {2}">
+                                                    <Binding Path="Name"/>
+                                                    <Binding Path="Number"/>
+                                                    <Binding Path="Status"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
 
-                    <Button Style="{StaticResource StandardButton}"
-                            Grid.Row="7"
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="1"
                             Grid.Column="2"
                             Height="30"
                             Margin="5"
@@ -589,26 +964,28 @@
                             Command="{Binding EditMaterial}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Button Style="{StaticResource StandardButton}"
-                            Grid.Row="8"
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="2"
                             Grid.Column="2"
                             Margin="5"
                             Height="30"
                             Content="Удалить"
-                            Command="{Binding DeleteMaterialFromShutter}"
+                            Command="{Binding DeleteMaterialFromValve}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
-                    <Button Style="{StaticResource StandardButton}" 
-                            Grid.Row="6"
+                            <Button Style="{StaticResource StandardButton}" 
+                            Grid.Row="0"
                             Grid.Column="2"
                             Margin="5"
                             Height="30"
                             Content="Добавить"
-                            Command="{Binding AddMaterialToShutter}"
+                            Command="{Binding AddMaterialToValve}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-                </Grid>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
             </TabItem>
-
+            
             <TabItem Header="Операции">
                 <TabControl Style="{StaticResource StandardTabControl}">
                     <TabItem Header="Сборка">

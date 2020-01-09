@@ -97,7 +97,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                         {
                             if (SelectedItem.AmountRemaining == null && SelectedItem.Amount > 0) 
                                 SelectedItem.AmountRemaining = SelectedItem.Amount;
-                            else SelectedItem.AmountRemaining = SelectedItem.Amount - SelectedItem.BaseValveWithSeals?.Count();
+                            else 
+                                SelectedItem.AmountRemaining = SelectedItem.Amount - SelectedItem.BaseValveWithSeals?.Count();
                             db.AssemblyUnitSeals.Update(SelectedItem);
                             db.SaveChanges();
                             foreach(var i in CastJournal)

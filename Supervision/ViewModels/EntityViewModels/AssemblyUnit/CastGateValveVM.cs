@@ -6,24 +6,20 @@ using System.Windows.Data;
 using System.Windows.Input;
 using DataLayer;
 using DataLayer.Entities.AssemblyUnits;
-using DataLayer.Entities.Detailing.WeldGateValveDetails;
-using DataLayer.Journals;
 using DataLayer.Journals.AssemblyUnits;
-using DataLayer.TechnicalControlPlans;
 using DataLayer.TechnicalControlPlans.AssemblyUnits;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
 using Supervision.Views.EntityViews.AssemblyUnit;
-using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
 
 namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
 {
-    public class ReverseShutterVM : BasePropertyChanged
+    public class CastGateValveVM : BasePropertyChanged
     {
         private readonly DataContext db;
-        private IEnumerable<ReverseShutter> allInstances;
+        private IEnumerable<CastGateValve> allInstances;
         private ICollectionView allInstancesView;
-        private ReverseShutter selectedItem;
+        private CastGateValve selectedItem;
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
@@ -45,7 +41,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutter item && item.Number != null)
+                    if (obj is CastGateValve item && item.Number != null)
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
@@ -62,7 +58,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutter item && item.Drawing != null)
+                    if (obj is CastGateValve item && item.Drawing != null)
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
@@ -79,7 +75,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is ReverseShutter item && item.Status != null)
+                    if (obj is CastGateValve item && item.Status != null)
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
@@ -110,8 +106,8 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                     {
                         if (SelectedItem != null)
                         {
-                            var wn = new ReverseShutterEditView();
-                            var vm = new ReverseShutterEditVM(SelectedItem.Id, SelectedItem);
+                            var wn = new CastGateValveEditView();
+                            var vm = new CastGateValveEditVM(SelectedItem.Id, SelectedItem);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -130,20 +126,20 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                     {
                         if (SelectedItem != null)
                         {
-                            var item = new ReverseShutter()
+                            var item = new CastGateValve()
                             {
                                 Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер:"),
                                 Drawing = SelectedItem.Drawing,
                                 Status = SelectedItem.Status,
                                 Name = SelectedItem.Name,
                             };
-                            db.Set<ReverseShutter>().Add(item);
+                            db.Set<CastGateValve>().Add(item);
                             db.SaveChanges();
-                            var Journal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id).ToList();
+                            var Journal = db.Set<CastGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id).ToList();
                             var coatingJournal = db.Set<CoatingJournal>().Where(i => i.DetailId == SelectedItem.Id).ToList();
                             foreach (var record in Journal)
                             {
-                                var Record = new ReverseShutterJournal()
+                                var Record = new CastGateValveJournal()
                                 {
                                     Date = record.Date,
                                     DetailId = item.Id,
@@ -160,7 +156,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                     Status = record.Status,
                                     JournalNumber = record.JournalNumber
                                 };
-                                db.Set<ReverseShutterJournal>().Add(Record);
+                                db.Set<CastGateValveJournal>().Add(Record);
                                 db.SaveChanges();
                             }
                             foreach (var record in coatingJournal)
@@ -198,15 +194,15 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 return addItem ?? (
                     addItem = new DelegateCommand<Window>((w) =>
                     {
-                        var item = new ReverseShutter();
-                        db.Set<ReverseShutter>().Add(item);
+                        var item = new CastGateValve();
+                        db.Set<CastGateValve>().Add(item);
                         db.SaveChanges();
                         SelectedItem = item;
-                        var tcpPoints = db.Set<ReverseShutterTCP>().ToList();
+                        var tcpPoints = db.Set<CastGateValveTCP>().ToList();
                         var coatingPoints = db.Set<CoatingTCP>().ToList();
                         foreach (var i in tcpPoints)
                         {
-                            var journal = new ReverseShutterJournal()
+                            var journal = new CastGateValveJournal()
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
@@ -218,7 +214,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                             };
                             if (journal != null)
                             {
-                                db.Set<ReverseShutterJournal>().Add(journal);
+                                db.Set<CastGateValveJournal>().Add(journal);
                                 db.SaveChanges();
                             }
                         }
@@ -240,8 +236,8 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                 db.SaveChanges();
                             }
                         }
-                        var wn = new ReverseShutterEditView();
-                        var vm = new ReverseShutterEditVM(SelectedItem.Id, SelectedItem);
+                        var wn = new CastGateValveEditView();
+                        var vm = new CastGateValveEditVM(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
@@ -257,7 +253,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                     {
                         if (SelectedItem != null)
                         {
-                            db.Set<ReverseShutter>().Remove(SelectedItem);
+                            db.Set<CastGateValve>().Remove(SelectedItem);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -276,7 +272,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             }
         }
 
-        public ReverseShutter SelectedItem
+        public CastGateValve SelectedItem
         {
             get => selectedItem;
             set
@@ -286,7 +282,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             }
         }
 
-        public IEnumerable<ReverseShutter> AllInstances
+        public IEnumerable<CastGateValve> AllInstances
         {
             get => allInstances;
             set
@@ -305,11 +301,11 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             }
         }
 
-        public ReverseShutterVM()
+        public CastGateValveVM()
         {
             db = new DataContext();
-            db.Set<ReverseShutter>().Load();
-            AllInstances = db.Set<ReverseShutter>().Local.ToObservableCollection();
+            db.Set<CastGateValve>().Load();
+            AllInstances = db.Set<CastGateValve>().Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             if (AllInstances.Any())
             {

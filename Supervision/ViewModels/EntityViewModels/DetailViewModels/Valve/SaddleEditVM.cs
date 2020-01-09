@@ -135,8 +135,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                                {
                                    if (SelectedFrontalSaddleSealing != null)
                                    {
-                                       var amount = db.FrontalSaddleSeals.Where(i => i.Id == SelectedFrontalSaddleSealing.Id).Count();
-                                       if (amount > 0)
+                                       if (SelectedFrontalSaddleSealing.AmountRemaining > 0)
                                        {
                                            var item = new SaddleWithSealing()
                                            {

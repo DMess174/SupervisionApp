@@ -95,8 +95,10 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         if (SelectedItem != null)
                         {
-                            if (SelectedItem.AmountRemaining == null && SelectedItem.Amount > 0) SelectedItem.AmountRemaining = SelectedItem.Amount;
-                            else SelectedItem.AmountRemaining = SelectedItem.Amount - SelectedItem.BaseValveWithScrewNuts?.Select(i => i.ScrewNutAmount).Sum();
+                            if (SelectedItem.AmountRemaining == null && SelectedItem.Amount > 0) 
+                                SelectedItem.AmountRemaining = SelectedItem.Amount;
+                            else 
+                                SelectedItem.AmountRemaining = SelectedItem.Amount - SelectedItem.BaseValveWithScrewNuts?.Select(i => i.ScrewNutAmount).Sum();
                             db.ScrewNuts.Update(SelectedItem);
                             db.SaveChanges();
                             foreach(var i in CastJournal)

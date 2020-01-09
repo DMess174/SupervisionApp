@@ -354,7 +354,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Styles\ProjectStyles\CloseTabItemAction.cs" />
+    <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\CastGateValveEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\ReverseShutterEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\CastGateValveVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\ReverseShutterVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\BaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CastingCaseEditVM.cs" />
@@ -437,8 +439,14 @@
     <Compile Include="ViewModels\ProductTypeViewModel.cs" />
     <Compile Include="ViewModels\JournalNumbersViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
+    <Compile Include="Views\EntityViews\AssemblyUnit\CastGateValveEditView.xaml.cs">
+      <DependentUpon>CastGateValveEditView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\AssemblyUnit\ReverseShutterEditView.xaml.cs">
       <DependentUpon>ReverseShutterEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\AssemblyUnit\CastGateValveView.xaml.cs">
+      <DependentUpon>CastGateValveView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\AssemblyUnit\ReverseShutterView.xaml.cs">
       <DependentUpon>ReverseShutterView.xaml</DependentUpon>
@@ -790,7 +798,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\AssemblyUnit\CastGateValveEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\AssemblyUnit\ReverseShutterEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\AssemblyUnit\CastGateValveView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
