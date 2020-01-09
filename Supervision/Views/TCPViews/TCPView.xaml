@@ -56,17 +56,22 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Пункт" 
-                                    Width="70" 
-                                    Binding="{Binding Path = Point}" 
-                                    TextBlock.TextAlignment="Center" >
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="HorizontalAlignment" Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="Пункт" 
+                                    Width="70">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Path = Point, UpdateSourceTrigger=PropertyChanged}"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="1"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn 
                     Header="Наименование операции"
@@ -93,7 +98,7 @@
                                      AcceptsReturn="True"
                                      AcceptsTab="True"
                                      VerticalAlignment="Center"
-                                     MinLines="3"
+                                     MinLines="1"
                                      MaxLines="50"
                                      SpellCheck.IsEnabled="True"
                                      Language="ru-ru"/>

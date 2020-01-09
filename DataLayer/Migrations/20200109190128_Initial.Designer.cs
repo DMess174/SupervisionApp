@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200108124715_Initial")]
+    [Migration("20200109190128_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,7 +78,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("BaseValveId");
 
-                    b.ToTable("BaseValveWithCoating");
+                    b.ToTable("BaseValveWithCoatings");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValveWithScrewNut", b =>
@@ -174,7 +174,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("ReverseShutterId");
 
-                    b.ToTable("ReverseShutterWithCoating");
+                    b.ToTable("ReverseShutterWithCoatings");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.AssemblyUnitSealing", b =>

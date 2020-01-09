@@ -76,7 +76,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("BaseValveId");
 
-                    b.ToTable("BaseValveWithCoating");
+                    b.ToTable("BaseValveWithCoatings");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseValveWithScrewNut", b =>
@@ -172,7 +172,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("ReverseShutterId");
 
-                    b.ToTable("ReverseShutterWithCoating");
+                    b.ToTable("ReverseShutterWithCoatings");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.AssemblyUnitSealing", b =>
