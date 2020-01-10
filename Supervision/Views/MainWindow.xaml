@@ -16,12 +16,12 @@
             <RowDefinition Height="3"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        
+
         <Menu Style="{StaticResource StandardMenu}" 
               Height="25"
               VerticalAlignment="Top" 
               Grid.Row="0" >
-            
+
             <MenuItem Header="Файл">
                 <MenuItem Header="Главное меню" Command="{Binding MainMenuOpen}"/>
                 <Separator />
@@ -59,9 +59,10 @@
 
                 <MenuItem Header="Захлопка (ЗО)" Command="{Binding SlamShutterOpen}"/>
 
-                <MenuItem Header="Затвор (ЗШК)" Command="{Binding ShutterOpen}">
+                <MenuItem Header="Затвор (ЗШК)">
                     <MenuItem Header="Диск затвора" Command="{Binding ShutterDiskOpen}"/>
                     <MenuItem Header="Направляющая затвора" Command="{Binding ShutterGuideOpen}"/>
+                    <MenuItem Header="Затвор (ЗШК)" Command="{Binding ShutterOpen}"/>
                 </MenuItem>
 
                 <MenuItem Header="Кран шаровой (ЗШ, ЗШЛ, ЗШК)" Command="{Binding BallValveOpen}"/>
@@ -70,33 +71,23 @@
 
                 <MenuItem Header="Корпус" >
                     <MenuItem Header="ЗШ" Command="{Binding CastValveCaseOpen}" />
-                    <MenuItem Header="ЗШЛ" Command="{Binding SheetGateValveCaseOpen}">
-                        <MenuItem Header="Днище" Command="{Binding CaseBottomOpen}"/>
-                        <MenuItem Header="Патрубок" Command="{Binding WeldNozzleOpen}"/>
-                        <MenuItem Header="Стенка боковая" Command="{Binding SideWallOpen}"/>
-                        <MenuItem Header="Стенка лицевая" Command="{Binding FrontWallOpen}"/>
-                        <MenuItem Header="Фланец" Command="{Binding CaseFlangeOpen}"/>
-                    </MenuItem>
-                    <MenuItem Header="ЗШК" Command="{Binding CompactGateValveCaseOpen}">
-                        <MenuItem Header="Днище" Command="{Binding CaseBottomOpen}"/>
-                        <MenuItem Header="Патрубок" Command="{Binding WeldNozzleOpen}"/>
-                        <MenuItem Header="Стенка боковая" Command="{Binding SideWallOpen}"/>
-                        <MenuItem Header="Стенка лицевая" Command="{Binding FrontWallOpen}"/>
-                        <MenuItem Header="Фланец" Command="{Binding CaseFlangeOpen}"/>
-                    </MenuItem>
+                    <MenuItem Header="ЗШЛ" Command="{Binding SheetGateValveCaseOpen}"/>
+                    <MenuItem Header="ЗШК" Command="{Binding CompactGateValveCaseOpen}"/>
                     <MenuItem Header="ЗО" Command="{Binding CaseShutterOpen}"/>
+                    <MenuItem Header="Детали корпуса">
+                        <MenuItem Header="Днище" Command="{Binding CaseBottomOpen}"/>
+                        <MenuItem Header="Патрубок" Command="{Binding WeldNozzleOpen}"/>
+                        <MenuItem Header="Стенка боковая" Command="{Binding SideWallOpen}"/>
+                        <MenuItem Header="Стенка лицевая" Command="{Binding FrontWallOpen}"/>
+                        <MenuItem Header="Фланец" Command="{Binding CaseFlangeOpen}"/>
+                    </MenuItem>
                 </MenuItem>
 
                 <MenuItem Header="Крышка" >
-                    <MenuItem Header="ЗШ" Command="{Binding CastValveCoverOpen}">
-                        <MenuItem Header="Кольцо уплотнительное" Command="{Binding CoverSealingRingOpen}"/>
-                    </MenuItem>
-                    <MenuItem Header="ЗШЛ" Command="{Binding SheetGateValveCoverOpen}">
-                        <MenuItem Header="Втулка" Command="{Binding CoverSleeveOpen}"/>
-                        <MenuItem Header="Кольцо уплотнительное" Command="{Binding CoverSealingRingOpen}"/>
-                        <MenuItem Header="Фланец" Command="{Binding CoverFlangeOpen}"/>
-                    </MenuItem>
-                    <MenuItem Header="ЗШК" Command="{Binding CompactGateValveCoverOpen}">
+                    <MenuItem Header="ЗШ" Command="{Binding CastValveCoverOpen}"/>
+                    <MenuItem Header="ЗШЛ" Command="{Binding SheetGateValveCoverOpen}"/>
+                    <MenuItem Header="ЗШК" Command="{Binding CompactGateValveCoverOpen}"/>
+                    <MenuItem Header="Детали крышки">
                         <MenuItem Header="Втулка" Command="{Binding CoverSleeveOpen}"/>
                         <MenuItem Header="Кольцо уплотнительное" Command="{Binding CoverSealingRingOpen}"/>
                         <MenuItem Header="Фланец" Command="{Binding CoverFlangeOpen}"/>
@@ -140,22 +131,68 @@
             <MenuItem Header="ПТК">
                 <MenuItem Header="PID" Command="{Binding PIDTCPOpen}" />
                 <MenuItem Header="Антикоррозионное покрытие (нанесение АКП)" Command="{Binding CoatingTCPOpen}" />
-                <MenuItem Header="Задвижка компактная с расширяющимся затвором (ЗШК)" />
-                <MenuItem Header="Задвижка шиберная (ЗШ)">
-                    <MenuItem Header=" Пружина" Command="{Binding SpringTCPOpen}"/>
-                </MenuItem>
-                    <MenuItem Header="Задвижка шиберная листовая (ЗШЛ)" />
-
+                <MenuItem Header="Задвижка компактная с расширяющимся затвором (ЗШК)" Command="{Binding CompactGateValveTCPOpen}"/>
+                <MenuItem Header="Задвижка шиберная (ЗШ)" Command="{Binding CastGateValveTCPOpen}"/>
+                <MenuItem Header="Задвижка шиберная листовая (ЗШЛ)" Command="{Binding SheetGateValveTCPOpen}" />
                 <MenuItem Header="Затвор обратный (ЗО)" Command="{Binding ReverseShutterTCPOpen}" />
-                <MenuItem Header="Затвор обратный (ЗО)" >
-                    <MenuItem Header="Втулка бронзовая" Command="{Binding BronzeSleeveShutterTCPOpen}" />
-                    <MenuItem Header="Втулка стальная" Command="{Binding SteelSleeveShutterTCPOpen}" />
-                    <MenuItem Header="Заглушка" Command="{Binding StubShutterTCPOpen}" />
-                    <MenuItem Header="Затвор обратный" Command="{Binding ShutterReverseTCPOpen}" />
-                    <MenuItem Header="Захлопка" Command="{Binding SlamShutterTCPOpen}" />
-                    <MenuItem Header="Катушка" Command="{Binding NozzleTCPOpen}" />
-                    <MenuItem Header="Корпус затвора" Command="{Binding CaseShutterTCPOpen}" />
-                    <MenuItem Header="Ось" Command="{Binding ShaftShutterTCPOpen}" />
+                <MenuItem Header="Шибер" Command="{Binding GateTCPOpen}" />
+
+                <MenuItem Header="Деталировка" >
+                    <MenuItem Header="Втулка" >
+                        <MenuItem Header="Втулка бронзовая (ЗО)" Command="{Binding BronzeSleeveShutterTCPOpen}"/>
+                        <MenuItem Header="Втулка стальная (ЗО)" Command="{Binding SteelSleeveShutterTCPOpen}" />
+                        <MenuItem Header="Втулка крышки (ЗШЛ, ЗШК)" Command="{Binding CoverSleeveTCPOpen}"/>
+                        <MenuItem Header="Втулка ходовая (ЗШ, ЗШЛ, ЗШК)" Command="{Binding RunningSleeveTCPOpen}" />
+                    </MenuItem>
+
+                    <MenuItem Header="Гайка (ЗШ, ЗШЛ, ЗШК)" Command="{Binding ScrewNutTCPOpen}"/>
+
+                    <MenuItem Header="Заглушка (ЗО)" Command="{Binding StubShutterTCPOpen}"/>
+
+                    <MenuItem Header="Захлопка (ЗО)" Command="{Binding SlamShutterTCPOpen}"/>
+
+                    <MenuItem Header="Затвор (ЗШК)">
+                        <MenuItem Header="Диск затвора" Command="{Binding ShutterDiskTCPOpen}"/>
+                        <MenuItem Header="Затвор" Command="{Binding ShutterTCPOpen}"/>
+                        <MenuItem Header="Направляющая затвора" Command="{Binding ShutterGuideTCPOpen}"/>
+                    </MenuItem>
+
+                    <MenuItem Header="Кран шаровой (ЗШ, ЗШЛ, ЗШК)" Command="{Binding BallValveTCPOpen}"/>
+
+                    <MenuItem Header="Катушка (ЗШ, ЗО)" Command="{Binding NozzleTCPOpen}"/>
+
+                    <MenuItem Header="Корпус" >
+                        <MenuItem Header="ЗШ" Command="{Binding CastValveCaseTCPOpen}" />
+                        <MenuItem Header="ЗШЛ" Command="{Binding SheetGateValveCaseTCPOpen}"/>
+                        <MenuItem Header="ЗШК" Command="{Binding CompactGateValveCaseTCPOpen}"/>
+                        <MenuItem Header="ЗО" Command="{Binding ReverseShutterCaseTCPOpen}"/>
+                        <MenuItem Header="Детали корпуса">
+                            <MenuItem Header="Днище (ЗШЛ, ЗШК)" Command="{Binding CaseBottomTCPOpen}"/>
+                            <MenuItem Header="Патрубок (ЗШЛ, ЗШК)" Command="{Binding WeldNozzleTCPOpen}"/>
+                            <MenuItem Header="Стенка боковая (ЗШЛ, ЗШК)" Command="{Binding SideWallTCPOpen}"/>
+                            <MenuItem Header="Стенка лицевая (ЗШЛ, ЗШК)" Command="{Binding FrontWallTCPOpen}"/>
+                            <MenuItem Header="Фланец (ЗШЛ, ЗШК)" Command="{Binding CaseFlangeTCPOpen}"/>
+                        </MenuItem>
+                    </MenuItem>
+
+                    <MenuItem Header="Крышка" >
+                        <MenuItem Header="ЗШ" Command="{Binding CastGateValveCoverTCPOpen}"/>
+                        <MenuItem Header="ЗШЛ" Command="{Binding SheetGateValveCoverTCPOpen}"/>
+                        <MenuItem Header="ЗШК" Command="{Binding CompactGateValveCoverTCPOpen}"/>
+
+                        <MenuItem Header="Детали крышки">
+                            <MenuItem Header="Втулка (ЗШЛ, ЗШК)" Command="{Binding CoverSleeveTCPOpen}"/>
+                            <MenuItem Header="Кольцо уплотнительное (ЗШ, ЗШЛ, ЗШК)" Command="{Binding CoverSealingRingTCPOpen}"/>
+                            <MenuItem Header="Фланец (ЗШЛ, ЗШК)" Command="{Binding CoverFlangeTCPOpen}"/>
+                        </MenuItem>
+                    </MenuItem>
+
+                    <MenuItem Header="Ось (ЗО)" Command="{Binding ShaftShutterTCPOpen}"/>
+                    <MenuItem Header="Пружина (ЗШ, ЗШЛ)" Command="{Binding SpringTCPOpen}"/>
+                    <MenuItem Header="Седло (ЗШ, ЗШЛ, ЗШК)" Command="{Binding SaddleTCPOpen}"/>
+                    <MenuItem Header="Фланец ответный" Command="{Binding CounterFlangeTCPOpen}"/>
+                    <MenuItem Header="Шпилька (ЗШ, ЗШЛ, ЗШК)" Command="{Binding ScrewStudTCPOpen}"/>
+                    <MenuItem Header="Шпиндель (ЗШ, ЗШЛ, ЗШК)" Command="{Binding SpindleTCPOpen}"/>
                 </MenuItem>
 
                 <MenuItem Header="Материалы">
@@ -163,13 +200,10 @@
                     <MenuItem Header="Металл" Command="{Binding MetalMaterialTCPOpen}"/>
                     <MenuItem Header="Сварочные материалы" Command="{Binding WeldingMaterialTCPOpen}"/>
                 </MenuItem>
-
-                <MenuItem Header="Шибер" Command="{Binding GateTCPOpen}" />
             </MenuItem>
-
             <MenuItem Header="Журналы" Command="{Binding JournalNumbersOpen}"/>
         </Menu>
-        
+
         <Separator Style="{StaticResource HorizontalSeparator}" 
                    Grid.Row="1"/>
         

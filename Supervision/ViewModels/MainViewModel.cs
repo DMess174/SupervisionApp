@@ -33,6 +33,9 @@ using DataLayer.Entities.Detailing.CompactGateValveDetails;
 using Supervision.Views.EntityViews.AssemblyUnit;
 using Supervision.ViewModels.EntityViewModels.AssemblyUnit;
 using DataLayer.TechnicalControlPlans;
+using DataLayer.TechnicalControlPlans.Detailing.CompactGateValveDetails;
+using DataLayer.TechnicalControlPlans.Detailing.CastGateValveDetails;
+using DataLayer.TechnicalControlPlans.Materials.AnticorrosiveCoating;
 
 namespace Supervision.ViewModels
 {
@@ -81,6 +84,45 @@ namespace Supervision.ViewModels
                 {
                     var w = new CustomerView();
                     var vm = new CustomerVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand InspectorOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new InspectorView();
+                    var vm = new InspectorVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand ProductTypeOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ProductTypeView();
+                    var vm = new ProductTypeViewModel();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand JournalNumbersOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new JournalNumbersView();
+                    var vm = new JournalNumbersViewModel();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });
@@ -492,46 +534,7 @@ namespace Supervision.ViewModels
         }
         #endregion
 
-        public ICommand InspectorOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new InspectorView();
-                    var vm = new InspectorVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
-        public ICommand ProductTypeOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new ProductTypeView();
-                    var vm = new ProductTypeViewModel();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
-
-        public ICommand JournalNumbersOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new JournalNumbersView();
-                    var vm = new JournalNumbersViewModel();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
+        
 
         #region TCP
         public ICommand PIDTCPOpen
@@ -542,19 +545,6 @@ namespace Supervision.ViewModels
                 {
                     var w = new TCPView();
                     var vm = new TCPViewModel<PIDTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
-        public ICommand ReverseShutterTCPOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<ReverseShutterTCP>();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });
@@ -573,20 +563,7 @@ namespace Supervision.ViewModels
                 });
             }
         }
-        public ICommand SpringTCPOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<SpringTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
-        public ICommand ShutterReverseTCPOpen
+        public ICommand ReverseShutterTCPOpen
         {
             get
             {
@@ -599,6 +576,60 @@ namespace Supervision.ViewModels
                 });
             }
         }
+        public ICommand CastGateValveTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CastGateValveTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SheetGateValveTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<SheetGateValveTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CompactGateValveTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CompactGateValveTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand GateTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<GateTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #region Details
+        #region Sleeve
         public ICommand BronzeSleeveShutterTCPOpen
         {
             get
@@ -607,58 +638,6 @@ namespace Supervision.ViewModels
                 {
                     var w = new TCPView();
                     var vm = new TCPViewModel<BronzeSleeveShutterTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
-        public ICommand ShaftShutterTCPOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<ShaftShutterTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
-        public ICommand SlamShutterTCPOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<SlamShutterTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
-        public ICommand StubShutterTCPOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<StubShutterTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
-        public ICommand NozzleTCPOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<NozzleTCP>();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });
@@ -677,7 +656,167 @@ namespace Supervision.ViewModels
                 });
             }
         }
-        public ICommand CaseShutterTCPOpen
+        public ICommand RunningSleeveTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<RunningSleeveTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #endregion
+        public ICommand ScrewNutTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<ScrewNutTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand StubShutterTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<StubShutterTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SlamShutterTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<SlamShutterTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #region Shutter
+        public ICommand ShutterDiskTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<ShutterDiskTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand ShutterTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<ShutterTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand ShutterGuideTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<ShutterGuideTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #endregion
+        public ICommand BallValveTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<BallValveTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand NozzleTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<NozzleTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #region Case
+        public ICommand CastGateValveCaseTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CastGateValveCaseTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SheetGateValveCaseTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<SheetGateValveCaseTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CompactGateValveCaseTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CompactGateValveCaseTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand ReverseShutterCaseTCPOpen
         {
             get
             {
@@ -685,6 +824,249 @@ namespace Supervision.ViewModels
                 {
                     var w = new TCPView();
                     var vm = new TCPViewModel<ReverseShutterCaseTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #region Details
+        public ICommand CaseBottomTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CaseBottomTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand WeldNozzleTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<WeldNozzleTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SideWallTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<SideWallTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand FrontWallTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<FrontWallTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CaseFlangeTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CaseFlangeTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #endregion
+        #endregion
+        #region Cover
+        public ICommand CastGateValveCoverTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CastGateValveCoverTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SheetGateValveCoverTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<SheetGateValveCoverTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CompactGateValveCoverTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CompactGateValveCoverTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #region Details
+        public ICommand CoverFlangeTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CoverFlangeTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CoverSealingRingTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CoverSealingRingTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CoverSleeveTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CoverSleeveTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #endregion
+        #endregion
+        public ICommand ShaftShutterTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<ShaftShutterTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SpringTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<SpringTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SaddleTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<SaddleTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CounterFlangeTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<CounterFlangeTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand ScrewStudTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<ScrewStudTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SpindleTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<SpindleTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #endregion
+        #region Materials
+        public ICommand AnticorrosiveCoatingTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<AnticorrosiveCoatingTCP>();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });
@@ -703,6 +1085,20 @@ namespace Supervision.ViewModels
                 });
             }
         }
+        public ICommand WeldingMaterialTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<WeldingMaterialTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #endregion
         #endregion
 
         public ICommand AppExit
