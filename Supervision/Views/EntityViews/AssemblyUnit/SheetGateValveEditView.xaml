@@ -220,7 +220,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -485,7 +485,7 @@
                         
                     </TabItem>
                     
-                    <TabItem Header="Крепеж, пружины, краны, уплотнения">
+                    <TabItem Header="Крепеж, пружины, краны, уплотнения, ответные фланцы">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
@@ -504,7 +504,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -735,7 +735,7 @@
 
                             <Separator Style="{StaticResource HorizontalSeparator}"
                                        Grid.Row="3"
-                                       Grid.ColumnSpan="10"/>
+                                       Grid.ColumnSpan="11"/>
 
                             <Label Style="{StaticResource StandardLabel}"
                            FontSize="{StaticResource Hi}"
@@ -808,12 +808,12 @@
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
                             <Label Style="{StaticResource StandardLabel}"
-                           FontSize="{StaticResource Hi}"
-                           Grid.Row="4"
-                                   Grid.Column="4"
-                           Content="Кран шаровой:"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Center"/>
+                                FontSize="{StaticResource Hi}"
+                                Grid.Row="4"
+                                Grid.Column="4"
+                                Content="Кран шаровой:"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"/>
                             <ComboBox Style="{StaticResource StandardComboBox}" 
                               Grid.Row="4"
                               Grid.Column="5"
@@ -879,6 +879,78 @@
                             Command="{Binding AddBallValveToValve}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
+                            <Label Style="{StaticResource StandardLabel}"
+                                FontSize="{StaticResource Hi}"
+                                Grid.Row="4"
+                                Grid.Column="8"
+                                Content="Фланец ответный:"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"/>
+                            <ComboBox Style="{StaticResource StandardComboBox}" 
+                              Grid.Row="4"
+                              Grid.Column="9"
+                              Margin="5 0 5 0"
+                              IsEditable="True"
+                              VerticalAlignment="Center" 
+                              ItemsSource="{Binding CounterFlanges}"
+                              SelectedItem="{Binding SelectedCounterFlange}"
+                              DisplayMemberPath="FullName"
+                              SelectedValuePath="Id"/>
+                            <ListBox  Style="{StaticResource StandardListBox}"
+                              ItemsSource="{Binding SelectedItem.CounterFlanges}" 
+                              Margin="5"
+                                      Grid.Column="8"
+                              Grid.ColumnSpan="2"
+                              Grid.Row="5"
+                              Grid.RowSpan="2"
+                              SelectedItem="{Binding SelectedCounterFlangeFromList}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding EditCounterFlange}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} - {1}">
+                                                    <Binding Path="Number"/>
+                                                    <Binding Path="Status"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="5"
+                            Grid.Column="10"
+                            Height="30"
+                            Margin="5"
+                            Content="Открыть"
+                            Command="{Binding EditCounterFlange}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="6"
+                            Grid.Column="10"
+                            Margin="5"
+                            Height="30"
+                            Content="Удалить"
+                            Command="{Binding DeleteCounterFlangeFromValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Button Style="{StaticResource StandardButton}" 
+                            Grid.Row="4"
+                            Grid.Column="10"
+                            Margin="5"
+                            Height="30"
+                            Content="Добавить"
+                            Command="{Binding AddCounterFlangeToValve}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            
                         </Grid>
                     </TabItem>
                     <TabItem Header="АКП">

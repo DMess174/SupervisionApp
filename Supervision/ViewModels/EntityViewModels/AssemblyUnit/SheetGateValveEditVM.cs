@@ -1,7 +1,6 @@
 ﻿using DataLayer;
 using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Entities.Detailing;
-using DataLayer.Entities.Detailing.CastGateValveDetails;
 using DataLayer.Entities.Detailing.SheetGateValveDetails;
 using DataLayer.Entities.Materials.AnticorrosiveCoating;
 using DataLayer.Journals.AssemblyUnits;
@@ -13,15 +12,11 @@ using DataLayer.TechnicalControlPlans.Materials.AnticorrosiveCoating;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.Native;
 using Microsoft.EntityFrameworkCore;
-using Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve;
-using Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGateValve;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve;
 using Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating;
 using Supervision.Views.EntityViews;
 using Supervision.Views.EntityViews.AssemblyUnit;
-using Supervision.Views.EntityViews.DetailViews;
-using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
 using Supervision.Views.EntityViews.DetailViews.Valve;
 using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
 using Supervision.Views.EntityViews.MaterialViews.AnticorrosiveCoating;
@@ -446,6 +441,105 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             set
             {
                 saddles = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region CounterFlange
+        private IEnumerable<CounterFlange> counterFlanges;
+        private CounterFlange selectedCounterFlange;
+        private CounterFlange selectedCounterFlangeFromList;
+        private ICommand editCounterFlange;
+        private ICommand addCounterFlangeToValve;
+        private ICommand deleteCounterFlangeFromValve;
+
+        public CounterFlange SelectedCounterFlange
+        {
+            get => selectedCounterFlange;
+            set
+            {
+                selectedCounterFlange = value;
+                RaisePropertyChanged();
+            }
+        }
+        public CounterFlange SelectedCounterFlangeFromList
+        {
+            get => selectedCounterFlangeFromList;
+            set
+            {
+                selectedCounterFlangeFromList = value;
+                RaisePropertyChanged();
+            }
+        }
+        public ICommand AddCounterFlangeToValve
+        {
+            get
+            {
+                return addCounterFlangeToValve ?? (
+                           addCounterFlangeToValve = new DelegateCommand(() =>
+                           {
+                               if (SelectedItem.CounterFlanges.Count() < 2)
+                               {
+                                   if (SelectedCounterFlange != null)
+                                   {
+                                       var item = SelectedCounterFlange;
+                                       item.BaseValveId = SelectedItem.Id;
+                                       db.CounterFlanges.Update(item);
+                                       db.SaveChanges();
+                                       CounterFlanges = null;
+                                       CounterFlanges = db.CounterFlanges.Local.Where(i => i.BaseValveId == null).ToObservableCollection();
+                                   }
+                                   else MessageBox.Show("Объект не выбран!", "Ошибка");
+                               }
+                               else MessageBox.Show("Невозможно привязать более 2 фланцев!", "Ошибка");
+                           }));
+            }
+        }
+        public ICommand EditCounterFlange
+        {
+            get
+            {
+                return editCounterFlange ?? (
+                           editCounterFlange = new DelegateCommand<Window>((w) =>
+                           {
+                               if (SelectedCounterFlangeFromList != null)
+                               {
+                                   var wn = new CounterFlangeEditView();
+                                   var vm = new CounterFlangeEditVM(SelectedCounterFlangeFromList.Id, SelectedItem);
+                                   wn.DataContext = vm;
+                                   wn.Show();
+                               }
+                               else MessageBox.Show("Объект не выбран", "Ошибка");
+                           }));
+            }
+        }
+        public ICommand DeleteCounterFlangeFromValve
+        {
+            get
+            {
+                return deleteCounterFlangeFromValve ?? (
+                    deleteCounterFlangeFromValve = new DelegateCommand<Window>((w) =>
+                    {
+                        if (SelectedCounterFlangeFromList != null)
+                        {
+                            var item = SelectedCounterFlangeFromList;
+                            item.BaseValveId = null;
+                            db.CounterFlanges.Update(item);
+                            db.SaveChanges();
+                            CounterFlanges = null;
+                            CounterFlanges = db.CounterFlanges.Local.Where(i => i.BaseValveId == null).ToObservableCollection();
+                        }
+                        else MessageBox.Show("Объект не выбран", "Ошибка");
+                    }));
+            }
+        }
+        public IEnumerable<CounterFlange> CounterFlanges
+        {
+            get => counterFlanges;
+            set
+            {
+                counterFlanges = value;
                 RaisePropertyChanged();
             }
         }
