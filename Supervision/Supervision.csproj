@@ -354,10 +354,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Styles\ProjectStyles\CloseTabItemAction.cs" />
+    <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\CompactGateValveEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\SheetGateValveEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\CastGateValveEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\ReverseShutterEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\CastGateValveVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\CompactGateValveVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\SheetGateValveVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\ReverseShutterVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\BaseVM.cs" />
@@ -441,6 +443,9 @@
     <Compile Include="ViewModels\ProductTypeViewModel.cs" />
     <Compile Include="ViewModels\JournalNumbersViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
+    <Compile Include="Views\EntityViews\AssemblyUnit\CompactGateValveEditView.xaml.cs">
+      <DependentUpon>CompactGateValveEditView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\AssemblyUnit\SheetGateValveEditView.xaml.cs">
       <DependentUpon>SheetGateValveEditView.xaml</DependentUpon>
     </Compile>
@@ -452,6 +457,9 @@
     </Compile>
     <Compile Include="Views\EntityViews\AssemblyUnit\CastGateValveView.xaml.cs">
       <DependentUpon>CastGateValveView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\AssemblyUnit\CompactGateValveView.xaml.cs">
+      <DependentUpon>CompactGateValveView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\AssemblyUnit\SheetGateValveView.xaml.cs">
       <DependentUpon>SheetGateValveView.xaml</DependentUpon>
@@ -806,6 +814,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\AssemblyUnit\CompactGateValveEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\AssemblyUnit\SheetGateValveEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -819,6 +831,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EntityViews\AssemblyUnit\CastGateValveView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\AssemblyUnit\CompactGateValveView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

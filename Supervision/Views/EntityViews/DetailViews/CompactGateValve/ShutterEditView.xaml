@@ -6,7 +6,7 @@
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       mc:Ignorable="d"
       Style="{StaticResource StandardWindow}"
-      d:DesignHeight="450" d:DesignWidth="1200"
+      d:DesignHeight="500" d:DesignWidth="1200"
         WindowStartupLocation="CenterScreen"
         Title="{Binding SelectedItem.Name}">
     <Window.Resources>
@@ -19,7 +19,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -351,6 +353,32 @@
                    Grid.Row="3"/>
 
         <Grid Grid.Row="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Label Style="{StaticResource StandardLabel}"
+                   Grid.Row="0"
+                   Content="Примечание"/>
+
+            <TextBox  Style="{StaticResource StandardTextBox}"
+                   Grid.Row="1"
+                   Margin="5" 
+                   TextWrapping="Wrap"
+                   AcceptsReturn="True"
+                   AcceptsTab="True"
+                   VerticalAlignment="Stretch"
+                   MinLines="3"
+                   MaxLines="50"
+                   SpellCheck.IsEnabled="True"
+                   Language="ru-ru"
+                   Text="{Binding SelectedItem.Comment, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        </Grid>
+
+        <Separator Style="{StaticResource HorizontalSeparator}" 
+                   Grid.Row="5"/>
+
+        <Grid Grid.Row="6">
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Right" 
                         VerticalAlignment="Center"

@@ -6,7 +6,7 @@
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       mc:Ignorable="d" 
       Style="{StaticResource StandardWindow}"
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="700" d:DesignWidth="800"
       WindowStartupLocation="CenterScreen"
       Title="{Binding SelectedItem.Name}">
     <Window.Resources>
@@ -19,6 +19,9 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -376,7 +379,7 @@
                                 </DataGridTemplateColumn>
 
                                 <DataGridTemplateColumn 
-                                    Header="Инспектор"
+                                    Header="Инженер"
                                     MinWidth="120"
                                     Width="auto">
                                     <DataGridTemplateColumn.CellTemplate>
@@ -529,9 +532,35 @@
 
         
         <Separator Style="{StaticResource HorizontalSeparator}" 
-                   Grid.Row="3"/>
+                   Grid.Row="4"/>
 
-        <StackPanel Grid.Row="4"
+        <Grid Grid.Row="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Label Style="{StaticResource StandardLabel}"
+                   Grid.Row="0"
+                   Content="Примечание"/>
+
+            <TextBox  Style="{StaticResource StandardTextBox}"
+                   Grid.Row="1"
+                   Margin="5" 
+                   TextWrapping="Wrap"
+                   AcceptsReturn="True"
+                   AcceptsTab="True"
+                   VerticalAlignment="Stretch"
+                   MinLines="3"
+                   MaxLines="50"
+                   SpellCheck.IsEnabled="True"
+                   Language="ru-ru"
+                   Text="{Binding SelectedItem.Comment, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        </Grid>
+
+        <Separator Style="{StaticResource HorizontalSeparator}"
+                   Grid.Row="6"/>
+
+        <StackPanel Grid.Row="7"
                     Orientation="Horizontal" 
                         HorizontalAlignment="Right" 
                         VerticalAlignment="Bottom">

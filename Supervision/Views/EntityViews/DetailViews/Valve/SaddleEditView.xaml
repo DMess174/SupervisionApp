@@ -21,10 +21,10 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -234,11 +234,11 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Label Style="{StaticResource StandardLabel}" 
@@ -248,7 +248,6 @@
 
             <ComboBox Style="{StaticResource StandardComboBox}" 
                       Grid.Column="1"
-                      Width="300" 
                       Margin="5 0 5 0" 
                       IsEditable="True" 
                       VerticalAlignment="Center" 
@@ -349,12 +348,13 @@
             <TabItem Header="ЗШ">
                 <Grid>
                     <DataGrid Style="{StaticResource StandardDataGrid}"
-                        Grid.Row="0" 
-                        Grid.Column="0" 
-                        MinRowHeight="50"
-                        ItemsSource="{Binding CastJournal}"
-                        IsReadOnly="False"
-                        HorizontalScrollBarVisibility="Visible">
+                            Grid.Row="0" 
+                            Grid.Column="0" 
+                            MinRowHeight="50"
+                            ItemsSource="{Binding CastJournal}"
+                            IsReadOnly="False"
+                            VerticalScrollBarVisibility="Auto"
+                            HorizontalScrollBarVisibility="Visible">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Дата"
                                 MinWidth="100"
@@ -506,12 +506,13 @@
             <TabItem Header="ЗШЛ">
                 <Grid>
                     <DataGrid Style="{StaticResource StandardDataGrid}"
-                        Grid.Row="0" 
-                        Grid.Column="0" 
-                        MinRowHeight="50"
-                        ItemsSource="{Binding SheetJournal}"
-                        IsReadOnly="False"
-                        HorizontalScrollBarVisibility="Visible">
+                            Grid.Row="0" 
+                            Grid.Column="0" 
+                            MinRowHeight="50"
+                            ItemsSource="{Binding SheetJournal}"
+                            IsReadOnly="False"
+                            VerticalScrollBarVisibility="Auto"
+                            HorizontalScrollBarVisibility="Visible">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Дата"
                                 MinWidth="100"

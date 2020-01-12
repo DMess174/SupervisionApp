@@ -20,9 +20,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition MaxHeight="500" Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -667,7 +667,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn 
-                    Header="Инспектор"
+                    Header="Инженер"
                     MinWidth="120"
                     Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
@@ -871,7 +871,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn 
-                    Header="Инспектор"
+                    Header="Инженер"
                     MinWidth="120"
                     Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
@@ -1075,7 +1075,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn 
-                    Header="Инспектор"
+                    Header="Инженер"
                     MinWidth="120"
                     Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
@@ -1279,7 +1279,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn 
-                    Header="Инспектор"
+                    Header="Инженер"
                     MinWidth="120"
                     Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
@@ -1483,7 +1483,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn 
-                    Header="Инспектор"
+                    Header="Инженер"
                     MinWidth="120"
                     Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
@@ -1687,7 +1687,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn 
-                    Header="Инспектор"
+                    Header="Инженер"
                     MinWidth="120"
                     Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
