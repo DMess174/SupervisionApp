@@ -9,7 +9,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
-            <Border SnapsToDevicePixels="True" x:Name="Border" Grid.ColumnSpan="2" Background="{StaticResource BackgroundNormal}" BorderBrush="{StaticResource BorderBrushNormal}" BorderThickness="1" />
+            <Border SnapsToDevicePixels="True" x:Name="Border" Grid.ColumnSpan="2" Background="{StaticResource LightBackground}" BorderBrush="{StaticResource Foreground}" BorderThickness="1" />
             <Path x:Name="Arrow" Grid.Column="1" Opacity="0.6" Fill="{StaticResource Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z"/>
         </Grid>
         <ControlTemplate.Triggers>

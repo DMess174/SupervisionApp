@@ -251,7 +251,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         #endregion
 
         #region Case
-        private IEnumerable<SheetGateValveCase> cases;
+        private IEnumerable<CompactGateValveCase> cases;
         private ICommand editCase;
 
         public ICommand EditCase
@@ -264,7 +264,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                if (SelectedItem.WeldGateValveCaseId != null)
                                {
                                    var wn = new WeldGateValveCaseEditView();
-                                   var vm = new WeldGateValveCaseEditVM<SheetGateValveCase, SheetGateValveCaseTCP, SheetGateValveCaseJournal>(SelectedItem.WeldGateValveCase.Id, SelectedItem);
+                                   var vm = new WeldGateValveCaseEditVM<CompactGateValveCase, CompactGateValveCaseTCP, CompactGateValveCaseJournal>(SelectedItem.WeldGateValveCase.Id, SelectedItem);
                                    wn.DataContext = vm;
                                    wn.Show();
                                }
@@ -272,7 +272,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                            }));
             }
         }
-        public IEnumerable<SheetGateValveCase> Cases
+        public IEnumerable<CompactGateValveCase> Cases
         {
             get => cases;
             set
@@ -285,7 +285,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         #endregion
 
         #region Cover
-        private IEnumerable<SheetGateValveCover> covers;
+        private IEnumerable<CompactGateValveCover> covers;
         private ICommand editCover;
 
         public ICommand EditCover
@@ -298,7 +298,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                if (SelectedItem.WeldGateValveCoverId != null)
                                {
                                    var wn = new WeldGateValveCoverEditView();
-                                   var vm = new WeldGateValveCoverEditVM<SheetGateValveCover, SheetGateValveCoverTCP, SheetGateValveCoverJournal>(SelectedItem.WeldGateValveCover.Id, SelectedItem);
+                                   var vm = new WeldGateValveCoverEditVM<CompactGateValveCover, CompactGateValveCoverTCP, CompactGateValveCoverJournal>(SelectedItem.WeldGateValveCover.Id, SelectedItem);
                                    wn.DataContext = vm;
                                    wn.Show();
                                }
@@ -306,7 +306,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                            }));
             }
         }
-        public IEnumerable<SheetGateValveCover> Covers
+        public IEnumerable<CompactGateValveCover> Covers
         {
             get => covers;
             set
@@ -696,6 +696,8 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                                ScrewStudId = SelectedScrewStud.Id,
                                                ScrewStudAmount = tempAmount
                                            };
+                                           db.BaseValveWithScrewStuds.Add(item);
+                                           db.SaveChanges();
                                        }
                                        else MessageBox.Show($"Остаток шпилек составляет {SelectedScrewStud.AmountRemaining}", "Ошибка");
                                    }
@@ -803,6 +805,8 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                                ScrewNutId = SelectedScrewNut.Id,
                                                ScrewNutAmount = tempAmount
                                            };
+                                           db.BaseValveWithScrewNuts.Add(item);
+                                           db.SaveChanges();
                                        }
                                        else MessageBox.Show($"Остаток гаек составляет {SelectedScrewNut.AmountRemaining}", "Ошибка");
                                    }
@@ -1423,6 +1427,28 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         }
         #endregion
 
+        #region Spindle
+        private ICommand editSpindle;
+        public ICommand EditSpindle
+        {
+            get
+            {
+                return editSpindle ?? (
+                           editSpindle = new DelegateCommand<Window>((w) =>
+                           {
+                               if (SelectedItem.WeldGateValveCover.Spindle != null)
+                               {
+                                   var wn = new SpindleEditView();
+                                   var vm = new SpindleEditVM(SelectedItem.WeldGateValveCover.Spindle.Id, SelectedItem);
+                                   wn.DataContext = vm;
+                                   wn.Show();
+                               }
+                               else MessageBox.Show("Для просмотра привяжите деталь", "Ошибка");
+                           }));
+            }
+        }
+        #endregion
+
         public CompactGateValveEditVM(int id, BaseTable entity)
         {
             parentEntity = entity;
@@ -1453,8 +1479,11 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             SelectedItem.BaseValveWithSprings = db.BaseValveWithSprings.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
             db.BaseValveWithSeals.Load();
             SelectedItem.BaseValveWithSeals = db.BaseValveWithSeals.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
-            Cases = db.SheetGateValveCases.ToList();
-            Covers = db.SheetGateValveCovers.Include(i => i.Spindle).ToList();
+            db.CounterFlanges.Load();
+            CounterFlanges = db.CounterFlanges.Local.Where(i => i.BaseValveId == null).ToObservableCollection();
+            SelectedItem.CounterFlanges = db.CounterFlanges.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
+            Cases = db.CompactGateValveCases.ToList();
+            Covers = db.CompactGateValveCovers.Include(i => i.Spindle).ToList();
             Shutters = db.Shutters.ToList();
             Saddles = db.Saddles.Local.Where(i => i.BaseValveId == null).ToObservableCollection();
             ShearPins = db.ShearPins.Local.Where(i => i.BaseValveId == null).ToObservableCollection();

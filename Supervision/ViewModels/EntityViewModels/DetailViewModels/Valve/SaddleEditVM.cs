@@ -8,6 +8,7 @@ using DataLayer.Entities.Materials;
 using DataLayer.Journals.Detailing;
 using DataLayer.TechnicalControlPlans.Detailing;
 using DevExpress.Mvvm;
+using DevExpress.Mvvm.Native;
 using Microsoft.EntityFrameworkCore;
 using Supervision.ViewModels.EntityViewModels.Materials;
 using Supervision.Views.EntityViews.DetailViews.Valve;
@@ -131,7 +132,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 return addFrontalSaddleSealingToSaddle ?? (
                            addFrontalSaddleSealingToSaddle = new DelegateCommand(() =>
                            {
-                               if (SelectedItem.SaddleWithSealings.Count() < 2)
+                               if (SelectedItem.SaddleWithSealings?.Count() < 2 || SelectedItem.SaddleWithSealings == null)
                                {
                                    if (SelectedFrontalSaddleSealing != null)
                                    {
@@ -365,12 +366,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.Saddles.Include(i => i.BaseValve).SingleOrDefault(i => i.Id == id);
+            db.SaddleWithSeals.Load();
+            SelectedItem.SaddleWithSealings = db.SaddleWithSeals.Local.Where(i => i.SaddleId == SelectedItem.Id).ToObservableCollection();
             CastJournal = db.SaddleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
             SheetJournal = db.SaddleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
             CompactJournal = db.SaddleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШК").OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.Saddles.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Materials = db.MetalMaterials.ToList();
+            FrontalSaddleSeals = db.FrontalSaddleSeals.ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.Set<SaddleTCP>().ToList();
         }

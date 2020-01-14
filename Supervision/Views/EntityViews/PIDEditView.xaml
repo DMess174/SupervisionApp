@@ -118,7 +118,7 @@
 
                     <DatePicker Style="{StaticResource StandardDatepicker}"
                                 Grid.Row="1"
-/>
+                                SelectedDate="{Binding Path = SelectedItem.ShippingDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 </Grid>
                 
                 <Grid Grid.Column="4">
@@ -170,7 +170,7 @@
 
                     <TextBlock Style="{StaticResource StandardTextBlock}"
                                Grid.Row="1"
-                               Text="Заказик" 
+                               Text="Заказчик" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
                 </Grid>

@@ -70,10 +70,10 @@
                 <MenuItem Header="Катушка (ЗШ, ЗО)" Command="{Binding NozzleOpen}"/>
 
                 <MenuItem Header="Корпус" >
-                    <MenuItem Header="ЗШ" Command="{Binding CastValveCaseOpen}" />
+                    <MenuItem Header="ЗШ" Command="{Binding CastGateValveCaseOpen}" />
                     <MenuItem Header="ЗШЛ" Command="{Binding SheetGateValveCaseOpen}"/>
                     <MenuItem Header="ЗШК" Command="{Binding CompactGateValveCaseOpen}"/>
-                    <MenuItem Header="ЗО" Command="{Binding CaseShutterOpen}"/>
+                    <MenuItem Header="ЗО" Command="{Binding ReverseShutterCaseOpen}"/>
                     <MenuItem Header="Детали корпуса">
                         <MenuItem Header="Днище" Command="{Binding CaseBottomOpen}"/>
                         <MenuItem Header="Патрубок" Command="{Binding WeldNozzleOpen}"/>
@@ -84,7 +84,7 @@
                 </MenuItem>
 
                 <MenuItem Header="Крышка" >
-                    <MenuItem Header="ЗШ" Command="{Binding CastValveCoverOpen}"/>
+                    <MenuItem Header="ЗШ" Command="{Binding CastGateValveCoverOpen}"/>
                     <MenuItem Header="ЗШЛ" Command="{Binding SheetGateValveCoverOpen}"/>
                     <MenuItem Header="ЗШК" Command="{Binding CompactGateValveCoverOpen}"/>
                     <MenuItem Header="Детали крышки">
@@ -519,13 +519,7 @@
                 NavigationUIVisibility="Hidden"
                 Opacity="{Binding FrameOpacity}"/>
         </Grid>
-        <Separator Grid.Row="3" 
-                   VerticalAlignment="Center" 
-                   HorizontalAlignment="Stretch" 
-                   Height="3" Foreground="Black" 
-                   BorderBrush="#FF828790" 
-                   Background="#FF828790" 
-                   Margin="0" 
-                   VerticalContentAlignment="Center"/>
+        <Separator Style="{StaticResource HorizontalSeparator}" 
+                   Grid.Row="3"/>
     </Grid>
 </Window>

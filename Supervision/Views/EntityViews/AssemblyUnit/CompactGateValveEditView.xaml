@@ -311,7 +311,7 @@
                             <TextBlock Style="{StaticResource StandardTextBlock}" 
                                        Grid.Column="5"
                                        Grid.Row="2"
-                                       Height="25"
+                                       Width="auto" 
                                        Margin="5 0 5 0" 
                                        VerticalAlignment="Center" 
                                        Text="{Binding SelectedItem.WeldGateValveCover.Spindle.FullName}"/>
@@ -544,9 +544,10 @@
                                     <DataTemplate>
                                         <TextBlock>
                                             <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} - {1}">
-                                                    <Binding Path="Number"/>
-                                                    <Binding Path="Status"/>
+                                                <MultiBinding StringFormat="{}{0} - {1} шт. - {2}">
+                                                    <Binding Path="ScrewStud.Number"/>
+                                                    <Binding Path="ScrewStudAmount"/>
+                                                    <Binding Path="ScrewStud.Status"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>
@@ -620,9 +621,10 @@
                                     <DataTemplate>
                                         <TextBlock>
                                             <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} - {1}">
-                                                    <Binding Path="Number"/>
-                                                    <Binding Path="Status"/>
+                                                <MultiBinding StringFormat="{}{0} - {1} шт. - {2}">
+                                                    <Binding Path="ScrewNut.Number"/>
+                                                    <Binding Path="ScrewNutAmount"/>
+                                                    <Binding Path="ScrewNut.Status"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>

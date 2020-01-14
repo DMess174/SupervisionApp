@@ -36,6 +36,15 @@ using DataLayer.TechnicalControlPlans;
 using DataLayer.TechnicalControlPlans.Detailing.CompactGateValveDetails;
 using DataLayer.TechnicalControlPlans.Detailing.CastGateValveDetails;
 using DataLayer.TechnicalControlPlans.Materials.AnticorrosiveCoating;
+using Supervision.Views.EntityViews.MaterialViews.AnticorrosiveCoating;
+using Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating;
+using DataLayer.Entities.Materials.AnticorrosiveCoating;
+using DataLayer.Journals.Materials.AnticorrosiveCoating;
+using DataLayer.Entities.Materials;
+using DataLayer.Journals.Materials;
+using Supervision.Views.EntityViews.DetailViews.CompactGateValve;
+using Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateValve;
+using Supervision.Views;
 
 namespace Supervision.ViewModels
 {
@@ -182,57 +191,192 @@ namespace Supervision.ViewModels
                 });
             }
         }
-        #endregion
 
-
-        public ICommand CastValveCaseOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                            {
-                                var w = new CastingCaseView();
-                                var vm = new CastGateValveCaseVM();
-                                w.DataContext = vm;
-                                w.ShowDialog();
-                            });
-            }
-        }
-        public ICommand CastValveCoverOpen
+        public ICommand AbrasiveMaterialOpen
         {
             get
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CastingCoverView();
-                    var vm = new CastGateValveCoverVM();
+                    var w = new BaseAnticorrosiveCoatingView();
+                    var vm = new BaseAnticorrosiveCoatingVM<AbrasiveMaterial, AnticorrosiveCoatingTCP, AbrasiveMaterialJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand UndercoatOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new BaseAnticorrosiveCoatingView();
+                    var vm = new BaseAnticorrosiveCoatingVM<Undercoat, AnticorrosiveCoatingTCP, UndercoatJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand AbovegroundCoatingOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new BaseAnticorrosiveCoatingView();
+                    var vm = new BaseAnticorrosiveCoatingVM<AbovegroundCoating, AnticorrosiveCoatingTCP, AbovegroundCoatingJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand UndergroundCoatingOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new BaseAnticorrosiveCoatingView();
+                    var vm = new BaseAnticorrosiveCoatingVM<UndergroundCoating, AnticorrosiveCoatingTCP, UndergroundCoatingJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand WeldingMaterialOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new WeldingMaterialView();
+                    var vm = new WeldingMaterialVM<WeldingMaterial, WeldingMaterialTCP, WeldingMaterialJournal>();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });
             }
         }
 
-        public ICommand NozzleOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                            {
-                                var w = new NozzleView();
-                                var vm = new NozzleVM();
-                                w.DataContext = vm;
-                                w.ShowDialog();
-                            });
-            }
-        }
-        public ICommand SpindleOpen
+        public ICommand FrontalSaddleSealingOpen
         {
             get
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new SpindleView();
-                    var vm = new SpindleVM();
+                    var w = new FrontalSaddleSealingView();
+                    var vm = new FrontalSaddleSealingVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand AssemblyUnitSealingOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new AssemblyUnitSealingView();
+                    var vm = new AssemblyUnitSealingVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #endregion
+
+        #region Assembly
+        public ICommand ReverseShutterOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ReverseShutterView();
+                    var vm = new ReverseShutterVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CastGateValveOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new CastGateValveView();
+                    var vm = new CastGateValveVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SheetGateValveOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new SheetGateValveView();
+                    var vm = new SheetGateValveVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CompactGateValveOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new CompactGateValveView();
+                    var vm = new CompactGateValveVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #endregion
+
+        #region Details
+        #region Sleeve
+        public ICommand BronzeSleeveShutterOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ReverseShutterDetailView();
+                    var vm = new ReverseShutterDetailVM<BronzeSleeveShutter, BronzeSleeveShutterTCP, BronzeSleeveShutterJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SteelSleeveShutterOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ReverseShutterDetailView();
+                    var vm = new ReverseShutterDetailVM<SteelSleeveShutter, SteelSleeveShutterTCP, SteelSleeveShutterJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CoverSleeveOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new CoverSleeveView();
+                    var vm = new CoverSleeveVM();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });
@@ -251,48 +395,129 @@ namespace Supervision.ViewModels
                 });
             }
         }
-        public ICommand CounterFlangeOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new CounterFlangeView();
-                    var vm = new CounterFlangeVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
-        public ICommand SpringOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new SpringView();
-                    var vm = new SpringVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
 
-        #region ReverseShutter
-        public ICommand ReverseShutterOpen
+        #endregion
+        public ICommand ScrewNutOpen
         {
             get
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ReverseShutterView();
-                    var vm = new ReverseShutterVM();
+                    var w = new ScrewNutView();
+                    var vm = new ScrewNutVM();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });
             }
         }
-        public ICommand CaseShutterOpen
+        public ICommand StubShutterOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ReverseShutterDetailView();
+                    var vm = new ReverseShutterDetailVM<StubShutter, StubShutterTCP, StubShutterJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SlamShutterOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new SlamShutterView();
+                    var vm = new SlamShutterVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #region Shutter
+        public ICommand ShutterDiskOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ShutterDiskView();
+                    var vm = new ShutterDiskVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand ShutterGuideOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ShutterGuideView();
+                    var vm = new ShutterGuideVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand ShutterOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ShutterView();
+                    var vm = new ShutterVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #endregion
+        public ICommand BallValveOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new BallValveView();
+                    var vm = new BallValveVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand NozzleOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new NozzleView();
+                    var vm = new NozzleVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #region Case
+        public ICommand CastGateValveCaseOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new CastingCaseView();
+                    var vm = new CastGateValveCaseVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand ReverseShutterCaseOpen
         {
             get
             {
@@ -305,74 +530,33 @@ namespace Supervision.ViewModels
                 });
             }
         }
-        public ICommand BronzeSleeveShutterOpen
+        public ICommand SheetGateValveCaseOpen
         {
             get
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ReverseShutterDetailView();
-                    var vm = new ReverseShutterDetailVM<BronzeSleeveShutter, BronzeSleeveShutterTCP, BronzeSleeveShutterJournal>();
+                    var w = new WeldGateValveCaseView();
+                    var vm = new WeldGateValveCaseVM<SheetGateValveCase, SheetGateValveCaseTCP, SheetGateValveCaseJournal>();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });
             }
         }
-        public ICommand ShaftShutterOpen
+        public ICommand CompactGateValveCaseOpen
         {
             get
             {
                 return new DelegateCommand(() =>
-                            {
-                                var w = new ReverseShutterDetailView();
-                                var vm = new ReverseShutterDetailVM<ShaftShutter, ShaftShutterTCP, ShaftShutterJournal>();
-                                w.DataContext = vm;
-                                w.ShowDialog();
-                            });
+                {
+                    var w = new WeldGateValveCaseView();
+                    var vm = new WeldGateValveCaseVM<CompactGateValveCase, CompactGateValveCaseTCP, CompactGateValveCaseJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
             }
         }
-        public ICommand SlamShutterOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                            {
-                                var w = new SlamShutterView();
-                                var vm = new SlamShutterVM();
-                                w.DataContext = vm;
-                                w.ShowDialog();
-                            });
-            }
-        }
-        public ICommand SteelSleeveShutterOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                            {
-                                var w = new ReverseShutterDetailView();
-                                var vm = new ReverseShutterDetailVM<SteelSleeveShutter, SteelSleeveShutterTCP, SteelSleeveShutterJournal>();
-                                w.DataContext = vm;
-                                w.ShowDialog();
-                            });
-            }
-        }
-        public ICommand StubShutterOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                            {
-                                var w = new ReverseShutterDetailView();
-                                var vm = new ReverseShutterDetailVM<StubShutter, StubShutterTCP, StubShutterJournal>();
-                                w.DataContext = vm;
-                                w.ShowDialog();
-                            });
-            }
-        }
-        #endregion
-
-        #region WeldCaseDetails
+        #region CaseDetail
         public ICommand CaseBottomOpen
         {
             get
@@ -438,69 +622,17 @@ namespace Supervision.ViewModels
                 });
             }
         }
-        public ICommand SheetGateValveCaseOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new WeldGateValveCaseView();
-                    var vm = new WeldGateValveCaseVM<SheetGateValveCase, SheetGateValveCaseTCP, SheetGateValveCaseJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
-        public ICommand CompactGateValveCaseOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new WeldGateValveCaseView();
-                    var vm = new WeldGateValveCaseVM<CompactGateValveCase, CompactGateValveCaseTCP, CompactGateValveCaseJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
         #endregion
-
-        #region WeldCoverDetails
-        public ICommand CoverFlangeOpen
+        #endregion
+        #region Cover
+        public ICommand CastGateValveCoverOpen
         {
             get
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CoverFlangeView();
-                    var vm = new CoverFlangeVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
-        public ICommand CoverSleeveOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new CoverSleeveView();
-                    var vm = new CoverSleeveVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
-        }
-        public ICommand CoverSealingRingOpen
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new CoverSealingRingView();
-                    var vm = new CoverSealingRingVM();
+                    var w = new CastingCoverView();
+                    var vm = new CastGateValveCoverVM();
                     w.DataContext = vm;
                     w.ShowDialog();
                 });
@@ -532,9 +664,127 @@ namespace Supervision.ViewModels
                 });
             }
         }
+        #region CoverDetial
+        public ICommand CoverFlangeOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new CoverFlangeView();
+                    var vm = new CoverFlangeVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CoverSealingRingOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new CoverSealingRingView();
+                    var vm = new CoverSealingRingVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
         #endregion
-
-        
+        #endregion
+        public ICommand ShaftShutterOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ReverseShutterDetailView();
+                    var vm = new ReverseShutterDetailVM<ShaftShutter, ShaftShutterTCP, ShaftShutterJournal>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SpringOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new SpringView();
+                    var vm = new SpringVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SaddleOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new SaddleView();
+                    var vm = new SaddleVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand CounterFlangeOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new CounterFlangeView();
+                    var vm = new CounterFlangeVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand GateOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    //var w = new GateView();
+                    //var vm = new GateVM();
+                    //w.DataContext = vm;
+                    //w.ShowDialog();
+                });
+            }
+        }
+        public ICommand ScrewStudOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new ScrewStudView();
+                    var vm = new ScrewStudVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand SpindleOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new SpindleView();
+                    var vm = new SpindleVM();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        #endregion
 
         #region TCP
         public ICommand PIDTCPOpen
@@ -1128,6 +1378,15 @@ namespace Supervision.ViewModels
                     Thread.Sleep(50);
                 }
             }).ConfigureAwait(false);
+        }
+
+        public ICommand MainMenuOpen
+        {
+            get
+            {
+                    Page page = new MainMenu();
+                    return new DelegateCommand(() => SlowOpacity(page));
+            }
         }
     }
 }

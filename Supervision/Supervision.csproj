@@ -695,6 +695,9 @@
     <Compile Include="Views\EntityViews\JournalNumbersView.xaml.cs">
       <DependentUpon>JournalNumbersView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainMenu.xaml.cs">
+      <DependentUpon>MainMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TCPViews\TCPView.xaml.cs">
       <DependentUpon>TCPView.xaml</DependentUpon>
     </Compile>
@@ -1149,6 +1152,10 @@
     <Page Include="Views\EntityViews\JournalNumbersView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TCPViews\TCPView.xaml">
       <Generator>MSBuild:Compile</Generator>
