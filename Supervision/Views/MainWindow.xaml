@@ -214,6 +214,7 @@
                 <ColumnDefinition Width="30*" MinWidth="500"/>
             </Grid.ColumnDefinitions>
             <TreeView Background="{StaticResource LightBackground}"
+                      BorderBrush="Black"
                       Grid.Column="0"
                       Margin="2">
                 <TreeViewItem Header="Изделие"
@@ -509,7 +510,7 @@
                 VerticalAlignment="Stretch" 
                 ShowsPreview="False" 
                 Width="5" 
-                Background="DarkGray"/>
+                Background="#CAC4B0"/>
             <Frame
                 Background="{StaticResource LightBackground}"
                 VerticalAlignment="Stretch"

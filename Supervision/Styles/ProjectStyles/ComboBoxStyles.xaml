@@ -9,7 +9,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
-            <Border SnapsToDevicePixels="True" x:Name="Border" Grid.ColumnSpan="2" Background="{StaticResource LightBackground}" BorderBrush="{StaticResource Foreground}" BorderThickness="1" />
+            <Border SnapsToDevicePixels="True" x:Name="Border" Grid.ColumnSpan="2" Background="{StaticResource TextBoxBackground}" BorderBrush="{StaticResource Foreground}" BorderThickness="1" />
             <Path x:Name="Arrow" Grid.Column="1" Opacity="0.6" Fill="{StaticResource Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z"/>
         </Grid>
         <ControlTemplate.Triggers>
@@ -70,7 +70,7 @@
                                  IsReadOnly="{TemplateBinding IsReadOnly}"/>
                         <Popup VerticalOffset="-1" SnapsToDevicePixels="True" Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True"  Focusable="False" PopupAnimation="Slide">
                             <Grid Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                <Border x:Name="DropDownBorder" Background="{StaticResource BackgroundNormal}" BorderThickness="1" BorderBrush="{StaticResource BorderBrushNormal}"/>
+                                <Border x:Name="DropDownBorder" Background="{StaticResource TextBoxBackground}" BorderThickness="1" BorderBrush="{StaticResource BorderBrushNormal}"/>
                                 <ScrollViewer SnapsToDevicePixels="True">
                                     <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                 </ScrollViewer>

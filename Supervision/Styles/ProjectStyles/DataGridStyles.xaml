@@ -7,19 +7,20 @@
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="GridLinesVisibility" Value="All"/>
         <Setter Property="HeadersVisibility" Value="Column"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Foreground}"/>
         <Setter Property="CanUserAddRows" Value="False"/>
         <Setter Property="CanUserDeleteRows" Value="False"/>
         <Setter Property="CanUserResizeColumns" Value="True"/>
         <Setter Property="SelectionMode" Value="Single"/>
         <Setter Property="SelectionUnit" Value="FullRow"/>
+        <Setter Property="Margin" Value="5 0 5 0"/>
         <Setter Property="Background" Value="{StaticResource LightBackground}"/>
-        <Setter Property="RowBackground" Value="{StaticResource LightBackground}"/>
+        <Setter Property="RowBackground" Value="{StaticResource TextBoxBackground}"/>
         <Setter Property="FontFamily" Value="{StaticResource BaseFont}"/>
         <Style.Resources>
             <Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
                 <Setter Property="Width" Value="8"/>
-                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Background" Value="{StaticResource Foreground}"/>
                 <Setter Property="Cursor" Value="SizeWE"/>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -76,7 +77,7 @@
                                     <Setter Property="Background" Value="{StaticResource BackgroundHighlighted}"/>
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource BackgroundNormal}"/>
+                                    <Setter Property="Background" Value="{StaticResource BackgroundHighlighted}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

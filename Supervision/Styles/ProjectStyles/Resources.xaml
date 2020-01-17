@@ -2,26 +2,26 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--Background-->
     <SolidColorBrush x:Key="Background" Color="#0000FF"/>
-    <SolidColorBrush x:Key="LightBackground" Color="#0067C5"/>
+    <SolidColorBrush x:Key="LightBackground" Color="#CAC4B0"/> 
 
     <!--Foreground-->
-    <SolidColorBrush x:Key="Foreground" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Foreground" Color="#000000"/>
 
     <!--General-->
-    <SolidColorBrush x:Key="BackgroundHighlighted" Color="#00008B"/>
-    <SolidColorBrush x:Key="BorderBrushHighlighted" Color="#00008B"/>
-    <SolidColorBrush x:Key="BackgroundSelected" Color="#483D8B"/>
-    <SolidColorBrush x:Key="BorderBrushSelected" Color="#1C97EA"/>
-    <SolidColorBrush x:Key="BackgroundNormal" Color="#0000FF"/>
-    <SolidColorBrush x:Key="BorderBrushNormal" Color="#54545C"/>
+    <SolidColorBrush x:Key="BackgroundHighlighted" Color="#3B83BD"/> 
+    <SolidColorBrush x:Key="BorderBrushHighlighted" Color="#1C97EA"/>
+    <SolidColorBrush x:Key="BackgroundSelected" Color="#CAC4B0"/>
+    <SolidColorBrush x:Key="BorderBrushSelected" Color="#000000"/>
+    <SolidColorBrush x:Key="BackgroundNormal" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="BorderBrushNormal" Color="#1E1E1E"/>
    
     <!--Text Box-->
-    <SolidColorBrush x:Key="TextBoxBackground" Color="#0067C5"/>
-    <SolidColorBrush x:Key="TextBoxBackgroundSelected" Color="#483D8B"/>
+    <SolidColorBrush x:Key="TextBoxBackground" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="TextBoxBackgroundSelected" Color="#FFFFFF"/>
     
     <!--Search Text Box-->
-    <SolidColorBrush x:Key="SearchTextForeground" Color="#999999"/>
-    
+    <SolidColorBrush x:Key="SearchTextForeground" Color="#000000"/>
+
     <!--Link Button-->
     <SolidColorBrush x:Key="LinkButtonForeground" Color="#1297FB"/>
     <SolidColorBrush x:Key="LinkButtonForegroundHighlighted" Color="#55AAFF"/>
@@ -34,9 +34,9 @@
     
     <!--Menu-->
     <SolidColorBrush x:Key="MenuSeparatorBorderBrush" Color="#000000"/>
-    <SolidColorBrush x:Key="MenuItemHighlightedBackground" Color="#3E3E40"/>
-    <SolidColorBrush x:Key="SubmenuItemBackground" Color="#1B1B1C"/>
-    <SolidColorBrush x:Key="SubmenuItemBackgroundHighlighted" Color="#333334"/>
+    <SolidColorBrush x:Key="MenuItemHighlightedBackground" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="SubmenuItemBackground" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="SubmenuItemBackgroundHighlighted" Color="#CAC4B0"/>
     <SolidColorBrush x:Key="MenuDisabledForeground" Color="#656565"/>
     
     <!--Scroll Bar-->

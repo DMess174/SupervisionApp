@@ -290,7 +290,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             db.Nozzles.Include(i => i.MetalMaterial).Load();
             AllInstances = db.Nozzles.Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
-            if (AllInstances.Count() != 0)
+            if (AllInstances.Any())
             {
                 Name = AllInstances.First().Name;
             }

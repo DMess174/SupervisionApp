@@ -21,7 +21,7 @@ namespace BusinessLayer.Repository.Implementations.Entities.Detailing
 
         public async Task<Nozzle> GetInclude(int id)
         {
-            return await DbEntity.Include(i => i.CastingCase).SingleOrDefaultAsync(i => i.Id == id);
+            return await DbEntity.Include(i => i.MetalMaterial).SingleOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<IEnumerable<NozzleJournal>> GetJournal(Nozzle nozzle)

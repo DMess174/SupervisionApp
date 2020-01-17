@@ -5,6 +5,8 @@
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="TextBox" x:Key="StandardTextBox">
         <Setter Property="Background" Value="{StaticResource TextBoxBackground}"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="CaretBrush" Value="{StaticResource Foreground}"/>
         <Setter Property="FontFamily" Value="{StaticResource BaseFont}"/>
@@ -28,6 +30,8 @@
     </Style>
     <Style TargetType="TextBox" x:Key="SearchTextBox">
         <Setter Property="Background" Value="{StaticResource TextBoxBackground}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushNormal}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="CaretBrush" Value="{StaticResource Foreground}"/>
         <Setter Property="Template">
@@ -35,7 +39,7 @@
                 <ControlTemplate TargetType="{x:Type TextBox}">
                     <Grid Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
                         <TextBlock Foreground="{StaticResource SearchTextForeground}" Margin="5,0,0,0" 
-                                   VerticalAlignment="Center" Name="search" Text="Search ..." Visibility="Hidden"/>
+                                   VerticalAlignment="Center" Name="search" Text="Введите значение..." Visibility="Hidden"/>
                         <ScrollViewer x:Name="PART_ContentHost" Margin="1"/>
                     </Grid>
                     <ControlTemplate.Triggers>

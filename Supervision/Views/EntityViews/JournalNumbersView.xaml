@@ -47,7 +47,6 @@
                                      AcceptsReturn="True"
                                      AcceptsTab="True"
                                      VerticalAlignment="Center"
-                                     MinLines="3"
                                      MaxLines="50"
                                      SpellCheck.IsEnabled="True"
                                      Language="ru-ru"/>

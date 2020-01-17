@@ -29,7 +29,8 @@
                   HorizontalContentAlignment="Stretch">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" 
-                                    Width="20*" 
+                                    Width="20*"
+                                    IsReadOnly="True"
                                     Binding="{Binding Path = Id}"
                                     TextBlock.TextAlignment="Center">
                     <DataGridTextColumn.ElementStyle>
@@ -64,8 +65,9 @@
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
                                      AcceptsTab="True"
+                                     VerticalContentAlignment="Center"
                                      VerticalAlignment="Center"
-                                     MinLines="1"
+                                     MinLines="3"
                                      MaxLines="50"
                                      SpellCheck.IsEnabled="True"
                                      Language="ru-ru"/>
@@ -97,8 +99,9 @@
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
                                      AcceptsTab="True"
+                                     VerticalContentAlignment="Center"
                                      VerticalAlignment="Center"
-                                     MinLines="1"
+                                     MinLines="3"
                                      MaxLines="50"
                                      SpellCheck.IsEnabled="True"
                                      Language="ru-ru"/>

@@ -7,6 +7,8 @@
         <Setter Property="Background" Value="{StaticResource LightBackground}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="FontFamily" Value="{StaticResource BaseFont}"/>
-        <Setter Property="Height" Value="{StaticResource Big}"
+        <Setter Property="FontSize" Value="{StaticResource Big}"/>
+        <Setter Property="Height" Value="auto"/>
+        <Setter Property="FontWeight" Value="DemiBold"/>
     </Style>
 </ResourceDictionary>

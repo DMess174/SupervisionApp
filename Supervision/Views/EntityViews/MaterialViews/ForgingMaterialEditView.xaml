@@ -527,7 +527,8 @@
                             Margin="10 2 10 2" 
                             Command="{Binding CloseWindow}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-                </StackPanel>
+
+            </StackPanel>
             </Grid>
     </Grid>
 </Window>
