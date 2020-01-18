@@ -76,5 +76,7 @@ namespace DataLayer
         public IEnumerable<SheetMaterialJournal> SheetMaterialJournals { get; set; }
         public IEnumerable<WeldingMaterialJournal> WeldingMaterialJournals { get; set; }
         public IEnumerable<ControlWeldJournal> ControlWeldJournals { get; set; }
+        public IEnumerable<StoresControlJournal> StoresControlJournals { get; set; }
+        public IEnumerable<FactoryInspectionJournal> FactoryInspectionJournals { get; set; }
     }
 }

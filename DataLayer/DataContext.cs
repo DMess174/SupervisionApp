@@ -42,6 +42,12 @@ namespace DataLayer
         public DbSet<Inspector> Inspectors { get; set; }
         public DbSet<JournalNumber> JournalNumbers { get; set; }
 
+        public DbSet<StoresControlTCP> StoresControlTCPs { get; set; }
+        public DbSet<StoresControlJournal> StoresControlJournals { get; set; }
+
+        public DbSet<FactoryInspectionTCP> FactoryInspectionTCPs { get; set; }
+        public DbSet<FactoryInspectionJournal> FactoryInspectionJournals { get; set; }
+
         public DbSet<ControlWeld> ControlWelds { get; set; }
         public DbSet<ControlWeldTCP> ControlWeldTCPs { get; set; }
         public DbSet<ControlWeldJournal> ControlWeldJournals { get; set; }
