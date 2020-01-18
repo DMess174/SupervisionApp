@@ -1348,10 +1348,75 @@ namespace Supervision.ViewModels
                 });
             }
         }
+        public ICommand FrontalSaddleSealingTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<FrontalSaddleSealingTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand AssemblyUnitSealingTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<AssemblyUnitSealingTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
         #endregion
-        #endregion
+        public ICommand ControlWeldTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<ControlWeldTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand FactoryInspectionTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var w = new TCPView();
+                    var vm = new TCPViewModel<FactoryInspectionTCP>();
+                    w.DataContext = vm;
+                    w.ShowDialog();
+                });
+            }
+        }
+        public ICommand StoresControlTCPOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+            var w = new TCPView();
+            var vm = new TCPViewModel<StoresControlTCP>();
+            w.DataContext = vm;
+            w.ShowDialog();
+        });
+            }
+}
+#endregion
 
-        public ICommand AppExit
+public ICommand AppExit
         {
             get
             {

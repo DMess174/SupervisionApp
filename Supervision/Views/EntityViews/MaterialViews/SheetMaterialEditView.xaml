@@ -16,8 +16,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -247,58 +250,6 @@
                         <ComboBoxItem Content="Брак"/>
                     </ComboBox>
                 </Grid>
-
-                <Separator Grid.Column="10">
-                    <Separator.Style>
-                        <Style TargetType="Separator" BasedOn="{StaticResource VerticalSeparator}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedItem.CastingCase}"
-                                             Value="{x:Null}">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Separator.Style>
-                </Separator>
-
-                <Grid Grid.Column="11">
-                    <StackPanel VerticalAlignment="Center">
-                        <TextBlock
-                            IsEnabled="{Binding ElementName=Number, Path=Text}"
-                            Width="auto" 
-                            Margin="5 0 5 5" 
-                            VerticalAlignment="Center"
-                            Text="В сборке:">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource StandardTextBlock}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedItem.CastingCase}"
-                                                     Value="{x:Null}">
-                                            <Setter Property="Visibility" Value="Collapsed">
-                                            </Setter>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <TextBlock Style="{StaticResource StandardTextBlock}"
-                                   Margin="5 0 5 0" 
-                                   Text="{Binding SelectedItem.CastingCase.Name}"></TextBlock>
-                        <TextBlock Name="Number"
-                               Width="auto" 
-                               Margin="5 5 5 0" 
-                               VerticalAlignment="Center">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource StandardTextBlock}"/>
-                            </TextBlock.Style>
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}№ {0}">
-                                    <Binding Path="SelectedItem.CastingCase.Number"/>
-                                </MultiBinding>
-                                </TextBlock.Text>
-                        </TextBlock>
-                    </StackPanel>
-                </Grid>
             </Grid>
         </Grid>
         
@@ -306,7 +257,7 @@
                    Grid.Row="1"/>
 
         <DataGrid Style="{StaticResource StandardDataGrid}"
-                Grid.Row="2" 
+                Grid.Row="4" 
                 Grid.Column="0" 
                 MinRowHeight="50"
                 ItemsSource="{Binding Journal}"
@@ -356,7 +307,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn 
-                    Header="Инспектор"
+                    Header="Инженер"
                     MinWidth="120"
                     Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
@@ -460,7 +411,7 @@
         </DataGrid>
 
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal">
+        <StackPanel Grid.Row="5" Orientation="Horizontal">
             <TextBlock Text="Выбор пункта:"
                    Margin="5 0 10 0"
                    FontSize="{StaticResource Hi}"
@@ -482,7 +433,12 @@
                             </StackPanel.Width>
                             <TextBlock Width="auto">
                                 <TextBlock.Text>
-                                    <Binding Path="Point" StringFormat="{}{0} - "/>
+                                    <Binding Path="Point" StringFormat="{}{0}("/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <TextBlock Width="auto">
+                                <TextBlock.Text>
+                                    <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                 </TextBlock.Text>
                             </TextBlock>
                             <TextBlock TextWrapping="Wrap" >
@@ -505,12 +461,35 @@
         </StackPanel>
 
         <Separator Style="{StaticResource HorizontalSeparator}" 
-                   Grid.Row="4"/>
+                   Grid.Row="5"/>
         
-            <Grid Grid.Row="5">
+        <Grid Grid.Row="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Label Style="{StaticResource StandardLabel}"
+                   Grid.Row="0"
+                   Content="Примечание"/>
 
-
-
+            <TextBox  Style="{StaticResource StandardTextBox}"
+                   Grid.Row="1"
+                   Margin="5" 
+                   TextWrapping="Wrap"
+                   AcceptsReturn="True"
+                   AcceptsTab="True"
+                   VerticalAlignment="Stretch"
+                   MinLines="3"
+                   MaxLines="50"
+                   SpellCheck.IsEnabled="True"
+                   Language="ru-ru"
+                   Text="{Binding SelectedItem.Comment, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        </Grid>
+        
+        <Separator Style="{StaticResource HorizontalSeparator}" 
+                   Grid.Row="7"/>
+        
+            <Grid Grid.Row="8">
                 <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Right" 
                         VerticalAlignment="Center"

@@ -135,6 +135,9 @@
                 <MenuItem Header="Задвижка шиберная (ЗШ)" Command="{Binding CastGateValveTCPOpen}"/>
                 <MenuItem Header="Задвижка шиберная листовая (ЗШЛ)" Command="{Binding SheetGateValveTCPOpen}" />
                 <MenuItem Header="Затвор обратный (ЗО)" Command="{Binding ReverseShutterTCPOpen}" />
+                <MenuItem Header="КСС" Command="{Binding ControlWeldTCPOpen}" />
+                <MenuItem Header="Проверка завода" Command="{Binding FactoryInspectionTCPOpen}" />
+                <MenuItem Header="Складирование материалов" Command="{Binding StoresControlTCPOpen}" />
                 <MenuItem Header="Шибер" Command="{Binding GateTCPOpen}" />
 
                 <MenuItem Header="Деталировка" >
@@ -199,6 +202,12 @@
                     <MenuItem Header="АКП" Command="{Binding AnticorrosiveMaterialTCPOpen}"/>
                     <MenuItem Header="Металл" Command="{Binding MetalMaterialTCPOpen}"/>
                     <MenuItem Header="Сварочные материалы" Command="{Binding WeldingMaterialTCPOpen}"/>
+                    <MenuItem Header="Уплотнительные материалы">
+                        <MenuItem Header="Торцевые уплотнения (седло)"
+                                  Command="{Binding FrontalSaddleSealingTCPOpen}"/>
+                        <MenuItem Header="Уплотнения (РТИ, графлекс)"
+                                  Command="{Binding AssemblyUnitSealingTCPOpen}"/>
+                    </MenuItem>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Журналы" Command="{Binding JournalNumbersOpen}"/>
@@ -510,7 +519,7 @@
                 VerticalAlignment="Stretch" 
                 ShowsPreview="False" 
                 Width="5" 
-                Background="#CAC4B0"/>
+                Background="Gray"/>
             <Frame
                 Background="{StaticResource LightBackground}"
                 VerticalAlignment="Stretch"

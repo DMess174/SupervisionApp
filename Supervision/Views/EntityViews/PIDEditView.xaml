@@ -4,7 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="1000"
+      Height="900" Width="1300"
+      d:DesignHeight="900" d:DesignWidth="1300"
       WindowStartupLocation="CenterScreen"
       Title="{Binding SelectedItem.Name}"
       Style="{StaticResource StandardWindow}">
@@ -19,7 +20,7 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>

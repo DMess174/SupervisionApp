@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--Background-->
     <SolidColorBrush x:Key="Background" Color="#0000FF"/>
-    <SolidColorBrush x:Key="LightBackground" Color="#CAC4B0"/> 
+    <SolidColorBrush x:Key="LightBackground" Color="#ecece7"/> 
 
     <!--Foreground-->
     <SolidColorBrush x:Key="Foreground" Color="#000000"/>
@@ -10,7 +10,7 @@
     <!--General-->
     <SolidColorBrush x:Key="BackgroundHighlighted" Color="#3B83BD"/> 
     <SolidColorBrush x:Key="BorderBrushHighlighted" Color="#1C97EA"/>
-    <SolidColorBrush x:Key="BackgroundSelected" Color="#CAC4B0"/>
+    <SolidColorBrush x:Key="BackgroundSelected" Color="#ecece7"/>
     <SolidColorBrush x:Key="BorderBrushSelected" Color="#000000"/>
     <SolidColorBrush x:Key="BackgroundNormal" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="BorderBrushNormal" Color="#1E1E1E"/>
@@ -36,7 +36,7 @@
     <SolidColorBrush x:Key="MenuSeparatorBorderBrush" Color="#000000"/>
     <SolidColorBrush x:Key="MenuItemHighlightedBackground" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="SubmenuItemBackground" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="SubmenuItemBackgroundHighlighted" Color="#CAC4B0"/>
+    <SolidColorBrush x:Key="SubmenuItemBackgroundHighlighted" Color="#ecece7"/>
     <SolidColorBrush x:Key="MenuDisabledForeground" Color="#656565"/>
     
     <!--Scroll Bar-->

@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d"
       Style="{StaticResource StandardWindow}"
-      d:DesignHeight="450" d:DesignWidth="1200"
+      d:DesignHeight="700" d:DesignWidth="1200"
         WindowStartupLocation="CenterScreen"
         Title="{Binding SelectedItem.Name}">
     <Window.Resources>
@@ -21,6 +21,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -280,7 +282,7 @@
                                         </DataGridTemplateColumn>
 
                                         <DataGridTemplateColumn 
-                                            Header="Инспектор"
+                                            Header="Инженер"
                                             MinWidth="120"
                                             Width="auto">
                                             <DataGridTemplateColumn.CellTemplate>
@@ -437,7 +439,7 @@
                                         </DataGridTemplateColumn>
 
                                         <DataGridTemplateColumn 
-                                            Header="Инспектор"
+                                            Header="Инженер"
                                             MinWidth="120"
                                             Width="auto">
                                             <DataGridTemplateColumn.CellTemplate>
@@ -595,7 +597,7 @@
                                         </DataGridTemplateColumn>
 
                                         <DataGridTemplateColumn 
-                                            Header="Инспектор"
+                                            Header="Инженер"
                                             MinWidth="120"
                                             Width="auto">
                                             <DataGridTemplateColumn.CellTemplate>
@@ -752,7 +754,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Применяемость">
+            <TabItem Header="Применение">
                 <DataGrid Style="{StaticResource StandardDataGrid}"
                           IsReadOnly="True"
                           MinRowHeight="50"
@@ -776,6 +778,31 @@
                    Grid.Row="5"/>
 
         <Grid Grid.Row="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Label Style="{StaticResource StandardLabel}"
+                   Grid.Row="0"
+                   Content="Примечание"/>
+
+            <TextBox  Style="{StaticResource StandardTextBox}"
+                   Grid.Row="1"
+                   Margin="5" 
+                   TextWrapping="Wrap"
+                   AcceptsReturn="True"
+                   AcceptsTab="True"
+                   VerticalAlignment="Stretch"
+                   MinLines="3"
+                   MaxLines="50"
+                   SpellCheck.IsEnabled="True"
+                   Language="ru-ru"
+                   Text="{Binding SelectedItem.Comment, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        </Grid>
+        <Separator Style="{StaticResource HorizontalSeparator}" 
+                   Grid.Row="7"/>
+
+        <Grid Grid.Row="8">
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Right" 
                         VerticalAlignment="Center"
