@@ -43,6 +43,8 @@
                           Command="{Binding CompactGateValveOpen}" />
                 <MenuItem Header="Затвор обратный (ЗО)" 
                           Command="{Binding ReverseShutterOpen}" />
+                <MenuItem Header="Проверка завода"
+                          Command="{Binding FactoryInspectionOpen}"/>
             </MenuItem>
 
             <MenuItem Header="Деталировка" >
@@ -118,11 +120,13 @@
                     <MenuItem Header="Прокат" Command="{Binding RolledMaterialOpen}"/>
                     <MenuItem Header="Труба" Command="{Binding PipeMaterialOpen}"/>
                 </MenuItem>
+                <MenuItem Header="КСС" Command="{Binding ControlWeldOpen}"/>
                 <MenuItem Header="Сварочные материалы" Command="{Binding WeldingMaterialOpen}"/>
                 <MenuItem Header="Уплотнительные материалы">
                     <MenuItem Header="Торцевое уплотнение (седло)" Command="{Binding FrontalSaddleSealingOpen}"/>
                     <MenuItem Header="Уплотнения (графлекс, РТИ)" Command="{Binding AssemblyUnitSealingOpen}"/>
                 </MenuItem>
+                <MenuItem Header="Складирование материалов" Command="{Binding StoresControlOpen}"/>
             </MenuItem>
 
             <MenuItem Header="Персонал"
@@ -317,7 +321,8 @@
                                   Style="{StaticResource TreeViewItemStandard}"
                                   Margin="2">
                         <TreeViewItem Header="Детали корпуса"
-                                      Style="{StaticResource TreeViewItemStandard}">
+                                      Style="{StaticResource TreeViewItemStandard}"
+                                      Margin="2">
                             <Button Style="{StaticResource TreeViewButton}"
                                     Command="{Binding CaseBottomOpen}"
                                     Content="Днище"/>

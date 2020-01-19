@@ -1,4 +1,5 @@
 ﻿using DataLayer.Entities.AssemblyUnits;
+using DataLayer.Entities.Detailing;
 using DataLayer.Journals;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace DataLayer
         public ProductType ProductType { get; set; }
 
         public IEnumerable<BaseAssemblyUnit> BaseAssemblyUnits { get; set; }
+        public IEnumerable<Gate> Gates { get; set; }
         public IEnumerable<PIDJournal> PIDJournals { get; set; }
     }
 }

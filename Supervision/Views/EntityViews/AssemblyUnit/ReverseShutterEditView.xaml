@@ -792,7 +792,12 @@
                                                 </StackPanel.Width>
                                                 <TextBlock Width="auto">
                                                     <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0} - "/>
+                                                        <Binding Path="Point" StringFormat="{}{0}("/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Width="auto">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                                 <TextBlock TextWrapping="Wrap" >
@@ -996,7 +1001,12 @@
                                                 </StackPanel.Width>
                                                 <TextBlock Width="auto">
                                                     <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0} - "/>
+                                                        <Binding Path="Point" StringFormat="{}{0}("/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Width="auto">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                                 <TextBlock TextWrapping="Wrap" >
@@ -1200,7 +1210,12 @@
                                                 </StackPanel.Width>
                                                 <TextBlock Width="auto">
                                                     <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0} - "/>
+                                                        <Binding Path="Point" StringFormat="{}{0}("/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Width="auto">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                                 <TextBlock TextWrapping="Wrap" >
@@ -1404,7 +1419,12 @@
                                                 </StackPanel.Width>
                                                 <TextBlock Width="auto">
                                                     <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0} - "/>
+                                                        <Binding Path="Point" StringFormat="{}{0}("/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Width="auto">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                                 <TextBlock TextWrapping="Wrap" >
@@ -1608,7 +1628,12 @@
                                                 </StackPanel.Width>
                                                 <TextBlock Width="auto">
                                                     <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0} - "/>
+                                                        <Binding Path="Point" StringFormat="{}{0}("/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Width="auto">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                                 <TextBlock TextWrapping="Wrap" >
@@ -1812,7 +1837,12 @@
                                                 </StackPanel.Width>
                                                 <TextBlock Width="auto">
                                                     <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0} - "/>
+                                                        <Binding Path="Point" StringFormat="{}{0}("/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Width="auto">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                                 <TextBlock TextWrapping="Wrap" >

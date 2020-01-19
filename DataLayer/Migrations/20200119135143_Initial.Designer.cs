@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200118073654_Initial")]
+    [Migration("20200119135143_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -498,11 +498,15 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Number");
 
+                    b.Property<int?>("PIDId");
+
                     b.Property<string>("Status");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MetalMaterialId");
+
+                    b.HasIndex("PIDId");
 
                     b.ToTable("Gates");
                 });
@@ -1192,11 +1196,23 @@ namespace DataLayer.Migrations
 
                     b.Property<DateTime?>("ExpiryDate");
 
+                    b.Property<string>("FirstMaterial");
+
                     b.Property<string>("MechanicalPropertiesReport");
 
                     b.Property<string>("MetallographicPropertiesReport");
 
+                    b.Property<string>("Name");
+
                     b.Property<string>("Number");
+
+                    b.Property<string>("SecondMaterial");
+
+                    b.Property<string>("Size");
+
+                    b.Property<string>("Status");
+
+                    b.Property<string>("WeldingMethod");
 
                     b.HasKey("Id");
 
@@ -4524,6 +4540,10 @@ namespace DataLayer.Migrations
                     b.HasOne("DataLayer.Entities.Materials.MetalMaterial", "MetalMaterial")
                         .WithMany("Gates")
                         .HasForeignKey("MetalMaterialId");
+
+                    b.HasOne("DataLayer.PID", "PID")
+                        .WithMany("Gates")
+                        .HasForeignKey("PIDId");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.Nozzle", b =>
@@ -5384,7 +5404,7 @@ namespace DataLayer.Migrations
             modelBuilder.Entity("DataLayer.Journals.Materials.ControlWeldJournal", b =>
                 {
                     b.HasOne("DataLayer.Entities.Materials.ControlWeld", "Entity")
-                        .WithMany()
+                        .WithMany("ControlWeldJournals")
                         .HasForeignKey("DetailId");
 
                     b.HasOne("DataLayer.Inspector", "Inspector")

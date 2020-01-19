@@ -481,6 +481,10 @@
                             Content="Добавить"
                             Command="{Binding AddShearPinToValve}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                            <Separator Style="{StaticResource HorizontalSeparator}"
+                                       Grid.Row="4"
+                                       Grid.ColumnSpan="11"/>
                         </Grid>
                         
                     </TabItem>
@@ -1169,7 +1173,12 @@
                                                 </StackPanel.Width>
                                                 <TextBlock Width="auto">
                                                     <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0} - "/>
+                                                        <Binding Path="Point" StringFormat="{}{0}("/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Width="auto">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                                 <TextBlock TextWrapping="Wrap" >
@@ -1373,7 +1382,12 @@
                                                 </StackPanel.Width>
                                                 <TextBlock Width="auto">
                                                     <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0} - "/>
+                                                        <Binding Path="Point" StringFormat="{}{0}("/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Width="auto">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                                 <TextBlock TextWrapping="Wrap" >
@@ -1577,7 +1591,12 @@
                                                 </StackPanel.Width>
                                                 <TextBlock Width="auto">
                                                     <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0} - "/>
+                                                        <Binding Path="Point" StringFormat="{}{0}("/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Width="auto">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                                 <TextBlock TextWrapping="Wrap" >
@@ -1781,7 +1800,12 @@
                                                 </StackPanel.Width>
                                                 <TextBlock Width="auto">
                                                     <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0} - "/>
+                                                        <Binding Path="Point" StringFormat="{}{0}("/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Width="auto">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                                 <TextBlock TextWrapping="Wrap" >
@@ -1985,7 +2009,12 @@
                                                 </StackPanel.Width>
                                                 <TextBlock Width="auto">
                                                     <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0} - "/>
+                                                        <Binding Path="Point" StringFormat="{}{0}("/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Width="auto">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                                 <TextBlock TextWrapping="Wrap" >
@@ -2189,7 +2218,12 @@
                                                 </StackPanel.Width>
                                                 <TextBlock Width="auto">
                                                     <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0} - "/>
+                                                        <Binding Path="Point" StringFormat="{}{0}("/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Width="auto">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                                 <TextBlock TextWrapping="Wrap" >

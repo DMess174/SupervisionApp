@@ -7,14 +7,20 @@ namespace DataLayer.Entities.Materials
 {
     public class ControlWeld : BaseTable
     {
+        public string Name { get; set; } = "КСС";
         public string Number { get; set; }
         public string MechanicalPropertiesReport { get; set; }
         public string MetallographicPropertiesReport { get; set; }
+        public string WeldingMethod { get; set; }
+        public string FirstMaterial { get; set; }
+        public string SecondMaterial { get; set; }
+        public string Size { get; set; }
+        public string Status { get; set; }
         public DateTime? BeginingDate { get; set; }
         public DateTime? ExpiryDate { get; set; }
 
         [NotMapped] 
-        //public string FullName => string.Format($"{Batch}/{Name}");
+        public string FullName => string.Format($"{Name} № {Number}/{WeldingMethod}/ до {BeginingDate}");
 
         public IEnumerable<ControlWeldJournal> ControlWeldJournals { get; set; }
     }
