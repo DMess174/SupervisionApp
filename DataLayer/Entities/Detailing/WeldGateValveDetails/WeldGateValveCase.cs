@@ -16,6 +16,7 @@ namespace DataLayer.Entities.Detailing.WeldGateValveDetails
 
         public IEnumerable<FrontWall> FrontWalls { get; set; }
         public IEnumerable<SideWall> SideWalls { get; set; }
+        public IEnumerable<CaseEdge> CaseEdges { get; set; }
 
         public BaseWeldValve BaseWeldValve { get; set; }
     }

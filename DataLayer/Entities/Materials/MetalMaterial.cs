@@ -9,6 +9,23 @@ namespace DataLayer.Entities.Materials
 {
     public class MetalMaterial : BaseTable
     {
+        public MetalMaterial() { }
+
+        public MetalMaterial(MetalMaterial material)
+        {
+            Batch = material.Batch;
+            Certificate = material.Certificate;
+            Comment = material.Comment;
+            FirstSize = material.FirstSize;
+            Material = material.Material;
+            MaterialCertificateNumber = material.MaterialCertificateNumber;
+            Melt = material.Melt;
+            Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:");
+            SecondSize = material.SecondSize;
+            Status = material.Status;
+            ThirdSize = material.ThirdSize;
+        }
+
         public string Name { get; set; }
         public string Number { get; set; }
         public string Material { get; set; }

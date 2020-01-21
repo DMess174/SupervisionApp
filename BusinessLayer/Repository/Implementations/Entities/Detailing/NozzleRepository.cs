@@ -10,28 +10,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Repository.Implementations.Entities.Detailing
 {
-    public class NozzleRepository : Repository<Nozzle, NozzleJournal, NozzleTCP>, INozzleRepository
+    public class NozzleRepository : Repository<Nozzle>, INozzleRepository
     {
         public NozzleRepository(DataContext context) : base(context)
         {
-            DbEntity = context.Nozzles;
-            DbJournal = context.NozzleJournals;
-            DbTCP = context.NozzleTCPs;
         }
 
-        public async Task<Nozzle> GetInclude(int id)
+        public Task<Nozzle> GetInclude(int id)
         {
-            return await DbEntity.Include(i => i.MetalMaterial).SingleOrDefaultAsync(i => i.Id == id);
+            throw new System.NotImplementedException();
         }
 
-        public async Task<IEnumerable<NozzleJournal>> GetJournal(Nozzle nozzle)
+        public Task<IEnumerable<NozzleJournal>> GetJournal(Nozzle nozzle)
         {
-            return await DbJournal.Where(i => i.DetailId == nozzle.Id).ToListAsync();
+            throw new System.NotImplementedException();
         }
 
-        public async Task<IEnumerable<NozzleTCP>> GetPoints()
+        public Task<IEnumerable<NozzleTCP>> GetPoints()
         {
-            return await DbTCP.ToListAsync();
+            throw new System.NotImplementedException();
         }
     }
 }

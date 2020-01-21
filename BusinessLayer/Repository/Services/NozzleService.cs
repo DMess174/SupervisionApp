@@ -23,7 +23,7 @@ namespace BusinessLayer.Repository.Services
             try
             {
                 var nozzle = new Nozzle();
-                var entity = await unitOfWork.Nozzle.EntityAddAsync(nozzle);
+                var entity = await unitOfWork.Nozzle.AddAsync(nozzle);
                 await unitOfWork.CompleteAsync();
                 return QueryResult<Nozzle>.Success(nozzle);
             }

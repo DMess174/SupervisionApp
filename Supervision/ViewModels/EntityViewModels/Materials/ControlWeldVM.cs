@@ -28,7 +28,6 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
-        private ICommand copyItem;
         private ICommand closeWindow;
 
         private string name;

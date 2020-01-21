@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Generic;
 using DevExpress.Mvvm;
 using DataLayer;
 using System.ComponentModel;

@@ -45,6 +45,7 @@ using DataLayer.Journals.Materials;
 using Supervision.Views.EntityViews.DetailViews.CompactGateValve;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateValve;
 using Supervision.Views;
+using BusinessLayer.Report.DailyReport;
 
 namespace Supervision.ViewModels
 {
@@ -59,6 +60,17 @@ namespace Supervision.ViewModels
                 currentPage = value;
                 RaisePropertyChanged();
             } 
+        }
+
+        
+
+        public ICommand GetReport
+        {
+
+            get
+            {
+                return new DelegateCommand(() => DailyReport.GetReport());
+            }
         }
 
         private double frameOpacity;

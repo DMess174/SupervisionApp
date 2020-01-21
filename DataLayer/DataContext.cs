@@ -129,6 +129,10 @@ namespace DataLayer
         public DbSet<SideWallTCP> SideWallTCPs { get; set; }
         public DbSet<SideWallJournal> SideWallJournals { get; set; }
 
+        public DbSet<CaseEdge> CaseEdges { get; set; }
+        public DbSet<CaseEdgeTCP> CaseEdgeTCPs { get; set; }
+        public DbSet<CaseEdgeJournal> CaseEdgeJournals { get; set; }
+
         public DbSet<RunningSleeve> RunningSleeves { get; set; }
         public DbSet<RunningSleeveTCP> RunningSleeveTCPs { get; set; }
         public DbSet<RunningSleeveJournal> RunningSleeveJournals { get; set; }

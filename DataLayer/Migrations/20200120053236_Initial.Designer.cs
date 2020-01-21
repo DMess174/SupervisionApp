@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200119135143_Initial")]
+    [Migration("20200120053236_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -943,6 +943,36 @@ namespace DataLayer.Migrations
                     b.HasIndex("MetalMaterialId");
 
                     b.ToTable("CaseBottoms");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.WeldGateValveDetails.CaseEdge", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Certificate");
+
+                    b.Property<string>("Comment");
+
+                    b.Property<string>("Drawing");
+
+                    b.Property<int?>("MetalMaterialId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Number");
+
+                    b.Property<string>("Status");
+
+                    b.Property<int?>("WeldGateValveCaseId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MetalMaterialId");
+
+                    b.HasIndex("WeldGateValveCaseId");
+
+                    b.ToTable("CaseEdges");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.WeldGateValveDetails.CaseFlange", b =>
@@ -2660,6 +2690,50 @@ namespace DataLayer.Migrations
                     b.ToTable("CaseBottomJournals");
                 });
 
+            modelBuilder.Entity("DataLayer.Journals.Detailing.WeldGateValveDetails.CaseEdgeJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("RemarkClosed");
+
+                    b.Property<string>("RemarkIssued");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("CaseEdgeJournals");
+                });
+
             modelBuilder.Entity("DataLayer.Journals.Detailing.WeldGateValveDetails.CaseFlangeJournal", b =>
                 {
                     b.Property<int>("Id")
@@ -4211,6 +4285,13 @@ namespace DataLayer.Migrations
                     b.HasDiscriminator().HasValue("CaseBottomTCP");
                 });
 
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails.CaseEdgeTCP", b =>
+                {
+                    b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
+
+                    b.HasDiscriminator().HasValue("CaseEdgeTCP");
+                });
+
             modelBuilder.Entity("DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails.CaseFlangeTCP", b =>
                 {
                     b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
@@ -4640,6 +4721,17 @@ namespace DataLayer.Migrations
                     b.HasOne("DataLayer.Entities.Materials.MetalMaterial", "MetalMaterial")
                         .WithMany("CaseBottoms")
                         .HasForeignKey("MetalMaterialId");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Detailing.WeldGateValveDetails.CaseEdge", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Materials.MetalMaterial", "MetalMaterial")
+                        .WithMany()
+                        .HasForeignKey("MetalMaterialId");
+
+                    b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCase", "WeldGateValveCase")
+                        .WithMany("CaseEdges")
+                        .HasForeignKey("WeldGateValveCaseId");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Detailing.WeldGateValveDetails.CaseFlange", b =>
@@ -5177,6 +5269,21 @@ namespace DataLayer.Migrations
 
                     b.HasOne("DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails.CaseBottomTCP", "EntityTCP")
                         .WithMany("CaseBottomJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Detailing.WeldGateValveDetails.CaseEdgeJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.CaseEdge", "Entity")
+                        .WithMany("CaseEdgeJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany()
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails.CaseEdgeTCP", "EntityTCP")
+                        .WithMany("CaseEdgeJournals")
                         .HasForeignKey("PointId");
                 });
 

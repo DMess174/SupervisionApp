@@ -2,26 +2,32 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using DataLayer;
-using DataLayer.Journals;
-using DataLayer.TechnicalControlPlans;
 
 namespace BusinessLayer.Repository.Interfaces
 {
-    public interface IRepository<TEntity, TEntityJournal, TEntityTCP> 
-        where TEntity : BaseTable
-        where TEntityJournal : BaseJournal<TEntity, TEntityTCP>
-        where TEntityTCP : BaseTCP
+    public interface IRepository<TEntity> 
     {
-        Task<TEntity> EntityAddAsync(TEntity entity);
-        Task<TEntityJournal> JournalAddAsync(TEntityJournal journal);
-        Task<TEntityTCP> TCPAddAsync(TEntityTCP points);
+        int Add(TEntity entity);
+        int Add(IEnumerable<TEntity> entities);
+        Task<int> AddAsync(TEntity entity);
+        Task<int> AddAsync(IEnumerable<TEntity> entities);
 
-        IEnumerable<TEntity> GetAllEntities();
-        Task<IEnumerable<TEntity>> GetAllEntitiesAsync();
-        TEntity GetById(int id);
-        void Update(TEntity entity);
-        void Delete(TEntity entity);
+        int AddCopy(TEntity entity);
+        Task<int> AddCopyAsync(TEntity entity);
 
+        IEnumerable<TEntity> GetAll();
+        IEnumerable<TEntity> GetAll<TEntitySortField>(Expression<Func<TEntity, TEntitySortField>> orderBy, bool ascending);
+        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> GetAllAsync<TEntitySortField>(Expression<Func<TEntity, TEntitySortField>> orderBy, bool ascending);
+
+        TEntity GetById(int? id);
+
+        int Update(TEntity entity);
+        int Update(IEnumerable<TEntity> entities);
+
+        int Delete(TEntity entity);
+
+        IEnumerable<TEntity> GetSome(Expression<Func<TEntity, bool>> where);
+        Task<IEnumerable<TEntity>> GetSomeAsync (Expression<Func<TEntity, bool>> where);
     }
 }

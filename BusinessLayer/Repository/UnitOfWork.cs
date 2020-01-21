@@ -50,13 +50,6 @@ namespace BusinessLayer.Repository
             transaction = null;
         }
 
-        public IRepository<TEntity, TEntityJournal, TEntityTCP> GetRepository<TEntity, TEntityJournal, TEntityTCP>() 
-            where TEntity : BaseTable
-            where TEntityJournal : BaseJournal<TEntity, TEntityTCP>
-            where TEntityTCP : BaseTCP
-        {
-            return repositories.GetOrAdd(typeof(TEntity), (object)new BusinessLayer.Repository.Implementations.Repository<TEntity, TEntityJournal, TEntityTCP>(context)) as IRepository<TEntity, TEntityJournal, TEntityTCP>;
-        }
 
         public void RollbackTransaction()
         {
@@ -83,6 +76,11 @@ namespace BusinessLayer.Repository
                 context.Dispose();
 
             disposed = true;
+        }
+
+        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseTable
+        {
+            throw new NotImplementedException();
         }
 
         ~UnitOfWork()

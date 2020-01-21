@@ -101,14 +101,34 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        if (!(parentEntity is SheetMaterial)) w?.Close();
+                        if (db.Entry(SelectedItem).State == EntityState.Modified)
+                        {
+                            MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+                            if (result == MessageBoxResult.Yes)
+                            {
+                                if (!(parentEntity is SheetMaterial)) w?.Close();
+                                else
+                                {
+                                    var wn = new SheetMaterialView();
+                                    var vm = new SheetMaterialVM();
+                                    wn.DataContext = vm;
+                                    w?.Close();
+                                    wn.ShowDialog();
+                                }
+                            }
+                            else return;
+                        }
                         else
                         {
-                            var wn = new SheetMaterialView();
-                            var vm = new SheetMaterialVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
+                            if (!(parentEntity is SheetMaterial)) w?.Close();
+                            else
+                            {
+                                var wn = new SheetMaterialView();
+                                var vm = new SheetMaterialVM();
+                                wn.DataContext = vm;
+                                w?.Close();
+                                wn.ShowDialog();
+                            }
                         }
                     }));
             }

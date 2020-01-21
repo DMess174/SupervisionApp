@@ -10,6 +10,11 @@ namespace DataLayer.Entities.Materials
             Name = "Лист";
         }
 
+        public SheetMaterial(SheetMaterial material) : base(material)
+        {
+            Name = "Лист";
+        }
+
         public IEnumerable<SheetMaterialJournal> SheetMaterialJournals { get; set; }
     }
 }

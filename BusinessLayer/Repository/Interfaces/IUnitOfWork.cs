@@ -17,10 +17,8 @@ namespace BusinessLayer.Repository.Interfaces
         void RollbackTransaction();
         void CommitTransaction();
 
-        IRepository<TEntity, TEntityJournal, TEntityTCP> GetRepository<TEntity, TEntityJournal, TEntityTCP>()
-            where TEntity : BaseTable
-            where TEntityJournal : BaseJournal<TEntity, TEntityTCP>
-            where TEntityTCP : BaseTCP;
+        IRepository<TEntity> GetRepository<TEntity>()
+            where TEntity : BaseTable;
 
     }
 }

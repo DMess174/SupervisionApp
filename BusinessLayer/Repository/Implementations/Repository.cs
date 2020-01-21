@@ -1,77 +1,158 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using BusinessLayer.Repository.Interfaces;
 using DataLayer;
 using DataLayer.Journals;
 using DataLayer.TechnicalControlPlans;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BusinessLayer.Repository.Implementations
 {
-    public class Repository<TEntity, TEntityJournal, TEntityTCP> : IRepository<TEntity, TEntityJournal, TEntityTCP> 
-        where TEntity : BaseTable
-        where TEntityJournal : BaseJournal<TEntity, TEntityTCP>
-        where TEntityTCP : BaseTCP
+    public class Repository<TEntity> : IDisposable, IRepository<TEntity>
+        where TEntity : BaseTable, new()
     {
-        protected readonly DataContext context;
+        protected readonly DataContext db;
+        protected readonly DbSet<TEntity> table;
+        protected DataContext Context => db;
 
-        protected DbSet<TEntity> DbEntity { get; set; }
-        protected DbSet<TEntityJournal> DbJournal { get; set; }
-        protected DbSet<TEntityTCP> DbTCP { get; set; }
-
-
-        public Repository(DataContext Сontext)
+        public Repository() : this(new DataContext())
         {
-            context = Сontext;
-            DbEntity = context.Set<TEntity>();
-            DbJournal = context.Set<TEntityJournal>();
-            DbTCP = context.Set<TEntityTCP>();
         }
 
-        public async Task<TEntity> EntityAddAsync(TEntity entity)
+        public Repository(DataContext context)
         {
-            var entry = await DbEntity.AddAsync(entity);
-            return entry.Entity;
+            db = context;
+            table = db.Set<TEntity>();
         }
 
-        public async Task<TEntityJournal> JournalAddAsync(TEntityJournal journal)
+        public void Dispose()
         {
-            var entry = await DbJournal.AddAsync(journal);
-            return entry.Entity;
+            db?.Dispose();
         }
 
-        public async Task<TEntityTCP> TCPAddAsync(TEntityTCP point)
+
+        public int Add(TEntity entity)
         {
-            var entry = await DbTCP.AddAsync(point);
-            return entry.Entity;
+            table.Add(entity);
+            return SaveChanges();
         }
 
-        public virtual IEnumerable<TEntity> GetAllEntities()
+        public int Add(IEnumerable<TEntity> entities)
         {
-            DbEntity.Load();
-            return DbEntity.Local.ToObservableCollection();
-        }
-        //identity
-        public async Task<IEnumerable<TEntity>> GetAllEntitiesAsync()
-        {
-            await DbEntity.LoadAsync();
-            return DbEntity.Local.ToObservableCollection();
+            table.AddRange(entities);
+            return SaveChanges();
         }
 
-        public virtual TEntity GetById(int id)
+        public virtual int AddCopy(TEntity entity)
         {
-            return DbEntity.FirstOrDefault(e => e.Id == id);
+            TEntity newEntity = new TEntity();
+            table.Add(newEntity);
+            return SaveChanges();
         }
 
-        public void Update(TEntity entity)
+        public virtual async Task<int> AddCopyAsync(TEntity entity)
         {
-            DbEntity.Update(entity);
+            TEntity newEntity = new TEntity();
+            await table.AddAsync(newEntity);
+            return SaveChanges();
         }
 
-        public void Delete(TEntity entity)
+        public async Task<int> AddAsync(TEntity entity)
         {
-            DbEntity.Remove(entity);
+            await table.AddAsync(entity);
+            return SaveChanges();
         }
+
+        public async Task<int> AddAsync(IEnumerable<TEntity> entities)
+        {
+            await table.AddRangeAsync(entities);
+            return SaveChanges();
+        }
+
+        public IEnumerable<TEntity> GetAll()
+        {
+            table.Load();
+            return table.Local.ToObservableCollection();
+        }
+
+        public IEnumerable<TEntity> GetAll<TEntitySortField>(Expression<Func<TEntity, TEntitySortField>> orderBy, bool ascending)
+        {
+            (ascending ? table.OrderBy(orderBy) : table.OrderByDescending(orderBy)).Load();
+            return table.Local.ToObservableCollection();
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            await table.LoadAsync();
+            return table.Local.ToObservableCollection();
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync<TEntitySortField>(Expression<Func<TEntity, TEntitySortField>> orderBy, bool ascending)
+        {
+            await (ascending ? table.OrderBy(orderBy) : table.OrderByDescending(orderBy)).LoadAsync();
+            return table.Local.ToObservableCollection();
+        }
+
+        public TEntity GetById(int? id) => table.Find(id);
+
+        public int Update(TEntity entity)
+        {
+            table.Update(entity);
+            return SaveChanges();
+        }
+
+        public int Update(IEnumerable<TEntity> entities)
+        {
+            table.UpdateRange(entities);
+            return SaveChanges();
+        }
+
+        public int Delete(TEntity entity)
+        {
+            db.Entry(entity).State = EntityState.Deleted;
+            return SaveChanges();
+        }
+
+        public IEnumerable<TEntity> GetSome(Expression<Func<TEntity, bool>> where)
+        {
+            table.Where(where).Load();
+            return table.Local.ToObservableCollection();
+        }
+
+        public async Task<IEnumerable<TEntity>> GetSomeAsync (Expression<Func<TEntity, bool>> where)
+        {
+            await table.Where(where).LoadAsync();
+            return table.Local.ToObservableCollection();
+        }
+
+        internal int SaveChanges()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw; //Заглушка
+            }
+            catch (RetryLimitExceededException ex)
+            {
+                throw; //Заглушка
+            }
+            catch (DbUpdateException ex)
+            {
+                throw; //Заглушка
+            }
+            catch (Exception ex)
+            {
+                throw; //Заглушка
+            }
+        }
+
+        
     }
 }

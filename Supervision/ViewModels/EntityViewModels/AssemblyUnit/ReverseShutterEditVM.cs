@@ -629,28 +629,28 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                            {
                                if (SelectedMaterialFromList != null)
                                {
-                                   if (SelectedMaterialFromList is Undercoat)
+                                   if (SelectedMaterialFromList.BaseAnticorrosiveCoating is Undercoat)
                                    {
                                        var wn = new BaseAnticorrosiveCoatingEditView();
                                        var vm = new BaseAnticorrosiveCoatingEditVM<Undercoat, AnticorrosiveCoatingTCP, UndercoatJournal>(SelectedMaterialFromList.Id, SelectedItem);
                                        wn.DataContext = vm;
                                        wn.Show();
                                    }
-                                   if (SelectedMaterialFromList is AbovegroundCoating)
+                                   if (SelectedMaterialFromList.BaseAnticorrosiveCoating is AbovegroundCoating)
                                    {
                                        var wn = new BaseAnticorrosiveCoatingEditView();
                                        var vm = new BaseAnticorrosiveCoatingEditVM<AbovegroundCoating, AnticorrosiveCoatingTCP, AbovegroundCoatingJournal>(SelectedMaterialFromList.Id, SelectedItem);
                                        wn.DataContext = vm;
                                        wn.Show();
                                    }
-                                   if (SelectedMaterialFromList is UndergroundCoating)
+                                   if (SelectedMaterialFromList.BaseAnticorrosiveCoating is UndergroundCoating)
                                    {
                                        var wn = new BaseAnticorrosiveCoatingEditView();
                                        var vm = new BaseAnticorrosiveCoatingEditVM<UndergroundCoating, AnticorrosiveCoatingTCP, UndergroundCoatingJournal>(SelectedMaterialFromList.Id, SelectedItem);
                                        wn.DataContext = vm;
                                        wn.Show();
                                    }
-                                   if (SelectedMaterialFromList is AbrasiveMaterial)
+                                   if (SelectedMaterialFromList.BaseAnticorrosiveCoating is AbrasiveMaterial)
                                    {
                                        var wn = new BaseAnticorrosiveCoatingEditView();
                                        var vm = new BaseAnticorrosiveCoatingEditVM<AbrasiveMaterial, AnticorrosiveCoatingTCP, AbrasiveMaterialJournal>(SelectedMaterialFromList.Id, SelectedItem);

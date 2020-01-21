@@ -26,6 +26,7 @@
                 <MenuItem Header="Главное меню" Command="{Binding MainMenuOpen}"/>
                 <Separator />
                 <MenuItem Header="Выход" Command="{Binding AppExit}"/>
+                <MenuItem Header="Рапорт" Command="{Binding GetReport}"/>
             </MenuItem>
 
             <MenuItem Header="Заказ" >

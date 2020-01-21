@@ -7,11 +7,8 @@ using DataLayer.TechnicalControlPlans;
 
 namespace BusinessLayer.Repository.Interfaces.Entities.Detailing
 {
-    public interface IReverseShutterDetailRepository<TEntity, TEntityJournal, TEntityTCP> : IRepository<ReverseShutterDetail, BaseJournal<ReverseShutterDetail, BaseTCP>, BaseTCP>
+    public interface IReverseShutterDetailRepository<TEntity> : IRepository<ReverseShutterDetail>
         where  TEntity : ReverseShutterDetail
-        where TEntityJournal : BaseJournal<ReverseShutterDetail, TEntityTCP>
-        where TEntityTCP : BaseTCP
     {
-        Task<IEnumerable<TEntityJournal>> GetJournal(int id);
     }
 }
