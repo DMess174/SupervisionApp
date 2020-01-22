@@ -20,7 +20,10 @@ namespace BusinessLayer.Repository.Interfaces
 
         int DeleteJournalRecord(TEntityJournal record);
 
-        IEnumerable<TEntityJournal> GetSomeJournalRecord(Expression<Func<TEntityJournal, bool>> where);
-        Task<IEnumerable<TEntityJournal>> GetSomeJournalRecordAsync(Expression<Func<TEntityJournal, bool>> where);
+        IEnumerable<TEntityJournal> GetAllJournalRecords();
+        Task<IEnumerable<TEntityJournal>> GetAllJournalRecordsAsync();
+
+        IEnumerable<TEntityJournal> GetSomeJournalRecords(Expression<Func<TEntityJournal, bool>> where);
+        Task<IEnumerable<TEntityJournal>> GetSomeJournalRecordsAsync(Expression<Func<TEntityJournal, bool>> where);
     }
 }

@@ -18,10 +18,12 @@ namespace BusinessLayer.Repository.Implementations
         where TEntityTCP : BaseTCP, new()
     {
         protected readonly DbSet<TEntityJournal> journal;
+        protected readonly DbSet<TEntityTCP> tcp;
 
         public RepositoryWithJournal(DataContext context) : base(context)
         {
             journal = db.Set<TEntityJournal>();
+            tcp = db.Set<TEntityTCP>();
         }
 
         public virtual int AddJournalRecord(TEntity entity, TEntityJournal record)
@@ -33,6 +35,12 @@ namespace BusinessLayer.Repository.Implementations
         public virtual int AddJournalRecord(TEntity entity, IEnumerable<TEntityJournal> entities)
         {
             journal.AddRange(entities);
+            return SaveChanges();
+        }
+
+        public virtual async Task<int> AddJournalRecordAsync(TEntity entity, TEntityJournal record)
+        {
+            await journal.AddAsync(record);
             return SaveChanges();
         }
 
@@ -50,43 +58,49 @@ namespace BusinessLayer.Repository.Implementations
             return SaveChanges();
         }
 
-        public virtual async Task<int> AddJournalRecordAsync(TEntity entity, TEntityJournal record)
-        {
-            await journal.AddAsync(record);
-            return SaveChanges();
-        }
-
         public virtual async Task<int> AddJournalRecordAsync(TEntity entity, IEnumerable<TEntityJournal> entities)
         {
             await journal.AddRangeAsync(entities);
             return SaveChanges();
         }
 
-        public virtual int UpdateJournalRecord(TEntityJournal entity)
+        public int UpdateJournalRecord(TEntityJournal entity)
         {
             journal.Update(entity);
             return SaveChanges();
         }
 
-        public virtual int UpdateJournalRecord(IEnumerable<TEntityJournal> records)
+        public int UpdateJournalRecord(IEnumerable<TEntityJournal> records)
         {
             journal.UpdateRange(records);
             return SaveChanges();
         }
 
-        public virtual int DeleteJournalRecord(TEntityJournal record)
+        public int DeleteJournalRecord(TEntityJournal record)
         {
             db.Entry(record).State = EntityState.Deleted;
             return SaveChanges();
         }
 
-        public virtual IEnumerable<TEntityJournal> GetSomeJournalRecord(Expression<Func<TEntityJournal, bool>> where)
+        public IEnumerable<TEntityJournal> GetAllJournalRecords()
+        {
+            journal.Load();
+            return journal.Local.ToObservableCollection();
+        }
+
+        public async Task<IEnumerable<TEntityJournal>> GetAllJournalRecordsAsync()
+        {
+            await journal.LoadAsync();
+            return journal.Local.ToObservableCollection();
+        }
+
+        public IEnumerable<TEntityJournal> GetSomeJournalRecords(Expression<Func<TEntityJournal, bool>> where)
         {
             journal.Where(where).Load();
             return journal.Local.ToObservableCollection();
         }
 
-        public virtual async Task<IEnumerable<TEntityJournal>> GetSomeJournalRecordAsync(Expression<Func<TEntityJournal, bool>> where)
+        public async Task<IEnumerable<TEntityJournal>> GetSomeJournalRecordsAsync(Expression<Func<TEntityJournal, bool>> where)
         {
             await journal.Where(where).LoadAsync();
             return journal.Local.ToObservableCollection();

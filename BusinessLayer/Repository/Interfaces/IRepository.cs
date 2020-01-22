@@ -7,13 +7,13 @@ namespace BusinessLayer.Repository.Interfaces
 {
     public interface IRepository<TEntity> 
     {
-        int Add(TEntity entity);
-        int Add(IEnumerable<TEntity> entities);
-        Task<int> AddAsync(TEntity entity);
-        Task<int> AddAsync(IEnumerable<TEntity> entities);
+        TEntity Add(TEntity entity);
+        IEnumerable<TEntity> Add(IEnumerable<TEntity> entities);
+        Task<TEntity> AddAsync(TEntity entity);
+        Task<IEnumerable<TEntity>> AddAsync(IEnumerable<TEntity> entities);
 
-        int AddCopy(TEntity entity);
-        Task<int> AddCopyAsync(TEntity entity);
+        TEntity AddCopy(TEntity entity);
+        Task<TEntity> AddCopyAsync(TEntity entity);
 
         IEnumerable<TEntity> GetAll();
         IEnumerable<TEntity> GetAll<TEntitySortField>(Expression<Func<TEntity, TEntitySortField>> orderBy, bool ascending);

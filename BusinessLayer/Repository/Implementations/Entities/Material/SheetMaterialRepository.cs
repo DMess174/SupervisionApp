@@ -14,6 +14,20 @@ namespace BusinessLayer.Repository.Implementations.Entities.Material
     {
         public SheetMaterialRepository(DataContext context) : base(context) { }
 
-        
+        public override SheetMaterial AddCopy(SheetMaterial entity)
+        {
+            SheetMaterial newEntity = new SheetMaterial(entity);
+            table.Add(newEntity);
+            SaveChanges();
+            return newEntity;
+        }
+
+        public override async Task<SheetMaterial> AddCopyAsync(SheetMaterial entity)
+        {
+            SheetMaterial newEntity = new SheetMaterial(entity);
+            await table.AddAsync(newEntity);
+            SaveChanges();
+            return newEntity;
+        }
     }
 }

@@ -35,42 +35,48 @@ namespace BusinessLayer.Repository.Implementations
         }
 
 
-        public int Add(TEntity entity)
+        public TEntity Add(TEntity entity)
         {
             table.Add(entity);
-            return SaveChanges();
+            SaveChanges();
+            return entity;
         }
 
-        public int Add(IEnumerable<TEntity> entities)
+        public IEnumerable<TEntity> Add(IEnumerable<TEntity> entities)
         {
             table.AddRange(entities);
-            return SaveChanges();
+            SaveChanges();
+            return entities;
         }
 
-        public virtual int AddCopy(TEntity entity)
+        public virtual TEntity AddCopy(TEntity entity)
         {
             TEntity newEntity = new TEntity();
             table.Add(newEntity);
-            return SaveChanges();
+            SaveChanges();
+            return newEntity;
         }
 
-        public virtual async Task<int> AddCopyAsync(TEntity entity)
+        public virtual async Task<TEntity> AddCopyAsync(TEntity entity)
         {
             TEntity newEntity = new TEntity();
             await table.AddAsync(newEntity);
-            return SaveChanges();
+            SaveChanges();
+            return newEntity;
         }
 
-        public async Task<int> AddAsync(TEntity entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
             await table.AddAsync(entity);
-            return SaveChanges();
+            SaveChanges();
+            return entity;
         }
 
-        public async Task<int> AddAsync(IEnumerable<TEntity> entities)
+        public async Task<IEnumerable<TEntity>> AddAsync(IEnumerable<TEntity> entities)
         {
             await table.AddRangeAsync(entities);
-            return SaveChanges();
+            SaveChanges();
+            return entities;
         }
 
         public IEnumerable<TEntity> GetAll()
