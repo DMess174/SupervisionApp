@@ -3,12 +3,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using DataLayer;
-using DataLayer.Entities.Detailing;
 using DataLayer.Entities.Detailing.WeldGateValveDetails;
 using DataLayer.Entities.Materials;
-using DataLayer.Journals.Detailing;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
-using DataLayer.TechnicalControlPlans.Detailing;
 using DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
@@ -18,28 +15,26 @@ using Supervision.Views.EntityViews.MaterialViews;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
 {
-    public class CoverSealingRingEditVM: BasePropertyChanged
+    public class CaseEdgeEditVM : BasePropertyChanged
     {
 
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<MetalMaterial> materials;
         private IEnumerable<string> drawings;
-        private IEnumerable<CoverSealingRingTCP> points;
+        private IEnumerable<CaseEdgeTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<CoverSealingRingJournal> castJournal;
-        private IEnumerable<CoverSealingRingJournal> sheetJournal;
-        private IEnumerable<CoverSealingRingJournal> compactJournal;
+        private IEnumerable<CaseEdgeJournal> journal;
         private readonly BaseTable parentEntity;
-        private CoverSealingRing selectedItem;
-        private CoverSealingRingTCP selectedTCPPoint;
+        private CaseEdge selectedItem;
+        private CaseEdgeTCP selectedTCPPoint;
 
         private ICommand saveItem;
         private ICommand closeWindow;
         private ICommand addOperation;
         private ICommand editMaterial;
 
-        public CoverSealingRing SelectedItem
+        public CaseEdge SelectedItem
         {
             get => selectedItem;
             set
@@ -48,34 +43,17 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<CoverSealingRingJournal> CastJournal
+
+        public IEnumerable<CaseEdgeJournal> Journal
         {
-            get => castJournal;
+            get => journal;
             set
             {
-                castJournal = value;
+                journal = value;
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<CoverSealingRingJournal> SheetJournal
-        {
-            get => sheetJournal;
-            set
-            {
-                sheetJournal = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<CoverSealingRingJournal> CompactJournal
-        {
-            get => compactJournal;
-            set
-            {
-                compactJournal = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<CoverSealingRingTCP> Points
+        public IEnumerable<CaseEdgeTCP> Points
         {
             get => points;
             set
@@ -93,6 +71,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 RaisePropertyChanged();
             }
         }
+
         public ICommand SaveItem
         {
             get
@@ -102,28 +81,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                     {
                         if (SelectedItem != null)
                         {
-                            db.CoverSealingRings.Update(SelectedItem);
+                            db.CaseEdges.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach (var i in CastJournal)
+                            foreach(var i in Journal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.CoverSealingRingJournals.UpdateRange(CastJournal);
-                            db.SaveChanges();
-                            foreach (var i in SheetJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
-                            db.CoverSealingRingJournals.UpdateRange(SheetJournal);
-                            db.SaveChanges();
-                            foreach (var i in CompactJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
-                            db.CoverSealingRingJournals.UpdateRange(CompactJournal);
+                            db.CaseEdgeJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
@@ -137,10 +102,10 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        if (parentEntity is CoverSealingRing)
+                        if (parentEntity is CaseEdge)
                         {
-                            var wn = new CoverSealingRingView();
-                            var vm = new CoverSealingRingVM();
+                            var wn = new CaseEdgeView();
+                            var vm = new CaseEdgeVM();
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -159,7 +124,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                         if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
                         else
                         {
-                            var item = new CoverSealingRingJournal()
+                            var item = new CaseEdgeJournal()
                             {
                                 DetailDrawing = SelectedItem.Drawing,
                                 DetailNumber = SelectedItem.Number,
@@ -169,11 +134,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                                 Description = SelectedTCPPoint.Description,
                                 PointId = SelectedTCPPoint.Id,
                             };
-                            db.CoverSealingRingJournals.Add(item);
+                            db.CaseEdgeJournals.Add(item);
                             db.SaveChanges();
-                            CastJournal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-                            SheetJournal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-                            CompactJournal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШК").OrderBy(x => x.PointId).ToList();
+                            Journal = db.CaseEdgeJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
                         }
                     }));
             }
@@ -185,16 +148,16 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 return editMaterial ?? (
                            editMaterial = new DelegateCommand<Window>((w) =>
                            {
-                               if (SelectedItem.MetalMaterial is PipeMaterial)
+                               if (SelectedItem.MetalMaterial != null)
                                {
-                                   var wn = new PipeMaterialEditView();
-                                   var vm = new PipeMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else if (SelectedItem.MetalMaterial != null)
-                               {
-                                   if (SelectedItem.MetalMaterial is SheetMaterial)
+                                   if (SelectedItem.MetalMaterial is PipeMaterial)
+                                   {
+                                       var wn = new PipeMaterialEditView();
+                                       var vm = new PipeMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
+                                       wn.DataContext = vm;
+                                       wn.Show();
+                                   }
+                                   else if (SelectedItem.MetalMaterial is SheetMaterial)
                                    {
                                        var wn = new SheetMaterialEditView();
                                        var vm = new SheetMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
@@ -249,7 +212,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             }
         }
 
-        public CoverSealingRingTCP SelectedTCPPoint
+        public CaseEdgeTCP SelectedTCPPoint
         {
             get => selectedTCPPoint;
             set
@@ -259,19 +222,17 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             }
         }
 
-        public CoverSealingRingEditVM(int id, BaseTable entity)
+        public CaseEdgeEditVM(int id, BaseTable entity)
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.CoverSealingRings.Include(i => i.CastGateValveCover).Include(i => i.CoverSleeve).SingleOrDefault(i => i.Id == id);
-            CastJournal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-            SheetJournal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-            CompactJournal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШК").OrderBy(x => x.PointId).ToList();
+            SelectedItem = db.CaseEdges.Include(i => i.WeldGateValveCase).SingleOrDefault(i => i.Id == id);
+            Journal = db.CaseEdgeJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Drawings = db.CoverSealingRings.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
+            Drawings = db.CaseEdges.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Materials = db.MetalMaterials.ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<CoverSealingRingTCP>().ToList();
+            Points = db.Set<CaseEdgeTCP>().ToList();
         }
     }
 }

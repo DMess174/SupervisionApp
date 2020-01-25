@@ -23,7 +23,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         private IEnumerable<string> thicknessJoin;
         private IEnumerable<NozzleTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<NozzleJournal> journal;
+        private IEnumerable<NozzleJournal> castJournal;
+        private IEnumerable<NozzleJournal> shutterJournal;
         private readonly BaseTable parentEntity;
         private NozzleTCP selectedTCPPoint;
         private IEnumerable<MetalMaterial> materials;
@@ -53,12 +54,21 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public IEnumerable<NozzleJournal> Journal
+        public IEnumerable<NozzleJournal> CastJournal
         {
-            get => journal;
+            get => castJournal;
             set
             {
-                journal = value;
+                castJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<NozzleJournal> ShutterJournal
+        {
+            get => shutterJournal;
+            set
+            {
+                shutterJournal = value;
                 RaisePropertyChanged();
             }
         }
@@ -92,14 +102,23 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                         {
                             db.Nozzles.Update(SelectedItem);
                             db.SaveChanges();
-                            if (Journal != null)
+                            if (CastJournal != null)
                             {
-                                foreach (var i in Journal)
+                                foreach (var i in CastJournal)
                                 {
                                     i.DetailNumber = SelectedItem.Number;
                                     i.DetailDrawing = SelectedItem.Drawing;
                                 }
-                                db.NozzleJournals.UpdateRange(Journal);
+                                db.NozzleJournals.UpdateRange(CastJournal);
+                            }
+                            if (ShutterJournal != null)
+                            {
+                                foreach (var i in ShutterJournal)
+                                {
+                                    i.DetailNumber = SelectedItem.Number;
+                                    i.DetailDrawing = SelectedItem.Drawing;
+                                }
+                                db.NozzleJournals.UpdateRange(ShutterJournal);
                             }
                             db.SaveChanges();
                         }
@@ -148,7 +167,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                             };
                             db.NozzleJournals.Add(item);
                             db.SaveChanges();
-                            Journal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            CastJournal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList();
+                            ShutterJournal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗО").OrderBy(x => x.PointId).ToList();
                         }
                     }));
             }
@@ -240,7 +260,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.Nozzles.Include(i => i.CastingCase).SingleOrDefault(i => i.Id == id);
-            Journal = db.Set<NozzleJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+            CastJournal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList();
+            ShutterJournal = db.NozzleJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗО").OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Materials = db.MetalMaterials.ToList();
             Drawings = db.Nozzles.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();

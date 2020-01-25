@@ -5,21 +5,24 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using DataLayer;
-using DataLayer.Entities.Detailing.CastGateValveDetails;
-using DataLayer.Journals.Detailing.CastGateValveDetails;
+using DataLayer.Entities.Detailing;
+using DataLayer.Entities.Detailing.WeldGateValveDetails;
+using DataLayer.Journals.Detailing;
+using DataLayer.Journals.Detailing.WeldGateValveDetails;
 using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
-using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
+using Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve;
 using Supervision.Views.EntityViews.DetailViews.Valve;
+using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
 
-namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGateValve
+namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
 {
-    public class CastGateValveCaseVM : BasePropertyChanged
+    public class CaseEdgeVM : BasePropertyChanged
     {
         private readonly DataContext db;
-        private IEnumerable<CastGateValveCase> allInstances;
+        private IEnumerable<CaseEdge> allInstances;
         private ICollectionView allInstancesView;
-        private CastGateValveCase selectedItem;
+        private CaseEdge selectedItem;
         private ICommand removeItem;
         private ICommand editItem;
         private ICommand addItem;
@@ -30,9 +33,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
         private string number = "";
         private string drawing = "";
         private string status = "";
-        private string material = "";
         private string certificate = "";
-        private string melt = "";
 
         #region Filter
         public string Number 
@@ -44,7 +45,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is CastGateValveCase item && item.Number != null)
+                    if (obj is CaseEdge item && item.Number != null)
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
@@ -61,7 +62,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is CastGateValveCase item && item.Drawing != null)
+                    if (obj is CaseEdge item && item.Drawing != null)
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
@@ -78,26 +79,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is CastGateValveCase item && item.Status != null)
+                    if (obj is CaseEdge item && item.Status != null)
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
-                    }
-                    else return false;
-                };
-            }
-        }
-        public string Material
-        {
-            get => material;
-            set
-            {
-                material= value;
-                RaisePropertyChanged();
-                allInstancesView.Filter += (obj) =>
-                {
-                    if (obj is CastGateValveCase item && item.Material != null)
-                    {
-                        return item.Material.ToLower().Contains(Material.ToLower());
                     }
                     else return false;
                 };
@@ -112,26 +96,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is CastGateValveCase item && item.Certificate != null)
+                    if (obj is CaseEdge item && item.Certificate != null)
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
-                    }
-                    else return false;
-                };
-            }
-        }
-        public string Melt
-        {
-            get => melt;
-            set
-            {
-                melt = value;
-                RaisePropertyChanged();
-                allInstancesView.Filter += (obj) =>
-                {
-                    if (obj is CastGateValveCase item && item.Melt != null)
-                    {
-                        return item.Melt.ToLower().Contains(Melt.ToLower());
                     }
                     else return false;
                 };
@@ -160,8 +127,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                     {
                         if (SelectedItem != null)
                         {
-                            var wn = new CastGateValveCaseEditView();
-                            var vm = new CastGateValveCaseEditVM(SelectedItem.Id, SelectedItem);
+                            var wn = new CaseEdgeEditView();
+                            var vm = new CaseEdgeEditVM(SelectedItem.Id, SelectedItem);
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
@@ -180,22 +147,21 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                     {
                         if (SelectedItem != null)
                         {
-                            var item = new CastGateValveCase()
+                            var item = new CaseEdge()
                             {
                                 Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
                                 Drawing = SelectedItem.Drawing,
-                                Material = SelectedItem.Material,
-                                Melt = SelectedItem.Melt,
                                 Certificate = SelectedItem.Certificate,
                                 Status = SelectedItem.Status,
-                                Name = SelectedItem.Name
+                                Name = SelectedItem.Name,
+                                MetalMaterialId = SelectedItem.MetalMaterialId
                             };
-                            db.CastGateValveCases.Add(item);
+                            db.CaseEdges.Add(item);
                             db.SaveChanges();
-                            var journal = db.CastGateValveCaseJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
-                            foreach (var record in journal)
+                            var Journal = db.CaseEdgeJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
+                            foreach (var record in Journal)
                             {
-                                var Record = new CastGateValveCaseJournal()
+                                var Record = new CaseEdgeJournal()
                                 {
                                     Date = record.Date,
                                     DetailId = item.Id,
@@ -212,7 +178,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                                     Status = record.Status,
                                     JournalNumber = record.JournalNumber
                                 };
-                                db.CastGateValveCaseJournals.Add(Record);
+                                db.CaseEdgeJournals.Add(Record);
                                 db.SaveChanges();
                             }
 
@@ -229,14 +195,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                 return addItem ?? (
                     addItem = new DelegateCommand<Window>((w) =>
                     {
-                        var item = new CastGateValveCase();
-                        db.CastGateValveCases.Add(item);
+                        var item = new CaseEdge();
+                        db.CaseEdges.Add(item);
                         db.SaveChanges();
                         SelectedItem = item;
-                        var tcpPoints = db.CastGateValveCaseTCPs.ToList();
+                        var tcpPoints = db.CaseEdgeTCPs.ToList();
                         foreach (var i in tcpPoints)
                         {
-                            var journal = new CastGateValveCaseJournal()
+                            var journal = new CaseEdgeJournal()
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
@@ -248,12 +214,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                             };
                             if (journal != null)
                             {
-                                db.CastGateValveCaseJournals.Add(journal);
+                                db.CaseEdgeJournals.Add(journal);
                                 db.SaveChanges();
                             }
                         }
-                        var wn = new CastGateValveCaseEditView();
-                        var vm = new CastGateValveCaseEditVM(SelectedItem.Id, SelectedItem);
+                        var wn = new CaseEdgeEditView();
+                        var vm = new CaseEdgeEditVM(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;
                         w?.Close();
                         wn.ShowDialog();
@@ -269,7 +235,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                     {
                         if (SelectedItem != null)
                         {
-                            db.CastGateValveCases.Remove(SelectedItem);
+                            db.CaseEdges.Remove(SelectedItem);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не выбран!", "Ошибка");
@@ -288,7 +254,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             }
         }
 
-        public CastGateValveCase SelectedItem
+        public CaseEdge SelectedItem
         {
             get => selectedItem;
             set
@@ -298,7 +264,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             }
         }
 
-        public IEnumerable<CastGateValveCase> AllInstances
+        public IEnumerable<CaseEdge> AllInstances
         {
             get => allInstances;
             set
@@ -317,11 +283,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
             }
         }
 
-        public CastGateValveCaseVM()
+        public CaseEdgeVM()
         {
             db = new DataContext();
-            db.CastGateValveCases.Load();
-            AllInstances = db.CastGateValveCases.Local.ToObservableCollection();
+            db.CaseEdges.Include(i => i.MetalMaterial).Load();
+            AllInstances = db.CaseEdges.Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             if (AllInstances.Count() != 0)
             {

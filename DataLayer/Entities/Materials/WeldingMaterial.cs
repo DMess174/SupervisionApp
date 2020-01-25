@@ -9,6 +9,7 @@ namespace DataLayer.Entities.Materials
         public string Name { get; set; }
         public string Certificate { get; set; }
         public string Batch { get; set; }
+        public string Amount { get; set; }
         public string Status { get; set; }
 
         [NotMapped] 

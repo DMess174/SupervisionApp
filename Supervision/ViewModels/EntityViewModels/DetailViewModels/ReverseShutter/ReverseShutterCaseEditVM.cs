@@ -23,7 +23,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
         private IEnumerable<string> drawings;
         private IEnumerable<ReverseShutterCaseTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<ReverseShutterCaseJournal> journal;
+        private IEnumerable<ReverseShutterCaseJournal> inputControlJournal;
+        private IEnumerable<ReverseShutterCaseJournal> inputNDTControlJournal;
+        private IEnumerable<ReverseShutterCaseJournal> mechanicalJournal;
+        private IEnumerable<ReverseShutterCaseJournal> overlayingJournal;
+        private IEnumerable<ReverseShutterCaseJournal> assemblyJournal;
+        private IEnumerable<ReverseShutterCaseJournal> nDTJournal;
 
         private ReverseShutterCase selectedItem;
         private ICommand saveItem;
@@ -47,12 +52,57 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public IEnumerable<ReverseShutterCaseJournal> Journal
+        public IEnumerable<ReverseShutterCaseJournal> InputControlJournal
         {
-            get => journal;
+            get => inputControlJournal;
             set
             {
-                journal = value;
+                inputControlJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<ReverseShutterCaseJournal> InputNDTControlJournal
+        {
+            get => inputNDTControlJournal;
+            set
+            {
+                inputNDTControlJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<ReverseShutterCaseJournal> MechanicalJournal
+        {
+            get => mechanicalJournal;
+            set
+            {
+                mechanicalJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<ReverseShutterCaseJournal> AssemblyJournal
+        {
+            get => assemblyJournal;
+            set
+            {
+                assemblyJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<ReverseShutterCaseJournal> NDTJournal
+        {
+            get => nDTJournal;
+            set
+            {
+                nDTJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<ReverseShutterCaseJournal> OverlayingJournal
+        {
+            get => overlayingJournal;
+            set
+            {
+                overlayingJournal = value;
                 RaisePropertyChanged();
             }
         }
@@ -146,15 +196,59 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                         {
                             db.ReverseShutterCases.Update(SelectedItem);
                             db.SaveChanges();
-                            if (Journal != null)
+                            if (InputControlJournal != null)
                             {
-                                foreach (var i in Journal)
+                                foreach (var i in InputControlJournal)
                                 {
                                     i.DetailNumber = SelectedItem.Number;
                                     i.DetailDrawing = SelectedItem.Drawing;
                                 }
-
-                                db.ReverseShutterCaseJournals.UpdateRange(Journal);
+                                db.ReverseShutterCaseJournals.UpdateRange(InputControlJournal);
+                            }
+                            if (InputNDTControlJournal != null)
+                            {
+                                foreach (var i in InputNDTControlJournal)
+                                {
+                                    i.DetailNumber = SelectedItem.Number;
+                                    i.DetailDrawing = SelectedItem.Drawing;
+                                }
+                                db.ReverseShutterCaseJournals.UpdateRange(InputNDTControlJournal);
+                            }
+                            if (MechanicalJournal != null)
+                            {
+                                foreach (var i in MechanicalJournal)
+                                {
+                                    i.DetailNumber = SelectedItem.Number;
+                                    i.DetailDrawing = SelectedItem.Drawing;
+                                }
+                                db.ReverseShutterCaseJournals.UpdateRange(MechanicalJournal);
+                            }
+                            if (AssemblyJournal != null)
+                            {
+                                foreach (var i in AssemblyJournal)
+                                {
+                                    i.DetailNumber = SelectedItem.Number;
+                                    i.DetailDrawing = SelectedItem.Drawing;
+                                }
+                                db.ReverseShutterCaseJournals.UpdateRange(AssemblyJournal);
+                            }
+                            if (NDTJournal != null)
+                            {
+                                foreach (var i in NDTJournal)
+                                {
+                                    i.DetailNumber = SelectedItem.Number;
+                                    i.DetailDrawing = SelectedItem.Drawing;
+                                }
+                                db.ReverseShutterCaseJournals.UpdateRange(NDTJournal);
+                            }
+                            if (OverlayingJournal != null)
+                            {
+                                foreach (var i in OverlayingJournal)
+                                {
+                                    i.DetailNumber = SelectedItem.Number;
+                                    i.DetailDrawing = SelectedItem.Drawing;
+                                }
+                                db.ReverseShutterCaseJournals.UpdateRange(OverlayingJournal);
                             }
                             db.SaveChanges();
                         }
@@ -207,7 +301,24 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             };
                             db.ReverseShutterCaseJournals.Add(item);
                             db.SaveChanges();
-                            Journal = db.ReverseShutterCaseJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            InputControlJournal = db.ReverseShutterCaseJournals
+                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль")
+                                .OrderBy(x => x.PointId).ToList();
+                            InputNDTControlJournal = db.ReverseShutterCaseJournals
+                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль (НК)")
+                                .OrderBy(x => x.PointId).ToList();
+                            MechanicalJournal = db.ReverseShutterCaseJournals
+                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка")
+                                .OrderBy(x => x.PointId).ToList();
+                            AssemblyJournal = db.ReverseShutterCaseJournals
+                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка")
+                                .OrderBy(x => x.PointId).ToList();
+                            NDTJournal = db.ReverseShutterCaseJournals
+                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль")
+                                .OrderBy(x => x.PointId).ToList();
+                            OverlayingJournal = db.ReverseShutterCaseJournals
+                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Наплавка")
+                                .OrderBy(x => x.PointId).ToList();
                         }
                     }));
             }
@@ -299,8 +410,23 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 SelectedItem.Nozzles = db.Nozzles.Local
                     .Where(i => i.CastingCaseId == SelectedItem.Id)
                     .ToObservableCollection();
-                Journal = db.ReverseShutterCaseJournals
-                    .Where(i => i.DetailId == SelectedItem.Id)
+                InputControlJournal = db.ReverseShutterCaseJournals
+                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль")
+                    .OrderBy(x => x.PointId).ToList();
+                InputNDTControlJournal = db.ReverseShutterCaseJournals
+                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль (НК)")
+                    .OrderBy(x => x.PointId).ToList();
+                MechanicalJournal = db.ReverseShutterCaseJournals
+                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка")
+                    .OrderBy(x => x.PointId).ToList();
+                AssemblyJournal = db.ReverseShutterCaseJournals
+                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка")
+                    .OrderBy(x => x.PointId).ToList();
+                NDTJournal = db.ReverseShutterCaseJournals
+                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль")
+                    .OrderBy(x => x.PointId).ToList();
+                OverlayingJournal = db.ReverseShutterCaseJournals
+                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Наплавка")
                     .OrderBy(x => x.PointId).ToList();
             }
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();

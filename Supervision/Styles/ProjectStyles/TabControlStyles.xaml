@@ -10,7 +10,7 @@
         <Style.Resources>
             <Style TargetType="{x:Type TabItem}">
                 <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Background" Value="{StaticResource LightBackground}"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TabItem}">
@@ -28,14 +28,11 @@
                                 
                             </Grid>
                             <ControlTemplate.Triggers>
-                                <Trigger Property="IsSelected" Value="false">
-                                    <Setter Property="Background" Value="Transparent"/>
-                                </Trigger>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" Value="{StaticResource BorderBrushSelected}"/>
+                                    <Setter Property="Background" Value="{StaticResource BackgroundHighlighted}"/>
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="true">
-                                    <Setter Property="Background" Value="{StaticResource BackgroundSelected}"/>
+                                    <Setter Property="Background" Value="{StaticResource BackgroundHighlighted}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

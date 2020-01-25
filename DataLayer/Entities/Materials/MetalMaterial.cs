@@ -61,5 +61,6 @@ namespace DataLayer.Entities.Materials
         public IEnumerable<ShutterGuide> ShutterGuides { get; set; }
         public IEnumerable<CounterFlange> CounterFlanges { get; set; }
         public IEnumerable<CoverSealingRing> CoverSealingRings { get; set; }
+        public IEnumerable<CaseEdge> CaseEdges { get; set; }
     }
 }

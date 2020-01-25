@@ -46,6 +46,7 @@ using Supervision.Views.EntityViews.DetailViews.CompactGateValve;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateValve;
 using Supervision.Views;
 using BusinessLayer.Report.DailyReport;
+using DataLayer.TechnicalControlPlans.Periodical;
 
 namespace Supervision.ViewModels
 {
@@ -61,8 +62,6 @@ namespace Supervision.ViewModels
                 RaisePropertyChanged();
             } 
         }
-
-        
 
         public ICommand GetReport
         {
@@ -622,6 +621,10 @@ namespace Supervision.ViewModels
                 });
             }
         }
+        public ICommand CaseEdgeOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new CaseEdgeView(), new CaseEdgeVM()));
+        }
         public ICommand FrontWallOpen
         {
             get
@@ -929,6 +932,10 @@ namespace Supervision.ViewModels
         {
             get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<WeldNozzleTCP>()));
         }
+        public ICommand CaseEdgeTCPOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CaseEdgeTCP>()));
+        }
         public ICommand SideWallTCPOpen
         {
             get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SideWallTCP>()));
@@ -963,218 +970,82 @@ namespace Supervision.ViewModels
         }
         public ICommand CoverSealingRingTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<CoverSealingRingTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoverSealingRingTCP>()));
         }
         public ICommand CoverSleeveTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<CoverSleeveTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoverSleeveTCP>()));
         }
         #endregion
         #endregion
         public ICommand ShaftShutterTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<ShaftShutterTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ShaftShutterTCP>()));
         }
         public ICommand SpringTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<SpringTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SpringTCP>()));
         }
         public ICommand SaddleTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<SaddleTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SaddleTCP>()));
         }
         public ICommand CounterFlangeTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<CounterFlangeTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CounterFlangeTCP>()));
         }
         public ICommand ScrewStudTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<ScrewStudTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ScrewStudTCP>()));
         }
         public ICommand SpindleTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<SpindleTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SpindleTCP>()));
         }
         #endregion
         #region Materials
         public ICommand AnticorrosiveCoatingTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<AnticorrosiveCoatingTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<AnticorrosiveCoatingTCP>()));
         }
         public ICommand MetalMaterialTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<MetalMaterialTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<MetalMaterialTCP>()));
         }
         public ICommand WeldingMaterialTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<WeldingMaterialTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<WeldingMaterialTCP>()));
         }
         public ICommand FrontalSaddleSealingTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<FrontalSaddleSealingTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<FrontalSaddleSealingTCP>()));
         }
         public ICommand AssemblyUnitSealingTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<AssemblyUnitSealingTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<AssemblyUnitSealingTCP>()));
         }
         #endregion
         public ICommand ControlWeldTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<ControlWeldTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ControlWeldTCP>()));
         }
         public ICommand FactoryInspectionTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    var w = new TCPView();
-                    var vm = new TCPViewModel<FactoryInspectionTCP>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<FactoryInspectionTCP>()));
         }
         public ICommand StoresControlTCPOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-            var w = new TCPView();
-            var vm = new TCPViewModel<StoresControlTCP>();
-            w.DataContext = vm;
-            w.ShowDialog();
-        });
-            }
-}
-#endregion
+                get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<StoresControlTCP>()));
+        }
+        public ICommand NDTTCPOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<NDTControlTCP>()));
+        }
+        public ICommand WeldingProceduresTCPOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<WeldingProceduresTCP>()));
+        }
+        #endregion
 
         public ICommand AppExit
         {

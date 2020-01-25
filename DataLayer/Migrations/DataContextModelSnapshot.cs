@@ -1291,6 +1291,8 @@ namespace DataLayer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Amount");
+
                     b.Property<string>("Batch");
 
                     b.Property<string>("Certificate");
@@ -1304,10 +1306,44 @@ namespace DataLayer.Migrations
                     b.ToTable("WeldingMaterials");
                 });
 
+            modelBuilder.Entity("DataLayer.Entities.Periodical.NDTControl", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<int?>("ProductTypeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductTypeId");
+
+                    b.ToTable("NDTControls");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Periodical.WeldingProcedures", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<int?>("ProductTypeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductTypeId");
+
+                    b.ToTable("WeldingProcedures");
+                });
+
             modelBuilder.Entity("DataLayer.Inspector", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Apointment");
 
                     b.Property<string>("Department");
 
@@ -3738,6 +3774,94 @@ namespace DataLayer.Migrations
                     b.ToTable("PIDJournals");
                 });
 
+            modelBuilder.Entity("DataLayer.Journals.Periodical.NDTControlJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("RemarkClosed");
+
+                    b.Property<string>("RemarkIssued");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("NDTControlJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Periodical.WeldingProceduresJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("DetailDrawing");
+
+                    b.Property<int?>("DetailId");
+
+                    b.Property<string>("DetailName");
+
+                    b.Property<string>("DetailNumber");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("RemarkClosed");
+
+                    b.Property<string>("RemarkIssued");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailId");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("WeldingProceduresJournals");
+                });
+
             modelBuilder.Entity("DataLayer.OperationType", b =>
                 {
                     b.Property<int>("Id")
@@ -3763,7 +3887,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "НК"
+                            Name = "Неразрушающий контроль"
                         },
                         new
                         {
@@ -3794,6 +3918,21 @@ namespace DataLayer.Migrations
                         {
                             Id = 9,
                             Name = "Отгрузка"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Входной контроль (НК)"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Сборка/Сварка"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Подготовка к сборке"
                         });
                 });
 
@@ -4409,6 +4548,20 @@ namespace DataLayer.Migrations
                     b.HasDiscriminator().HasValue("PIDTCP");
                 });
 
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Periodical.NDTControlTCP", b =>
+                {
+                    b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
+
+                    b.HasDiscriminator().HasValue("NDTControlTCP");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Periodical.WeldingProceduresTCP", b =>
+                {
+                    b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
+
+                    b.HasDiscriminator().HasValue("WeldingProceduresTCP");
+                });
+
             modelBuilder.Entity("DataLayer.Entities.AssemblyUnits.BaseWeldValve", b =>
                 {
                     b.HasBaseType("DataLayer.Entities.AssemblyUnits.BaseValve");
@@ -4724,7 +4877,7 @@ namespace DataLayer.Migrations
             modelBuilder.Entity("DataLayer.Entities.Detailing.WeldGateValveDetails.CaseEdge", b =>
                 {
                     b.HasOne("DataLayer.Entities.Materials.MetalMaterial", "MetalMaterial")
-                        .WithMany()
+                        .WithMany("CaseEdges")
                         .HasForeignKey("MetalMaterialId");
 
                     b.HasOne("DataLayer.Entities.Detailing.WeldGateValveDetails.WeldGateValveCase", "WeldGateValveCase")
@@ -4799,6 +4952,20 @@ namespace DataLayer.Migrations
                     b.HasOne("DataLayer.Entities.Materials.MetalMaterial", "MetalMaterial")
                         .WithMany("WeldNozzles")
                         .HasForeignKey("MetalMaterialId");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Periodical.NDTControl", b =>
+                {
+                    b.HasOne("DataLayer.ProductType", "ProductType")
+                        .WithMany("NDTControls")
+                        .HasForeignKey("ProductTypeId");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.Periodical.WeldingProcedures", b =>
+                {
+                    b.HasOne("DataLayer.ProductType", "ProductType")
+                        .WithMany("WeldingProcedures")
+                        .HasForeignKey("ProductTypeId");
                 });
 
             modelBuilder.Entity("DataLayer.Journals.AssemblyUnits.CastGateValveJournal", b =>
@@ -5277,7 +5444,7 @@ namespace DataLayer.Migrations
                         .HasForeignKey("DetailId");
 
                     b.HasOne("DataLayer.Inspector", "Inspector")
-                        .WithMany()
+                        .WithMany("CaseEdgeJournals")
                         .HasForeignKey("InspectorId");
 
                     b.HasOne("DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails.CaseEdgeTCP", "EntityTCP")
@@ -5619,6 +5786,36 @@ namespace DataLayer.Migrations
 
                     b.HasOne("DataLayer.TechnicalControlPlans.PIDTCP", "EntityTCP")
                         .WithMany("PIDJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Periodical.NDTControlJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Periodical.NDTControl", "Entity")
+                        .WithMany("NDTControlJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany("NDTControls")
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Periodical.NDTControlTCP", "EntityTCP")
+                        .WithMany("NDTControlJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Periodical.WeldingProceduresJournal", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Periodical.WeldingProcedures", "Entity")
+                        .WithMany("WeldingProceduresJournals")
+                        .HasForeignKey("DetailId");
+
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany("WeldingProceduresJournals")
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Periodical.WeldingProceduresTCP", "EntityTCP")
+                        .WithMany("WeldingProceduresJournals")
                         .HasForeignKey("PointId");
                 });
 

@@ -62,7 +62,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         private ICommand editSlam;
         private ICommand editShaft;
         private IEnumerable<ReverseShutterJournal> testJournal;
-        private IEnumerable<ReverseShutterJournal> aftertestJournal;
+        private IEnumerable<ReverseShutterJournal> afterTestJournal;
         private IEnumerable<ReverseShutterJournal> documentationJournal;
         private IEnumerable<ReverseShutterJournal> shippingJournal;
         private IEnumerable<CoatingJournal> coatingJournal;
@@ -110,10 +110,10 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         }
         public IEnumerable<ReverseShutterJournal> AfterTestJournal
         {
-            get => aftertestJournal;
+            get => afterTestJournal;
             set
             {
-                aftertestJournal = value;
+                afterTestJournal = value;
                 RaisePropertyChanged();
             }
         }

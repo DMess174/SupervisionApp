@@ -24,11 +24,11 @@
                        Style="{StaticResource StandardTextBlock}" 
                        Margin="5 0 5 0" 
                        VerticalAlignment="Center"/>
-            
+
             <TextBox Style="{StaticResource StandardTextBox}"   
                      Width="100"
                      Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-            
+
             <TextBlock Text="Служба" 
                        Style="{StaticResource StandardTextBlock}" 
                        Margin="5 0 5 0" 
@@ -71,7 +71,13 @@
                                     Binding="{Binding Path = Name}" 
                                     TextBlock.TextAlignment="Center" >
                 </DataGridTextColumn>
-                
+
+                <DataGridTextColumn Header="Должность" 
+                                    Width="200*" 
+                                    Binding="{Binding Path = Apointment}" 
+                                    TextBlock.TextAlignment="Center" >
+                </DataGridTextColumn>
+
                 <DataGridTextColumn Header="Служба" 
                                     Width="200*" 
                                     Binding="{Binding Path= Department}"/>

@@ -61,11 +61,12 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         }
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<CompactGateValveJournal> assemblyJournal;
+        private IEnumerable<CompactGateValveJournal> assemblyPreparationJournal;
 
         private ICommand saveItem;
         private ICommand closeWindow;
         private IEnumerable<CompactGateValveJournal> testJournal;
-        private IEnumerable<CompactGateValveJournal> aftertestJournal;
+        private IEnumerable<CompactGateValveJournal> afterTestJournal;
         private IEnumerable<CompactGateValveJournal> documentationJournal;
         private IEnumerable<CompactGateValveJournal> shippingJournal;
         private IEnumerable<CoatingJournal> coatingJournal;
@@ -80,6 +81,15 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             }
         }
 
+        public IEnumerable<CompactGateValveJournal> AssemblyPreparationJournal
+        {
+            get => assemblyPreparationJournal;
+            set
+            {
+                assemblyPreparationJournal = value;
+                RaisePropertyChanged();
+            }
+        }
         public IEnumerable<CompactGateValveJournal> AssemblyJournal
         {
             get => assemblyJournal;
@@ -100,10 +110,10 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         }
         public IEnumerable<CompactGateValveJournal> AfterTestJournal
         {
-            get => aftertestJournal;
+            get => afterTestJournal;
             set
             {
-                aftertestJournal = value;
+                afterTestJournal = value;
                 RaisePropertyChanged();
             }
         }
@@ -181,6 +191,13 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                 }
                             }
                             db.Set<CompactGateValve>().Update(SelectedItem);
+                            db.SaveChanges();
+                            foreach (var i in AssemblyPreparationJournal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.Set<CompactGateValveJournal>().UpdateRange(AssemblyPreparationJournal);
                             db.SaveChanges();
                             foreach (var i in AssemblyJournal)
                             {
@@ -1240,6 +1257,8 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                    };
                                    db.Set<CompactGateValveJournal>().Add(item);
                                    db.SaveChanges();
+                                   SelectedTCPPoint = null;
+                                   AssemblyPreparationJournal = db.Set<CompactGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Подготовка к сборке").OrderBy(x => x.PointId).ToList();
                                    AssemblyJournal = db.Set<CompactGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId).ToList();
                                    TestJournal = db.Set<CompactGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
                                    AfterTestJournal = db.Set<CompactGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ВИК после ПСИ").OrderBy(x => x.PointId).ToList();
@@ -1271,6 +1290,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                    };
                                    db.Set<CoatingJournal>().Add(item);
                                    db.SaveChanges();
+                                   SelectedCoatingTCPPoint = null;
                                    CoatingJournal = db.Set<CoatingJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
                                }
                            }));
@@ -1455,6 +1475,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             db = new DataContext();
             SelectedItem = db.Set<CompactGateValve>().SingleOrDefault(i => i.Id == id);
             PIDs = db.PIDs.Include(i => i.Specification).ToList();
+            AssemblyPreparationJournal = db.Set<CompactGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Подготовка к сборке").OrderBy(x => x.PointId).ToList();
             AssemblyJournal = db.Set<CompactGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId).ToList();
             TestJournal = db.Set<CompactGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
             AfterTestJournal = db.Set<CompactGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ВИК после ПСИ").OrderBy(x => x.PointId).ToList();

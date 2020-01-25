@@ -27,6 +27,9 @@ using DataLayer.Entities.Materials.AnticorrosiveCoating;
 using DataLayer.TechnicalControlPlans.Materials.AnticorrosiveCoating;
 using DataLayer.Journals.Materials.AnticorrosiveCoating;
 using DataLayer.TechnicalControlPlans;
+using DataLayer.Entities.Periodical;
+using DataLayer.TechnicalControlPlans.Periodical;
+using DataLayer.Journals.Periodical;
 
 namespace DataLayer
 {
@@ -47,6 +50,14 @@ namespace DataLayer
 
         public DbSet<FactoryInspectionTCP> FactoryInspectionTCPs { get; set; }
         public DbSet<FactoryInspectionJournal> FactoryInspectionJournals { get; set; }
+
+        public DbSet<WeldingProcedures> WeldingProcedures { get; set; }
+        public DbSet<WeldingProceduresTCP> WeldingProceduresTCPs { get; set; }
+        public DbSet<WeldingProceduresJournal> WeldingProceduresJournals { get; set; }
+
+        public DbSet<NDTControl> NDTControls { get; set; }
+        public DbSet<NDTControlTCP> NDTControlTCPs { get; set; }
+        public DbSet<NDTControlJournal> NDTControlJournals { get; set; }
 
         public DbSet<ControlWeld> ControlWelds { get; set; }
         public DbSet<ControlWeldTCP> ControlWeldTCPs { get; set; }
@@ -275,13 +286,17 @@ namespace DataLayer
                 {
                 new OperationType { Id=1, Name="Входной контроль"},
                 new OperationType { Id=2, Name="Механическая обработка"},
-                new OperationType { Id=3, Name="НК"},
+                new OperationType { Id=3, Name="Неразрушающий контроль"},
                 new OperationType { Id=4, Name="Сборка"},
                 new OperationType { Id=5, Name="ПСИ"},
                 new OperationType { Id=6, Name="ВИК после ПСИ"},
                 new OperationType { Id=7, Name="АКП"},
                 new OperationType { Id=8, Name="Документация"},
-                new OperationType { Id=9, Name="Отгрузка"}
+                new OperationType { Id=9, Name="Отгрузка"},
+                new OperationType { Id=10, Name="Входной контроль (НК)"},
+                new OperationType { Id=11, Name="Сборка/Сварка"},
+                new OperationType { Id=12, Name="Подготовка к сборке"},
+                new OperationType { Id=13, Name="Наплавка"}
                 });
         }
 

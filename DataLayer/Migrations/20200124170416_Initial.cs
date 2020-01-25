@@ -138,6 +138,7 @@ namespace DataLayer.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
+                    Apointment = table.Column<string>(nullable: true),
                     Subdivision = table.Column<string>(nullable: true),
                     Department = table.Column<string>(nullable: true)
                 },
@@ -349,6 +350,7 @@ namespace DataLayer.Migrations
                     Name = table.Column<string>(nullable: true),
                     Certificate = table.Column<string>(nullable: true),
                     Batch = table.Column<string>(nullable: true),
+                    Amount = table.Column<string>(nullable: true),
                     Status = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -613,6 +615,46 @@ namespace DataLayer.Migrations
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_BaseTCP_ProductTypes_ProductTypeId",
+                        column: x => x.ProductTypeId,
+                        principalTable: "ProductTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NDTControls",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    ProductTypeId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NDTControls", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NDTControls_ProductTypes_ProductTypeId",
+                        column: x => x.ProductTypeId,
+                        principalTable: "ProductTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WeldingProcedures",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    ProductTypeId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WeldingProcedures", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WeldingProcedures_ProductTypes_ProductTypeId",
                         column: x => x.ProductTypeId,
                         principalTable: "ProductTypes",
                         principalColumn: "Id",
@@ -2083,6 +2125,94 @@ namespace DataLayer.Migrations
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_WeldNozzleJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NDTControlJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NDTControlJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NDTControlJournals_NDTControls_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "NDTControls",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_NDTControlJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_NDTControlJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WeldingProceduresJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DetailName = table.Column<string>(nullable: true),
+                    DetailNumber = table.Column<string>(nullable: true),
+                    DetailDrawing = table.Column<string>(nullable: true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    DetailId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WeldingProceduresJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WeldingProceduresJournals_WeldingProcedures_DetailId",
+                        column: x => x.DetailId,
+                        principalTable: "WeldingProcedures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_WeldingProceduresJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_WeldingProceduresJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
@@ -3892,7 +4022,7 @@ namespace DataLayer.Migrations
             migrationBuilder.InsertData(
                 table: "OperationTypes",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 3, "НК" });
+                values: new object[] { 3, "Неразрушающий контроль" });
 
             migrationBuilder.InsertData(
                 table: "OperationTypes",
@@ -3923,6 +4053,21 @@ namespace DataLayer.Migrations
                 table: "OperationTypes",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 9, "Отгрузка" });
+
+            migrationBuilder.InsertData(
+                table: "OperationTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 10, "Входной контроль (НК)" });
+
+            migrationBuilder.InsertData(
+                table: "OperationTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 11, "Сборка/Сварка" });
+
+            migrationBuilder.InsertData(
+                table: "OperationTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 12, "Подготовка к сборке" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbovegroundCoatingJournals_DetailId",
@@ -4541,6 +4686,26 @@ namespace DataLayer.Migrations
                 column: "PIDId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_NDTControlJournals_DetailId",
+                table: "NDTControlJournals",
+                column: "DetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NDTControlJournals_InspectorId",
+                table: "NDTControlJournals",
+                column: "InspectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NDTControlJournals_PointId",
+                table: "NDTControlJournals",
+                column: "PointId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NDTControls_ProductTypeId",
+                table: "NDTControls",
+                column: "ProductTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_NozzleJournals_DetailId",
                 table: "NozzleJournals",
                 column: "DetailId");
@@ -5103,6 +5268,26 @@ namespace DataLayer.Migrations
                 column: "PointId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_WeldingProcedures_ProductTypeId",
+                table: "WeldingProcedures",
+                column: "ProductTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WeldingProceduresJournals_DetailId",
+                table: "WeldingProceduresJournals",
+                column: "DetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WeldingProceduresJournals_InspectorId",
+                table: "WeldingProceduresJournals",
+                column: "InspectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WeldingProceduresJournals_PointId",
+                table: "WeldingProceduresJournals",
+                column: "PointId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WeldNozzleJournals_DetailId",
                 table: "WeldNozzleJournals",
                 column: "DetailId");
@@ -5219,6 +5404,9 @@ namespace DataLayer.Migrations
                 name: "JournalNumbers");
 
             migrationBuilder.DropTable(
+                name: "NDTControlJournals");
+
+            migrationBuilder.DropTable(
                 name: "NozzleJournals");
 
             migrationBuilder.DropTable(
@@ -5312,6 +5500,9 @@ namespace DataLayer.Migrations
                 name: "WeldingMaterialJournals");
 
             migrationBuilder.DropTable(
+                name: "WeldingProceduresJournals");
+
+            migrationBuilder.DropTable(
                 name: "WeldNozzleJournals");
 
             migrationBuilder.DropTable(
@@ -5334,6 +5525,9 @@ namespace DataLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "FrontWalls");
+
+            migrationBuilder.DropTable(
+                name: "NDTControls");
 
             migrationBuilder.DropTable(
                 name: "Nozzles");
@@ -5376,6 +5570,9 @@ namespace DataLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "WeldingMaterials");
+
+            migrationBuilder.DropTable(
+                name: "WeldingProcedures");
 
             migrationBuilder.DropTable(
                 name: "Inspectors");

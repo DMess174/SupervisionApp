@@ -80,6 +80,7 @@
                     <MenuItem Header="Детали корпуса">
                         <MenuItem Header="Днище" Command="{Binding CaseBottomOpen}"/>
                         <MenuItem Header="Патрубок" Command="{Binding WeldNozzleOpen}"/>
+                        <MenuItem Header="Ребро" Command="{Binding CaseEdgeOpen}"/>
                         <MenuItem Header="Стенка боковая" Command="{Binding SideWallOpen}"/>
                         <MenuItem Header="Стенка лицевая" Command="{Binding FrontWallOpen}"/>
                         <MenuItem Header="Фланец" Command="{Binding CaseFlangeOpen}"/>
@@ -140,9 +141,6 @@
                 <MenuItem Header="Задвижка шиберная (ЗШ)" Command="{Binding CastGateValveTCPOpen}"/>
                 <MenuItem Header="Задвижка шиберная листовая (ЗШЛ)" Command="{Binding SheetGateValveTCPOpen}" />
                 <MenuItem Header="Затвор обратный (ЗО)" Command="{Binding ReverseShutterTCPOpen}" />
-                <MenuItem Header="КСС" Command="{Binding ControlWeldTCPOpen}" />
-                <MenuItem Header="Проверка завода" Command="{Binding FactoryInspectionTCPOpen}" />
-                <MenuItem Header="Складирование материалов" Command="{Binding StoresControlTCPOpen}" />
                 <MenuItem Header="Шибер" Command="{Binding GateTCPOpen}" />
 
                 <MenuItem Header="Деталировка" >
@@ -170,13 +168,14 @@
                     <MenuItem Header="Катушка (ЗШ, ЗО)" Command="{Binding NozzleTCPOpen}"/>
 
                     <MenuItem Header="Корпус" >
-                        <MenuItem Header="ЗШ" Command="{Binding CastValveCaseTCPOpen}" />
+                        <MenuItem Header="ЗШ" Command="{Binding CastGateValveCaseTCPOpen}" />
                         <MenuItem Header="ЗШЛ" Command="{Binding SheetGateValveCaseTCPOpen}"/>
                         <MenuItem Header="ЗШК" Command="{Binding CompactGateValveCaseTCPOpen}"/>
                         <MenuItem Header="ЗО" Command="{Binding ReverseShutterCaseTCPOpen}"/>
                         <MenuItem Header="Детали корпуса">
                             <MenuItem Header="Днище (ЗШЛ, ЗШК)" Command="{Binding CaseBottomTCPOpen}"/>
                             <MenuItem Header="Патрубок (ЗШЛ, ЗШК)" Command="{Binding WeldNozzleTCPOpen}"/>
+                            <MenuItem Header="Ребро (ЗШЛ, ЗШК)" Command="{Binding CaseEdgeTCPOpen}"/>
                             <MenuItem Header="Стенка боковая (ЗШЛ, ЗШК)" Command="{Binding SideWallTCPOpen}"/>
                             <MenuItem Header="Стенка лицевая (ЗШЛ, ЗШК)" Command="{Binding FrontWallTCPOpen}"/>
                             <MenuItem Header="Фланец (ЗШЛ, ЗШК)" Command="{Binding CaseFlangeTCPOpen}"/>
@@ -213,6 +212,13 @@
                         <MenuItem Header="Уплотнения (РТИ, графлекс)"
                                   Command="{Binding AssemblyUnitSealingTCPOpen}"/>
                     </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Периодика">
+                    <MenuItem Header="КСС" Command="{Binding ControlWeldTCPOpen}" />
+                    <MenuItem Header="Неразрушающий контроль" Command="{Binding NDTTCPOpen}" />
+                    <MenuItem Header="Проверка завода" Command="{Binding FactoryInspectionTCPOpen}" />
+                    <MenuItem Header="Режимы сварки" Command="{Binding WeldingProceduresTCPOpen}" />
+                    <MenuItem Header="Складирование материалов" Command="{Binding StoresControlTCPOpen}" />
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Журналы" Command="{Binding JournalNumbersOpen}"/>
@@ -331,6 +337,9 @@
                                     Command="{Binding WeldNozzleOpen}"
                                     Content="Патрубок"/>
                             <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CaseEdgeOpen}"
+                                    Content="Ребро"/>
+                            <Button Style="{StaticResource TreeViewButton}"
                                     Command="{Binding SideWallOpen}"
                                     Content="Стенка боковая"/>
                             <Button Style="{StaticResource TreeViewButton}"
@@ -407,6 +416,9 @@
                             <Button Style="{StaticResource TreeViewButton}"
                                     Command="{Binding WeldNozzleOpen}"
                                     Content="Патрубок"/>
+                            <Button Style="{StaticResource TreeViewButton}"
+                                    Command="{Binding CaseEdgeOpen}"
+                                    Content="Ребро"/>
                             <Button Style="{StaticResource TreeViewButton}"
                                     Command="{Binding SideWallOpen}"
                                     Content="Стенка боковая"/>

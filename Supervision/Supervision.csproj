@@ -416,6 +416,8 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\CounterFlangeVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\ShearPinVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SpindleVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CaseEdgeEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CaseEdgeVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSealingRingEditVM.cs" />
@@ -512,9 +514,6 @@
     <Compile Include="Views\EntityViews\DetailViews\CastingCaseView.xaml.cs">
       <DependentUpon>CastingCaseView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EntityViews\DetailViews\CastingCaseEditView.xaml.cs">
-      <DependentUpon>CastingCaseEditView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\EntityViews\DetailViews\NozzleEditView.xaml.cs">
       <DependentUpon>NozzleEditView.xaml</DependentUpon>
     </Compile>
@@ -553,6 +552,9 @@
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\Valve\AssemblyUnitSealingView.xaml.cs">
       <DependentUpon>AssemblyUnitSealingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\CastGateValveCaseEditView.xaml.cs">
+      <DependentUpon>CastGateValveCaseEditView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\Valve\ScrewNutEditView.xaml.cs">
       <DependentUpon>ScrewNutEditView.xaml</DependentUpon>
@@ -598,6 +600,12 @@
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\Valve\SpindleView.xaml.cs">
       <DependentUpon>SpindleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CaseEdgeEditView.xaml.cs">
+      <DependentUpon>CaseEdgeEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CaseEdgeView.xaml.cs">
+      <DependentUpon>CaseEdgeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\WeldGateValve\CoverFlangeEditView.xaml.cs">
       <DependentUpon>CoverFlangeEditView.xaml</DependentUpon>
@@ -916,10 +924,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\EntityViews\DetailViews\CastingCaseEditView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\EntityViews\DetailViews\NozzleEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -969,6 +973,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EntityViews\DetailViews\Valve\AssemblyUnitSealingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\CastGateValveCaseEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1029,6 +1037,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EntityViews\DetailViews\Valve\SpindleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CaseEdgeEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\WeldGateValve\CaseEdgeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1274,6 +1290,9 @@
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\analyzers\dotnet\cs\Microsoft.CodeAnalysis.VersionCheckAnalyzer.resources.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\EntityViews\PeriodicalControl\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.0.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.0\build\Fody.targets')" />

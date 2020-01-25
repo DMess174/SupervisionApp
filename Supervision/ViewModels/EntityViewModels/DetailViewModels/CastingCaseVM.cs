@@ -15,6 +15,7 @@ using DataLayer.Entities.Detailing.CastGateValveDetails;
 using DataLayer.Entities.Detailing.ReverseShutterDetails;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter;
 using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
+using Supervision.Views.EntityViews.DetailViews.Valve;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
@@ -177,7 +178,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                             }
                             if (SelectedItem is CastGateValveCase)
                             {
-                                var wn = new CastingCaseEditView();
+                                var wn = new CastGateValveCaseEditView();
                                 var vm = new CastingCaseEditVM<TEntity, Inspector, TEntityTCP, TEntityJournal>(SelectedItem.Id, SelectedItem);
                                 wn.DataContext = vm;
                                 w?.Close();
@@ -270,7 +271,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                                 db.SaveChanges();
                             }
                         }
-                        var wn = new CastingCaseEditView();
+                        var wn = new CastGateValveCaseEditView();
                         var vm = new CastingCaseEditVM<TEntity, Inspector, TEntityTCP, TEntityJournal>(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;
                         w?.Close();

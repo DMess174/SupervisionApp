@@ -57,12 +57,14 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             }
         }
         private IEnumerable<Inspector> inspectors;
+        private IEnumerable<SheetGateValveJournal> assemblyPreparationJournal;
+
         private IEnumerable<SheetGateValveJournal> assemblyJournal;
 
         private ICommand saveItem;
         private ICommand closeWindow;
         private IEnumerable<SheetGateValveJournal> testJournal;
-        private IEnumerable<SheetGateValveJournal> aftertestJournal;
+        private IEnumerable<SheetGateValveJournal> afterTestJournal;
         private IEnumerable<SheetGateValveJournal> documentationJournal;
         private IEnumerable<SheetGateValveJournal> shippingJournal;
         private IEnumerable<CoatingJournal> coatingJournal;
@@ -77,6 +79,15 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             }
         }
 
+        public IEnumerable<SheetGateValveJournal> AssemblyPreparationJournal
+        {
+            get => assemblyPreparationJournal;
+            set
+            {
+                assemblyPreparationJournal = value;
+                RaisePropertyChanged();
+            }
+        }
         public IEnumerable<SheetGateValveJournal> AssemblyJournal
         {
             get => assemblyJournal;
@@ -97,10 +108,10 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         }
         public IEnumerable<SheetGateValveJournal> AfterTestJournal
         {
-            get => aftertestJournal;
+            get => afterTestJournal;
             set
             {
-                aftertestJournal = value;
+                afterTestJournal = value;
                 RaisePropertyChanged();
             }
         }
@@ -178,6 +189,13 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                 }
                             }
                             db.Set<SheetGateValve>().Update(SelectedItem);
+                            db.SaveChanges();
+                            foreach (var i in AssemblyPreparationJournal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.Set<SheetGateValveJournal>().UpdateRange(AssemblyPreparationJournal);
                             db.SaveChanges();
                             foreach (var i in AssemblyJournal)
                             {
@@ -696,7 +714,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                        }
                                        else MessageBox.Show($"Остаток шпилек составляет {SelectedScrewStud.AmountRemaining}", "Ошибка");
                                    }
-                                   else MessageBox.Show("Введено некорректное знаение", "Ошибка");
+                                   else MessageBox.Show("Введено некорректное значение", "Ошибка");
                                }
                                else MessageBox.Show("Объект не выбран!", "Ошибка");
                            }));
@@ -1426,6 +1444,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             db = new DataContext();
             SelectedItem = db.Set<SheetGateValve>().SingleOrDefault(i => i.Id == id);
             PIDs = db.PIDs.Include(i => i.Specification).ToList();
+            AssemblyPreparationJournal = db.Set<SheetGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Подготовка к сборке").OrderBy(x => x.PointId).ToList();
             AssemblyJournal = db.Set<SheetGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId).ToList();
             TestJournal = db.Set<SheetGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
             AfterTestJournal = db.Set<SheetGateValveJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ВИК после ПСИ").OrderBy(x => x.PointId).ToList();
@@ -1452,7 +1471,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             SelectedItem.BaseValveWithSeals = db.BaseValveWithSeals.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
             Cases = db.SheetGateValveCases.ToList();
             Covers = db.SheetGateValveCovers.Include(i => i.Spindle).ToList();
-            Gates = db.Gates.ToList();
+            Gates = db.Gates.Include(i => i.PID).Where(i => i.BaseValve == null).ToList();
             Saddles = db.Saddles.Local.Where(i => i.BaseValveId == null).ToObservableCollection();
             ShearPins = db.ShearPins.Local.Where(i => i.BaseValveId == null).ToObservableCollection();
             BallValves = db.BallValves.Local.Where(i => i.BaseValveId == null).ToObservableCollection();

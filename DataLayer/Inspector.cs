@@ -12,6 +12,7 @@ using DataLayer.Journals.Detailing.CompactGateValveDetails;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 using DataLayer.Journals.Materials.AnticorrosiveCoating;
 using DataLayer.Journals.Materials;
+using DataLayer.Journals.Periodical;
 
 namespace DataLayer
 {
@@ -19,11 +20,13 @@ namespace DataLayer
     {
         public string Name { get; set; }
 
+        public string Apointment { get; set; }
+
         public string Subdivision { get; set; }
 
         public string Department { get; set; }
 
-        [NotMapped] public string FullName => string.Format($"{Name}\n{Department}\n{Subdivision}");
+        [NotMapped] public string FullName => string.Format($"{Name}\n{Apointment}");
 
         public IEnumerable<CastGateValveJournal> CastGateValveJournals { get; set; }
         public IEnumerable<CoatingJournal> CoatingJournals { get; set; }
@@ -43,6 +46,7 @@ namespace DataLayer
         public IEnumerable<StubShutterJournal> StubShutterJournals { get; set; }
         public IEnumerable<CaseBottomJournal> CaseBottomJournals { get; set; }
         public IEnumerable<CaseFlangeJournal> CaseFlangeJournals { get; set; }
+        public IEnumerable<CaseEdgeJournal> CaseEdgeJournals { get; set; }
         public IEnumerable<CompactGateValveCaseJournal> CompactGateValveCaseJournals { get; set; }
         public IEnumerable<CompactGateValveCoverJournal> CompactGateValveCoverJournals { get; set; }
         public IEnumerable<CoverFlangeJournal> CoverFlangeJournals { get; set; }
@@ -78,5 +82,7 @@ namespace DataLayer
         public IEnumerable<ControlWeldJournal> ControlWeldJournals { get; set; }
         public IEnumerable<StoresControlJournal> StoresControlJournals { get; set; }
         public IEnumerable<FactoryInspectionJournal> FactoryInspectionJournals { get; set; }
+        public IEnumerable<NDTControlJournal> NDTControls { get; set; }
+        public IEnumerable<WeldingProceduresJournal> WeldingProceduresJournals { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -23,8 +25,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         private IEnumerable<CaseFlange> caseFlanges;
         private IEnumerable<CaseBottom> caseBottoms;
         private IEnumerable<FrontWall> frontWalls;
+        private IEnumerable<CaseEdge> caseEdges;
         private FrontWall selectedFrontWall;
         private FrontWall selectedFrontWallFromList;
+        private CaseEdge selectedEdge;
+        private CaseEdge selectedEdgeFromList;
+        private ICommand editEdge;
+        private ICommand addEdgeToCase;
+        private ICommand deleteEdgeFromCase;
         private ICommand editFrontWall;
         private ICommand addFrontWallToCase;
         private ICommand deleteFrontWallFromCase;
@@ -37,7 +45,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         private IEnumerable<string> drawings;
         private IEnumerable<TEntityTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<TEntityJournal> journal;
+        private IEnumerable<TEntityJournal> assemblyJournal;
+        private IEnumerable<TEntityJournal> mechanicalJournal;
+        private IEnumerable<TEntityJournal> nDTJournal;
         private readonly BaseTable parentEntity;
         private TEntity selectedItem;
         private TEntityTCP selectedTCPPoint;
@@ -58,12 +68,30 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             }
         }
 
-        public IEnumerable<TEntityJournal> Journal
+        public IEnumerable<TEntityJournal> AssemblyJournal
         {
-            get => journal;
+            get => assemblyJournal;
             set
             {
-                journal = value;
+                assemblyJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<TEntityJournal> MechanicalJournal
+        {
+            get => mechanicalJournal;
+            set
+            {
+                mechanicalJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<TEntityJournal> NDTJournal
+        {
+            get => nDTJournal;
+            set
+            {
+                nDTJournal = value;
                 RaisePropertyChanged();
             }
         }
@@ -114,12 +142,25 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                             }
                             db.Set<TEntity>().Update(SelectedItem);
                             db.SaveChanges();
-                            foreach (var i in Journal)
+                            foreach (var i in AssemblyJournal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.Set<TEntityJournal>().UpdateRange(Journal);
+                            db.Set<TEntityJournal>().UpdateRange(AssemblyJournal);
+                            db.SaveChanges();
+                            foreach (var i in MechanicalJournal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.Set<TEntityJournal>().UpdateRange(MechanicalJournal);
+                            db.SaveChanges(); foreach (var i in NDTJournal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.Set<TEntityJournal>().UpdateRange(NDTJournal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
@@ -167,7 +208,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                                    };
                                    db.Set<TEntityJournal>().Add(item);
                                    db.SaveChanges();
-                                   Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                                   AssemblyJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId).ToList();
+                                   MechanicalJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId).ToList();
+                                   NDTJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId).ToList();
                                }
                            }));
             }
@@ -249,6 +292,84 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                                    db.SaveChanges();
                                    FrontWalls = null;
                                    FrontWalls = db.FrontWalls.Local.Where(i => i.WeldGateValveCaseId == null).ToObservableCollection();
+                               }
+                               else MessageBox.Show("Объект не выбран", "Ошибка");
+                           }));
+            }
+        }
+        public CaseEdge SelectedEdge
+        {
+            get => selectedEdge;
+            set
+            {
+                selectedEdge = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public CaseEdge SelectedEdgeFromList
+        {
+            get => selectedEdgeFromList;
+            set
+            {
+                selectedEdgeFromList = value;
+                RaisePropertyChanged();
+            }
+        }
+        public ICommand AddEdgeToCase
+        {
+            get
+            {
+                return addEdgeToCase ?? (
+                           addEdgeToCase = new DelegateCommand(() =>
+                           {
+                                if (SelectedEdge != null)
+                                {
+                                    var item = SelectedEdge;
+                                    item.WeldGateValveCaseId = SelectedItem.Id;
+                                    db.CaseEdges.Update(item);
+                                    db.SaveChanges();
+                                    CaseEdges = null;
+                                    CaseEdges = db.CaseEdges.Local.Where(i => i.WeldGateValveCaseId == null).ToObservableCollection();
+                                }
+                                else MessageBox.Show("Объект не выбран!", "Ошибка");
+                           }));
+            }
+        }
+        public ICommand EditEdge
+        {
+            get
+            {
+                return editEdge ?? (
+                           editEdge = new DelegateCommand<Window>((w) =>
+                           {
+                               if (SelectedEdgeFromList != null)
+                               {
+                                   var wn = new CaseEdgeEditView();
+                                   var vm = new CaseEdgeEditVM(SelectedEdgeFromList.Id, SelectedItem);
+                                   wn.DataContext = vm;
+                                   wn.Show();
+                               }
+                               else MessageBox.Show("Объект не выбран", "Ошибка");
+                           }));
+            }
+        }
+
+        public ICommand DeleteEdgeFromCase
+        {
+            get
+            {
+                return deleteEdgeFromCase ?? (
+                           deleteEdgeFromCase = new DelegateCommand<Window>((w) =>
+                           {
+                               if (SelectedEdgeFromList != null)
+                               {
+                                   var item = SelectedEdgeFromList;
+                                   item.WeldGateValveCaseId = null;
+                                   db.CaseEdges.Update(item);
+                                   db.SaveChanges();
+                                   CaseEdges = null;
+                                   CaseEdges = db.CaseEdges.Local.Where(i => i.WeldGateValveCaseId == null).ToObservableCollection();
                                }
                                else MessageBox.Show("Объект не выбран", "Ошибка");
                            }));
@@ -408,6 +529,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 RaisePropertyChanged();
             }
         }
+        public IEnumerable<CaseEdge> CaseEdges
+        {
+            get => caseEdges;
+            set
+            {
+                caseEdges = value;
+                RaisePropertyChanged();
+            }
+        }
         public IEnumerable<string> Drawings
         {
             get => drawings;
@@ -444,11 +574,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             SelectedItem = db.Set<TEntity>()
                 .Include(i => i.FrontWalls)
                 .Include(i => i.SideWalls)
+                .Include(i => i.CaseEdges)
                 .Include(i => i.BaseWeldValve)
                 .SingleOrDefault(i => i.Id == id);
-            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+            AssemblyJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId).ToList();
+            MechanicalJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId).ToList();
+            NDTJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.Set<TEntity>().Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
+            CaseEdges = db.CaseEdges.ToList();
             CaseFlanges = db.CaseFlanges.ToList();
             CaseBottoms = db.CaseBottoms.ToList();
             FrontWalls = db.FrontWalls.Where(i => i.WeldGateValveCaseId == null).ToList();
