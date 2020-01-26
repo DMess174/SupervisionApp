@@ -1,0 +1,325 @@
+﻿<Window x:Class="Supervision.Views.EntityViews.PeriodicalControl.Gate.GatePeriodicalView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
+      Style="{StaticResource StandardWindow}"
+      d:DesignHeight="600" d:DesignWidth="1200"
+        WindowStartupLocation="CenterScreen"
+        Title="Периодика шибера">
+    <Window.Resources>
+        <CollectionViewSource x:Key="Inspectors" Source="{Binding Inspectors}"/>
+        <CollectionViewSource x:Key="Points" Source="{Binding Points}" />
+        <CollectionViewSource x:Key="JournalNumbers" Source="{Binding JournalNumbers}"/>
+    </Window.Resources>
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <Label Style="{StaticResource StandardLabel}" 
+                               Content="Дата последней проверки:" 
+                               Margin="5 0 5 0" 
+                               VerticalAlignment="Center"/>
+
+                    <Label Style="{StaticResource StandardLabel}" 
+                               Grid.Row="1" 
+                               Content="Срок проведения очередной проверки:" 
+                               Margin="5 0 5 0" 
+                               VerticalAlignment="Center"/>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" 
+                             Grid.Row="0" 
+                             Width="auto" 
+                             Margin="5 5 5 5" 
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Center"
+                             Text="{Binding LastInspection, StringFormat=dd-MM-yyyy}"/>
+
+                    <TextBlock Style="{StaticResource TextBlockStyle}" 
+                              Grid.Row="1" 
+                              Width="auto" 
+                              Margin="5 5 5 5" 
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center" 
+                              Text="{Binding NextInspection, StringFormat=dd-MM-yyyy}"/>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Separator Style="{StaticResource HorizontalSeparator}" 
+             Grid.Row="1"/>
+
+        <TabControl Style="{StaticResource StandardTabControl}"
+             Grid.Row="4">
+            <TabItem Header="Операции">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid Style="{StaticResource StandardDataGrid}"
+                        Grid.Row="0" 
+                        Grid.Column="0" 
+                        MinRowHeight="50"
+                        ItemsSource="{Binding Journal}"
+                        IsReadOnly="False"
+                        HorizontalScrollBarVisibility="Visible">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Дата"
+                                MinWidth="100"
+                                Width="auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
+                                            SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn 
+                                Header="Пункт"
+                                MinWidth="70"
+                                Width="auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Point}"
+                                            FontSize="{StaticResource Hi}"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Операция" 
+                                Width="250">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
+                                            TextWrapping="Wrap"
+                                            AcceptsReturn="True"
+                                            AcceptsTab="True"
+                                            VerticalAlignment="Center"
+                                            MinLines="3"
+                                            MaxLines="50"
+                                            SpellCheck.IsEnabled="True"
+                                            Language="ru-ru"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn 
+                                Header="Инспектор"
+                                MinWidth="120"
+                                Width="auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox  VerticalContentAlignment="Center"
+                                            IsEditable="True"
+                                            ItemsSource="{Binding Path=DataContext.Inspectors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            SelectedValuePath="Id"
+                                            SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}"
+                                            DisplayMemberPath="FullName">
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn
+                                Header="Статус" Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox 
+                                            Height="50" 
+                                            IsEditable="True"
+                                            SelectedItem="{Binding Status}"
+                                            SelectedValue= "{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
+                                            SelectedValuePath="Content">
+                                            <ComboBoxItem Content="Соответствует"/>
+                                            <ComboBoxItem Content="Не соответствует"/>
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Замечание&#x0a;   выдано"
+                                Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
+                                            TextWrapping="Wrap"
+                                            AcceptsReturn="True"
+                                            AcceptsTab="True"
+                                            VerticalAlignment="Center"
+                                            MinLines="3"
+                                            MaxLines="50"
+                                            SpellCheck.IsEnabled="True"
+                                            Language="ru-ru"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Замечание&#x0a;   закрыто"
+                                Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
+                                            TextWrapping="Wrap"
+                                            AcceptsReturn="True"
+                                            AcceptsTab="True"
+                                            VerticalAlignment="Center"
+                                            MinLines="3"
+                                            MaxLines="50"
+                                            SpellCheck.IsEnabled="True"
+                                            Language="ru-ru"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Номер журнала" 
+                                MinWidth="100"
+                                Width="auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox Height="50" 
+                                            IsEditable="True"
+                                            VerticalContentAlignment="Center" 
+                                            HorizontalContentAlignment="Center"
+                                            ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Примечание" 
+                                MinWidth="200"
+                                Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
+                                            TextWrapping="Wrap"
+                                            AcceptsReturn="True"
+                                            AcceptsTab="True"
+                                            VerticalAlignment="Center"
+                                            MinLines="3"
+                                            MaxLines="50"
+                                            SpellCheck.IsEnabled="True"
+                                            Language="ru-ru"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <TextBlock Text="Выбор пункта:"
+                            Margin="5 0 10 0"
+                            FontSize="{StaticResource Hi}"
+                            Style="{StaticResource StandardTextBlock}"
+                            VerticalAlignment="Center"/>
+
+                        <ComboBox Style="{StaticResource StandardComboBox}" 
+                            VerticalContentAlignment="Center" 
+                            ItemsSource="{Binding Points}"
+                            SelectedItem="{Binding SelectedTCPPoint}"
+                            Margin="5"
+                            MinWidth="300"
+                            Width="auto">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.Width>
+                                            <Binding ElementName="PointColumn" Path="ActualWidth"/>
+                                        </StackPanel.Width>
+                                        <TextBlock Width="auto">
+                                            <TextBlock.Text>
+                                                <Binding Path="Point" StringFormat="{}{0}-"/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock Width="auto">
+                                            <TextBlock.Text>
+                                                <Binding Path="ProductType.ShortName" StringFormat="{}{0} - "/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" >
+                                            <TextBlock.Text>
+                                                <Binding Path="Description"/>
+                                            </TextBlock.Text>
+                                            <TextBlock.Width>
+                                                <Binding ElementName="PointColumn" Path="ActualWidth"/>
+                                            </TextBlock.Width>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <Button Style="{StaticResource StandardButton}" 
+                            Content="Добавить операцию" 
+                            Margin="10" 
+                            Command="{Binding AddOperation}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <Separator Style="{StaticResource HorizontalSeparator}" 
+                   Grid.Row="5"/>
+
+        <Grid Grid.Row="6">
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Center"
+                        Height="35">
+                <Button Style="{StaticResource StandardButton}" 
+                            Width="70"
+                            Content="Сохранить" 
+                            Margin="10 2 10 2" 
+                            Command="{Binding SaveItem}" 
+                            CommandParameter="{Binding SelectedItem}"/>
+
+                <Button Style="{StaticResource StandardButton}" 
+                            Width="70"
+                            Content="Закрыть" 
+                            Margin="10 2 10 2" 
+                            Command="{Binding CloseWindow}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

@@ -8,7 +8,7 @@ namespace DataLayer
 {
     public class PID : BaseTable
     {
-        public string Number { get; set; }
+        public int? Number { get; set; }
         public int? Amount { get; set; }
         public int? AmountShipped { get; set; }
         public string DN { get; set; }
@@ -20,6 +20,8 @@ namespace DataLayer
         public string TechDocumentation { get; set; }
         public DateTime? ShippingDate { get; set; }
         public string Designation { get; set; }
+        public string Purpose { get; set; }
+        public int? Weight { get; set; }
         public string Comment { get; set; }
 
         public int? SpecificationId { get; set; }

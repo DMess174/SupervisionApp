@@ -31,7 +31,10 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         private IEnumerable<string> drawings;
         private IEnumerable<TEntityTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<TEntityJournal> journal;
+        private IEnumerable<TEntityJournal> assemblyJournal;
+        private IEnumerable<TEntityJournal> assemblyWeldingJournal;
+        private IEnumerable<TEntityJournal> mechanicalJournal;
+        private IEnumerable<TEntityJournal> nDTJournal;
         private readonly BaseTable parentEntity;
         private TEntity selectedItem;
         private TEntityTCP selectedTCPPoint;
@@ -54,12 +57,39 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             }
         }
 
-        public IEnumerable<TEntityJournal> Journal
+        public IEnumerable<TEntityJournal> AssemblyWeldingJournal
         {
-            get => journal;
+            get => assemblyWeldingJournal;
             set
             {
-                journal = value;
+                assemblyWeldingJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<TEntityJournal> MechanicalJournal
+        {
+            get => mechanicalJournal;
+            set
+            {
+                mechanicalJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<TEntityJournal> NDTJournal
+        {
+            get => nDTJournal;
+            set
+            {
+                nDTJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<TEntityJournal> AssemblyJournal
+        {
+            get => assemblyJournal;
+            set
+            {
+                assemblyJournal = value;
                 RaisePropertyChanged();
             }
         }
@@ -128,12 +158,33 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                             }
                             db.Set<TEntity>().Update(SelectedItem);
                             db.SaveChanges();
-                            foreach (var i in Journal)
+                            foreach (var i in AssemblyWeldingJournal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.Set<TEntityJournal>().UpdateRange(Journal);
+                            db.Set<TEntityJournal>().UpdateRange(AssemblyWeldingJournal);
+                            db.SaveChanges();
+                            foreach (var i in MechanicalJournal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.Set<TEntityJournal>().UpdateRange(MechanicalJournal);
+                            db.SaveChanges();
+                            foreach (var i in NDTJournal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.Set<TEntityJournal>().UpdateRange(NDTJournal);
+                            db.SaveChanges();
+                            foreach (var i in AssemblyJournal)
+                            {
+                                i.DetailNumber = SelectedItem.Number;
+                                i.DetailDrawing = SelectedItem.Drawing;
+                            }
+                            db.Set<TEntityJournal>().UpdateRange(AssemblyJournal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
@@ -181,7 +232,10 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                             };
                             db.Set<TEntityJournal>().Add(item);
                             db.SaveChanges();
-                            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            AssemblyWeldingJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId).ToList();
+                            MechanicalJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId).ToList();
+                            NDTJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId).ToList();
+                            AssemblyJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId).ToList();
                         }
                     }));
             }
@@ -329,7 +383,10 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.Set<TEntity>().Include(i => i.BaseWeldValve).SingleOrDefault(i => i.Id == id);
-            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+            AssemblyWeldingJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId).ToList();
+            MechanicalJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId).ToList();
+            NDTJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId).ToList();
+            AssemblyJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.Set<TEntity>().Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             CoverFlanges = db.CoverFlanges.ToList();

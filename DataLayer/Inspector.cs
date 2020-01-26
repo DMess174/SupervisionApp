@@ -1,13 +1,10 @@
-﻿using System;
-using DataLayer.Journals.Detailing;
+﻿using DataLayer.Journals.Detailing;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using DataLayer.Journals.AssemblyUnits;
 using DataLayer.Journals.Detailing.CastGateValveDetails;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
 using DataLayer.Journals;
-using DataLayer.TechnicalControlPlans;
-using DataLayer.Entities;
 using DataLayer.Journals.Detailing.CompactGateValveDetails;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 using DataLayer.Journals.Materials.AnticorrosiveCoating;
@@ -84,5 +81,10 @@ namespace DataLayer
         public IEnumerable<FactoryInspectionJournal> FactoryInspectionJournals { get; set; }
         public IEnumerable<NDTControlJournal> NDTControls { get; set; }
         public IEnumerable<WeldingProceduresJournal> WeldingProceduresJournals { get; set; }
+        public IEnumerable<CoatingChemicalCompositionJournal> CoatingChemicalCompositionJournals { get; set; }
+        public IEnumerable<DegreasingChemicalCompositionJournal> DegreasingChemicalCompositionJournals { get; set; }
+        public IEnumerable<CoatingPlasticityJournal> CoatingPlasticityJournals { get; set; }
+        public IEnumerable<CoatingPorosityJournal> CoatingPorosityJournals { get; set; }
+        public IEnumerable<CoatingProtectivePropertiesJournal> CoatingProtectivePropertiesJournals { get; set; }
     }
 }

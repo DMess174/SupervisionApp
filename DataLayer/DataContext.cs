@@ -45,6 +45,21 @@ namespace DataLayer
         public DbSet<Inspector> Inspectors { get; set; }
         public DbSet<JournalNumber> JournalNumbers { get; set; }
 
+        public DbSet<CoatingPlasticityTCP> CoatingPlasticityTCPs { get; set; }
+        public DbSet<CoatingPlasticityJournal> CoatingPlasticityJournals { get; set; }
+
+        public DbSet<CoatingPorosityTCP> CoatingPorosityTCPs { get; set; }
+        public DbSet<CoatingPorosityJournal> CoatingPorosityJournals { get; set; }
+
+        public DbSet<CoatingProtectivePropertiesTCP> CoatingProtectivePropertiesTCPs { get; set; }
+        public DbSet<CoatingProtectivePropertiesJournal> CoatingProtectivePropertiesJournals { get; set; }
+
+        public DbSet<DegreasingChemicalCompositionTCP> DegreasingChemicalCompositionTCPs { get; set; }
+        public DbSet<DegreasingChemicalCompositionJournal> DegreasingChemicalCompositionJournals { get; set; }
+
+        public DbSet<CoatingChemicalCompositionTCP> CoatingChemicalCompositionTCPs { get; set; }
+        public DbSet<CoatingChemicalCompositionJournal> CoatingChemicalCompositionJournals { get; set; }
+
         public DbSet<StoresControlTCP> StoresControlTCPs { get; set; }
         public DbSet<StoresControlJournal> StoresControlJournals { get; set; }
 
@@ -296,7 +311,9 @@ namespace DataLayer
                 new OperationType { Id=10, Name="Входной контроль (НК)"},
                 new OperationType { Id=11, Name="Сборка/Сварка"},
                 new OperationType { Id=12, Name="Подготовка к сборке"},
-                new OperationType { Id=13, Name="Наплавка"}
+                new OperationType { Id=13, Name="Наплавка"},
+                new OperationType { Id=14, Name="Подготовка поверхности"},
+                new OperationType { Id=15, Name="Покрытие"}
                 });
         }
 

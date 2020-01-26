@@ -44,8 +44,13 @@
                           Command="{Binding CompactGateValveOpen}" />
                 <MenuItem Header="Затвор обратный (ЗО)" 
                           Command="{Binding ReverseShutterOpen}" />
-                <MenuItem Header="Проверка завода"
-                          Command="{Binding FactoryInspectionOpen}"/>
+            </MenuItem>
+
+            <MenuItem Header="Периодика">
+                <MenuItem Header="Неразрушающий контроль" Command="{Binding NDTControlOpen}"/>
+                <MenuItem Header="Режимы сварки" Command="{Binding WeldingProceduresOpen}"/>
+                <MenuItem Header="Складирование материалов" Command="{Binding StoresControlOpen}"/>
+                <MenuItem Header="Проверка завода" Command="{Binding FactoryInspectionOpen}"/>
             </MenuItem>
 
             <MenuItem Header="Деталировка" >
@@ -102,7 +107,16 @@
                 <MenuItem Header="Пружина (ЗШ, ЗШЛ)" Command="{Binding SpringOpen}"/>
                 <MenuItem Header="Седло (ЗШ, ЗШЛ, ЗШК)" Command="{Binding SaddleOpen}"/>
                 <MenuItem Header="Фланец ответный" Command="{Binding CounterFlangeOpen}"/>
-                <MenuItem Header="Шибер (ЗШ, ЗШЛ)" Command="{Binding GateOpen}"/>
+                <MenuItem Header="Шибер (ЗШ, ЗШЛ)">
+                    <MenuItem Header="Периодика">
+                        <MenuItem Header="Хим. состав среды для обезжиривания" Command="{Binding DegreasingChemicalCompositionOpen}"/>
+                        <MenuItem Header="Хим. состав раствора для нанесения покрытия" Command="{Binding CoatingChemicalCompositionOpen}"/>
+                        <MenuItem Header="Пористость покрытия" Command="{Binding CoatingPorosityOpen}"/>
+                        <MenuItem Header="Пластичность покрытия" Command="{Binding CoatingPlasticityOpen}"/>
+                        <MenuItem Header="Защитные свойства покрытия" Command="{Binding CoatingProtectivePropertiesOpen}"/>
+                    </MenuItem>
+                    <MenuItem Header="Шибер" Command="{Binding GateOpen}"/>
+                </MenuItem>
                 <MenuItem Header="Шпилька (ЗШ, ЗШЛ, ЗШК)" Command="{Binding ScrewStudOpen}"/>
                 <MenuItem Header="Шпиндель (ЗШ, ЗШЛ, ЗШК)" Command="{Binding SpindleOpen}"/>
             </MenuItem>
@@ -128,7 +142,6 @@
                     <MenuItem Header="Торцевое уплотнение (седло)" Command="{Binding FrontalSaddleSealingOpen}"/>
                     <MenuItem Header="Уплотнения (графлекс, РТИ)" Command="{Binding AssemblyUnitSealingOpen}"/>
                 </MenuItem>
-                <MenuItem Header="Складирование материалов" Command="{Binding StoresControlOpen}"/>
             </MenuItem>
 
             <MenuItem Header="Персонал"
@@ -219,6 +232,13 @@
                     <MenuItem Header="Проверка завода" Command="{Binding FactoryInspectionTCPOpen}" />
                     <MenuItem Header="Режимы сварки" Command="{Binding WeldingProceduresTCPOpen}" />
                     <MenuItem Header="Складирование материалов" Command="{Binding StoresControlTCPOpen}" />
+                    <MenuItem Header="Шибер">
+                        <MenuItem Header="Хим. состав среды для обезжиривания" Command="{Binding DegreasingChemicalCompositionTCPOpen}"/>
+                        <MenuItem Header="Хим. состав раствора для нанесения покрытия" Command="{Binding CoatingChemicalCompositionTCPOpen}"/>
+                        <MenuItem Header="Пористость покрытия" Command="{Binding CoatingPorosityTCPOpen}"/>
+                        <MenuItem Header="Пластичность покрытия" Command="{Binding CoatingPlasticityTCPOpen}"/>
+                        <MenuItem Header="Защитные свойства покрытия" Command="{Binding CoatingProtectivePropertiesTCPOpen}"/>
+                    </MenuItem>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Журналы" Command="{Binding JournalNumbersOpen}"/>

@@ -1,36 +1,37 @@
-﻿using DataLayer;
-using DevExpress.Mvvm;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using DataLayer.TechnicalControlPlans.Materials;
-using DataLayer.Journals.Materials;
-using DataLayer.Entities.Materials;
-using Supervision.Views.EntityViews.MaterialViews;
+using DataLayer;
+using DataLayer.Entities.Periodical;
+using DataLayer.Journals;
+using DataLayer.TechnicalControlPlans;
+using DevExpress.Mvvm;
+using Supervision.Views.EntityViews.PeriodicalControl;
 
-namespace Supervision.ViewModels.EntityViewModels.Materials
+namespace Supervision.ViewModels.EntityViewModels.Periodical
 {
-    public class RolledMaterialEditVM : BasePropertyChanged
+    public class PeriodicalControlEditVM<TEntity, TEntityTCP, TEntityJournal> : BasePropertyChanged
+        where TEntity : PeriodicalControl, new()
+        where TEntityTCP : BaseTCP
+        where TEntityJournal : BaseJournal<TEntity, TEntityTCP>, new()
     {
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
-        private IEnumerable<string> materials;
-        private IEnumerable<string> firstSizes;
-        private IEnumerable<string> secondSizes;
-        private IEnumerable<string> thirdSizes;
-        private IEnumerable<MetalMaterialTCP> points;
+        private IEnumerable<string> names;
+        private IEnumerable<TEntityTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<RolledMaterialJournal> journal;
+        private IEnumerable<TEntityJournal> journal;
+        private IEnumerable<ProductType> productTypes;
         private readonly BaseTable parentEntity;
-        private MetalMaterialTCP selectedTCPPoint;
+        private TEntity selectedItem;
+        private TEntityTCP selectedTCPPoint;
 
-        private RolledMaterial selectedItem;
         private ICommand saveItem;
         private ICommand closeWindow;
         private ICommand addOperation;
-
-        public RolledMaterial SelectedItem
+        public TEntity SelectedItem
         {
             get => selectedItem;
             set
@@ -39,8 +40,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged();
             }
         }
-
-        public IEnumerable<RolledMaterialJournal> Journal
+        public IEnumerable<TEntityJournal> Journal
         {
             get => journal;
             set
@@ -49,7 +49,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<MetalMaterialTCP> Points
+        public IEnumerable<TEntityTCP> Points
         {
             get => points;
             set
@@ -77,16 +77,19 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         if (SelectedItem != null)
                         {
-                            db.RolledMaterials.Update(SelectedItem);
-                            db.SaveChanges();
                             if (Journal != null)
                             {
-                                foreach (var i in Journal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                }
-                                db.RolledMaterialJournals.UpdateRange(Journal);
+                                SelectedItem.LastControl = Journal.Select(i => i.Date).Max();
+                                SelectedItem.NextControl = Convert.ToDateTime(SelectedItem.LastControl).AddDays(7);
                             }
+                            db.Set<TEntity>().Update(SelectedItem);
+                            db.SaveChanges();
+                            foreach(var i in Journal)
+                            {
+                                i.DetailNumber = SelectedItem.Name;
+                                i.DetailDrawing = SelectedItem.ProductType.Name;
+                            }
+                            db.Set<TEntityJournal>().UpdateRange(Journal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
@@ -100,15 +103,15 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        if (!(parentEntity is RolledMaterial)) w?.Close();
-                        else
+                        if (parentEntity is TEntity)
                         {
-                            var wn = new RolledMaterialView();
-                            var vm = new RolledMaterialVM();
+                            var wn = new PeriodicalControlView();
+                            var vm = new PeriodicalControlVM<TEntity, TEntityTCP, TEntityJournal>();
                             wn.DataContext = vm;
                             w?.Close();
                             wn.ShowDialog();
                         }
+                        else w?.Close();
                     }));
             }
         }
@@ -122,29 +125,29 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                         if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
                         else
                         {
-                            var item = new RolledMaterialJournal()
+                            var item = new TEntityJournal()
                             {
-                                DetailNumber = SelectedItem.Number,
+                                DetailDrawing = SelectedItem.ProductType.Name,
                                 DetailName = SelectedItem.Name,
                                 DetailId = SelectedItem.Id,
                                 Point = SelectedTCPPoint.Point,
                                 Description = SelectedTCPPoint.Description,
                                 PointId = SelectedTCPPoint.Id,
                             };
-                            db.RolledMaterialJournals.Add(item);
+                            db.Set<TEntityJournal>().Add(item);
                             db.SaveChanges();
-                            Journal = db.RolledMaterialJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+                            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
                         }
                     }));
             }
         }
-
-        public IEnumerable<string> Materials
+ 
+        public IEnumerable<string> Names
         {
-            get => materials;
+            get => names;
             set
             {
-                materials = value;
+                names = value;
                 RaisePropertyChanged();
             }
         }
@@ -157,38 +160,16 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged();
             }
         }
-
-        public IEnumerable<string> FirstSizes
+        public IEnumerable<ProductType> ProductTypes
         {
-            get => firstSizes;
+            get => productTypes;
             set
             {
-                firstSizes = value;
+                productTypes = value;
                 RaisePropertyChanged();
             }
         }
-
-        public IEnumerable<string> SecondSizes
-        {
-            get => secondSizes;
-            set
-            {
-                secondSizes = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public IEnumerable<string> ThirdSizes
-        {
-            get => thirdSizes;
-            set
-            {
-                thirdSizes = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public MetalMaterialTCP SelectedTCPPoint
+        public TEntityTCP SelectedTCPPoint
         {
             get => selectedTCPPoint;
             set
@@ -198,19 +179,17 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public RolledMaterialEditVM(int id, BaseTable entity)
+        public PeriodicalControlEditVM(int id, BaseTable entity)
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.RolledMaterials.Find(id);
-            Journal = db.Set<RolledMaterialJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
+            SelectedItem = db.Set<TEntity>().SingleOrDefault(i => i.Id == id);
+            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Materials = db.RolledMaterials.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            FirstSizes = db.RolledMaterials.Select(t => t.FirstSize).Distinct().OrderBy(x => x).ToList();
-            SecondSizes = db.RolledMaterials.Select(t => t.SecondSize).Distinct().OrderBy(x => x).ToList();
-            ThirdSizes = db.RolledMaterials.Select(d => d.ThirdSize).Distinct().OrderBy(x => x).ToList();
+            Names = db.Set<TEntity>().Select(s => s.Name).Distinct().OrderBy(x => x).ToList();
+            ProductTypes = db.ProductTypes.ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.MetalMaterialTCPs.ToList();
+            Points = db.Set<TEntityTCP>().ToList();
         }
     }
 }

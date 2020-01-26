@@ -16,9 +16,9 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
-        private IEnumerable<string> firstSize;
-        private IEnumerable<string> secondSize;
-        private IEnumerable<string> thirdSize;
+        private IEnumerable<string> firstSizes;
+        private IEnumerable<string> secondSizes;
+        private IEnumerable<string> thirdSizes;
         private IEnumerable<MetalMaterialTCP> points;
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<ForgingMaterialJournal> journal;
@@ -158,32 +158,32 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public IEnumerable<string> FirstSize
+        public IEnumerable<string> FirstSizes
         {
-            get => firstSize;
+            get => firstSizes;
             set
             {
-                firstSize = value;
+                firstSizes = value;
                 RaisePropertyChanged();
             }
         }
 
-        public IEnumerable<string> SecondSize
+        public IEnumerable<string> SecondSizes
         {
-            get => secondSize;
+            get => secondSizes;
             set
             {
-                secondSize = value;
+                secondSizes = value;
                 RaisePropertyChanged();
             }
         }
 
-        public IEnumerable<string> ThirdSize
+        public IEnumerable<string> ThirdSizes
         {
-            get => thirdSize;
+            get => thirdSizes;
             set
             {
-                thirdSize = value;
+                thirdSizes = value;
                 RaisePropertyChanged();
             }
         }
@@ -206,9 +206,9 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             Journal = db.Set<ForgingMaterialJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Materials = db.ForgingMaterials.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            FirstSize = db.ForgingMaterials.Select(t => t.FirstSize).Distinct().OrderBy(x => x).ToList();
-            SecondSize = db.ForgingMaterials.Select(t => t.SecondSize).Distinct().OrderBy(x => x).ToList();
-            ThirdSize = db.ForgingMaterials.Select(d => d.ThirdSize).Distinct().OrderBy(x => x).ToList();
+            FirstSizes = db.ForgingMaterials.Select(t => t.FirstSize).Distinct().OrderBy(x => x).ToList();
+            SecondSizes = db.ForgingMaterials.Select(t => t.SecondSize).Distinct().OrderBy(x => x).ToList();
+            ThirdSizes = db.ForgingMaterials.Select(d => d.ThirdSize).Distinct().OrderBy(x => x).ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.MetalMaterialTCPs.ToList();
         }

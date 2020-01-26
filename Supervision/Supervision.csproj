@@ -407,6 +407,8 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\ScrewNutVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SaddleEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SaddleVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\GateEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\GateVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\SpringEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\ShearPinEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\BallValveVM.cs" />
@@ -455,6 +457,13 @@
     <Compile Include="ViewModels\EntityViewModels\Materials\PipeMaterialVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\SheetMaterialVM.cs" />
     <Compile Include="ViewModels\CustomerVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\Gate\CoatingProtectivePropertiesVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\Gate\CoatingPlasticityVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\Gate\CoatingPorosityVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\Gate\CoatingChemicalCompositionVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\Gate\DegreasingChemicalCompositionVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\PeriodicalControlEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\PeriodicalControlVM.cs" />
     <Compile Include="ViewModels\PIDEditVM.cs" />
     <Compile Include="ViewModels\SpecificationVM.cs" />
     <Compile Include="ViewModels\ProductTypeViewModel.cs" />
@@ -573,6 +582,12 @@
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\Valve\SaddleView.xaml.cs">
       <DependentUpon>SaddleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\GateEditView.xaml.cs">
+      <DependentUpon>GateEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\Valve\GateView.xaml.cs">
+      <DependentUpon>GateView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\DetailViews\Valve\SpringEditView.xaml.cs">
       <DependentUpon>SpringEditView.xaml</DependentUpon>
@@ -714,6 +729,18 @@
     </Compile>
     <Compile Include="Views\EntityViews\MaterialViews\SheetMaterialView.xaml.cs">
       <DependentUpon>SheetMaterialView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\PeriodicalControl\Gate\CoatingPorosityView.xaml.cs">
+      <DependentUpon>CoatingPorosityView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\PeriodicalControl\Gate\GatePeriodicalView.xaml.cs">
+      <DependentUpon>GatePeriodicalView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\PeriodicalControl\PeriodicalControlEditView.xaml.cs">
+      <DependentUpon>PeriodicalControlEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\PeriodicalControl\PeriodicalControlView.xaml.cs">
+      <DependentUpon>PeriodicalControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntityViews\PIDEditView.xaml.cs">
       <DependentUpon>PIDEditView.xaml</DependentUpon>
@@ -1004,6 +1031,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\GateEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\Valve\GateView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\DetailViews\Valve\SpringEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1192,6 +1227,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\EntityViews\PeriodicalControl\Gate\CoatingPorosityView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\PeriodicalControl\Gate\GatePeriodicalView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\PeriodicalControl\PeriodicalControlEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\PeriodicalControl\PeriodicalControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EntityViews\PIDEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1291,9 +1342,7 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\analyzers\dotnet\cs\Microsoft.CodeAnalysis.VersionCheckAnalyzer.resources.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\EntityViews\PeriodicalControl\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.0.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.0\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

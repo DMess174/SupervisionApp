@@ -47,6 +47,12 @@ using Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateValve;
 using Supervision.Views;
 using BusinessLayer.Report.DailyReport;
 using DataLayer.TechnicalControlPlans.Periodical;
+using Supervision.Views.EntityViews.PeriodicalControl;
+using DataLayer.Entities.Periodical;
+using DataLayer.Journals.Periodical;
+using Supervision.ViewModels.EntityViewModels.Periodical;
+using Supervision.ViewModels.EntityViewModels.Periodical.Gate;
+using Supervision.Views.EntityViews.PeriodicalControl.Gate;
 
 namespace Supervision.ViewModels
 {
@@ -288,6 +294,20 @@ namespace Supervision.ViewModels
                 return new DelegateCommand(() => OpenWindow(new StoresControlView(), new StoresControlVM()));
             }
         }
+        public ICommand NDTControlOpen
+        {
+            get
+            {
+                return new DelegateCommand(() => OpenWindow(new PeriodicalControlView(), new PeriodicalControlVM<NDTControl, NDTControlTCP, NDTControlJournal >()));
+            }
+        }
+        public ICommand WeldingProceduresOpen
+        {
+            get
+            {
+                return new DelegateCommand(() => OpenWindow(new PeriodicalControlView(), new PeriodicalControlVM<WeldingProcedures, WeldingProceduresTCP, WeldingProceduresJournal>()));
+            }
+        }
         public ICommand FactoryInspectionOpen
         {
             get
@@ -295,7 +315,26 @@ namespace Supervision.ViewModels
                 return new DelegateCommand(() => OpenWindow(new FactoryInspectionView(), new FactoryInspectionVM()));
             }
         }
-
+        public ICommand DegreasingChemicalCompositionOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new PeriodicalControlView(), new DegreasingChemicalCompositionVM()));
+        }
+        public ICommand CoatingChemicalCompositionOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new PeriodicalControlView(), new CoatingChemicalCompositionVM()));
+        }
+        public ICommand CoatingPlasticityOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new PeriodicalControlView(), new CoatingPlasticityVM()));
+        }
+        public ICommand CoatingProtectivePropertiesOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new PeriodicalControlView(), new CoatingProtectivePropertiesVM()));
+        }
+        public ICommand CoatingPorosityOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new CoatingPorosityView(), new CoatingPorosityVM()));
+        }
         public ICommand FrontalSaddleSealingOpen
         {
             get
@@ -1044,6 +1083,26 @@ namespace Supervision.ViewModels
         public ICommand WeldingProceduresTCPOpen
         {
             get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<WeldingProceduresTCP>()));
+        }
+        public ICommand DegreasingChemicalCompositionTCPOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<DegreasingChemicalCompositionTCP>()));
+        }
+        public ICommand CoatingChemicalCompositionTCPOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoatingChemicalCompositionTCP>()));
+        }
+        public ICommand CoatingPlasticityTCPOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoatingPlasticityTCP>()));
+        }
+        public ICommand CoatingProtectivePropertiesTCPOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoatingProtectivePropertiesTCP>()));
+        }
+        public ICommand CoatingPorosityTCPOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoatingPorosityTCP>()));
         }
         #endregion
 

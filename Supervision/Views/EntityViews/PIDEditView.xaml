@@ -27,7 +27,7 @@
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="80"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Label Style="{StaticResource StandardLabel}" 
                    FontSize="{StaticResource Big}"
@@ -48,6 +48,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
                                Text="Номер:" 
@@ -59,9 +60,16 @@
                                Text="Наименование изделия:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
+
+                    <TextBlock Style="{StaticResource StandardTextBlock}" 
+                               Grid.Row="2" 
+                               Text="Назначение:" 
+                               Margin="5 0 5 0" 
+                               VerticalAlignment="Center"/>
                 </Grid>
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
@@ -82,10 +90,26 @@
                               SelectedValuePath="Id"
                               SelectedValue="{Binding SelectedItem.ProductTypeId}"
                               DisplayMemberPath="ShortName"/>
+
+                    <ComboBox Style="{StaticResource StandardComboBox}" 
+                              Grid.Row="2" 
+                              Width="auto" 
+                              Margin="5 0 5 0" 
+                              IsEditable="True" 
+                              VerticalAlignment="Center" 
+                              Text="{Binding SelectedItem.Purpose, UpdateSourceTrigger=PropertyChanged}" 
+                              ItemsSource="{Binding Purpose}" 
+                              SelectedItem= "{Binding SelectedItem.Purpose}">
+                        <ComboBoxItem Content="Основное производство"/>
+                        <ComboBoxItem Content="Ремонт"/>
+                        <ComboBoxItem Content="Замена брака"/>
+                        <ComboBoxItem Content="Сторонний заказ"/>
+                    </ComboBox>
                 </Grid>
                 
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
@@ -100,10 +124,17 @@
                                Text="Срок поставки:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
+
+                    <TextBlock Style="{StaticResource StandardTextBlock}" 
+                               Grid.Row="2" 
+                               Text="Масса:" 
+                               Margin="5 0 5 0" 
+                               VerticalAlignment="Center"/>
                 </Grid>
                 
                 <Grid Grid.Column="3">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
@@ -120,6 +151,13 @@
                     <DatePicker Style="{StaticResource StandardDatepicker}"
                                 Grid.Row="1"
                                 SelectedDate="{Binding Path = SelectedItem.ShippingDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+                    <TextBox Style="{StaticResource StandardTextBox}" 
+                             Grid.Row="2" 
+                             Width="auto" 
+                             Margin="5 0 5 0" 
+                             VerticalAlignment="Center"
+                             Text="{Binding SelectedItem.Weight, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
                 
                 <Grid Grid.Column="4">
@@ -131,7 +169,7 @@
                                Text="Количество:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
-                    
+
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
                                Grid.Row="1" 
                                Text="Отгружено:" 
@@ -141,6 +179,7 @@
                 
                 <Grid Grid.Column="5">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
@@ -178,6 +217,7 @@
 
                 <Grid Grid.Column="7">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
