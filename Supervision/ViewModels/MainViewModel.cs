@@ -828,16 +828,7 @@ namespace Supervision.ViewModels
         }
         public ICommand GateOpen
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    //var w = new GateView();
-                    //var vm = new GateVM();
-                    //w.DataContext = vm;
-                    //w.ShowDialog();
-                });
-            }
+            get => new DelegateCommand(() => OpenWindow(new GateView(), new GateVM()));
         }
         public ICommand ScrewStudOpen
         {

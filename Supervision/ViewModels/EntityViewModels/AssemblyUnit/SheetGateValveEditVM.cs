@@ -343,12 +343,12 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 return editGate ?? (
                            editGate = new DelegateCommand<Window>((w) =>
                            {
-                               if (SelectedItem.GateId != null)
+                               if (SelectedItem.Gate != null)
                                {
-                                   //var wn = new CastGateValveDetailEditView();
-                                   //var vm = new CastGateValveDetailEditVM<ShaftShutter, ShaftShutterTCP, ShaftShutterJournal>(SelectedItem.ShaftShutter.Id, SelectedItem);
-                                   //wn.DataContext = vm;
-                                   //wn.Show();
+                                   var wn = new GateEditView();
+                                   var vm = new GateEditVM(SelectedItem.Gate.Id, SelectedItem);
+                                   wn.DataContext = vm;
+                                   wn.Show();
                                }
                                else MessageBox.Show("Для просмотра привяжите деталь", "Ошибка");
                            }));
