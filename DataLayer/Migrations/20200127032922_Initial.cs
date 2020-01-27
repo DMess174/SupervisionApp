@@ -628,7 +628,11 @@ namespace DataLayer.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
-                    ProductTypeId = table.Column<int>(nullable: true)
+                    ProductTypeId = table.Column<int>(nullable: true),
+                    LastControl = table.Column<DateTime>(nullable: true),
+                    NextControl = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -648,7 +652,11 @@ namespace DataLayer.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
-                    ProductTypeId = table.Column<int>(nullable: true)
+                    ProductTypeId = table.Column<int>(nullable: true),
+                    LastControl = table.Column<DateTime>(nullable: true),
+                    NextControl = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -731,7 +739,7 @@ namespace DataLayer.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Number = table.Column<string>(nullable: true),
+                    Number = table.Column<int>(nullable: true),
                     Amount = table.Column<int>(nullable: true),
                     AmountShipped = table.Column<int>(nullable: true),
                     DN = table.Column<string>(nullable: true),
@@ -743,6 +751,8 @@ namespace DataLayer.Migrations
                     TechDocumentation = table.Column<string>(nullable: true),
                     ShippingDate = table.Column<DateTime>(nullable: true),
                     Designation = table.Column<string>(nullable: true),
+                    Purpose = table.Column<string>(nullable: true),
+                    Weight = table.Column<int>(nullable: true),
                     Comment = table.Column<string>(nullable: true),
                     SpecificationId = table.Column<int>(nullable: true),
                     ProductTypeId = table.Column<int>(nullable: true)
@@ -1096,6 +1106,142 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CoatingChemicalCompositionJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoatingChemicalCompositionJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CoatingChemicalCompositionJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_CoatingChemicalCompositionJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CoatingPlasticityJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoatingPlasticityJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CoatingPlasticityJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_CoatingPlasticityJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CoatingPorosityJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoatingPorosityJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CoatingPorosityJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_CoatingPorosityJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CoatingProtectivePropertiesJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoatingProtectivePropertiesJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CoatingProtectivePropertiesJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_CoatingProtectivePropertiesJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ControlWeldJournals",
                 columns: table => new
                 {
@@ -1221,6 +1367,40 @@ namespace DataLayer.Migrations
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_CoverSealingRingJournals_BaseTCP_PointId",
+                        column: x => x.PointId,
+                        principalTable: "BaseTCP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DegreasingChemicalCompositionJournals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Point = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    JournalNumber = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
+                    RemarkIssued = table.Column<string>(nullable: true),
+                    RemarkClosed = table.Column<string>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    InspectorId = table.Column<int>(nullable: true),
+                    PointId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DegreasingChemicalCompositionJournals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DegreasingChemicalCompositionJournals_Inspectors_InspectorId",
+                        column: x => x.InspectorId,
+                        principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_DegreasingChemicalCompositionJournals_BaseTCP_PointId",
                         column: x => x.PointId,
                         principalTable: "BaseTCP",
                         principalColumn: "Id",
@@ -4069,6 +4249,21 @@ namespace DataLayer.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 12, "Подготовка к сборке" });
 
+            migrationBuilder.InsertData(
+                table: "OperationTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 13, "Наплавка" });
+
+            migrationBuilder.InsertData(
+                table: "OperationTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 14, "Подготовка поверхности" });
+
+            migrationBuilder.InsertData(
+                table: "OperationTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 15, "Покрытие" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AbovegroundCoatingJournals_DetailId",
                 table: "AbovegroundCoatingJournals",
@@ -4424,6 +4619,16 @@ namespace DataLayer.Migrations
                 column: "PointId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CoatingChemicalCompositionJournals_InspectorId",
+                table: "CoatingChemicalCompositionJournals",
+                column: "InspectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoatingChemicalCompositionJournals_PointId",
+                table: "CoatingChemicalCompositionJournals",
+                column: "PointId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CoatingJournals_DetailId",
                 table: "CoatingJournals",
                 column: "DetailId");
@@ -4436,6 +4641,36 @@ namespace DataLayer.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CoatingJournals_PointId",
                 table: "CoatingJournals",
+                column: "PointId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoatingPlasticityJournals_InspectorId",
+                table: "CoatingPlasticityJournals",
+                column: "InspectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoatingPlasticityJournals_PointId",
+                table: "CoatingPlasticityJournals",
+                column: "PointId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoatingPorosityJournals_InspectorId",
+                table: "CoatingPorosityJournals",
+                column: "InspectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoatingPorosityJournals_PointId",
+                table: "CoatingPorosityJournals",
+                column: "PointId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoatingProtectivePropertiesJournals_InspectorId",
+                table: "CoatingProtectivePropertiesJournals",
+                column: "InspectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoatingProtectivePropertiesJournals_PointId",
+                table: "CoatingProtectivePropertiesJournals",
                 column: "PointId");
 
             migrationBuilder.CreateIndex(
@@ -4588,6 +4823,16 @@ namespace DataLayer.Migrations
                 name: "IX_CoverSleeves_MetalMaterialId",
                 table: "CoverSleeves",
                 column: "MetalMaterialId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DegreasingChemicalCompositionJournals_InspectorId",
+                table: "DegreasingChemicalCompositionJournals",
+                column: "InspectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DegreasingChemicalCompositionJournals_PointId",
+                table: "DegreasingChemicalCompositionJournals",
+                column: "PointId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FactoryInspectionJournals_InspectorId",
@@ -5359,7 +5604,19 @@ namespace DataLayer.Migrations
                 name: "CastGateValveJournals");
 
             migrationBuilder.DropTable(
+                name: "CoatingChemicalCompositionJournals");
+
+            migrationBuilder.DropTable(
                 name: "CoatingJournals");
+
+            migrationBuilder.DropTable(
+                name: "CoatingPlasticityJournals");
+
+            migrationBuilder.DropTable(
+                name: "CoatingPorosityJournals");
+
+            migrationBuilder.DropTable(
+                name: "CoatingProtectivePropertiesJournals");
 
             migrationBuilder.DropTable(
                 name: "CompactGateValveCaseJournals");
@@ -5384,6 +5641,9 @@ namespace DataLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "CoverSleeveJournals");
+
+            migrationBuilder.DropTable(
+                name: "DegreasingChemicalCompositionJournals");
 
             migrationBuilder.DropTable(
                 name: "FactoryInspectionJournals");

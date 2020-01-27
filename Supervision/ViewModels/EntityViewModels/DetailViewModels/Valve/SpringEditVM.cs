@@ -20,8 +20,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
         private IEnumerable<string> drawings;
         private IEnumerable<SpringTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<SpringJournal> castJournal;
-        private IEnumerable<SpringJournal> sheetJournal;
+        private IEnumerable<SpringJournal> journal;
         private readonly BaseTable parentEntity;
         private Spring selectedItem;
         private SpringTCP selectedTCPPoint;
@@ -38,25 +37,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<SpringJournal> CastJournal
+        public IEnumerable<SpringJournal> Journal
         {
-            get => castJournal;
+            get => journal;
             set
             {
-                castJournal = value;
+                journal = value;
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<SpringJournal> SheetJournal
-        {
-            get => sheetJournal;
-            set
-            {
-                sheetJournal = value;
-                RaisePropertyChanged();
-            }
-        }
-
 
         public IEnumerable<SpringTCP> Points
         {
@@ -93,19 +82,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 
                             db.Springs.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in CastJournal)
+                            foreach(var i in Journal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.SpringJournals.UpdateRange(CastJournal);
-                            db.SaveChanges();
-                            foreach (var i in SheetJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
-                            db.SpringJournals.UpdateRange(SheetJournal);
+                            db.SpringJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
@@ -153,8 +135,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                             };
                             db.SpringJournals.Add(item);
                             db.SaveChanges();
-                            CastJournal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-                            SheetJournal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
+                            Journal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList(); //TODO: говнокод
                         }
                     }));
             }
@@ -203,8 +184,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.Springs.Include(i => i.BaseValveWithSprings).SingleOrDefault(i => i.Id == id);
-            CastJournal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-            SheetJournal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
+            Journal = db.SpringJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList(); //TODO: говнокод
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.Springs.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Materials = db.Springs.Select(s => s.Material).Distinct().OrderBy(x => x).ToList();

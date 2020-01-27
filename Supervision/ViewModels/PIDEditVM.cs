@@ -85,7 +85,7 @@ namespace Supervision.ViewModels
                             {
                                 foreach (var i in Journal)
                                 {
-                                    i.DetailNumber = SelectedItem.Number;
+                                    i.DetailNumber = SelectedItem.Number.ToString();
                                 }
                                 db.PIDJournals.UpdateRange(Journal);
                             }
@@ -126,7 +126,7 @@ namespace Supervision.ViewModels
                         {
                             var item = new PIDJournal()
                             {
-                                DetailNumber = SelectedItem.Number,
+                                DetailNumber = SelectedItem.Number.ToString(),
                                 DetailName = "PID",
                                 DetailId = SelectedItem.Id,
                                 Point = SelectedTCPPoint.Point,

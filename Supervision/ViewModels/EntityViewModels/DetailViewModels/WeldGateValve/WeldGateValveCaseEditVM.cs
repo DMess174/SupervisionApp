@@ -25,11 +25,14 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         private IEnumerable<CaseFlange> caseFlanges;
         private IEnumerable<CaseBottom> caseBottoms;
         private IEnumerable<FrontWall> frontWalls;
+        private IEnumerable<WeldNozzle> weldNozzles;
         private IEnumerable<CaseEdge> caseEdges;
         private FrontWall selectedFrontWall;
         private FrontWall selectedFrontWallFromList;
         private CaseEdge selectedEdge;
         private CaseEdge selectedEdgeFromList;
+        private WeldNozzle selectedWeldNozzleFromList;
+        private ICommand editWeldNozzle;
         private ICommand editEdge;
         private ICommand addEdgeToCase;
         private ICommand deleteEdgeFromCase;
@@ -493,6 +496,33 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                            }));
             }
         }
+        public WeldNozzle SelectedWeldNozzleFromList
+        {
+            get => selectedWeldNozzleFromList;
+            set
+            {
+                selectedWeldNozzleFromList = value;
+                RaisePropertyChanged();
+            }
+        }
+        public ICommand EditWeldNozzle
+        {
+            get
+            {
+                return editWeldNozzle ?? (
+                           editWeldNozzle = new DelegateCommand<Window>((w) =>
+                           {
+                               if (SelectedWeldNozzleFromList != null)
+                               {
+                                   var wn = new WeldNozzleEditView();
+                                   var vm = new WeldNozzleEditVM(SelectedWeldNozzleFromList.Id, SelectedItem);
+                                   wn.DataContext = vm;
+                                   wn.Show();
+                               }
+                               else MessageBox.Show("Для просмотра привяжите деталь", "Ошибка");
+                           }));
+            }
+        }
         public IEnumerable<CaseFlange> CaseFlanges
         {
             get => caseFlanges;
@@ -526,6 +556,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 sideWalls = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<WeldNozzle> WeldNozzles
+        {
+            get => weldNozzles;
+            set
+            {
+                weldNozzles = value;
                 RaisePropertyChanged();
             }
         }
@@ -572,7 +611,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.Set<TEntity>()
-                .Include(i => i.FrontWalls)
+                .Include(i => i.FrontWalls).ThenInclude(i => i.WeldNozzle)
                 .Include(i => i.SideWalls)
                 .Include(i => i.CaseEdges)
                 .Include(i => i.BaseWeldValve)
@@ -589,6 +628,13 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             SideWalls = db.SideWalls.Where(i => i.WeldGateValveCaseId == null).ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.Set<TEntityTCP>().ToList();
+            if (SelectedItem.FrontWalls != null)
+            {
+                foreach (var i in SelectedItem.FrontWalls)
+                {
+                    WeldNozzles.Append(i.WeldNozzle);
+                }
+            }
         }
     }
 }

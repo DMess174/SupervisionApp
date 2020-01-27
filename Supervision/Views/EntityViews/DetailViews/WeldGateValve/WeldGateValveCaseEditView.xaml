@@ -209,6 +209,8 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Label Style="{StaticResource StandardLabel}"
                            FontSize="{StaticResource Hi}"
@@ -278,9 +280,52 @@
                             Command="{Binding AddFrontWallToCase}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
+                    <Label Style="{StaticResource StandardLabel}"
+                           FontSize="{StaticResource Hi}"
+                           Content="Патрубок:"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Grid.Row="4"/>
+                    
+                    <ListBox  Style="{StaticResource StandardListBox}"
+                              ItemsSource="{Binding WeldNozzles}" 
+                              Margin="5"
+                              Grid.ColumnSpan="2"
+                              Grid.Row="5"
+                              Grid.RowSpan="2"
+                              SelectedItem="{Binding SelectedWeldNozzleFromList}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding EditWeldNozzle}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                            <Binding Path="Number"/>
+                                            <Binding Path="Status"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="5"
+                            Grid.Column="2"
+                            Height="30"
+                            Margin="5"
+                            Content="Открыть"
+                            Command="{Binding EditWeldNozzle}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
                     <Separator Style="{StaticResource VerticalSeparator}"
                                Grid.Column="3"
-                               Grid.RowSpan="3"/>
+                               Grid.RowSpan="7"/>
 
                     <Label Style="{StaticResource StandardLabel}"
                            FontSize="{StaticResource Hi}"
@@ -352,9 +397,85 @@
                             Command="{Binding AddSideWallToCase}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
+                    <Label Style="{StaticResource StandardLabel}"
+                           FontSize="{StaticResource Hi}"
+                           Content="Ребро:"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Grid.Column="4"
+                           Grid.Row="4"/>
+                    <ComboBox Style="{StaticResource StandardComboBox}" 
+                              Grid.Column="5"
+                              Grid.Row="4"
+                              Margin="5 0 5 0"
+                              IsEditable="True"
+                              VerticalAlignment="Center" 
+                              ItemsSource="{Binding CaseEdges}"
+                              SelectedItem="{Binding SelectedEdge}"
+                              DisplayMemberPath="FullName"
+                              SelectedValuePath="Id"/>
+                    <ListBox  Style="{StaticResource StandardListBox}"
+                              ItemsSource="{Binding SelectedItem.Edges}" 
+                              Margin="5"
+                              Grid.Column="4"
+                              Grid.ColumnSpan="2"
+                              Grid.Row="5"
+                              Grid.RowSpan="2"
+                              SelectedItem="{Binding SelectedEdgeFromList}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding EditEdge}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                            <Binding Path="Number"/>
+                                            <Binding Path="Status"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="5"
+                            Grid.Column="6"
+                            Height="30"
+                            Margin="5"
+                            Content="Открыть"
+                            Command="{Binding EditEdge}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                    <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="6"
+                            Grid.Column="6"
+                            Margin="5"
+                            Height="30"
+                            Content="Удалить"
+                            Command="{Binding DeleteEdgeFromCase}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                    <Button Style="{StaticResource StandardButton}" 
+                            Grid.Row="4"
+                            Grid.Column="6"
+                            Margin="5"
+                            Height="30"
+                            Content="Добавить"
+                            Command="{Binding AddEdgeToCase}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+
+                    <Separator Style="{StaticResource HorizontalSeparator}"
+                               Grid.Row="7"
+                               Grid.ColumnSpan="11"/>
+
                     <Separator Style="{StaticResource VerticalSeparator}"
                                Grid.Column="7"
-                               Grid.RowSpan="3"/>
+                               Grid.RowSpan="7"/>
 
                     <Label Style="{StaticResource StandardLabel}" 
                            FontSize="{StaticResource Hi}"

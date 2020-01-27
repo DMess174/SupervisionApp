@@ -1311,9 +1311,17 @@ namespace DataLayer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime?>("LastControl");
+
                     b.Property<string>("Name");
 
+                    b.Property<DateTime?>("NextControl");
+
                     b.Property<int?>("ProductTypeId");
+
+                    b.Property<string>("Status");
 
                     b.HasKey("Id");
 
@@ -1327,9 +1335,17 @@ namespace DataLayer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime?>("LastControl");
+
                     b.Property<string>("Name");
 
+                    b.Property<DateTime?>("NextControl");
+
                     b.Property<int?>("ProductTypeId");
+
+                    b.Property<string>("Status");
 
                     b.HasKey("Id");
 
@@ -3774,6 +3790,176 @@ namespace DataLayer.Migrations
                     b.ToTable("PIDJournals");
                 });
 
+            modelBuilder.Entity("DataLayer.Journals.Periodical.CoatingChemicalCompositionJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("RemarkClosed");
+
+                    b.Property<string>("RemarkIssued");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("CoatingChemicalCompositionJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Periodical.CoatingPlasticityJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("RemarkClosed");
+
+                    b.Property<string>("RemarkIssued");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("CoatingPlasticityJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Periodical.CoatingPorosityJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("RemarkClosed");
+
+                    b.Property<string>("RemarkIssued");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("CoatingPorosityJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Periodical.CoatingProtectivePropertiesJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("RemarkClosed");
+
+                    b.Property<string>("RemarkIssued");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("CoatingProtectivePropertiesJournals");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Periodical.DegreasingChemicalCompositionJournal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int?>("InspectorId");
+
+                    b.Property<string>("JournalNumber");
+
+                    b.Property<string>("Point");
+
+                    b.Property<int?>("PointId");
+
+                    b.Property<string>("RemarkClosed");
+
+                    b.Property<string>("RemarkIssued");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InspectorId");
+
+                    b.HasIndex("PointId");
+
+                    b.ToTable("DegreasingChemicalCompositionJournals");
+                });
+
             modelBuilder.Entity("DataLayer.Journals.Periodical.NDTControlJournal", b =>
                 {
                     b.Property<int>("Id")
@@ -3933,6 +4119,21 @@ namespace DataLayer.Migrations
                         {
                             Id = 12,
                             Name = "Подготовка к сборке"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Наплавка"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Подготовка поверхности"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "Покрытие"
                         });
                 });
 
@@ -3959,17 +4160,21 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("EarthquakeResistance");
 
-                    b.Property<string>("Number");
+                    b.Property<int?>("Number");
 
                     b.Property<string>("PN");
 
                     b.Property<int?>("ProductTypeId");
+
+                    b.Property<string>("Purpose");
 
                     b.Property<DateTime?>("ShippingDate");
 
                     b.Property<int?>("SpecificationId");
 
                     b.Property<string>("TechDocumentation");
+
+                    b.Property<int?>("Weight");
 
                     b.HasKey("Id");
 
@@ -4546,6 +4751,41 @@ namespace DataLayer.Migrations
                     b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
 
                     b.HasDiscriminator().HasValue("PIDTCP");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Periodical.CoatingChemicalCompositionTCP", b =>
+                {
+                    b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
+
+                    b.HasDiscriminator().HasValue("CoatingChemicalCompositionTCP");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Periodical.CoatingPlasticityTCP", b =>
+                {
+                    b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
+
+                    b.HasDiscriminator().HasValue("CoatingPlasticityTCP");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Periodical.CoatingPorosityTCP", b =>
+                {
+                    b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
+
+                    b.HasDiscriminator().HasValue("CoatingPorosityTCP");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Periodical.CoatingProtectivePropertiesTCP", b =>
+                {
+                    b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
+
+                    b.HasDiscriminator().HasValue("CoatingProtectivePropertiesTCP");
+                });
+
+            modelBuilder.Entity("DataLayer.TechnicalControlPlans.Periodical.DegreasingChemicalCompositionTCP", b =>
+                {
+                    b.HasBaseType("DataLayer.TechnicalControlPlans.BaseTCP");
+
+                    b.HasDiscriminator().HasValue("DegreasingChemicalCompositionTCP");
                 });
 
             modelBuilder.Entity("DataLayer.TechnicalControlPlans.Periodical.NDTControlTCP", b =>
@@ -5786,6 +6026,61 @@ namespace DataLayer.Migrations
 
                     b.HasOne("DataLayer.TechnicalControlPlans.PIDTCP", "EntityTCP")
                         .WithMany("PIDJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Periodical.CoatingChemicalCompositionJournal", b =>
+                {
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany("CoatingChemicalCompositionJournals")
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Periodical.CoatingChemicalCompositionTCP", "EntityTCP")
+                        .WithMany("CoatingChemicalCompositionJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Periodical.CoatingPlasticityJournal", b =>
+                {
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany("CoatingPlasticityJournals")
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Periodical.CoatingPlasticityTCP", "EntityTCP")
+                        .WithMany("CoatingPlasticityJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Periodical.CoatingPorosityJournal", b =>
+                {
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany("CoatingPorosityJournals")
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Periodical.CoatingPorosityTCP", "EntityTCP")
+                        .WithMany("CoatingPorosityJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Periodical.CoatingProtectivePropertiesJournal", b =>
+                {
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany("CoatingProtectivePropertiesJournals")
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Periodical.CoatingProtectivePropertiesTCP", "EntityTCP")
+                        .WithMany("CoatingProtectivePropertiesJournals")
+                        .HasForeignKey("PointId");
+                });
+
+            modelBuilder.Entity("DataLayer.Journals.Periodical.DegreasingChemicalCompositionJournal", b =>
+                {
+                    b.HasOne("DataLayer.Inspector", "Inspector")
+                        .WithMany("DegreasingChemicalCompositionJournals")
+                        .HasForeignKey("InspectorId");
+
+                    b.HasOne("DataLayer.TechnicalControlPlans.Periodical.DegreasingChemicalCompositionTCP", "EntityTCP")
+                        .WithMany("DegreasingChemicalCompositionJournals")
                         .HasForeignKey("PointId");
                 });
 
