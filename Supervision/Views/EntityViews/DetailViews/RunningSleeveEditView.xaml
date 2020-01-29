@@ -249,9 +249,9 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn 
-                    Header="Пункт"
-                    MinWidth="70"
-                    Width="auto">
+                                Header="Пункт"
+                                MinWidth="50"
+                                Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Path=Point}"
@@ -263,7 +263,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Операция" 
-                                    Width="250">
+                                    Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
@@ -280,9 +280,9 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn 
-                    Header="Инженер"
-                    MinWidth="120"
-                    Width="auto">
+                                            Header="Инженер"
+                                            MinWidth="120"
+                                            Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox  VerticalContentAlignment="Center"
@@ -301,7 +301,6 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox 
-                                      Height="50" 
                                       IsEditable="True"
                                       SelectedItem="{Binding Status}"
                                       SelectedValue= "{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
@@ -314,7 +313,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Замечание&#x0a;   выдано"
-                                        Width="150">
+                                        Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
@@ -331,7 +330,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Замечание&#x0a;   закрыто"
-                                        Width="150">
+                                        Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
@@ -352,7 +351,7 @@
                                         Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox Height="50" 
+                            <ComboBox 
                                       IsEditable="True"
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
@@ -364,8 +363,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Примечание" 
-                                        MinWidth="200"
-                                        Width="*">
+                                        Width="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
@@ -396,6 +394,7 @@
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
                       MinWidth="300"
+                      MaxWidth="500"
                       Width="auto">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>

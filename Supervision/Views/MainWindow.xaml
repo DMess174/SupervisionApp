@@ -119,6 +119,7 @@
                 </MenuItem>
                 <MenuItem Header="Шпилька (ЗШ, ЗШЛ, ЗШК)" Command="{Binding ScrewStudOpen}"/>
                 <MenuItem Header="Шпиндель (ЗШ, ЗШЛ, ЗШК)" Command="{Binding SpindleOpen}"/>
+                <MenuItem Header="Штифт срезной (ЗШ, ЗШЛ, ЗШК)" Command="{Binding ShearPinOpen}"/>
             </MenuItem>
 
             <MenuItem Header="Материалы">
@@ -213,6 +214,7 @@
                     <MenuItem Header="Фланец ответный" Command="{Binding CounterFlangeTCPOpen}"/>
                     <MenuItem Header="Шпилька (ЗШ, ЗШЛ, ЗШК)" Command="{Binding ScrewStudTCPOpen}"/>
                     <MenuItem Header="Шпиндель (ЗШ, ЗШЛ, ЗШК)" Command="{Binding SpindleTCPOpen}"/>
+                    <MenuItem Header="Штифт срезной (ЗШ, ЗШЛ, ЗШК)" Command="{Binding ShearPinTCPOpen}"/>
                 </MenuItem>
 
                 <MenuItem Header="Материалы">

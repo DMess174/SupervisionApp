@@ -548,9 +548,10 @@
                                     <DataTemplate>
                                         <TextBlock>
                                             <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} - {1}">
-                                                    <Binding Path="Number"/>
-                                                    <Binding Path="Status"/>
+                                                <MultiBinding StringFormat="{}{0} - {1} шт. - {2}">
+                                                    <Binding Path="ScrewStud.Number"/>
+                                                    <Binding Path="ScrewStudAmount"/>
+                                                    <Binding Path="ScrewStud.Status"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>
@@ -624,9 +625,10 @@
                                     <DataTemplate>
                                         <TextBlock>
                                             <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} - {1}">
-                                                    <Binding Path="Number"/>
-                                                    <Binding Path="Status"/>
+                                                <MultiBinding StringFormat="{}{0} - {1} шт. - {2}">
+                                                    <Binding Path="ScrewNut.Number"/>
+                                                    <Binding Path="ScrewNutAmount"/>
+                                                    <Binding Path="ScrewNut.Status"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>
@@ -700,9 +702,10 @@
                                     <DataTemplate>
                                         <TextBlock>
                                             <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} - {1}">
-                                                    <Binding Path="Number"/>
-                                                    <Binding Path="Status"/>
+                                                <MultiBinding StringFormat="{}{0} - {1} шт. - {2}">
+                                                    <Binding Path="Spring.Number"/>
+                                                    <Binding Path="SpringAmount"/>
+                                                    <Binding Path="Spring.Status"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>
@@ -775,8 +778,8 @@
                                         <TextBlock>
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}{0} - {1}">
-                                                    <Binding Path="Number"/>
-                                                    <Binding Path="Status"/>
+                                                    <Binding Path="AssemblyUnitSealing.Number"/>
+                                                    <Binding Path="AssemblyUnitSealing.Status"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>
@@ -949,9 +952,9 @@
                                         <TextBlock>
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}{0} - {1} - {2}">
-                                                    <Binding Path="Name"/>
-                                                    <Binding Path="Number"/>
-                                                    <Binding Path="Status"/>
+                                                    <Binding Path="BaseAnticorrosiveCoating.Name"/>
+                                                    <Binding Path="BaseAnticorrosiveCoating.Number"/>
+                                                    <Binding Path="BaseAnticorrosiveCoating.Status"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>
@@ -1019,7 +1022,7 @@
 
                                     <DataGridTemplateColumn 
                                 Header="Пункт"
-                                MinWidth="70"
+                                MinWidth="50"
                                 Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -1032,7 +1035,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Операция" 
-                                    Width="250">
+                                    Width="*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
@@ -1055,11 +1058,11 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox  VerticalContentAlignment="Center"
-                                                    IsEditable="True"
-                                                    ItemsSource="{Binding Path=DataContext.Inspectors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                                    SelectedValuePath="Id"
-                                                    SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}"
-                                                    DisplayMemberPath="FullName">
+                                       IsEditable="True"
+                                       ItemsSource="{Binding Path=DataContext.Inspectors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                       SelectedValuePath="Id"
+                                       SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}"
+                                       DisplayMemberPath="FullName">
                                                 </ComboBox>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
@@ -1070,11 +1073,10 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox 
-                                                    Height="50" 
-                                                    IsEditable="True"
-                                                    SelectedItem="{Binding Status}"
-                                                    SelectedValue= "{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
-                                                    SelectedValuePath="Content">
+                                      IsEditable="True"
+                                      SelectedItem="{Binding Status}"
+                                      SelectedValue= "{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedValuePath="Content">
                                                     <ComboBoxItem Content="Соответствует"/>
                                                     <ComboBoxItem Content="Не соответствует"/>
                                                 </ComboBox>
@@ -1083,35 +1085,35 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   выдано"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
-                                                    TextWrapping="Wrap"
-                                                    AcceptsReturn="True"
-                                                    AcceptsTab="True"
-                                                    VerticalAlignment="Center"
-                                                    MinLines="3"
-                                                    MaxLines="50"
-                                                    SpellCheck.IsEnabled="True"
-                                                    Language="ru-ru"/>
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   закрыто"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
-                                                    TextWrapping="Wrap"
-                                                    AcceptsReturn="True"
-                                                    AcceptsTab="True"
-                                                    VerticalAlignment="Center"
-                                                    MinLines="3"
-                                                    MaxLines="50"
-                                                    SpellCheck.IsEnabled="True"
-                                                    Language="ru-ru"/>
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -1121,31 +1123,30 @@
                                         Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox Height="50" 
-                                                    IsEditable="True"
-                                                    VerticalContentAlignment="Center" 
-                                                    HorizontalContentAlignment="Center"
-                                                    ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                                    SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
+                                                <ComboBox 
+                                      IsEditable="True"
+                                      VerticalContentAlignment="Center" 
+                                      HorizontalContentAlignment="Center"
+                                      ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                      SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                                 </ComboBox>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Примечание" 
-                                        MinWidth="200"
-                                        Width="*">
+                                        Width="150">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
-                                                    TextWrapping="Wrap"
-                                                    AcceptsReturn="True"
-                                                    AcceptsTab="True"
-                                                    VerticalAlignment="Center"
-                                                    MinLines="3"
-                                                    MaxLines="50"
-                                                    SpellCheck.IsEnabled="True"
-                                                    Language="ru-ru"/>
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -1228,7 +1229,7 @@
 
                                     <DataGridTemplateColumn 
                                 Header="Пункт"
-                                MinWidth="70"
+                                MinWidth="50"
                                 Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -1241,7 +1242,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Операция" 
-                                    Width="250">
+                                    Width="*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
@@ -1264,11 +1265,11 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox  VerticalContentAlignment="Center"
-                                                    IsEditable="True"
-                                                    ItemsSource="{Binding Path=DataContext.Inspectors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                                    SelectedValuePath="Id"
-                                                    SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}"
-                                                    DisplayMemberPath="FullName">
+                                       IsEditable="True"
+                                       ItemsSource="{Binding Path=DataContext.Inspectors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                       SelectedValuePath="Id"
+                                       SelectedValue="{Binding Path=InspectorId, UpdateSourceTrigger=PropertyChanged}"
+                                       DisplayMemberPath="FullName">
                                                 </ComboBox>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
@@ -1279,11 +1280,10 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox 
-                                                    Height="50" 
-                                                    IsEditable="True"
-                                                    SelectedItem="{Binding Status}"
-                                                    SelectedValue= "{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
-                                                    SelectedValuePath="Content">
+                                      IsEditable="True"
+                                      SelectedItem="{Binding Status}"
+                                      SelectedValue= "{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedValuePath="Content">
                                                     <ComboBoxItem Content="Соответствует"/>
                                                     <ComboBoxItem Content="Не соответствует"/>
                                                 </ComboBox>
@@ -1292,35 +1292,35 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   выдано"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
-                                                    TextWrapping="Wrap"
-                                                    AcceptsReturn="True"
-                                                    AcceptsTab="True"
-                                                    VerticalAlignment="Center"
-                                                    MinLines="3"
-                                                    MaxLines="50"
-                                                    SpellCheck.IsEnabled="True"
-                                                    Language="ru-ru"/>
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   закрыто"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
-                                                    TextWrapping="Wrap"
-                                                    AcceptsReturn="True"
-                                                    AcceptsTab="True"
-                                                    VerticalAlignment="Center"
-                                                    MinLines="3"
-                                                    MaxLines="50"
-                                                    SpellCheck.IsEnabled="True"
-                                                    Language="ru-ru"/>
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -1330,31 +1330,30 @@
                                         Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox Height="50" 
-                                                    IsEditable="True"
-                                                    VerticalContentAlignment="Center" 
-                                                    HorizontalContentAlignment="Center"
-                                                    ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                                    SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
+                                                <ComboBox 
+                                      IsEditable="True"
+                                      VerticalContentAlignment="Center" 
+                                      HorizontalContentAlignment="Center"
+                                      ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                      SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                                 </ComboBox>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Примечание" 
-                                        MinWidth="200"
-                                        Width="*">
+                                        Width="150">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
-                                                    TextWrapping="Wrap"
-                                                    AcceptsReturn="True"
-                                                    AcceptsTab="True"
-                                                    VerticalAlignment="Center"
-                                                    MinLines="3"
-                                                    MaxLines="50"
-                                                    SpellCheck.IsEnabled="True"
-                                                    Language="ru-ru"/>
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
+                                     VerticalAlignment="Center"
+                                     MinLines="3"
+                                     MaxLines="50"
+                                     SpellCheck.IsEnabled="True"
+                                     Language="ru-ru"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -1437,7 +1436,7 @@
 
                                     <DataGridTemplateColumn 
                                 Header="Пункт"
-                                MinWidth="70"
+                                MinWidth="50"
                                 Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -1450,7 +1449,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Операция" 
-                                    Width="250">
+                                    Width="*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
@@ -1467,9 +1466,9 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn 
-                    Header="Инженер"
-                    MinWidth="120"
-                    Width="auto">
+                                            Header="Инженер"
+                                            MinWidth="120"
+                                            Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox  VerticalContentAlignment="Center"
@@ -1488,7 +1487,6 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox 
-                                      Height="50" 
                                       IsEditable="True"
                                       SelectedItem="{Binding Status}"
                                       SelectedValue= "{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
@@ -1501,7 +1499,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   выдано"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
@@ -1518,7 +1516,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   закрыто"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
@@ -1539,7 +1537,7 @@
                                         Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox Height="50" 
+                                                <ComboBox 
                                       IsEditable="True"
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
@@ -1551,8 +1549,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Примечание" 
-                                        MinWidth="200"
-                                        Width="*">
+                                        Width="150">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
@@ -1646,7 +1643,7 @@
 
                                     <DataGridTemplateColumn 
                                 Header="Пункт"
-                                MinWidth="70"
+                                MinWidth="50"
                                 Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -1659,7 +1656,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Операция" 
-                                    Width="250">
+                                    Width="*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
@@ -1676,9 +1673,9 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn 
-                    Header="Инженер"
-                    MinWidth="120"
-                    Width="auto">
+                                            Header="Инженер"
+                                            MinWidth="120"
+                                            Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox  VerticalContentAlignment="Center"
@@ -1697,7 +1694,6 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox 
-                                      Height="50" 
                                       IsEditable="True"
                                       SelectedItem="{Binding Status}"
                                       SelectedValue= "{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
@@ -1710,7 +1706,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   выдано"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
@@ -1727,7 +1723,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   закрыто"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
@@ -1748,7 +1744,7 @@
                                         Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox Height="50" 
+                                                <ComboBox 
                                       IsEditable="True"
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
@@ -1760,8 +1756,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Примечание" 
-                                        MinWidth="200"
-                                        Width="*">
+                                        Width="150">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
@@ -1855,7 +1850,7 @@
 
                                     <DataGridTemplateColumn 
                                 Header="Пункт"
-                                MinWidth="70"
+                                MinWidth="50"
                                 Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -1868,7 +1863,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Операция" 
-                                    Width="250">
+                                    Width="*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
@@ -1885,9 +1880,9 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn 
-                    Header="Инженер"
-                    MinWidth="120"
-                    Width="auto">
+                                            Header="Инженер"
+                                            MinWidth="120"
+                                            Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox  VerticalContentAlignment="Center"
@@ -1906,7 +1901,6 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox 
-                                      Height="50" 
                                       IsEditable="True"
                                       SelectedItem="{Binding Status}"
                                       SelectedValue= "{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
@@ -1919,7 +1913,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   выдано"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
@@ -1936,7 +1930,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   закрыто"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
@@ -1957,7 +1951,7 @@
                                         Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox Height="50" 
+                                                <ComboBox 
                                       IsEditable="True"
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
@@ -1969,8 +1963,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Примечание" 
-                                        MinWidth="200"
-                                        Width="*">
+                                        Width="150">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
@@ -2064,7 +2057,7 @@
 
                                     <DataGridTemplateColumn 
                                 Header="Пункт"
-                                MinWidth="70"
+                                MinWidth="50"
                                 Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -2077,7 +2070,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Операция" 
-                                    Width="250">
+                                    Width="*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
@@ -2094,9 +2087,9 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn 
-                    Header="Инженер"
-                    MinWidth="120"
-                    Width="auto">
+                                            Header="Инженер"
+                                            MinWidth="120"
+                                            Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox  VerticalContentAlignment="Center"
@@ -2115,7 +2108,6 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox 
-                                      Height="50" 
                                       IsEditable="True"
                                       SelectedItem="{Binding Status}"
                                       SelectedValue= "{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
@@ -2128,7 +2120,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   выдано"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
@@ -2145,7 +2137,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   закрыто"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
@@ -2166,7 +2158,7 @@
                                         Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox Height="50" 
+                                                <ComboBox 
                                       IsEditable="True"
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
@@ -2178,8 +2170,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Примечание" 
-                                        MinWidth="200"
-                                        Width="*">
+                                        Width="150">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
@@ -2273,7 +2264,7 @@
 
                                     <DataGridTemplateColumn 
                                 Header="Пункт"
-                                MinWidth="70"
+                                MinWidth="50"
                                 Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -2286,7 +2277,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Операция" 
-                                    Width="250">
+                                    Width="*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
@@ -2303,9 +2294,9 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn 
-                                        Header="Инженер"
-                                        MinWidth="120"
-                                        Width="auto">
+                                            Header="Инженер"
+                                            MinWidth="120"
+                                            Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox  VerticalContentAlignment="Center"
@@ -2324,7 +2315,6 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ComboBox 
-                                      Height="50" 
                                       IsEditable="True"
                                       SelectedItem="{Binding Status}"
                                       SelectedValue= "{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}"
@@ -2337,7 +2327,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   выдано"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
@@ -2354,7 +2344,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Замечание&#x0a;   закрыто"
-                                        Width="150">
+                                        Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
@@ -2375,7 +2365,7 @@
                                         Width="auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox Height="50" 
+                                                <ComboBox 
                                       IsEditable="True"
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
@@ -2387,8 +2377,7 @@
                                     </DataGridTemplateColumn>
 
                                     <DataGridTemplateColumn Header="Примечание" 
-                                        MinWidth="200"
-                                        Width="*">
+                                        Width="150">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"

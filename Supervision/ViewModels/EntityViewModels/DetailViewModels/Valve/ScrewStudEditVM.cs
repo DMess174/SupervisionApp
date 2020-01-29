@@ -20,9 +20,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
         private IEnumerable<string> drawings;
         private IEnumerable<ScrewStudTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<ScrewStudJournal> castJournal;
-        private IEnumerable<ScrewStudJournal> sheetJournal;
-        private IEnumerable<ScrewStudJournal> compactJournal;
+        private IEnumerable<ScrewStudJournal> journal;
         private readonly BaseTable parentEntity;
         private ScrewStud selectedItem;
         private ScrewStudTCP selectedTCPPoint;
@@ -39,34 +37,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<ScrewStudJournal> CastJournal
+        public IEnumerable<ScrewStudJournal> Journal
         {
-            get => castJournal;
+            get => journal;
             set
             {
-                castJournal = value;
+                journal = value;
                 RaisePropertyChanged();
             }
-        }
-        public IEnumerable<ScrewStudJournal> SheetJournal
-        {
-            get => sheetJournal;
-            set
-            {
-                sheetJournal = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<ScrewStudJournal> CompactJournal
-        {
-            get => compactJournal;
-            set
-            {
-                compactJournal = value;
-                RaisePropertyChanged();
-            }
-        }
-
+        } 
         public IEnumerable<ScrewStudTCP> Points
         {
             get => points;
@@ -101,26 +80,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                                 SelectedItem.AmountRemaining = SelectedItem.Amount - SelectedItem.BaseValveWithScrewStuds?.Select(i => i.ScrewStudAmount).Sum();
                             db.ScrewStuds.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in CastJournal)
+                            foreach(var i in Journal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.ScrewStudJournals.UpdateRange(CastJournal);
-                            db.SaveChanges();
-                            foreach (var i in SheetJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
-                            db.ScrewStudJournals.UpdateRange(SheetJournal);
-                            db.SaveChanges();
-                            foreach (var i in CompactJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
-                            db.ScrewStudJournals.UpdateRange(CompactJournal);
+                            db.ScrewStudJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
@@ -168,9 +133,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                             };
                             db.ScrewStudJournals.Add(item);
                             db.SaveChanges();
-                            CastJournal = db.ScrewStudJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-                            SheetJournal = db.ScrewStudJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-                            CompactJournal = db.ScrewStudJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШК").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
+                            Journal = db.ScrewStudJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList(); //TODO: говнокод
                         }
                     }));
             }
@@ -218,10 +181,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.ScrewStuds.Include(i => i.BaseValveWithScrewStuds).SingleOrDefault(i => i.Id == id);
-            CastJournal = db.ScrewStudJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-            SheetJournal = db.ScrewStudJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-            CompactJournal = db.ScrewStudJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШК").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
+            SelectedItem = db.ScrewStuds.Include(i => i.BaseValveWithScrewStuds).ThenInclude(i => i.BaseValve).SingleOrDefault(i => i.Id == id);
+            Journal = db.ScrewStudJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList(); //TODO: говнокод
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.ScrewStuds.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Materials = db.ScrewStuds.Select(s => s.Material).Distinct().OrderBy(x => x).ToList();

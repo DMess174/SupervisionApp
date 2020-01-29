@@ -397,7 +397,7 @@
                             Height="30"
                             Margin="5 0 5 0"
                             Content="Открыть"
-                            Command="{Binding EditSlamShutter}"
+                            Command="{Binding EditSlam}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
 
                     <Label Style="{StaticResource StandardLabel}" 
@@ -781,6 +781,7 @@
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
                       MinWidth="300"
+                            MaxWidth="500"
                       Width="auto">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>

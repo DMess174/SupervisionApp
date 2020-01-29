@@ -856,6 +856,10 @@ namespace Supervision.ViewModels
                 });
             }
         }
+        public ICommand ShearPinOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new ShearPinView(), new ShearPinVM()));
+        }
         #endregion
 
         #region TCP
@@ -1031,6 +1035,10 @@ namespace Supervision.ViewModels
         public ICommand SpindleTCPOpen
         {
             get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SpindleTCP>()));
+        }
+        public ICommand ShearPinTCPOpen
+        {
+            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ShearPinTCP>()));
         }
         #endregion
         #region Materials

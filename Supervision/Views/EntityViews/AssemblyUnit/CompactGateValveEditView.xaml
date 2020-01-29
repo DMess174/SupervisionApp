@@ -705,8 +705,8 @@
                                         <TextBlock>
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}{0} - {1}">
-                                                    <Binding Path="Number"/>
-                                                    <Binding Path="Status"/>
+                                                    <Binding Path="AssemblyUnitSealing.Number"/>
+                                                    <Binding Path="AssemblyUnitSealing.Status"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>
@@ -951,9 +951,9 @@
                                         <TextBlock>
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}{0} - {1} - {2}">
-                                                    <Binding Path="Name"/>
-                                                    <Binding Path="Number"/>
-                                                    <Binding Path="Status"/>
+                                                    <Binding Path="BaseAnticorrosiveCoating.Name"/>
+                                                    <Binding Path="BaseAnticorrosiveCoating.Number"/>
+                                                    <Binding Path="BaseAnticorrosiveCoating.Status"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>

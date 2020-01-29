@@ -200,6 +200,8 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                         SelectedItem = item;
                         var tcpPoints = db.Set<CastGateValveTCP>().ToList();
                         var coatingPoints = db.Set<CoatingTCP>().ToList();
+                        var castJournal = new List<CastGateValveJournal>();
+                        var coatJournal = new List<CoatingJournal>();
                         foreach (var i in tcpPoints)
                         {
                             var journal = new CastGateValveJournal()
@@ -214,10 +216,11 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                             };
                             if (journal != null)
                             {
-                                db.Set<CastGateValveJournal>().Add(journal);
-                                db.SaveChanges();
+                                castJournal.Add(journal);
                             }
                         }
+                        db.Set<CastGateValveJournal>().AddRange(castJournal);
+                        db.SaveChanges();
                         foreach (var i in coatingPoints)
                         {
                             var journal = new CoatingJournal()
@@ -232,10 +235,11 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                             };
                             if (journal != null)
                             {
-                                db.Set<CoatingJournal>().Add(journal);
-                                db.SaveChanges();
+                                coatJournal.Add(journal);
                             }
                         }
+                        db.Set<CoatingJournal>().AddRange(coatJournal);
+                        db.SaveChanges();
                         var wn = new CastGateValveEditView();
                         var vm = new CastGateValveEditVM(SelectedItem.Id, SelectedItem);
                         wn.DataContext = vm;

@@ -189,6 +189,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.RunningSleeves.Include(i => i.BaseValveCover).SingleOrDefault(i => i.Id == id);
+            Journal = db.Set<RunningSleeveJournal>().Where(i => i.DetailId == SelectedItem.Id).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Materials = db.RunningSleeves.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
             Drawings = db.RunningSleeves.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();

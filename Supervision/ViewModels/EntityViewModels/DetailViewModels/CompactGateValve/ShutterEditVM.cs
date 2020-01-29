@@ -368,15 +368,18 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateVa
             parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.Set<Shutter>()
-                .Include(i => i.ShutterDisks)
                 .Include(i => i.ShutterGuides)
                 .Include(i => i.BaseValve)
                 .SingleOrDefault(i => i.Id == id);
+            db.ShutterDisks.Load();
+            SelectedItem.ShutterDisks = db.ShutterDisks.Local.Where(i => i.ShutterId == SelectedItem.Id).ToObservableCollection();
+            db.ShutterGuides.Load();
+            SelectedItem.ShutterGuides = db.ShutterGuides.Local.Where(i => i.ShutterId == SelectedItem.Id).ToObservableCollection();
             Journal = db.Set<ShutterJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.Set<Shutter>().Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            ShutterDisks = db.ShutterDisks.Where(i => i.ShutterId == null).ToList();
-            ShutterGuides = db.ShutterGuides.Where(i => i.ShutterId == null).ToList();
+            ShutterDisks = db.ShutterDisks.Local.Where(i => i.ShutterId == null).ToObservableCollection();
+            ShutterGuides = db.ShutterGuides.Local.Where(i => i.ShutterId == null).ToObservableCollection();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.Set<ShutterTCP>().ToList();
         }
