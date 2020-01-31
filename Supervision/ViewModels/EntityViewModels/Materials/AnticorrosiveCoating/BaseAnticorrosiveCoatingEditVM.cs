@@ -180,7 +180,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.Set<TEntity>().Include(i => i.BaseValveWithCoatings).Include(i => i.ReverseShutterWithCoatings).SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.Set<TEntity>().Include(i => i.BaseValveWithCoatings).ThenInclude(i => i.BaseValve).Include(i => i.ReverseShutterWithCoatings).ThenInclude(i => i.ReverseShutter).SingleOrDefault(i => i.Id == id);
             Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Names = db.Set<TEntity>().Select(s => s.Name).Distinct().OrderBy(x => x).ToList();

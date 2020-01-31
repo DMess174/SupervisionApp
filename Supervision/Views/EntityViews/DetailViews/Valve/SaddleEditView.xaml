@@ -302,9 +302,8 @@
                     <DataTemplate>
                         <TextBlock>
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} - {1}">
-                                    <Binding Path="FrontalSaddleSealing.Number"/>
-                                    <Binding Path="FrontalSaddleSealing.Status"/>
+                                <MultiBinding StringFormat="{}{0}">
+                                    <Binding Path="FrontalSaddleSealing.FullName"/>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>

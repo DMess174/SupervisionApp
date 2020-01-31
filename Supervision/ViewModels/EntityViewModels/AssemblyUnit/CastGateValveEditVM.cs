@@ -278,7 +278,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                if (SelectedItem.CastGateValveCase != null)
                                {
                                    var wn = new CastGateValveCaseEditView();
-                                   var vm = new CastGateValveCaseEditVM(SelectedItem.Id, SelectedItem);
+                                   var vm = new CastGateValveCaseEditVM(SelectedItem.CastGateValveCase.Id, SelectedItem);
                                    wn.DataContext = vm;
                                    wn.Show();
                                }
@@ -312,7 +312,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                if (SelectedItem.CastGateValveCover != null)
                                {
                                    var wn = new CastingCoverEditView();
-                                   var vm = new CastGateValveCoverEditVM(SelectedItem.Id, SelectedItem);
+                                   var vm = new CastGateValveCoverEditVM(SelectedItem.CastGateValveCover.Id, SelectedItem);
                                    wn.DataContext = vm;
                                    wn.Show();
                                }
@@ -1372,7 +1372,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             SelectedItem.ShearPins = db.ShearPins.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
             db.BallValves.Load();
             SelectedItem.BallValves = db.BallValves.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
-            db.BaseAnticorrosiveCoatings.Load();
+            db.BaseValveWithCoatings.Load();
             SelectedItem.BaseValveWithCoatings = db.BaseValveWithCoatings.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
             db.BaseValveWithScrewStuds.Load();
             SelectedItem.BaseValveWithScrewStuds = db.BaseValveWithScrewStuds.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();

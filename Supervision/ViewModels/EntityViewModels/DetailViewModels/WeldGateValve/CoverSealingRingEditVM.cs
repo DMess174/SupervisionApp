@@ -29,7 +29,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<CoverSealingRingJournal> castJournal;
         private IEnumerable<CoverSealingRingJournal> sheetJournal;
-        private IEnumerable<CoverSealingRingJournal> compactJournal;
         private readonly BaseTable parentEntity;
         private CoverSealingRing selectedItem;
         private CoverSealingRingTCP selectedTCPPoint;
@@ -63,15 +62,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             set
             {
                 sheetJournal = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<CoverSealingRingJournal> CompactJournal
-        {
-            get => compactJournal;
-            set
-            {
-                compactJournal = value;
                 RaisePropertyChanged();
             }
         }
@@ -117,13 +107,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
                             db.CoverSealingRingJournals.UpdateRange(SheetJournal);
-                            db.SaveChanges();
-                            foreach (var i in CompactJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
-                            db.CoverSealingRingJournals.UpdateRange(CompactJournal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
@@ -173,7 +156,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                             db.SaveChanges();
                             CastJournal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
                             SheetJournal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-                            CompactJournal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШК").OrderBy(x => x.PointId).ToList();
                         }
                     }));
             }
@@ -266,7 +248,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             SelectedItem = db.CoverSealingRings.Include(i => i.CastGateValveCover).Include(i => i.CoverSleeve).SingleOrDefault(i => i.Id == id);
             CastJournal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
             SheetJournal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ").OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-            CompactJournal = db.CoverSealingRingJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШК").OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.CoverSealingRings.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Materials = db.MetalMaterials.ToList();

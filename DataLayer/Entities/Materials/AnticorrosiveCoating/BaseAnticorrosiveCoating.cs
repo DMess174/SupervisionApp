@@ -14,7 +14,7 @@ namespace DataLayer.Entities.Materials.AnticorrosiveCoating
         public string Comment { get; set; }
 
         [NotMapped] 
-        public string FullName => string.Format($"{Batch}/{Name}");
+        public string FullName => string.Format($"{Batch}/{Name}/{Status}");
 
         public IEnumerable<BaseValveWithCoating> BaseValveWithCoatings { get; set; }
         public IEnumerable<ReverseShutterWithCoating> ReverseShutterWithCoatings { get; set; }

@@ -184,7 +184,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             }
                             if (InputNDTControlJournal != null)
                             {
-                                foreach (var i in InputControlJournal)
+                                foreach (var i in InputNDTControlJournal)
                                 {
                                     i.DetailNumber = SelectedItem.Number;
                                     i.DetailDrawing = SelectedItem.Drawing;
@@ -193,7 +193,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             }
                             if (MechanicalJournal != null)
                             {
-                                foreach (var i in InputControlJournal)
+                                foreach (var i in MechanicalJournal)
                                 {
                                     i.DetailNumber = SelectedItem.Number;
                                     i.DetailDrawing = SelectedItem.Drawing;
@@ -202,7 +202,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             }
                             if (AssemblyJournal != null)
                             {
-                                foreach (var i in InputControlJournal)
+                                foreach (var i in AssemblyJournal)
                                 {
                                     i.DetailNumber = SelectedItem.Number;
                                     i.DetailDrawing = SelectedItem.Drawing;
@@ -211,7 +211,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             }
                             if (AssemblyWeldingJournal != null)
                             {
-                                foreach (var i in InputControlJournal)
+                                foreach (var i in AssemblyWeldingJournal)
                                 {
                                     i.DetailNumber = SelectedItem.Number;
                                     i.DetailDrawing = SelectedItem.Drawing;
@@ -220,7 +220,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             }
                             if (NDTJournal != null)
                             {
-                                foreach (var i in InputControlJournal)
+                                foreach (var i in NDTJournal)
                                 {
                                     i.DetailNumber = SelectedItem.Number;
                                     i.DetailDrawing = SelectedItem.Drawing;
@@ -274,9 +274,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             };
                             db.CastGateValveCoverJournals.Add(item);
                             db.SaveChanges();
-                            InputControlJournal = db.CastGateValveCoverJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль")
-                                .OrderBy(x => x.PointId).ToList();
+                            InputControlJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId).ToList();
                             InputNDTControlJournal = db.CastGateValveCoverJournals
                                 .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль (НК)")
                                 .OrderBy(x => x.PointId).ToList();
@@ -421,24 +419,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.CastGateValveCovers.Include(i => i.CastGateValve).SingleOrDefault(i => i.Id == id);
-            InputControlJournal = db.CastGateValveCoverJournals
-                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль")
-                .OrderBy(x => x.PointId).ToList();
-            InputNDTControlJournal = db.CastGateValveCoverJournals
-                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль (НК)")
-                .OrderBy(x => x.PointId).ToList();
-            MechanicalJournal = db.CastGateValveCoverJournals
-                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка")
-                .OrderBy(x => x.PointId).ToList();
-            AssemblyWeldingJournal = db.CastGateValveCoverJournals
-                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка")
-                .OrderBy(x => x.PointId).ToList();
-            AssemblyJournal = db.CastGateValveCoverJournals
-                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка")
-                .OrderBy(x => x.PointId).ToList();
-            NDTJournal = db.CastGateValveCoverJournals
-                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль")
-                .OrderBy(x => x.PointId).ToList();
+            InputControlJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId).ToList();
+            InputNDTControlJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль (НК)").OrderBy(x => x.PointId).ToList();
+            MechanicalJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId).ToList();
+            AssemblyWeldingJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId).ToList();
+            AssemblyJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId).ToList();
+            NDTJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Materials = db.ReverseShutterCases.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
             Drawings = db.ReverseShutterCases.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();

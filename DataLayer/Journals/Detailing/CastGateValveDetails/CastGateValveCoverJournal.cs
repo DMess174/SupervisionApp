@@ -3,7 +3,7 @@ using DataLayer.TechnicalControlPlans.Detailing.CastGateValveDetails;
 
 namespace DataLayer.Journals.Detailing.CastGateValveDetails
 {
-    public class CastGateValveCoverJournal : BaseJournal<CastGateValveCover, CastGateValveCaseTCP>
+    public class CastGateValveCoverJournal : BaseJournal<CastGateValveCover, CastGateValveCoverTCP>
     {
     }
 }

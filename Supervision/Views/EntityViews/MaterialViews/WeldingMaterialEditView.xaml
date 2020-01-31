@@ -164,11 +164,11 @@
             <TabItem Header="Операции">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
                     <DataGrid Style="{StaticResource StandardDataGrid}"
-                        Grid.Row="0" 
+                        Grid.Row="0"
                         Grid.Column="0" 
                         MinRowHeight="50"
                         ItemsSource="{Binding Journal}"
@@ -176,12 +176,12 @@
                 HorizontalScrollBarVisibility="Visible">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Дата"
-                                        MinWidth="100"
-                                        Width="auto">
+                                MinWidth="100"
+                                Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
-                                        SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                            SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -332,7 +332,7 @@
                             SelectedItem="{Binding SelectedTCPPoint}"
                             Margin="5"
                             MinWidth="300"
-                            Width="auto">
+                            MaxWidth="500">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">

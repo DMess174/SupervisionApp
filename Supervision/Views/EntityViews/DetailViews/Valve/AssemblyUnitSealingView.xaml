@@ -7,7 +7,7 @@
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="450" d:DesignWidth="800"
       WindowStartupLocation="CenterScreen"
-      Title="{Binding Name}">
+      Title="Уплотнительные материалы">
 
     <Grid>
         <Grid.ColumnDefinitions>

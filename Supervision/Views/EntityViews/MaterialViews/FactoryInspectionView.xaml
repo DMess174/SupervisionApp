@@ -42,12 +42,12 @@
                 HorizontalScrollBarVisibility="Visible">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Дата"
-                                        MinWidth="100"
-                                        Width="auto">
+                                MinWidth="100"
+                                Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
-                                        SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                            SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

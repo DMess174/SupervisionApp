@@ -611,30 +611,26 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             parentEntity = entity;
             db = new DataContext();
             SelectedItem = db.Set<TEntity>()
-                .Include(i => i.FrontWalls).ThenInclude(i => i.WeldNozzle)
-                .Include(i => i.SideWalls)
-                .Include(i => i.CaseEdges)
                 .Include(i => i.BaseWeldValve)
                 .SingleOrDefault(i => i.Id == id);
+            db.FrontWalls.Include(i => i.WeldNozzle).Load();
+            SelectedItem.FrontWalls = db.FrontWalls.Local.Where(i => i.WeldGateValveCaseId == SelectedItem.Id).ToObservableCollection();
+            db.SideWalls.Load();
+            SelectedItem.SideWalls = db.SideWalls.Local.Where(i => i.WeldGateValveCaseId == SelectedItem.Id).ToObservableCollection();
+            db.CaseEdges.Load();
+            SelectedItem.CaseEdges = db.CaseEdges.Local.Where(i => i.WeldGateValveCaseId == SelectedItem.Id).ToObservableCollection();
             AssemblyJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId).ToList();
             MechanicalJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId).ToList();
             NDTJournal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.Set<TEntity>().Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            CaseEdges = db.CaseEdges.ToList();
             CaseFlanges = db.CaseFlanges.ToList();
             CaseBottoms = db.CaseBottoms.ToList();
-            FrontWalls = db.FrontWalls.Where(i => i.WeldGateValveCaseId == null).ToList();
-            SideWalls = db.SideWalls.Where(i => i.WeldGateValveCaseId == null).ToList();
+            CaseEdges = db.CaseEdges.Local.Where(i => i.WeldGateValveCaseId == null).ToObservableCollection();
+            FrontWalls = db.FrontWalls.Local.Where(i => i.WeldGateValveCaseId == null).ToObservableCollection();
+            SideWalls = db.SideWalls.Local.Where(i => i.WeldGateValveCaseId == null).ToObservableCollection();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.Set<TEntityTCP>().ToList();
-            if (SelectedItem.FrontWalls != null)
-            {
-                foreach (var i in SelectedItem.FrontWalls)
-                {
-                    WeldNozzles.Append(i.WeldNozzle);
-                }
-            }
         }
     }
 }

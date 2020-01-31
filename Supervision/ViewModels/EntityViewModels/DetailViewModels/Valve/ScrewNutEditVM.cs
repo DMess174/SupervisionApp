@@ -182,7 +182,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
         {
             parentEntity = entity;
             db = new DataContext();
-            SelectedItem = db.ScrewNuts.Include(i => i.BaseValveWithScrewNuts).SingleOrDefault(i => i.Id == id);
+            SelectedItem = db.ScrewNuts.Include(i => i.BaseValveWithScrewNuts).ThenInclude(i => i.BaseValve).SingleOrDefault(i => i.Id == id);
             Journal = db.ScrewNutJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList(); //TODO: говнокод
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.ScrewNuts.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();

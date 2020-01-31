@@ -4,7 +4,6 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        Height="500pt"
       mc:Ignorable="d"
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="1000" d:DesignWidth="1200"
@@ -246,6 +245,9 @@
                             <ListBox  Style="{StaticResource StandardListBox}"
                               ItemsSource="{Binding SelectedItem.Saddles}" 
                               Margin="5"
+                                      Height="80"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                               Grid.ColumnSpan="2"
                               Grid.Row="3"
                               Grid.RowSpan="2"
@@ -433,6 +435,9 @@
                               Grid.Column="8"
                               Grid.RowSpan="2"
                               Grid.ColumnSpan="2"
+                                      Height="80"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                               Grid.Row="3"
                               SelectedItem="{Binding SelectedShearPinFromList}">
                                 <i:Interaction.Triggers>
@@ -536,6 +541,9 @@
                               Margin="5"
                               Grid.ColumnSpan="2"
                               Grid.Row="1"
+                                      Height="80"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                               Grid.RowSpan="2"
                               SelectedItem="{Binding SelectedScrewStudFromList}">
                                 <i:Interaction.Triggers>
@@ -614,6 +622,9 @@
                               Grid.ColumnSpan="2"
                               Grid.Row="1"
                               Grid.RowSpan="2"
+                                      Height="80"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                               SelectedItem="{Binding SelectedScrewNutFromList}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseDoubleClick">
@@ -690,6 +701,9 @@
                                       Grid.Column="8"
                               Grid.ColumnSpan="2"
                               Grid.Row="1"
+                                      Height="80"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                               Grid.RowSpan="2"
                               SelectedItem="{Binding SelectedSpringFromList}">
                                 <i:Interaction.Triggers>
@@ -765,6 +779,9 @@
                               Margin="5"
                               Grid.ColumnSpan="2"
                               Grid.Row="5"
+                              Height="80"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                               Grid.RowSpan="2"
                               SelectedItem="{Binding SelectedSealFromList}">
                                 <i:Interaction.Triggers>
@@ -777,9 +794,8 @@
                                     <DataTemplate>
                                         <TextBlock>
                                             <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} - {1}">
-                                                    <Binding Path="AssemblyUnitSealing.Number"/>
-                                                    <Binding Path="AssemblyUnitSealing.Status"/>
+                                                <MultiBinding StringFormat="{}{0}">
+                                                    <Binding Path="AssemblyUnitSealing.FullName"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>
@@ -837,6 +853,9 @@
                                       Grid.Column="4"
                               Grid.ColumnSpan="2"
                               Grid.Row="5"
+                                      Height="80"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                               Grid.RowSpan="2"
                               SelectedItem="{Binding SelectedBallValveFromList}">
                                 <i:Interaction.Triggers>
@@ -940,6 +959,9 @@
                               Grid.ColumnSpan="2"
                               Grid.RowSpan="2"
                               Grid.Row="1"
+                              Height="80"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                               SelectedItem="{Binding SelectedMaterialFromList}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseDoubleClick">
@@ -951,10 +973,8 @@
                                     <DataTemplate>
                                         <TextBlock>
                                             <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} - {1} - {2}">
-                                                    <Binding Path="BaseAnticorrosiveCoating.Name"/>
-                                                    <Binding Path="BaseAnticorrosiveCoating.Number"/>
-                                                    <Binding Path="BaseAnticorrosiveCoating.Status"/>
+                                                <MultiBinding StringFormat="{}{0}">
+                                                    <Binding Path="BaseAnticorrosiveCoating.FullName"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>

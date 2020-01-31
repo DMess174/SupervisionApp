@@ -1459,7 +1459,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             SelectedItem.ShearPins = db.ShearPins.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
             db.BallValves.Load();
             SelectedItem.BallValves = db.BallValves.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
-            db.BaseAnticorrosiveCoatings.Load();
+            db.BaseValveWithCoatings.Load();
             SelectedItem.BaseValveWithCoatings = db.BaseValveWithCoatings.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
             db.BaseValveWithScrewStuds.Load();
             SelectedItem.BaseValveWithScrewStuds = db.BaseValveWithScrewStuds.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
