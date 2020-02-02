@@ -144,12 +144,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                                 var detail = db.CoverSealingRings.Include(i => i.CastGateValveCover).Include(i => i.CoverSleeve).SingleOrDefault(i => i.Id == SelectedItem.CoverSealingRingId);
                                 if (detail?.CastGateValveCover != null && detail.CastGateValveCover.Id != SelectedItem.Id)
                                 {
-                                    MessageBox.Show($"Втулка применена в {detail.CastGateValveCover.Name} № {detail.CastGateValveCover.Number}", "Ошибка");
+                                    MessageBox.Show($"Уплотнительное кольцо применено в {detail.CastGateValveCover.Name} № {detail.CastGateValveCover.Number}", "Ошибка");
                                     return;
                                 }
-                                else if (detail?.CoverSleeve != null)
+                                if (detail?.CoverSleeve != null)
                                 {
-                                    MessageBox.Show($"Втулка применена в {detail.CoverSleeve.Name} № {detail.CoverSleeve.Number}", "Ошибка");
+                                    MessageBox.Show($"Уплотнительное кольцо применено в {detail.CoverSleeve.Name} № {detail.CoverSleeve.Number}", "Ошибка");
                                     return;
                                 }
                             }
@@ -426,8 +426,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             AssemblyJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId).ToList();
             NDTJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Materials = db.ReverseShutterCases.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            Drawings = db.ReverseShutterCases.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
+            Materials = db.CastGateValveCovers.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
+            Drawings = db.CastGateValveCovers.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             CoverSealingRings = db.CoverSealingRings.ToList();
             Spindles = db.Spindles.ToList();
             RunningSleeves = db.RunningSleeves.ToList();

@@ -145,12 +145,6 @@
                                Text="Протокол&#x0a;(металлография):" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
-
-                    <TextBlock Style="{StaticResource StandardTextBlock}" 
-                               Grid.Row="2" 
-                               Text="Статус:" 
-                               Margin="5 0 5 0" 
-                               VerticalAlignment="Center"/>
                 </Grid>
 
                 <Grid Grid.Column="5">
@@ -222,7 +216,7 @@
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
                     <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
-                                            SelectedDate="{Binding Path = BeginingDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                            SelectedDate="{Binding Path = SelectedItem.BeginingDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                     <Separator  Style="{StaticResource HorizontalSeparator}"/>
 
@@ -232,7 +226,7 @@
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
                     <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
-                                SelectedDate="{Binding Path = ExpiryDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                SelectedDate="{Binding Path = SelectedItem.ExpiryDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 </StackPanel>
             </Grid>
         </Grid>
@@ -413,6 +407,7 @@
                             SelectedItem="{Binding SelectedTCPPoint}"
                             Margin="5"
                             MinWidth="300"
+                                  MaxWidth="500"
                             Width="auto">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>

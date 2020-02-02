@@ -66,18 +66,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
         }
         private IEnumerable<GateTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<GateJournal> castInputControlJournal;
-        private IEnumerable<GateJournal> sheetInputControlJournal;
-        private IEnumerable<GateJournal> castPreparationJournal;
-        private IEnumerable<GateJournal> sheetPreparationJournal;
-        private IEnumerable<GateJournal> castCoatingJournal;
-        private IEnumerable<GateJournal> sheetCoatingJournal;
-        private IEnumerable<GateJournal> castTestJournal;
-        private IEnumerable<GateJournal> sheetTestJournal;
-        private IEnumerable<GateJournal> castDocumentationJournal;
-        private IEnumerable<GateJournal> sheetDocumentationJournal;
-        private IEnumerable<GateJournal> castShippedJournal;
-        private IEnumerable<GateJournal> sheetShippedJournal;
+        private IEnumerable<GateJournal> inputControlJournal;
+        private IEnumerable<GateJournal> preparationJournal;
+        private IEnumerable<GateJournal> coatingJournal;
+        private IEnumerable<GateJournal> testJournal;
+        private IEnumerable<GateJournal> documentationJournal;
+        private IEnumerable<GateJournal> shippedJournal;
         private readonly BaseTable parentEntity;
         private Gate selectedItem;
         private GateTCP selectedTCPPoint;
@@ -97,111 +91,58 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public IEnumerable<GateJournal> CastInputControlJournal
+        public IEnumerable<GateJournal> InputControlJournal
         {
-            get => castInputControlJournal;
+            get => inputControlJournal;
             set
             {
-                castInputControlJournal = value;
+                inputControlJournal = value;
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<GateJournal> SheetInputControlJournal
+       
+        public IEnumerable<GateJournal> PreparationJournal
         {
-            get => sheetInputControlJournal;
+            get => preparationJournal;
             set
             {
-                sheetInputControlJournal = value;
+                preparationJournal = value;
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<GateJournal> CastPreparationJournal
+        public IEnumerable<GateJournal> CoatingJournal
         {
-            get => castPreparationJournal;
+            get => coatingJournal;
             set
             {
-                castPreparationJournal = value;
+                coatingJournal = value;
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<GateJournal> SheetPreparationJournal
+        public IEnumerable<GateJournal> TestJournal
         {
-            get => sheetPreparationJournal;
+            get => testJournal;
             set
             {
-                sheetPreparationJournal = value;
+                testJournal = value;
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<GateJournal> CastCoatingJournal
+        public IEnumerable<GateJournal> DocumentationJournal
         {
-            get => castCoatingJournal;
+            get => documentationJournal;
             set
             {
-                castCoatingJournal = value;
+                documentationJournal = value;
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<GateJournal> SheetCoatingJournal
+        public IEnumerable<GateJournal> ShippedJournal
         {
-            get => sheetCoatingJournal;
+            get => shippedJournal;
             set
             {
-                sheetCoatingJournal = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<GateJournal> CastTestJournal
-        {
-            get => castTestJournal;
-            set
-            {
-                castTestJournal = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<GateJournal> SheetTestJournal
-        {
-            get => sheetTestJournal;
-            set
-            {
-                sheetTestJournal = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<GateJournal> CastDocumentationJournal
-        {
-            get => castDocumentationJournal;
-            set
-            {
-                castDocumentationJournal = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<GateJournal> SheetDocumentationJournal
-        {
-            get => sheetDocumentationJournal;
-            set
-            {
-                sheetDocumentationJournal = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<GateJournal> CastShippedJournal
-        {
-            get => castShippedJournal;
-            set
-            {
-                castShippedJournal = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<GateJournal> SheetShippedJournal
-        {
-            get => sheetShippedJournal;
-            set
-            {
-                sheetShippedJournal = value;
+                shippedJournal = value;
                 RaisePropertyChanged();
             }
         }
@@ -235,89 +176,42 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                         {
                             db.Gates.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in CastInputControlJournal)
+                            foreach(var i in InputControlJournal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.GateJournals.UpdateRange(CastInputControlJournal);
-                            db.SaveChanges();
-                            foreach (var i in SheetInputControlJournal)
+                            db.GateJournals.UpdateRange(InputControlJournal);
+                            foreach (var i in PreparationJournal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.GateJournals.UpdateRange(SheetInputControlJournal);
-                            db.SaveChanges();
-                            foreach (var i in CastPreparationJournal)
+                            db.GateJournals.UpdateRange(PreparationJournal);
+                            foreach (var i in CoatingJournal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.GateJournals.UpdateRange(CastPreparationJournal);
-                            db.SaveChanges();
-                            foreach (var i in SheetPreparationJournal)
+                            db.GateJournals.UpdateRange(CoatingJournal);
+                            foreach (var i in TestJournal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.GateJournals.UpdateRange(SheetPreparationJournal);
-                            db.SaveChanges();
-                            foreach (var i in CastCoatingJournal)
+                            db.GateJournals.UpdateRange(TestJournal);
+                            foreach (var i in DocumentationJournal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.GateJournals.UpdateRange(CastCoatingJournal);
-                            db.SaveChanges();
-                            foreach (var i in SheetCoatingJournal)
+                            db.GateJournals.UpdateRange(DocumentationJournal);
+                            foreach (var i in ShippedJournal)
                             {
                                 i.DetailNumber = SelectedItem.Number;
                                 i.DetailDrawing = SelectedItem.Drawing;
                             }
-                            db.GateJournals.UpdateRange(SheetCoatingJournal);
-                            db.SaveChanges();
-                            foreach (var i in CastTestJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
-                            db.GateJournals.UpdateRange(CastTestJournal);
-                            db.SaveChanges();
-                            foreach (var i in SheetTestJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
-                            db.GateJournals.UpdateRange(SheetTestJournal);
-                            db.SaveChanges();
-                            foreach (var i in CastDocumentationJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
-                            db.GateJournals.UpdateRange(CastDocumentationJournal);
-                            db.SaveChanges();
-                            foreach (var i in SheetDocumentationJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
-                            db.GateJournals.UpdateRange(SheetDocumentationJournal);
-                            db.SaveChanges();
-                            foreach (var i in CastShippedJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
-                            db.GateJournals.UpdateRange(CastShippedJournal);
-                            db.SaveChanges();
-                            foreach (var i in SheetShippedJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
-                            db.GateJournals.UpdateRange(SheetShippedJournal);
+                            db.GateJournals.UpdateRange(ShippedJournal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");
@@ -365,18 +259,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                             };
                             db.GateJournals.Add(item);
                             db.SaveChanges();
-                            CastInputControlJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ" && i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId).ToList();
-                            SheetInputControlJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ" && i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId).ToList();
-                            CastPreparationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ" && i.EntityTCP.OperationType.Name == "Подготовка поверхности").OrderBy(x => x.PointId).ToList();
-                            SheetPreparationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ" && i.EntityTCP.OperationType.Name == "Подготовка поверхности").OrderBy(x => x.PointId).ToList();
-                            CastCoatingJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ" && i.EntityTCP.OperationType.Name == "Покрытие").OrderBy(x => x.PointId).ToList();
-                            SheetCoatingJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ" && i.EntityTCP.OperationType.Name == "Покрытие").OrderBy(x => x.PointId).ToList();
-                            CastTestJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ" && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
-                            SheetTestJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ" && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
-                            CastDocumentationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ" && i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId).ToList();
-                            SheetDocumentationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ" && i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId).ToList();
-                            CastShippedJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ" && i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId).ToList();
-                            SheetShippedJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ" && i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId).ToList();
+                            InputControlJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId).ToList();
+                            PreparationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Подготовка поверхности").OrderBy(x => x.PointId).ToList();
+                            CoatingJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Покрытие").OrderBy(x => x.PointId).ToList();
+                            TestJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
+                            DocumentationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId).ToList();
+                            ShippedJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId).ToList();
                         }
                     }));
             }
@@ -469,7 +357,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 return degreasingChemicalCompositionOpen ?? (
                            degreasingChemicalCompositionOpen = new DelegateCommand<Window>((w) =>
                            {
-                               var wn = new PeriodicalControlView();
+                               var wn = new GatePeriodicalView();
                                var vm = new DegreasingChemicalCompositionVM();
                                wn.DataContext = vm;
                                wn.Show();
@@ -483,7 +371,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 return coatingChemicalCompositionOpen ?? (
                            coatingChemicalCompositionOpen = new DelegateCommand<Window>((w) =>
                            {
-                               var wn = new PeriodicalControlView();
+                               var wn = new GatePeriodicalView();
                                var vm = new CoatingChemicalCompositionVM();
                                wn.DataContext = vm;
                                wn.Show();
@@ -497,7 +385,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 return coatingPlasticityOpen ?? (
                            coatingPlasticityOpen = new DelegateCommand<Window>((w) =>
                            {
-                               var wn = new PeriodicalControlView();
+                               var wn = new GatePeriodicalView();
                                var vm = new CoatingPlasticityVM();
                                wn.DataContext = vm;
                                wn.Show();
@@ -511,7 +399,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 return coatingProtectivePropertiesOpen ?? (
                            coatingProtectivePropertiesOpen = new DelegateCommand<Window>((w) =>
                            {
-                               var wn = new PeriodicalControlView();
+                               var wn = new GatePeriodicalView();
                                var vm = new CoatingProtectivePropertiesVM();
                                wn.DataContext = vm;
                                wn.Show();
@@ -539,18 +427,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             db = new DataContext();
             SelectedItem = db.Gates.Include(i => i.BaseValve).SingleOrDefault(i => i.Id == id);
             PIDs = db.PIDs.Include(i => i.Specification).ToList();
-            CastInputControlJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ" && i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId).ToList();
-            SheetInputControlJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ" && i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId).ToList();
-            CastPreparationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ" && i.EntityTCP.OperationType.Name == "Подготовка поверхности").OrderBy(x => x.PointId).ToList();
-            SheetPreparationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ" && i.EntityTCP.OperationType.Name == "Подготовка поверхности").OrderBy(x => x.PointId).ToList();
-            CastCoatingJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ" && i.EntityTCP.OperationType.Name == "Покрытие").OrderBy(x => x.PointId).ToList();
-            SheetCoatingJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ" && i.EntityTCP.OperationType.Name == "Покрытие").OrderBy(x => x.PointId).ToList();
-            CastTestJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ" && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
-            SheetTestJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ" && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
-            CastDocumentationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ" && i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId).ToList();
-            SheetDocumentationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ" && i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId).ToList();
-            CastShippedJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШ" && i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId).ToList();
-            SheetShippedJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.ProductType.ShortName == "ЗШЛ" && i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId).ToList();
+            InputControlJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId).ToList();
+            PreparationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Подготовка поверхности").OrderBy(x => x.PointId).ToList();
+            CoatingJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Покрытие").OrderBy(x => x.PointId).ToList();
+            TestJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
+            DocumentationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId).ToList();
+            ShippedJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.Gates.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Materials = db.MetalMaterials.ToList();

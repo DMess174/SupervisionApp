@@ -18,9 +18,10 @@ namespace DataLayer.Entities.Materials
         public string Status { get; set; }
         public DateTime? BeginingDate { get; set; }
         public DateTime? ExpiryDate { get; set; }
+        public string Comment { get; set; }
 
         [NotMapped] 
-        public string FullName => string.Format($"{Name} № {Number}/{WeldingMethod}/ до {BeginingDate}");
+        public string FullName => string.Format($"{Name} № {Number}/{WeldingMethod}/ до {ExpiryDate}");
 
         public IEnumerable<ControlWeldJournal> ControlWeldJournals { get; set; }
     }

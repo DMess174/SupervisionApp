@@ -317,19 +317,19 @@ namespace Supervision.ViewModels
         }
         public ICommand DegreasingChemicalCompositionOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new PeriodicalControlView(), new DegreasingChemicalCompositionVM()));
+            get => new DelegateCommand(() => OpenWindow(new GatePeriodicalView(), new DegreasingChemicalCompositionVM()));
         }
         public ICommand CoatingChemicalCompositionOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new PeriodicalControlView(), new CoatingChemicalCompositionVM()));
+            get => new DelegateCommand(() => OpenWindow(new GatePeriodicalView(), new CoatingChemicalCompositionVM()));
         }
         public ICommand CoatingPlasticityOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new PeriodicalControlView(), new CoatingPlasticityVM()));
+            get => new DelegateCommand(() => OpenWindow(new GatePeriodicalView(), new CoatingPlasticityVM()));
         }
         public ICommand CoatingProtectivePropertiesOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new PeriodicalControlView(), new CoatingProtectivePropertiesVM()));
+            get => new DelegateCommand(() => OpenWindow(new GatePeriodicalView(), new CoatingProtectivePropertiesVM()));
         }
         public ICommand CoatingPorosityOpen
         {

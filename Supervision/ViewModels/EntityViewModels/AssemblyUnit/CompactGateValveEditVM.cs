@@ -886,116 +886,6 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         }
         #endregion
 
-        #region Spring
-        private IEnumerable<Spring> springs;
-        private Spring selectedSpring;
-        private BaseValveWithSpring selectedSpringFromList;
-        private ICommand editSpring;
-        private ICommand addSpringToValve;
-        private ICommand deleteSpringFromValve;
-
-        public Spring SelectedSpring
-        {
-            get => selectedSpring;
-            set
-            {
-                selectedSpring = value;
-                RaisePropertyChanged();
-            }
-        }
-        public BaseValveWithSpring SelectedSpringFromList
-        {
-            get => selectedSpringFromList;
-            set
-            {
-                selectedSpringFromList = value;
-                RaisePropertyChanged();
-            }
-        }
-        public ICommand AddSpringToValve
-        {
-            get
-            {
-                return addSpringToValve ?? (
-                           addSpringToValve = new DelegateCommand(() =>
-                           {
-                               if (SelectedSpring != null)
-                               {
-                                   bool success = Int32.TryParse(Microsoft.VisualBasic.Interaction.InputBox("Введите количество пружин:"), out int tempAmount);
-                                   if (success && tempAmount > 0)
-                                   {
-                                       if (tempAmount <= SelectedSpring.AmountRemaining)
-                                       {
-                                           SelectedSpring.AmountRemaining -= tempAmount;
-                                           db.Springs.Update(SelectedSpring);
-                                           var item = new BaseValveWithSpring()
-                                           {
-                                               BaseValveId = SelectedItem.Id,
-                                               SpringId = SelectedSpring.Id,
-                                               SpringAmount = tempAmount
-                                           };
-                                           db.BaseValveWithSprings.Add(item);
-                                           db.SaveChanges();
-                                           Springs = db.Springs.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
-                                       }
-                                       else MessageBox.Show($"Остаток пружин составляет {SelectedSpring.AmountRemaining}", "Ошибка");
-                                   }
-                                   else MessageBox.Show("Введено некорректное знаение", "Ошибка");
-                               }
-                               else MessageBox.Show("Объект не выбран!", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditSpring
-        {
-            get
-            {
-                return editSpring ?? (
-                           editSpring = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedSpringFromList != null)
-                               {
-                                   var wn = new SpringEditView();
-                                   var vm = new SpringEditVM(SelectedSpringFromList.SpringId, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand DeleteSpringFromValve
-        {
-            get
-            {
-                return deleteSpringFromValve ?? (
-                           deleteSpringFromValve = new DelegateCommand(() =>
-                           {
-                               if (SelectedSpringFromList != null)
-                               {
-                                   var item = SelectedSpringFromList;
-                                   var stud = db.Springs.Find(item.SpringId);
-                                   stud.AmountRemaining += item.SpringAmount;
-                                   db.BaseValveWithSprings.Remove(item);
-                                   db.Springs.Update(stud);
-                                   db.SaveChanges();
-                                   Springs = db.Springs.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
-        public IEnumerable<Spring> Springs
-        {
-            get => springs;
-            set
-            {
-                springs = value;
-                RaisePropertyChanged();
-            }
-        }
-        #endregion
-
         #region Seal
         private IEnumerable<AssemblyUnitSealing> seals;
         private AssemblyUnitSealing selectedSeal;
@@ -1504,8 +1394,6 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             SelectedItem.BaseValveWithScrewStuds = db.BaseValveWithScrewStuds.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
             db.BaseValveWithScrewNuts.Load();
             SelectedItem.BaseValveWithScrewNuts = db.BaseValveWithScrewNuts.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
-            db.BaseValveWithSprings.Load();
-            SelectedItem.BaseValveWithSprings = db.BaseValveWithSprings.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
             db.BaseValveWithSeals.Load();
             SelectedItem.BaseValveWithSeals = db.BaseValveWithSeals.Local.Where(i => i.BaseValveId == SelectedItem.Id).ToObservableCollection();
             db.CounterFlanges.Load();
@@ -1521,8 +1409,6 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             ScrewNuts = db.ScrewNuts.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
             db.ScrewStuds.Load();
             ScrewStuds = db.ScrewStuds.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
-            db.Springs.Load();
-            Springs = db.Springs.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
             db.AssemblyUnitSeals.Load();
             Seals = db.AssemblyUnitSeals.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();

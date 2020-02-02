@@ -455,7 +455,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                    }
                                    else MessageBox.Show("Объект не выбран!", "Ошибка");
                                }
-                               else MessageBox.Show("Невозможно привязать более 2 стенок!", "Ошибка");
+                               else MessageBox.Show("Невозможно привязать более 2 втулок!", "Ошибка");
                            }));
             }
         }
@@ -537,7 +537,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                    }
                                    else MessageBox.Show("Объект не выбран!", "Ошибка");
                                }
-                               else MessageBox.Show("Невозможно привязать более 2 стенок!", "Ошибка");
+                               else MessageBox.Show("Невозможно привязать более 2 заглушек!", "Ошибка");
                            }));
             }
         }

@@ -246,6 +246,9 @@
                               Margin="5"
                               Grid.ColumnSpan="2"
                               Grid.Row="3"
+                              Height="80"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                               Grid.RowSpan="2"
                               SelectedItem="{Binding SelectedBronzeSleeveFromList}">
                         <i:Interaction.Triggers>
@@ -322,6 +325,9 @@
                               Grid.Column="4"
                               Grid.ColumnSpan="2"
                               Grid.Row="3"
+                              Height="80"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                               Grid.RowSpan="2"
                               SelectedItem="{Binding SelectedSteelSleeveFromList}">
                         <i:Interaction.Triggers>
@@ -478,6 +484,9 @@
                               Margin="5"
                               Grid.Column="8"
                               Grid.RowSpan="2"
+                              Height="80"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                               Grid.ColumnSpan="2"
                               Grid.Row="3"
                               SelectedItem="{Binding SelectedStubFromList}">
@@ -557,6 +566,9 @@
                               Grid.Column="0"
                               Grid.ColumnSpan="2"
                               Grid.RowSpan="2"
+                              Height="80"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                               Grid.Row="7"
                               SelectedItem="{Binding SelectedMaterialFromList}">
                         <i:Interaction.Triggers>
@@ -989,6 +1001,7 @@
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
                       MinWidth="300"
+                                          MaxWidth="500"
                       Width="auto">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
@@ -1196,6 +1209,7 @@
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
                       MinWidth="300"
+                                          MaxWidth="500"
                       Width="auto">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
@@ -1403,6 +1417,7 @@
                       SelectedItem="{Binding SelectedCoatingTCPPoint}"
                       Margin="5"
                       MinWidth="300"
+                                          MaxWidth="500"
                       Width="auto">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
@@ -1610,6 +1625,7 @@
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
                       MinWidth="300"
+                                          MaxWidth="500"
                       Width="auto">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
@@ -1817,6 +1833,7 @@
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
                       MinWidth="300"
+                                          MaxWidth="500"
                       Width="auto">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>

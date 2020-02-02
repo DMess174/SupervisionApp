@@ -6,6 +6,11 @@ namespace DataLayer.Entities.Detailing.CastGateValveDetails
 {
     public class CastGateValveCover : BaseValveCover
     {
+        public CastGateValveCover()
+        {
+            Name = "Крышка ЗШ";
+        }
+
         public string Material { get; set; }
 
         public string Melt { get; set; }

@@ -94,6 +94,7 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical.Gate
                     {
                         LastInspection = Convert.ToDateTime(db.CoatingPorosityJournals.Select(i => i.Date).Max());
                         NextInspection = LastInspection.AddYears(1);
+                        ShippedAmount = Convert.ToInt32(db.GateJournals.Where(i => i.Date > LastInspection && i.EntityTCP.OperationType.Name == "Отгрузка").Select(i => i.DetailId).Distinct().Count());
                     }
                 }));
             }
@@ -161,7 +162,7 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical.Gate
             {
                 LastInspection = Convert.ToDateTime(db.CoatingPorosityJournals.Select(i => i.Date).Max());
                 NextInspection = LastInspection.AddYears(1);
-                ShippedAmount = Convert.ToInt32(db.GateJournals.Where(i => i.Date > LastInspection && i.EntityTCP.OperationType.Name == "Отгрузка").Select(i => i.DetailId).Distinct().Sum());
+                ShippedAmount = Convert.ToInt32(db.GateJournals.Where(i => i.Date > LastInspection && i.EntityTCP.OperationType.Name == "Отгрузка").Select(i => i.DetailId).Distinct().Count());
             }
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();

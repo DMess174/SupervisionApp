@@ -711,6 +711,9 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                                ScrewStudId = SelectedScrewStud.Id,
                                                ScrewStudAmount = tempAmount
                                            };
+                                           db.BaseValveWithScrewStuds.Add(item);
+                                           db.SaveChanges();
+                                           ScrewStuds = db.ScrewStuds.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
                                        }
                                        else MessageBox.Show($"Остаток шпилек составляет {SelectedScrewStud.AmountRemaining}", "Ошибка");
                                    }
@@ -753,6 +756,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                    db.BaseValveWithScrewStuds.Remove(item);
                                    db.ScrewStuds.Update(stud);
                                    db.SaveChanges();
+                                   ScrewStuds = db.ScrewStuds.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
                                }
                                else MessageBox.Show("Объект не выбран", "Ошибка");
                            }));
@@ -817,7 +821,10 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                                BaseValveId = SelectedItem.Id,
                                                ScrewNutId = SelectedScrewNut.Id,
                                                ScrewNutAmount = tempAmount
-                                           };
+                                           }; 
+                                           db.BaseValveWithScrewNuts.Add(item);
+                                           db.SaveChanges();
+                                           ScrewNuts = db.ScrewNuts.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
                                        }
                                        else MessageBox.Show($"Остаток гаек составляет {SelectedScrewNut.AmountRemaining}", "Ошибка");
                                    }
@@ -860,6 +867,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                    db.BaseValveWithScrewNuts.Remove(item);
                                    db.ScrewNuts.Update(stud);
                                    db.SaveChanges();
+                                   ScrewNuts = db.ScrewNuts.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
                                }
                                else MessageBox.Show("Объект не выбран", "Ошибка");
                            }));
@@ -926,6 +934,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                            };
                                            db.BaseValveWithSprings.Add(item);
                                            db.SaveChanges();
+                                           Springs = db.Springs.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
                                        }
                                        else MessageBox.Show($"Остаток пружин составляет {SelectedSpring.AmountRemaining}", "Ошибка");
                                    }
@@ -968,6 +977,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                    db.BaseValveWithSprings.Remove(item);
                                    db.Springs.Update(stud);
                                    db.SaveChanges();
+                                   Springs = db.Springs.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
                                }
                                else MessageBox.Show("Объект не выбран", "Ошибка");
                            }));
@@ -1030,6 +1040,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                        };
                                        db.BaseValveWithSeals.Add(item);
                                        db.SaveChanges();
+                                       Seals = db.AssemblyUnitSeals.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
                                    }
                                    else MessageBox.Show($"Остаток уплотнений составляет {SelectedSeal.AmountRemaining}", "Ошибка");
                                }
@@ -1070,6 +1081,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                    db.BaseValveWithSeals.Remove(item);
                                    db.AssemblyUnitSeals.Update(stud);
                                    db.SaveChanges();
+                                   Seals = db.AssemblyUnitSeals.Local.Where(i => i.AmountRemaining > 0).ToObservableCollection();
                                }
                                else MessageBox.Show("Объект не выбран", "Ошибка");
                            }));
