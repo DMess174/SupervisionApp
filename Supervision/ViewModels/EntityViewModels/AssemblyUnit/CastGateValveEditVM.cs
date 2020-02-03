@@ -250,15 +250,35 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        if (parentEntity is CastGateValve)
+                        if (db.Entry(SelectedItem).State == EntityState.Modified)
                         {
-                            var wn = new CastGateValveView();
-                            var vm = new CastGateValveVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
+                            MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+                            if (result == MessageBoxResult.Yes)
+                            {
+                                if (parentEntity is CastGateValve)
+                                {
+                                    var wn = new CastGateValveView();
+                                    var vm = new CastGateValveVM();
+                                    wn.DataContext = vm;
+                                    w?.Close();
+                                    wn.ShowDialog();
+                                }
+                                else w?.Close();
+                            }
+                            else return;
                         }
-                        else w?.Close();
+                        else
+                        {
+                            if (parentEntity is CastGateValve)
+                            {
+                                var wn = new CastGateValveView();
+                                var vm = new CastGateValveVM();
+                                wn.DataContext = vm;
+                                w?.Close();
+                                wn.ShowDialog();
+                            }
+                            else w?.Close();
+                        }
                     }));
             }
         }

@@ -14,7 +14,6 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Label Style="{StaticResource StandardLabel}"
                HorizontalAlignment="Center"
@@ -22,6 +21,166 @@
         
         <Separator Style="{StaticResource HorizontalSeparator}"
                    Grid.Row="1"/>
-        
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!--Row 1-->
+            <StackPanel Orientation="Vertical" >
+                <Label Style="{StaticResource StandardLabel}"
+                       HorizontalAlignment="Center"
+                       Content="Изделия"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Задвижка шиберная"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Задвижка шиберная листовая"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Задвижка компактная"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Затвор обратный"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Шибер"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+            </StackPanel>
+
+            <Separator Style="{StaticResource VerticalSeparator}"
+                       Grid.Column="1"/>
+
+            <StackPanel Orientation="Vertical" Grid.Column="2" >
+                <Label Style="{StaticResource StandardLabel}"
+                       HorizontalAlignment="Center"
+                       Content="Металл"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                    <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Лист"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Поковка"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+
+                    <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Прокат"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+
+                    <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Труба"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+                </StackPanel>
+
+                <Separator Style="{StaticResource HorizontalSeparator}"/>
+
+                <Label Style="{StaticResource StandardLabel}"
+                       HorizontalAlignment="Center"
+                       Content="АКП"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Vertical" >
+                        <Label Style="{StaticResource StandardLabel}"
+                            HorizontalAlignment="Center"
+                            Content="Надземное"/>
+                        
+                        <Button Style="{StaticResource StandardButton}"
+                            Margin="10"
+                            Content="Грунт"
+                            FontSize="{StaticResource Hi}"
+                            Command="{Binding CastGateValveOpen}"/>
+
+                        <Button Style="{StaticResource StandardButton}"
+                            Margin="10"
+                            Content="Эмаль"
+                            FontSize="{StaticResource Hi}"
+                            Command="{Binding CastGateValveOpen}"/>
+                    </StackPanel>
+
+                    <Separator Grid.Column="1" Style="{StaticResource VerticalSeparator}"/>
+
+                    <StackPanel Grid.Column="2" Orientation="Vertical">
+                        <Label Style="{StaticResource StandardLabel}"
+                            HorizontalAlignment="Center"
+                            Content="Подземное"/>
+
+                        <Button Style="{StaticResource StandardButton}"
+                            Margin="10"
+                            Content="Компоненты"
+                            FontSize="{StaticResource Hi}"
+                            Command="{Binding CastGateValveOpen}"/>
+                    </StackPanel>
+                </Grid>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Дробь/Купершлак"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+
+                <Separator Style="{StaticResource HorizontalSeparator}"/>
+
+                <Label Style="{StaticResource StandardLabel}"
+                            HorizontalAlignment="Center"
+                            Content="Сварка"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Сварочные материалы"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="КСС"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+            </StackPanel>
+            <!--Row 2-->
+            <Separator Style="{StaticResource HorizontalSeparator}"
+                       Grid.Row="1"
+                       Grid.ColumnSpan="3"/>
+            
+        </Grid>
     </Grid>
 </Page>

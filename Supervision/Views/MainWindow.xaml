@@ -300,7 +300,7 @@
                                 Command="{Binding NozzleOpen}" 
                                 Content="Катушка" />
                         <Button Style="{StaticResource TreeViewButton}"
-                                Command="{Binding CaseShutterOpen}" 
+                                Command="{Binding ReverseShutterCaseOpen}" 
                                 Content="Корпус" />
                         <Button Style="{StaticResource TreeViewButton}"
                                 Command="{Binding ShaftShutterOpen}" 
@@ -319,13 +319,13 @@
                                 Command="{Binding NozzleOpen}" 
                                 Content="Катушка" />
                         <Button Style="{StaticResource TreeViewButton}"
-                                Command="{Binding CastValveCaseOpen}"
+                                Command="{Binding CastGateValveCaseOpen}"
                                 Content="Корпус" />
                         <Button Style="{StaticResource TreeViewButton}"
                                 Command="{Binding BallValveOpen}"
                                 Content="Кран шаровой"/>
                         <Button Style="{StaticResource TreeViewButton}" 
-                                Command="{Binding CastValveCoverOpen}"
+                                Command="{Binding CastGateValveCoverOpen}"
                                 Content="Крышка" />
                         <Button Style="{StaticResource TreeViewButton}"
                                 Command="{Binding CoverSealingRingOpen}"
@@ -509,14 +509,14 @@
                                   Style="{StaticResource TreeViewItemStandard}"
                                   Margin="2">
                             <Button Style="{StaticResource TreeViewButton}" 
-                                Command="{Binding UnderCoatOpen}"
+                                Command="{Binding UndercoatOpen}"
                                 Content="Грунт" />
                             <Button Style="{StaticResource TreeViewButton}" 
                                 Command="{Binding AbovegroundCoatingOpen}"
                                 Content="Эмаль" />
                         </TreeViewItem>
                         <Button Style="{StaticResource TreeViewButton}" 
-                                Command="{Binding UndergroungCoatingOpen}"
+                                Command="{Binding UndergroundCoatingOpen}"
                                 Content="Подземное" />
                         <Button Style="{StaticResource TreeViewButton}" 
                                 Command="{Binding AbrasiveMaterialOpen}"

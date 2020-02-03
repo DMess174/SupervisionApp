@@ -6,7 +6,7 @@
       mc:Ignorable="d" 
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="500" d:DesignWidth="800"
-      WindowStartupLocation="CenterScreen" 
+      WindowStartupLocation="CenterOwner" 
       Title="Тип продукции">
     <Grid>
         <Grid.RowDefinitions>

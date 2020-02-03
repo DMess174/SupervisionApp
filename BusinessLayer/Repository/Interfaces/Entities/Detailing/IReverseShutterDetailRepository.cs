@@ -7,8 +7,7 @@ using DataLayer.TechnicalControlPlans;
 
 namespace BusinessLayer.Repository.Interfaces.Entities.Detailing
 {
-    public interface IReverseShutterDetailRepository<TEntity> : IRepository<ReverseShutterDetail>
-        where  TEntity : ReverseShutterDetail
+    public interface IReverseShutterDetailRepository
     {
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using DataLayer.Entities.AssemblyUnits;
-using DataLayer.Entities.Materials;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
 
 namespace DataLayer.Entities.Detailing.ReverseShutterDetails
@@ -10,6 +8,11 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
         public BronzeSleeveShutter()
         {
             Name = "Втулка бронзовая";
+        }
+
+        public BronzeSleeveShutter(BronzeSleeveShutter sleeve) : base(sleeve)
+        {
+            Name = sleeve.Name;
         }
 
         public string Material { get; set; }

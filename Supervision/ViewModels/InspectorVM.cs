@@ -17,6 +17,7 @@ namespace Supervision.ViewModels
         private ICollectionView allInstancesView;
         private IEnumerable<string> departments;
         private IEnumerable<string> subdivisions;
+        private IEnumerable<string> apointments;
         private Inspector selectedItem;
         private ICommand addItem;
         private ICommand saveItem;
@@ -202,6 +203,16 @@ namespace Supervision.ViewModels
             }
         }
 
+        public IEnumerable<string> Apointments
+        {
+            get => apointments;
+            set
+            {
+                apointments = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public InspectorVM()
         {
             db = new DataContext();
@@ -209,6 +220,7 @@ namespace Supervision.ViewModels
             AllInstances = db.Inspectors.Local.ToObservableCollection();
             Departments = AllInstances.Select(d => d.Department).Distinct().ToList();
             Subdivisions = AllInstances.Select(s => s.Subdivision).Distinct().ToList();
+            Apointments = AllInstances.Select(s => s.Apointment).Distinct().ToList();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
         }
     }

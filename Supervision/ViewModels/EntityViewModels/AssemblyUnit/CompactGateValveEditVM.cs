@@ -253,15 +253,35 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        if (parentEntity is CompactGateValve)
+                        if (db.Entry(SelectedItem).State == EntityState.Modified)
                         {
-                            var wn = new CompactGateValveView();
-                            var vm = new CompactGateValveVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
+                            MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+                            if (result == MessageBoxResult.Yes)
+                            {
+                                if (parentEntity is CompactGateValve)
+                                {
+                                    var wn = new CompactGateValveView();
+                                    var vm = new CompactGateValveVM();
+                                    wn.DataContext = vm;
+                                    w?.Close();
+                                    wn.ShowDialog();
+                                }
+                                else w?.Close();
+                            }
+                            else return;
                         }
-                        else w?.Close();
+                        else
+                        {
+                            if (parentEntity is CompactGateValve)
+                            {
+                                var wn = new CompactGateValveView();
+                                var vm = new CompactGateValveVM();
+                                wn.DataContext = vm;
+                                w?.Close();
+                                wn.ShowDialog();
+                            }
+                            else w?.Close();
+                        }
                     }));
             }
         }

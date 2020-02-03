@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repository\Interfaces\Entities\AssemblyUnits\**" />
+    <EmbeddedResource Remove="Repository\Interfaces\Entities\AssemblyUnits\**" />
+    <None Remove="Repository\Interfaces\Entities\AssemblyUnits\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EPPlus" Version="4.5.3.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="2.2.6" />
@@ -27,7 +33,6 @@
 
   <ItemGroup>
     <Folder Include="Repository\Implementations\Entities\AssemblyUnits\" />
-    <Folder Include="Repository\Interfaces\Entities\AssemblyUnits\" />
   </ItemGroup>
 
   <ItemGroup>

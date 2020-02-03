@@ -58,6 +58,11 @@ namespace Supervision.ViewModels
 {
     public class MainViewModel : BasePropertyChanged
     {
+        public MainViewModel()
+        {
+            var db = new DataContext();
+            db.Dispose();
+        }
         private Page currentPage;
         public Page CurrentPage
         { 
