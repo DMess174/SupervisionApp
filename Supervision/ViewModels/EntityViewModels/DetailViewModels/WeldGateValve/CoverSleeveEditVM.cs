@@ -99,11 +99,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                             }
                             db.CoverSleeves.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach (var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.CoverSleeveJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }

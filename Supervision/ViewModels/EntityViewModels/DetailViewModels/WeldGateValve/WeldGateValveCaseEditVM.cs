@@ -145,24 +145,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                             }
                             db.Set<TEntity>().Update(SelectedItem);
                             db.SaveChanges();
-                            foreach (var i in AssemblyJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<TEntityJournal>().UpdateRange(AssemblyJournal);
-                            db.SaveChanges();
-                            foreach (var i in MechanicalJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<TEntityJournal>().UpdateRange(MechanicalJournal);
-                            db.SaveChanges(); foreach (var i in NDTJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<TEntityJournal>().UpdateRange(NDTJournal);
                             db.SaveChanges();
                         }

@@ -33,6 +33,8 @@ namespace Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating
         private string number = "";
         private string status = "";
         private string certificate = "";
+        private string factory = "";
+        private string batch = "";
 
         #region Filter
         public string Number 
@@ -48,7 +50,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating
                     {
                         return item.Name.ToLower().Contains(Number.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -65,7 +67,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -82,7 +84,41 @@ namespace Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
-                    else return false;
+                    else return true;
+                };
+            }
+        }
+        public string Factory
+        {
+            get => factory;
+            set
+            {
+                factory = value;
+                RaisePropertyChanged();
+                allInstancesView.Filter += (obj) =>
+                {
+                    if (obj is TEntity item && item.Factory != null)
+                    {
+                        return item.Factory.ToLower().Contains(Factory.ToLower());
+                    }
+                    else return true;
+                };
+            }
+        }
+        public string Batch
+        {
+            get => batch;
+            set
+            {
+                batch = value;
+                RaisePropertyChanged();
+                allInstancesView.Filter += (obj) =>
+                {
+                    if (obj is TEntity item && item.Batch != null)
+                    {
+                        return item.Batch.ToLower().Contains(Batch.ToLower());
+                    }
+                    else return true;
                 };
             }
         }

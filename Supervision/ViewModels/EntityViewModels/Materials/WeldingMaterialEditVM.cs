@@ -77,11 +77,6 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                         {
                             db.Set<TEntity>().Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Name;
-                                i.DetailDrawing = SelectedItem.Batch;
-                            }
                             db.Set<TEntityJournal>().UpdateRange(Journal);
                             db.SaveChanges();
                         }

@@ -29,7 +29,7 @@
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="80"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Label Style="{StaticResource StandardLabel}" 
                    FontSize="{StaticResource Hi}"
@@ -58,7 +58,7 @@
 
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
                                Grid.Row="1" 
-                               Text="Сертификат:" 
+                               Text="Предприятие:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
                 </Grid>
@@ -77,16 +77,20 @@
                               ItemsSource="{Binding Names}" 
                               SelectedItem= "{Binding SelectedItem.Name}"/>
 
-                    <TextBox Style="{StaticResource StandardTextBox}" 
-                             Grid.Row="1" 
-                             Width="auto" 
-                             Margin="5 0 5 0" 
-                             VerticalAlignment="Center"
-                             Text="{Binding SelectedItem.Certificate, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ComboBox Style="{StaticResource StandardComboBox}" 
+                              Grid.Row="1" 
+                              Width="auto" 
+                              Margin="5 0 5 0" 
+                              IsEditable="True" 
+                              VerticalAlignment="Center" 
+                              Text="{Binding SelectedItem.Factory, UpdateSourceTrigger=PropertyChanged}" 
+                              ItemsSource="{Binding Factories}" 
+                              SelectedItem= "{Binding SelectedItem.Factory}"/>
                 </Grid>
 
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
@@ -96,7 +100,13 @@
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
 
-                    <TextBlock Grid.Row="1" 
+                    <TextBlock Style="{StaticResource StandardTextBlock}" 
+                               Grid.Row="1" 
+                               Text="Сертификат:" 
+                               Margin="5 0 5 0" 
+                               VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Row="2" 
                                Text="Цвет (RAL):" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center">
@@ -115,8 +125,9 @@
 
                 <Grid Grid.Column="3">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
                     <TextBox Style="{StaticResource StandardTextBox}" 
                                Grid.Row="0" 
@@ -125,7 +136,14 @@
                                VerticalAlignment="Center"
                                Text="{Binding SelectedItem.Batch, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <ComboBox Grid.Row="1" 
+                    <TextBox Style="{StaticResource StandardTextBox}" 
+                             Grid.Row="1" 
+                             Width="auto" 
+                             Margin="5 0 5 0" 
+                             VerticalAlignment="Center"
+                             Text="{Binding SelectedItem.Certificate, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <ComboBox Grid.Row="2" 
                               Width="auto" 
                               Margin="5 0 5 0" 
                               IsEditable="True" 

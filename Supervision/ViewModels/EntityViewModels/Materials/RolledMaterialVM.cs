@@ -27,7 +27,6 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
 
         private string name;
         private string number = "";
-        private string pipeNumber = "";
         private string batch = "";
         private string material = "";
         private string certificate = "";
@@ -47,24 +46,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
-                    else return false;
-                };
-            }
-        }
-        public string PipeNumber
-        {
-            get => pipeNumber;
-            set
-            {
-                pipeNumber = value;
-                RaisePropertyChanged("SheetNumber");
-                allInstancesView.Filter += (obj) =>
-                {
-                    if (obj is RolledMaterial item && item.MaterialCertificateNumber != null)
-                    {
-                        return item.MaterialCertificateNumber.ToLower().Contains(PipeNumber.ToLower());
-                    }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -77,11 +59,11 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is RolledMaterial item && item.Status != null)
+                    if (obj is RolledMaterial item && item.Batch != null)
                     {
                         return item.Batch.ToLower().Contains(Batch.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -98,7 +80,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         return item.Material.ToLower().Contains(Material.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -115,7 +97,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -132,7 +114,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         return item.Melt.ToLower().Contains(Melt.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }

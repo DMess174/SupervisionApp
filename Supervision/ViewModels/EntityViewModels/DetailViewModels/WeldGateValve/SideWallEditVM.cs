@@ -83,11 +83,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                         {
                             db.SideWalls.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.SideWallJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }

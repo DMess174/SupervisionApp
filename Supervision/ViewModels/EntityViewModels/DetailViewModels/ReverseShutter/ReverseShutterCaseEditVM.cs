@@ -196,60 +196,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                         {
                             db.ReverseShutterCases.Update(SelectedItem);
                             db.SaveChanges();
-                            if (InputControlJournal != null)
-                            {
-                                foreach (var i in InputControlJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.ReverseShutterCaseJournals.UpdateRange(InputControlJournal);
-                            }
-                            if (InputNDTControlJournal != null)
-                            {
-                                foreach (var i in InputNDTControlJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.ReverseShutterCaseJournals.UpdateRange(InputNDTControlJournal);
-                            }
-                            if (MechanicalJournal != null)
-                            {
-                                foreach (var i in MechanicalJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.ReverseShutterCaseJournals.UpdateRange(MechanicalJournal);
-                            }
-                            if (AssemblyJournal != null)
-                            {
-                                foreach (var i in AssemblyJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.ReverseShutterCaseJournals.UpdateRange(AssemblyJournal);
-                            }
-                            if (NDTJournal != null)
-                            {
-                                foreach (var i in NDTJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.ReverseShutterCaseJournals.UpdateRange(NDTJournal);
-                            }
-                            if (OverlayingJournal != null)
-                            {
-                                foreach (var i in OverlayingJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.ReverseShutterCaseJournals.UpdateRange(OverlayingJournal);
-                            }
+                            db.ReverseShutterCaseJournals.UpdateRange(InputControlJournal);
+                            db.ReverseShutterCaseJournals.UpdateRange(InputNDTControlJournal);
+                            db.ReverseShutterCaseJournals.UpdateRange(MechanicalJournal);
+                            db.ReverseShutterCaseJournals.UpdateRange(AssemblyJournal);
+                            db.ReverseShutterCaseJournals.UpdateRange(NDTJournal);
+                            db.ReverseShutterCaseJournals.UpdateRange(OverlayingJournal);
                             db.SaveChanges();
                         }
                         else

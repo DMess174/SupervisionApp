@@ -12,6 +12,8 @@ namespace DataLayer.Entities.Materials
         public string MechanicalPropertiesReport { get; set; }
         public string MetallographicPropertiesReport { get; set; }
         public string WeldingMethod { get; set; }
+        public string Welder { get; set; }
+        public string Stamp { get; set; }
         public string FirstMaterial { get; set; }
         public string SecondMaterial { get; set; }
         public string Size { get; set; }

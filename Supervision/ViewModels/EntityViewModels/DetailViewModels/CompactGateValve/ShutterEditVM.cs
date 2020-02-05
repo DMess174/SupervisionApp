@@ -93,11 +93,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateVa
                         {
                             db.Set<Shutter>().Update(SelectedItem);
                             db.SaveChanges();
-                            foreach (var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<ShutterJournal>().UpdateRange(Journal);
                             db.SaveChanges();
                         }

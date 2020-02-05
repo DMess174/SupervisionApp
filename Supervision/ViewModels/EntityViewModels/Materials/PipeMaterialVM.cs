@@ -47,7 +47,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -57,14 +57,14 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             set
             {
                 pipeNumber = value;
-                RaisePropertyChanged("SheetNumber");
+                RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is PipeMaterial item && item.MaterialCertificateNumber != null)
                     {
                         return item.MaterialCertificateNumber.ToLower().Contains(PipeNumber.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -81,7 +81,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         return item.Batch.ToLower().Contains(Batch.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -98,7 +98,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         return item.Material.ToLower().Contains(Material.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -115,7 +115,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -132,7 +132,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                     {
                         return item.Melt.ToLower().Contains(Melt.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }

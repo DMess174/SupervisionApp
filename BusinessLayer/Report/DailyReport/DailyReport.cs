@@ -2,6 +2,7 @@
 using DataLayer.Journals;
 using DataLayer.Journals.Materials;
 using DataLayer.TechnicalControlPlans;
+using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,42 @@ using System.Text;
 
 namespace BusinessLayer.Report.DailyReport
 {
-    public static class DailyReport
+    public class DailyReport
     {
-        public static void GetReport()
+        public DateTime? Date { get; set; }
+        public string Point { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Status { get; set; }
+        public string Engineer { get; set; }
+        public string Remark { get; set; }
+        public string RemarkClosed { get; set; }
+        public string Comment { get; set; }
+
+        public async void GetReport(DateTime beginDate, DateTime endDate, Inspector inspector, string journal)
         {
             using (DataContext db = new DataContext())
             {
-                var result = db.SheetMaterialJournals.ToList();
+                List<DailyReport> reports = new List<DailyReport>();
+                var result = await db.SheetMaterialJournals.Where(i => i.Date >= beginDate && i.Date <= endDate && i.Inspector == inspector && i.JournalNumber == journal).ToListAsync();
+                foreach (var i in result)
+                {
+                    DailyReport reportRecord = new DailyReport
+                    {
+                        Date = i.Date,
+                        Point = i.Point,
+                        Name = i.DetailName + i.DetailNumber,
+                        Description = i.Description,
+                        Status = i.Status,
+                        Engineer = i.Inspector.FullName,
+                        Remark = i.RemarkIssued,
+                        RemarkClosed = i.RemarkClosed,
+                        Comment = i.Comment
+                    };
+                    reports.Add(reportRecord);
+                }
+                result = null;
+
                 ExcelPackage report = new ExcelPackage();
                 var workSheet = report.Workbook.Worksheets.Add("Report");
                 int recordIndex = 2;
@@ -41,7 +71,7 @@ namespace BusinessLayer.Report.DailyReport
                 workSheet.Column(6).AutoFit();
                 workSheet.Column(7).AutoFit();
                 workSheet.Column(8).AutoFit();
-                string p_strPath = "C:\\report.xlsx";
+                string p_strPath = $@"Reports\.xlsx";
 
                 if (File.Exists(p_strPath))
                     File.Delete(p_strPath);

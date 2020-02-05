@@ -32,7 +32,7 @@
                 <ColumnDefinition Width="13*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Vertical" Margin="5,5,5,4.8">
+            <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
                 <TextBlock Style="{StaticResource StandardTextBlock}" 
                            Text="Номер" 
                            Margin="5" 
@@ -47,18 +47,18 @@
             <StackPanel Grid.Column="1" 
                         Orientation="Vertical" 
                         Margin="5" Grid.ColumnSpan="2">
-                <TextBox Style="{StaticResource StandardTextBox}" 
+                <TextBox Style="{StaticResource SearchTextBox}" 
                          VerticalAlignment="Center" 
                          Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}"
                          Margin="5"/>
 
-                <TextBox Style="{StaticResource StandardTextBox}" 
+                <TextBox Style="{StaticResource SearchTextBox}" 
                          VerticalAlignment="Center" 
                          Text="{Binding Drawing, UpdateSourceTrigger=PropertyChanged}"
                          Margin="5"/>
             </StackPanel>
 
-            <StackPanel Grid.Column="3" Orientation="Vertical" Margin="4.6,5,4.6,4.8">
+            <StackPanel Grid.Column="3" Orientation="Vertical" VerticalAlignment="Center">
                 <TextBlock Style="{StaticResource StandardTextBlock}" 
                            Text="Материал" 
                            Margin="5" 
@@ -73,12 +73,12 @@
             <StackPanel Grid.Column="4" 
                         Orientation="Vertical" 
                         Margin="5.4,5,5,4.8">
-                <TextBox Style="{StaticResource StandardTextBox}" 
+                <TextBox Style="{StaticResource SearchTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
                          Text="{Binding Material, UpdateSourceTrigger=PropertyChanged}" />
 
-                <TextBox Style="{StaticResource StandardTextBox}" 
+                <TextBox Style="{StaticResource SearchTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
                          Text="{Binding Certificate, UpdateSourceTrigger=PropertyChanged}" />
@@ -86,7 +86,7 @@
 
             <StackPanel Grid.Column="5" 
                         Orientation="Vertical" 
-                        Margin="5,5,5.2,4.8">
+                        VerticalAlignment="Center">
                 <TextBlock Style="{StaticResource StandardTextBlock}" 
                            Text="Плавка" Margin="5" 
                            VerticalAlignment="Center"/>
@@ -99,12 +99,12 @@
             <StackPanel Grid.Column="6" 
                         Orientation="Vertical" 
                         Margin="4.8,5,4.6,4.8">
-                <TextBox Style="{StaticResource StandardTextBox}" 
+                <TextBox Style="{StaticResource SearchTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
                          Text="{Binding Melt, UpdateSourceTrigger=PropertyChanged}" />
 
-                <TextBox Style="{StaticResource StandardTextBox}" 
+                <TextBox Style="{StaticResource SearchTextBox}" 
                          VerticalAlignment="Center" 
                          Margin="5"
                          Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" />

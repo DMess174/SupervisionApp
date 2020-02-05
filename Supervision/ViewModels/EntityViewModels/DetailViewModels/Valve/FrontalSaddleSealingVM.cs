@@ -30,6 +30,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
         private string drawing = "";
         private string status = "";
         private string certificate = "";
+        private string material = "";
+        private string batch = "";
 
         #region Filter
         public string Number 
@@ -45,7 +47,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -62,7 +64,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -79,7 +81,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -96,7 +98,41 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
-                    else return false;
+                    else return true;
+                };
+            }
+        }
+        public string Material
+        {
+            get => material;
+            set
+            {
+                material = value;
+                RaisePropertyChanged();
+                allInstancesView.Filter += (obj) =>
+                {
+                    if (obj is FrontalSaddleSealing item && item.Material != null)
+                    {
+                        return item.Material.ToLower().Contains(Material.ToLower());
+                    }
+                    else return true;
+                };
+            }
+        }
+        public string Batch
+        {
+            get => batch;
+            set
+            {
+                batch = value;
+                RaisePropertyChanged();
+                allInstancesView.Filter += (obj) =>
+                {
+                    if (obj is FrontalSaddleSealing item && item.Batch != null)
+                    {
+                        return item.Batch.ToLower().Contains(Batch.ToLower());
+                    }
+                    else return true;
                 };
             }
         }

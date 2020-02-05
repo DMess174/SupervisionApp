@@ -35,10 +35,4 @@
     <Folder Include="Repository\Implementations\Entities\AssemblyUnits\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Microsoft.VisualBasic">
-      <HintPath>..\..\..\..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.VisualBasic\Microsoft.VisualBasic.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

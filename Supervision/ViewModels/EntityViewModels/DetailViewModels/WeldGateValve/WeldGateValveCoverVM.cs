@@ -48,7 +48,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -65,7 +65,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -82,7 +82,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }

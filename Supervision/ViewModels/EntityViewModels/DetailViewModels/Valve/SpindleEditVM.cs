@@ -102,25 +102,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                         {
                             db.Spindles.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in CastJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.SpindleJournals.UpdateRange(CastJournal);
-                            db.SaveChanges();
-                            foreach (var i in SheetJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.SpindleJournals.UpdateRange(SheetJournal);
-                            db.SaveChanges();
-                            foreach (var i in CompactJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.SpindleJournals.UpdateRange(CompactJournal);
                             db.SaveChanges();
                         }

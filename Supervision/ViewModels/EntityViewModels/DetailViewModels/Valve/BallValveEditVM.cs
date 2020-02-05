@@ -79,11 +79,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                         {
                             db.BallValves.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.BallValveJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }

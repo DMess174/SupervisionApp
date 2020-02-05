@@ -47,7 +47,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -64,7 +64,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -81,7 +81,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -98,7 +98,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Material.ToLower().Contains(Material.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -115,7 +115,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -132,7 +132,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Melt.ToLower().Contains(Melt.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }

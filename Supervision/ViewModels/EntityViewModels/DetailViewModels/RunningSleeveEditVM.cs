@@ -79,16 +79,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                         {
                             db.RunningSleeves.Update(SelectedItem);
                             db.SaveChanges();
-                            if (Journal != null)
-                            {
-                                foreach (var i in Journal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-
-                                db.RunningSleeveJournals.UpdateRange(Journal);
-                            }
+                            db.RunningSleeveJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }
                         else

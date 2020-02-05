@@ -192,53 +192,12 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                             }
                             db.Set<CompactGateValve>().Update(SelectedItem);
                             db.SaveChanges();
-                            foreach (var i in AssemblyPreparationJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<CompactGateValveJournal>().UpdateRange(AssemblyPreparationJournal);
-                            db.SaveChanges();
-                            foreach (var i in AssemblyJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<CompactGateValveJournal>().UpdateRange(AssemblyJournal);
-                            db.SaveChanges();
-                            foreach (var i in AfterTestJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<CompactGateValveJournal>().UpdateRange(AfterTestJournal);
-                            db.SaveChanges();
-                            foreach (var i in CoatingJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<CoatingJournal>().UpdateRange(CoatingJournal);
-                            db.SaveChanges();
-                            foreach (var i in TestJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<CompactGateValveJournal>().UpdateRange(TestJournal);
-                            db.SaveChanges();
-                            foreach (var i in DocumentationJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<CompactGateValveJournal>().UpdateRange(DocumentationJournal);
-                            db.SaveChanges();
-                            foreach (var i in ShippingJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<CompactGateValveJournal>().UpdateRange(ShippingJournal);
                             db.SaveChanges();
                         }

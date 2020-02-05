@@ -82,11 +82,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                         {
                             db.CounterFlanges.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.CounterFlangeJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }

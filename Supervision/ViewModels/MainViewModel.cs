@@ -74,14 +74,14 @@ namespace Supervision.ViewModels
             } 
         }
 
-        public ICommand GetReport
-        {
+        //public ICommand GetReport
+        //{
 
-            get
-            {
-                return new DelegateCommand(() => DailyReport.GetReport());
-            }
-        }
+        //    get
+        //    {
+        //        return new DelegateCommand(() => DailyReport.GetReport());
+        //    }
+        //}
 
         private double frameOpacity;
         public double FrameOpacity

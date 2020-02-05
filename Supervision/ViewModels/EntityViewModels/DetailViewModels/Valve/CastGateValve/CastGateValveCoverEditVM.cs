@@ -173,60 +173,12 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                             }
                             db.Set<CastGateValveCover>().Update(SelectedItem);
                             db.SaveChanges();
-                            if (InputControlJournal != null)
-                            {
-                                foreach (var i in InputControlJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.CastGateValveCoverJournals.UpdateRange(InputControlJournal);
-                            }
-                            if (InputNDTControlJournal != null)
-                            {
-                                foreach (var i in InputNDTControlJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.CastGateValveCoverJournals.UpdateRange(InputNDTControlJournal);
-                            }
-                            if (MechanicalJournal != null)
-                            {
-                                foreach (var i in MechanicalJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.CastGateValveCoverJournals.UpdateRange(MechanicalJournal);
-                            }
-                            if (AssemblyJournal != null)
-                            {
-                                foreach (var i in AssemblyJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.CastGateValveCoverJournals.UpdateRange(AssemblyJournal);
-                            }
-                            if (AssemblyWeldingJournal != null)
-                            {
-                                foreach (var i in AssemblyWeldingJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.CastGateValveCoverJournals.UpdateRange(AssemblyWeldingJournal);
-                            }
-                            if (NDTJournal != null)
-                            {
-                                foreach (var i in NDTJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.CastGateValveCoverJournals.UpdateRange(NDTJournal);
-                            }
+                            db.CastGateValveCoverJournals.UpdateRange(InputControlJournal);
+                            db.CastGateValveCoverJournals.UpdateRange(InputNDTControlJournal);
+                            db.CastGateValveCoverJournals.UpdateRange(MechanicalJournal);
+                            db.CastGateValveCoverJournals.UpdateRange(AssemblyJournal);
+                            db.CastGateValveCoverJournals.UpdateRange(AssemblyWeldingJournal);
+                            db.CastGateValveCoverJournals.UpdateRange(NDTJournal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");

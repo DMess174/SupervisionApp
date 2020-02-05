@@ -27,7 +27,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 
         private string name;
         private string number = "";
-        private string drawing = "";
+        private string designation = "";
         private string status = "";
         private string certificate = "";
 
@@ -45,24 +45,24 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
-        public string Drawing
+        public string Designation
         {
-            get => drawing;
+            get => designation;
             set
             {
-                drawing = value;
+                designation = value;
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is BallValve item && item.Drawing != null)
+                    if (obj is BallValve item && item.Designation != null)
                     {
-                        return item.Drawing.ToLower().Contains(Drawing.ToLower());
+                        return item.Designation.ToLower().Contains(Designation.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -79,7 +79,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -96,7 +96,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }

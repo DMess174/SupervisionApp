@@ -94,18 +94,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                         {
                             db.CoverSealingRings.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach (var i in CastJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.CoverSealingRingJournals.UpdateRange(CastJournal);
-                            db.SaveChanges();
-                            foreach (var i in SheetJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.CoverSealingRingJournals.UpdateRange(SheetJournal);
                             db.SaveChanges();
                         }

@@ -20,6 +20,8 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
         private IEnumerable<string> weldingMethods;
+        private IEnumerable<string> welders;
+        private IEnumerable<string> stamps;
         private IEnumerable<TEntityTCP> points;
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<TEntityJournal> journal;
@@ -78,10 +80,6 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                         {
                             db.Set<TEntity>().Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                            }
                             db.Set<TEntityJournal>().UpdateRange(Journal);
                             db.SaveChanges();
                         }
@@ -162,6 +160,24 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged();
             }
         }
+        public IEnumerable<string> Welders
+        {
+            get => welders;
+            set
+            {
+                welders = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<string> Stamps
+        {
+            get => stamps;
+            set
+            {
+                stamps = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public TEntityTCP SelectedTCPPoint
         {
@@ -182,6 +198,8 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Materials = db.Set<TEntity>().Select(s => s.FirstMaterial).Distinct().OrderBy(x => x).ToList();
             WeldingMethods = db.Set<TEntity>().Select(s => s.WeldingMethod).Distinct().OrderBy(x => x).ToList();
+            Welders = db.Set<TEntity>().Select(s => s.Welder).Distinct().OrderBy(x => x).ToList();
+            Stamps = db.Set<TEntity>().Select(s => s.Stamp).Distinct().OrderBy(x => x).ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.Set<TEntityTCP>().ToList();
         }

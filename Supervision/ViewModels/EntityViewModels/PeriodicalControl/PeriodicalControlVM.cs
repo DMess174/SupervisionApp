@@ -31,25 +31,25 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical
         private ICommand closeWindow;
         
 
-        private string findByName = "";
+        private string name = "";
         private string status = "";
         private string productType = "";
 
         #region Filter
-        public string FindByName
+        public string Name
         {
-            get => findByName;
+            get => name;
             set
             {
-                findByName = value;
+                name = value;
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
                     if (obj is TEntity item && item.Name != null)
                     {
-                        return item.Name.ToLower().Contains(FindByName.ToLower());
+                        return item.Name.ToLower().Contains(Name.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -66,7 +66,7 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -79,11 +79,11 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.ProductType != null)
+                    if (obj is TEntity item && item.ProductType.Name != null)
                     {
                         return item.ProductType.Name.ToLower().Contains(ProductType.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }

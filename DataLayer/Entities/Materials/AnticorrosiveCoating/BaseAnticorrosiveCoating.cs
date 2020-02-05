@@ -7,6 +7,7 @@ namespace DataLayer.Entities.Materials.AnticorrosiveCoating
     public class BaseAnticorrosiveCoating : BaseTable
     {
         public string Name { get; set; }
+        public string Factory { get; set; }
         public string Certificate { get; set; }
         public string Batch { get; set; }
         public string Amount { get; set; }

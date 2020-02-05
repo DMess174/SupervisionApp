@@ -62,7 +62,7 @@
                         Margin="5.4,5,5,4.8">
                 <TextBox Style="{StaticResource SearchTextBox}" 
                        VerticalAlignment="Center" 
-                       Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                       Text="{Binding ProductType, UpdateSourceTrigger=PropertyChanged}"
                        Margin="5"/>
             </StackPanel>
 

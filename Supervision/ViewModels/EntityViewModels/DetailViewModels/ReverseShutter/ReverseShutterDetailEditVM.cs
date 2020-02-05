@@ -86,11 +86,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                         {
                             db.Set<TEntity>().Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<TEntityJournal>().UpdateRange(Journal);
                             db.SaveChanges();
                         }

@@ -102,24 +102,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
                         {
                             db.Nozzles.Update(SelectedItem);
                             db.SaveChanges();
-                            if (CastJournal != null)
-                            {
-                                foreach (var i in CastJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.NozzleJournals.UpdateRange(CastJournal);
-                            }
-                            if (ShutterJournal != null)
-                            {
-                                foreach (var i in ShutterJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.NozzleJournals.UpdateRange(ShutterJournal);
-                            }
+                            db.NozzleJournals.UpdateRange(CastJournal);
+                            db.NozzleJournals.UpdateRange(ShutterJournal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");

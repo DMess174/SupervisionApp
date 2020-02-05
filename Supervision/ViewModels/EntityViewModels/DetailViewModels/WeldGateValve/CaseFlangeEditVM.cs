@@ -88,11 +88,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                         {
                             db.CaseFlanges.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.CaseFlangeJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }

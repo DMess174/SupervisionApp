@@ -34,6 +34,8 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
         private string drawing = "";
         private string status = "";
         private string certificate = "";
+        private string material = "";
+        private string melt = "";
 
         #region Filter
         public string Number 
@@ -49,7 +51,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -66,7 +68,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -83,7 +85,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -96,11 +98,45 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.Certificate != null)
+                    if (obj is TEntity item && item.MetalMaterial.Certificate != null)
                     {
-                        return item.Certificate.ToLower().Contains(Certificate.ToLower());
+                        return item.MetalMaterial.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
-                    else return false;
+                    else return true;
+                };
+            }
+        }
+        public string Material
+        {
+            get => material;
+            set
+            {
+                material = value;
+                RaisePropertyChanged();
+                allInstancesView.Filter += (obj) =>
+                {
+                    if (obj is TEntity item && item.MetalMaterial.Material != null)
+                    {
+                        return item.MetalMaterial.Material.ToLower().Contains(Material.ToLower());
+                    }
+                    else return true;
+                };
+            }
+        }
+        public string Melt
+        {
+            get => melt;
+            set
+            {
+                melt = value;
+                RaisePropertyChanged();
+                allInstancesView.Filter += (obj) =>
+                {
+                    if (obj is TEntity item && item.MetalMaterial.Melt != null)
+                    {
+                        return item.MetalMaterial.Melt.ToLower().Contains(Melt.ToLower());
+                    }
+                    else return true;
                 };
             }
         }

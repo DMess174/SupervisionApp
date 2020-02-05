@@ -176,41 +176,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                         {
                             db.Gates.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in InputControlJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.GateJournals.UpdateRange(InputControlJournal);
-                            foreach (var i in PreparationJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.GateJournals.UpdateRange(PreparationJournal);
-                            foreach (var i in CoatingJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.GateJournals.UpdateRange(CoatingJournal);
-                            foreach (var i in TestJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.GateJournals.UpdateRange(TestJournal);
-                            foreach (var i in DocumentationJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.GateJournals.UpdateRange(DocumentationJournal);
-                            foreach (var i in ShippedJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.GateJournals.UpdateRange(ShippedJournal);
                             db.SaveChanges();
                         }

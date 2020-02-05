@@ -82,11 +82,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 
                             db.Springs.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.SpringJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }

@@ -81,14 +81,7 @@ namespace Supervision.ViewModels
                         {
                             db.PIDs.Update(SelectedItem);
                             db.SaveChanges();
-                            if (Journal != null)
-                            {
-                                foreach (var i in Journal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number.ToString();
-                                }
-                                db.PIDJournals.UpdateRange(Journal);
-                            }
+                            db.PIDJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");

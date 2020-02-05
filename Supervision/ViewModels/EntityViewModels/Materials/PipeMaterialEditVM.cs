@@ -79,14 +79,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                         {
                             db.PipeMaterials.Update(SelectedItem);
                             db.SaveChanges();
-                            if (Journal != null)
-                            {
-                                foreach (var i in Journal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                }
-                                db.PipeMaterialJournals.UpdateRange(Journal);
-                            }
+                            db.PipeMaterialJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");

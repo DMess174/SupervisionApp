@@ -28,7 +28,7 @@
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Label Style="{StaticResource StandardLabel}" 
                    FontSize="{StaticResource Hi}"

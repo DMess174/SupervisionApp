@@ -186,51 +186,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGat
                         {
                             db.CastGateValveCases.Update(SelectedItem);
                             db.SaveChanges();
-                            if (InputControlJournal != null)
-                            {
-                                foreach (var i in InputControlJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.CastGateValveCaseJournals.UpdateRange(InputControlJournal);
-                            }
-                            if (InputNDTControlJournal != null)
-                            {
-                                foreach (var i in InputControlJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.CastGateValveCaseJournals.UpdateRange(InputNDTControlJournal);
-                            }
-                            if (MechanicalJournal != null)
-                            {
-                                foreach (var i in InputControlJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.CastGateValveCaseJournals.UpdateRange(MechanicalJournal);
-                            }
-                            if (AssemblyJournal != null)
-                            {
-                                foreach (var i in InputControlJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.CastGateValveCaseJournals.UpdateRange(AssemblyJournal);
-                            }
-                            if (NDTJournal != null)
-                            {
-                                foreach (var i in InputControlJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.CastGateValveCaseJournals.UpdateRange(NDTJournal);
-                            }
+                            db.CastGateValveCaseJournals.UpdateRange(InputControlJournal);
+                            db.CastGateValveCaseJournals.UpdateRange(InputNDTControlJournal);
+                            db.CastGateValveCaseJournals.UpdateRange(MechanicalJournal);
+                            db.CastGateValveCaseJournals.UpdateRange(AssemblyJournal);
+                            db.CastGateValveCaseJournals.UpdateRange(NDTJournal);
                             db.SaveChanges();
                         }
                         else

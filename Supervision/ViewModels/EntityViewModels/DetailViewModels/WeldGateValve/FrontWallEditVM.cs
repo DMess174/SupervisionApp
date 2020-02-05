@@ -93,11 +93,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                             }
                             db.FrontWalls.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach (var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.FrontWallJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }

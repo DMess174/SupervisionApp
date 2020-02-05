@@ -31,8 +31,11 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
         private string status = "";
         private string certificate = "";
 
+        private string material = "";
+        private string melt = "";
+
         #region Filter
-        public string Number 
+        public string Number
         {
             get => number;
             set
@@ -45,7 +48,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -62,7 +65,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -79,7 +82,41 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
-                    else return false;
+                    else return true;
+                };
+            }
+        }
+        public string Material
+        {
+            get => material;
+            set
+            {
+                material = value;
+                RaisePropertyChanged();
+                allInstancesView.Filter += (obj) =>
+                {
+                    if (obj is ScrewNut item && item.Material != null)
+                    {
+                        return item.Material.ToLower().Contains(Material.ToLower());
+                    }
+                    else return true;
+                };
+            }
+        }
+        public string Melt
+        {
+            get => melt;
+            set
+            {
+                melt = value;
+                RaisePropertyChanged();
+                allInstancesView.Filter += (obj) =>
+                {
+                    if (obj is ScrewNut item && item.Melt != null)
+                    {
+                        return item.Melt.ToLower().Contains(Melt.ToLower());
+                    }
+                    else return true;
                 };
             }
         }
@@ -96,7 +133,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                     {
                         return item.Certificate.ToLower().Contains(Certificate.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }

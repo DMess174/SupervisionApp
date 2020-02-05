@@ -84,11 +84,6 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical
                             }
                             db.Set<TEntity>().Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Name;
-                                i.DetailDrawing = SelectedItem.ProductType.Name;
-                            }
                             db.Set<TEntityJournal>().UpdateRange(Journal);
                             db.SaveChanges();
                         }

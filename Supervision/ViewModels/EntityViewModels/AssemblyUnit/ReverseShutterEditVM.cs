@@ -209,46 +209,11 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                             }
                             db.Set<ReverseShutter>().Update(SelectedItem);
                             db.SaveChanges();
-                            foreach (var i in AssemblyJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<ReverseShutterJournal>().UpdateRange(AssemblyJournal);
-                            db.SaveChanges();
-                            foreach (var i in AfterTestJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<ReverseShutterJournal>().UpdateRange(AfterTestJournal);
-                            db.SaveChanges();
-                            foreach (var i in CoatingJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<CoatingJournal>().UpdateRange(CoatingJournal);
-                            db.SaveChanges();
-                            foreach (var i in TestJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<ReverseShutterJournal>().UpdateRange(TestJournal);
-                            db.SaveChanges();
-                            foreach (var i in DocumentationJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<ReverseShutterJournal>().UpdateRange(DocumentationJournal);
-                            db.SaveChanges();
-                            foreach (var i in ShippingJournal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.Set<ReverseShutterJournal>().UpdateRange(ShippingJournal);
                             db.SaveChanges();
                         }

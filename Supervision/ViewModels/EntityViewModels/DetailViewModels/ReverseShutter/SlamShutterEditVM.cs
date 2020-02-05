@@ -114,42 +114,10 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                         {
                             db.SlamShutters.Update(SelectedItem);
                             db.SaveChanges();
-                            if (InputControlJournal != null)
-                            {
-                                foreach (var i in InputControlJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.SlamShutterJournals.UpdateRange(InputControlJournal);
-                            }
-                            if (InputNDTControlJournal != null)
-                            {
-                                foreach (var i in InputNDTControlJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.SlamShutterJournals.UpdateRange(InputNDTControlJournal);
-                            }
-                            if (MechanicalJournal != null)
-                            {
-                                foreach (var i in MechanicalJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.SlamShutterJournals.UpdateRange(MechanicalJournal);
-                            }
-                            if (OverlayingJournal != null)
-                            {
-                                foreach (var i in OverlayingJournal)
-                                {
-                                    i.DetailNumber = SelectedItem.Number;
-                                    i.DetailDrawing = SelectedItem.Drawing;
-                                }
-                                db.SlamShutterJournals.UpdateRange(OverlayingJournal);
-                            }
+                            db.SlamShutterJournals.UpdateRange(InputControlJournal);
+                            db.SlamShutterJournals.UpdateRange(InputNDTControlJournal);
+                            db.SlamShutterJournals.UpdateRange(MechanicalJournal);
+                            db.SlamShutterJournals.UpdateRange(OverlayingJournal);
                             db.SaveChanges();
                         }
                         else MessageBox.Show("Объект не найден!", "Ошибка");

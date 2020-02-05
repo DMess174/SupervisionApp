@@ -81,11 +81,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                                 SelectedItem.AmountRemaining = SelectedItem.Amount - SelectedItem.BaseValveWithSeals?.Count();
                             db.AssemblyUnitSeals.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.AssemblyUnitSealingJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }

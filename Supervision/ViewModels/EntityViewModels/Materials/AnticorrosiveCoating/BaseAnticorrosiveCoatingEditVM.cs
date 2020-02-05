@@ -21,6 +21,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> names;
         private IEnumerable<string> colors;
+        private IEnumerable<string> factories;
         private IEnumerable<TEntityTCP> points;
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<TEntityJournal> journal;
@@ -79,11 +80,6 @@ namespace Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating
                         {
                             db.Set<TEntity>().Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Name;
-                                i.DetailDrawing = SelectedItem.Batch;
-                            }
                             db.Set<TEntityJournal>().UpdateRange(Journal);
                             db.SaveChanges();
                         }
@@ -98,15 +94,35 @@ namespace Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating
                 return closeWindow ?? (
                     closeWindow = new DelegateCommand<Window>((w) =>
                     {
-                        if (parentEntity is TEntity)
+                        if (db.Entry(SelectedItem).State == EntityState.Modified)
                         {
-                            var wn = new BaseAnticorrosiveCoatingView();
-                            var vm = new BaseAnticorrosiveCoatingVM<TEntity, TEntityTCP, TEntityJournal>();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
+                            MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+                            if (result == MessageBoxResult.Yes)
+                            {
+                                if (parentEntity is TEntity)
+                                {
+                                    var wn = new BaseAnticorrosiveCoatingView();
+                                    var vm = new BaseAnticorrosiveCoatingVM<TEntity, TEntityTCP, TEntityJournal>();
+                                    wn.DataContext = vm;
+                                    w?.Close();
+                                    wn.ShowDialog();
+                                }
+                                else w?.Close();
+                            }
+                            else return;
                         }
-                        else w?.Close();
+                        else
+                        {
+                            if (parentEntity is TEntity)
+                            {
+                                var wn = new BaseAnticorrosiveCoatingView();
+                                var vm = new BaseAnticorrosiveCoatingVM<TEntity, TEntityTCP, TEntityJournal>();
+                                wn.DataContext = vm;
+                                w?.Close();
+                                wn.ShowDialog();
+                            }
+                            else w?.Close();
+                        }
                     }));
             }
         }
@@ -165,6 +181,15 @@ namespace Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating
                 RaisePropertyChanged();
             }
         }
+        public IEnumerable<string> Factories
+        {
+            get => factories;
+            set
+            {
+                factories = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public TEntityTCP SelectedTCPPoint
         {
@@ -184,6 +209,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating
             Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Names = db.Set<TEntity>().Select(s => s.Name).Distinct().OrderBy(x => x).ToList();
+            Factories = db.Set<TEntity>().Select(s => s.Factory).Distinct().OrderBy(x => x).ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.Set<TEntityTCP>().ToList();
             if (SelectedItem is AbovegroundCoating)

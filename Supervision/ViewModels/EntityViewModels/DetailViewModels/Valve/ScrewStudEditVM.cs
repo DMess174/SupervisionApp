@@ -80,11 +80,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                                 SelectedItem.AmountRemaining = SelectedItem.Amount - SelectedItem.BaseValveWithScrewStuds?.Select(i => i.ScrewStudAmount).Sum();
                             db.ScrewStuds.Update(SelectedItem);
                             db.SaveChanges();
-                            foreach(var i in Journal)
-                            {
-                                i.DetailNumber = SelectedItem.Number;
-                                i.DetailDrawing = SelectedItem.Drawing;
-                            }
                             db.ScrewStudJournals.UpdateRange(Journal);
                             db.SaveChanges();
                         }
