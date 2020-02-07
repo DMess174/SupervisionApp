@@ -270,6 +270,7 @@
                         <ListBox  Style="{StaticResource StandardListBox}"
                             ItemsSource="{Binding SelectedItem.Nozzles}" 
                             Margin="5"
+                                  Height="80"
                             Grid.ColumnSpan="2"
                             Grid.Row="1"
                             Grid.RowSpan="2"
@@ -490,6 +491,7 @@
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
+                                          MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
                                         <ComboBox.ItemTemplate>
@@ -698,6 +700,7 @@
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
+                                          MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
                                         <ComboBox.ItemTemplate>
@@ -908,6 +911,7 @@
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
+                                          MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
                                         <ComboBox.ItemTemplate>
@@ -1118,6 +1122,7 @@
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
+                                          MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
                                         <ComboBox.ItemTemplate>
@@ -1328,6 +1333,7 @@
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
+                                          MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
                                         <ComboBox.ItemTemplate>
@@ -1538,6 +1544,7 @@
                                         ItemsSource="{Binding Points}"
                                         SelectedItem="{Binding SelectedTCPPoint}"
                                         Margin="5"
+                                          MaxWidth="500"
                                         MinWidth="300"
                                         Width="auto">
                                         <ComboBox.ItemTemplate>

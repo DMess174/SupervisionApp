@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer
 {
@@ -12,6 +14,6 @@ namespace DataLayer
         public int? CustomerId { get; set; }
         public Customer Customer { get; set; }
 
-        public IEnumerable<PID> PIDs { get; set; }
+        public ObservableCollection<PID> PIDs { get; set; }
     }
 }

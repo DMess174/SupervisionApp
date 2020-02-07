@@ -104,7 +104,7 @@ namespace Supervision.ViewModels
                                     DetailId = SelectedPID.Id,
                                     PointId = i.Id,
                                     DetailName = "PID",
-                                    DetailNumber = SelectedPID.Number.ToString(),
+                                    DetailNumber = SelectedPID.Number,
                                     Point = i.Point,
                                     Description = i.Description
                                 };

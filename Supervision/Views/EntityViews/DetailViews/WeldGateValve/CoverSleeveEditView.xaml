@@ -457,6 +457,7 @@
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
+                                          MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
                 <ComboBox.ItemTemplate>

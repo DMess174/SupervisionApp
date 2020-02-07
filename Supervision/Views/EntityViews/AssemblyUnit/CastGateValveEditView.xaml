@@ -1186,6 +1186,7 @@
                                     ItemsSource="{Binding Points}"
                                     SelectedItem="{Binding SelectedTCPPoint}"
                                     Margin="5"
+                                          MaxWidth="500"
                                     MinWidth="300"
                                     Width="auto">
                                     <ComboBox.ItemTemplate>
@@ -1392,6 +1393,7 @@
                                     VerticalContentAlignment="Center" 
                                     ItemsSource="{Binding Points}"
                                     SelectedItem="{Binding SelectedTCPPoint}"
+                                          MaxWidth="500"
                                     Margin="5"
                                     MinWidth="300"
                                     Width="auto">
@@ -1599,6 +1601,7 @@
                       VerticalContentAlignment="Center" 
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
+                                          MaxWidth="500"
                       Margin="5"
                       MinWidth="300"
                       Width="auto">
@@ -1806,6 +1809,7 @@
                       VerticalContentAlignment="Center" 
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
+                                          MaxWidth="500"
                       Margin="5"
                       MinWidth="300"
                       Width="auto">
@@ -2014,6 +2018,7 @@
                       ItemsSource="{Binding CoatingPoints}"
                       SelectedItem="{Binding SelectedCoatingTCPPoint}"
                       Margin="5"
+                                          MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
                                     <ComboBox.ItemTemplate>
@@ -2221,6 +2226,7 @@
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
+                                          MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
                                     <ComboBox.ItemTemplate>
@@ -2428,6 +2434,7 @@
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
                       Margin="5"
+                                          MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
                                     <ComboBox.ItemTemplate>
