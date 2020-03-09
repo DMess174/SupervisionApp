@@ -17,7 +17,6 @@ using Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating;
 using Supervision.Views.EntityViews;
 using Supervision.Views.EntityViews.AssemblyUnit;
 using Supervision.Views.EntityViews.DetailViews;
-using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
 using Supervision.Views.EntityViews.DetailViews.Valve;
 using Supervision.Views.EntityViews.MaterialViews.AnticorrosiveCoating;
 using System;

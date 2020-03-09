@@ -1,5 +1,4 @@
-﻿using DataLayer.Entities;
-using DataLayer.TechnicalControlPlans;
+﻿using DataLayer.TechnicalControlPlans;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 

@@ -42,11 +42,12 @@
 
   <ItemGroup>
     <Folder Include="Entities\Periodical\Gate\" />
+    <Folder Include="Entities\HumanResources\" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic">
-      <HintPath>..\..\..\..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.VisualBasic\Microsoft.VisualBasic.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.VisualBasic\8.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualBasic.dll</HintPath>
     </Reference>
   </ItemGroup>
 

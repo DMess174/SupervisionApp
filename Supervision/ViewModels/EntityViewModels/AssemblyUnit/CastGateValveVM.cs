@@ -144,9 +144,6 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                     Date = record.Date,
                                     DetailId = item.Id,
                                     Description = record.Description,
-                                    DetailName = item.Name,
-                                    DetailNumber = item.Number,
-                                    DetailDrawing = item.Drawing,
                                     InspectorId = record.InspectorId,
                                     Point = record.Point,
                                     PointId = record.PointId,
@@ -166,9 +163,6 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                                     Date = record.Date,
                                     DetailId = item.Id,
                                     Description = record.Description,
-                                    DetailName = item.Name,
-                                    DetailNumber = item.Number,
-                                    DetailDrawing = item.Drawing,
                                     InspectorId = record.InspectorId,
                                     Point = record.Point,
                                     PointId = record.PointId,
@@ -208,9 +202,6 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
-                                DetailName = SelectedItem.Name,
-                                DetailNumber = SelectedItem.Number,
-                                DetailDrawing = SelectedItem.Drawing,
                                 Point = i.Point,
                                 Description = i.Description
                             };
@@ -227,9 +218,6 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                             {
                                 DetailId = SelectedItem.Id,
                                 PointId = i.Id,
-                                DetailName = SelectedItem.Name,
-                                DetailNumber = SelectedItem.Number,
-                                DetailDrawing = SelectedItem.Drawing,
                                 Point = i.Point,
                                 Description = i.Description
                             };

@@ -18,5 +18,20 @@ namespace DataLayer.Entities
 
         [NotMapped]
         public string FullName => string.Format($"{Number} - {Status}");
+
+        public BaseEntity()
+        {
+
+        }
+
+        public BaseEntity(BaseEntity entity)
+        {
+            Name = entity.Name;
+            Number = entity.Number;
+            Drawing = entity.Drawing;
+            Certificate = entity.Certificate;
+            Status = entity.Status;
+            Comment = entity.Comment;
+        }
     }
 }

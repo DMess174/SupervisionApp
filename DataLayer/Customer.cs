@@ -8,5 +8,15 @@ namespace DataLayer
         public string ShortName { get; set; }
 
         public IEnumerable<Specification> Specifications { get; set; }
+
+        public Customer()
+        {
+        }
+
+        public Customer(Customer customer)
+        {
+            Name = customer.Name;
+            ShortName = customer.ShortName;
+        }
     }
 }
