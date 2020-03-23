@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace DataLayer
 {
@@ -10,6 +8,7 @@ namespace DataLayer
         public string Program { get; set; }
         public string Consignee { get; set; }
         public string Facility { get; set; }
+        public bool IsSupervisionRequest { get; set; } = false;
 
         public int? CustomerId { get; set; }
         public Customer Customer { get; set; }

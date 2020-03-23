@@ -92,7 +92,7 @@
                         IsEditable="True"
                         ItemsSource="{Binding Path=DataContext.ProductTypes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                         SelectedValuePath="Id"
-                        SelectedValue="{Binding Path=ProductTypeId, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValue="{Binding Path=SelectedItem.ProductTypeId, UpdateSourceTrigger=PropertyChanged}"
                         DisplayMemberPath="ShortName"/>
                 </Grid>
 

@@ -122,7 +122,7 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical
                         {
                             var item = new TEntityJournal()
                             {
-                                DetailDrawing = SelectedItem.ProductType.Name,
+                                DetailDrawing = SelectedItem.ProductType?.Name,
                                 DetailName = SelectedItem.Name,
                                 DetailId = SelectedItem.Id,
                                 Point = SelectedTCPPoint.Point,

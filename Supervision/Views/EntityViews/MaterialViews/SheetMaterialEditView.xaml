@@ -93,7 +93,7 @@
                     </Grid.RowDefinitions>
                     
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
-                               Text="Номер листа:" 
+                               Text="Номер листа&#x0a;по сертификату:" 
                                Margin="5 0 5 0" 
                                VerticalAlignment="Center"/>
                     

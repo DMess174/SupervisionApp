@@ -14,10 +14,14 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Label Style="{StaticResource StandardLabel}"
                HorizontalAlignment="Center"
-               Content="Главное меню"/>
+               Content="ГЛАВНОЕ МЕНЮ"/>
         
         <Separator Style="{StaticResource HorizontalSeparator}"
                    Grid.Row="1"/>
@@ -43,31 +47,31 @@
                         Margin="10"
                         Content="Задвижка шиберная"
                         FontSize="{StaticResource Hi}"
-                        Command="{Binding CastGateValveOpen}"/>
+                        Command="{Binding CastGateValveMenuOpen}"/>
 
                 <Button Style="{StaticResource StandardButton}"
                         Margin="10"
                         Content="Задвижка шиберная листовая"
                         FontSize="{StaticResource Hi}"
-                        Command="{Binding CastGateValveOpen}"/>
+                        Command="{Binding SheetGateValveMenuOpen}"/>
 
                 <Button Style="{StaticResource StandardButton}"
                         Margin="10"
                         Content="Задвижка компактная"
                         FontSize="{StaticResource Hi}"
-                        Command="{Binding CastGateValveOpen}"/>
+                        Command="{Binding CompactGateValveMenuOpen}"/>
 
                 <Button Style="{StaticResource StandardButton}"
                         Margin="10"
                         Content="Затвор обратный"
                         FontSize="{StaticResource Hi}"
-                        Command="{Binding CastGateValveOpen}"/>
+                        Command="{Binding ReverseShutterMenuOpen}"/>
 
                 <Button Style="{StaticResource StandardButton}"
                         Margin="10"
                         Content="Шибер"
                         FontSize="{StaticResource Hi}"
-                        Command="{Binding CastGateValveOpen}"/>
+                        Command="{Binding GateOpen}"/>
             </StackPanel>
 
             <Separator Style="{StaticResource VerticalSeparator}"
@@ -83,25 +87,25 @@
                         Margin="10"
                         Content="Лист"
                         FontSize="{StaticResource Hi}"
-                        Command="{Binding CastGateValveOpen}"/>
+                        Command="{Binding SheetMaterialOpen}"/>
 
                 <Button Style="{StaticResource StandardButton}"
                         Margin="10"
                         Content="Поковка"
                         FontSize="{StaticResource Hi}"
-                        Command="{Binding CastGateValveOpen}"/>
+                        Command="{Binding ForgingMaterialOpen}"/>
 
                     <Button Style="{StaticResource StandardButton}"
                         Margin="10"
                         Content="Прокат"
                         FontSize="{StaticResource Hi}"
-                        Command="{Binding CastGateValveOpen}"/>
+                        Command="{Binding RolledMaterialOpen}"/>
 
                     <Button Style="{StaticResource StandardButton}"
                         Margin="10"
                         Content="Труба"
                         FontSize="{StaticResource Hi}"
-                        Command="{Binding CastGateValveOpen}"/>
+                        Command="{Binding PipeMaterialOpen}"/>
                 </StackPanel>
 
                 <Separator Style="{StaticResource HorizontalSeparator}"/>
@@ -128,13 +132,13 @@
                             Margin="10"
                             Content="Грунт"
                             FontSize="{StaticResource Hi}"
-                            Command="{Binding CastGateValveOpen}"/>
+                            Command="{Binding UndercoatOpen}"/>
 
                         <Button Style="{StaticResource StandardButton}"
                             Margin="10"
                             Content="Эмаль"
                             FontSize="{StaticResource Hi}"
-                            Command="{Binding CastGateValveOpen}"/>
+                            Command="{Binding AbovegroundCoatingOpen}"/>
                     </StackPanel>
 
                     <Separator Grid.Column="1" Style="{StaticResource VerticalSeparator}"/>
@@ -148,7 +152,7 @@
                             Margin="10"
                             Content="Компоненты"
                             FontSize="{StaticResource Hi}"
-                            Command="{Binding CastGateValveOpen}"/>
+                            Command="{Binding UndergroundCoatingOpen}"/>
                     </StackPanel>
                 </Grid>
 
@@ -156,7 +160,7 @@
                         Margin="10"
                         Content="Дробь/Купершлак"
                         FontSize="{StaticResource Hi}"
-                        Command="{Binding CastGateValveOpen}"/>
+                        Command="{Binding AbrasiveMaterialOpen}"/>
 
                 <Separator Style="{StaticResource HorizontalSeparator}"/>
 
@@ -168,19 +172,65 @@
                         Margin="10"
                         Content="Сварочные материалы"
                         FontSize="{StaticResource Hi}"
-                        Command="{Binding CastGateValveOpen}"/>
+                        Command="{Binding WeldingMaterialOpen}"/>
 
                 <Button Style="{StaticResource StandardButton}"
                         Margin="10"
                         Content="КСС"
                         FontSize="{StaticResource Hi}"
-                        Command="{Binding CastGateValveOpen}"/>
+                        Command="{Binding ControlWeldOpen}"/>
             </StackPanel>
             <!--Row 2-->
             <Separator Style="{StaticResource HorizontalSeparator}"
                        Grid.Row="1"
                        Grid.ColumnSpan="3"/>
-            
+        </Grid>
+
+        <Label Style="{StaticResource StandardLabel}"
+               Grid.Row="3"
+               HorizontalAlignment="Center"
+               Content="Периодика"/>
+
+        <Grid Grid.Row="4" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Неразрушающий контроль"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding NDTControlOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Режимы сварки"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding WeldingProceduresOpen}"/>
+            </StackPanel>
+
+            <Separator Style="{StaticResource VerticalSeparator}"
+                       Grid.Column="1"/>
+
+            <StackPanel Grid.Column="2">
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Складирование"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding StoresControlOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Проверка завода"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding FactoryInspectionOpen}"/>
+            </StackPanel>
+
+            <Separator Style="{StaticResource HorizontalSeparator}"
+                       Grid.Row="5"
+                       Grid.ColumnSpan="3"/>
         </Grid>
     </Grid>
 </Page>

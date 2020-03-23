@@ -138,7 +138,7 @@
                                     Binding="{Binding Path = Number}" 
                                     TextBlock.TextAlignment="Center" />
 
-                <DataGridTextColumn Header="Номер листа" 
+                <DataGridTextColumn Header="  Номер листа&#x0a;по сертификату:" 
                                     Width="200*" 
                                     Binding="{Binding Path= MaterialCertificateNumber}" />
 

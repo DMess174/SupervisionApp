@@ -1,0 +1,210 @@
+﻿<Page x:Class="Supervision.Views.CastGateValveMenu"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Supervision.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="700" d:DesignWidth="1000"
+      Title="MainMenu"
+      Style="{StaticResource StandardPage}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Label Style="{StaticResource StandardLabel}"
+               HorizontalAlignment="Center"
+               Content="ЗАДВИЖКА ШИБЕРНАЯ"/>
+
+        <Button Style="{StaticResource StandardButton}"
+                Grid.Row="1"
+                Width="200"
+                        Margin="10"
+                        Content="Задвижки"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveOpen}"/>
+
+        <Separator Style="{StaticResource HorizontalSeparator}"
+                   Grid.Row="2"/>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <Label Style="{StaticResource StandardLabel}"
+                   HorizontalAlignment="Center"
+                   Content="Детали корпуса"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                            Margin="10"
+                            Content="Корпус"
+                            FontSize="{StaticResource Hi}"
+                            Command="{Binding CastGateValveCaseOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Катушка"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding NozzleOpen}"/>
+            </StackPanel>
+
+            <Separator Style="{StaticResource VerticalSeparator}"
+                       Grid.Column="1"/>
+
+            <StackPanel Grid.Column="2">
+                <Label Style="{StaticResource StandardLabel}"
+                    Grid.Column="2"
+                    HorizontalAlignment="Center"
+                    Content="Детали крышки"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Крышка"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding CastGateValveCoverOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                            Margin="10"
+                            Content="Кольцо уплотнительное"
+                            FontSize="{StaticResource Hi}"
+                            Command="{Binding CoverSealingRingOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Шпиндель"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding SpindleOpen}"/>
+            </StackPanel>
+        </Grid>
+
+        <Separator Style="{StaticResource HorizontalSeparator}"
+                   Grid.Row="4"/>
+
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <Label Style="{StaticResource StandardLabel}"
+                   HorizontalAlignment="Center"
+                   Content="Детали затвора"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Шибер"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding GateOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Седло"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding SaddleOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                            Margin="10"
+                            Content="Пружина"
+                            FontSize="{StaticResource Hi}"
+                            Command="{Binding SpringOpen}"/>
+            </StackPanel>
+
+            <Separator Style="{StaticResource VerticalSeparator}"
+                       Grid.Column="1"/>
+
+            <StackPanel Grid.Column="2">
+                <Label Style="{StaticResource StandardLabel}"
+                    Grid.Column="2"
+                    HorizontalAlignment="Center"
+                    Content="Бугельный узел"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                            Margin="10"
+                            Content="Втулка ходовая"
+                            FontSize="{StaticResource Hi}"
+                            Command="{Binding RunningSleeveOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Штифт срезной"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding ShearPinOpen}"/>
+            </StackPanel>
+        </Grid>
+
+        <Separator Style="{StaticResource HorizontalSeparator}"
+                   Grid.Row="6"/>
+        
+        <Grid Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <Label Style="{StaticResource StandardLabel}"
+                       HorizontalAlignment="Center"
+                       Content="Крепежные детали"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Шпилька"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding ScrewStudOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                        Margin="10"
+                        Content="Гайка"
+                        FontSize="{StaticResource Hi}"
+                        Command="{Binding ScrewNutOpen}"/>
+            </StackPanel>
+
+            <Separator Style="{StaticResource VerticalSeparator}"
+                       Grid.Column="1"/>
+
+            <StackPanel Orientation="Vertical" Grid.Column="2" >
+                <Label Style="{StaticResource StandardLabel}"
+                       HorizontalAlignment="Center"
+                       Content="Прочие детали"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                            Margin="10"
+                            Content="Кран шаровой"
+                            FontSize="{StaticResource Hi}"
+                            Command="{Binding BallValveOpen}"/>
+
+                <Button Style="{StaticResource StandardButton}"
+                            Margin="10"
+                            Content="Фланец ответный"
+                            FontSize="{StaticResource Hi}"
+                            Command="{Binding CounterFlangeOpen}"/>
+            </StackPanel>
+        </Grid>
+
+        <Separator Style="{StaticResource HorizontalSeparator}"
+                   Grid.Row="8"/>
+
+        <Button Style="{StaticResource StandardButton}"
+                Grid.Row="9"
+                Width="200"
+                HorizontalAlignment="Right"
+                Margin="10"
+                Content="Главное меню"
+                FontSize="{StaticResource Hi}"
+                Command="{Binding MainMenuOpen}"/>
+    </Grid>
+</Page>

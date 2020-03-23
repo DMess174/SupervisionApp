@@ -365,6 +365,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Styles\ProjectStyles\CloseTabItemAction.cs" />
+    <Compile Include="ViewModels\DailyReportVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\CompactGateValveEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\SheetGateValveEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\CastGateValveEditVM.cs" />
@@ -469,6 +470,18 @@
     <Compile Include="ViewModels\ProductTypeViewModel.cs" />
     <Compile Include="ViewModels\JournalNumbersViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
+    <Compile Include="Views\DailyReportView.xaml.cs">
+      <DependentUpon>DailyReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReverseShutterMenu.xaml.cs">
+      <DependentUpon>ReverseShutterMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CompactGateValveMenu.xaml.cs">
+      <DependentUpon>CompactGateValveMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SheetGateValveMenu.xaml.cs">
+      <DependentUpon>SheetGateValveMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntityViews\AssemblyUnit\CompactGateValveEditView.xaml.cs">
       <DependentUpon>CompactGateValveEditView.xaml</DependentUpon>
     </Compile>
@@ -757,6 +770,9 @@
     <Compile Include="Views\EntityViews\JournalNumbersView.xaml.cs">
       <DependentUpon>JournalNumbersView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CastGateValveMenu.xaml.cs">
+      <DependentUpon>CastGateValveMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
     </Compile>
@@ -876,6 +892,22 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\ProjectStyles\WindowStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DailyReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReverseShutterMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CompactGateValveMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SheetGateValveMenu.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1260,6 +1292,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EntityViews\JournalNumbersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CastGateValveMenu.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

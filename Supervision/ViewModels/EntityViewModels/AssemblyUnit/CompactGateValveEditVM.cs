@@ -283,6 +283,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         #region Cover
         private IEnumerable<CompactGateValveCover> covers;
         private ICommand editCover;
+        
 
         public ICommand EditCover
         {

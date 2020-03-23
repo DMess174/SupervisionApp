@@ -62,7 +62,7 @@
                         Margin="5.4,5,5,4.8">
                 <TextBox Style="{StaticResource SearchTextBox}" 
                        VerticalAlignment="Center" 
-                       Text="{Binding ProductType, UpdateSourceTrigger=PropertyChanged}"
+                       Text="{Binding ProductType.Name, UpdateSourceTrigger=PropertyChanged}"
                        Margin="5"/>
             </StackPanel>
 
@@ -114,7 +114,7 @@
 
                 <DataGridTextColumn Header="Тип продукции" 
                                     Width="150*" 
-                                    Binding ="{Binding Path = ProductType.Name}" />
+                                    Binding ="{Binding Path = ProductType.ShortName}" />
 
                 <DataGridTextColumn Header="Дата контроля" 
                                     Width="100*" 

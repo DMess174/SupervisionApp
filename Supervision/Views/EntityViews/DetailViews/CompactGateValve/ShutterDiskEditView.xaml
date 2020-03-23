@@ -278,7 +278,9 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
-                                        SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        PreviewKeyDown="PreviewKeyDown_EventHandler">
+                            </DatePicker>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

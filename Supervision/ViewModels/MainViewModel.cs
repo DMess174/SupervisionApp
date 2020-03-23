@@ -45,7 +45,6 @@ using DataLayer.Journals.Materials;
 using Supervision.Views.EntityViews.DetailViews.CompactGateValve;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateValve;
 using Supervision.Views;
-using BusinessLayer.Report.DailyReport;
 using DataLayer.TechnicalControlPlans.Periodical;
 using Supervision.Views.EntityViews.PeriodicalControl;
 using DataLayer.Entities.Periodical;
@@ -60,8 +59,9 @@ namespace Supervision.ViewModels
     {
         public MainViewModel()
         {
-            var db = new DataContext();
-            db.Dispose();
+            Page page = new MainMenu();
+            page.DataContext = this;
+            SlowOpacity(page);
         }
         private Page currentPage;
         public Page CurrentPage
@@ -73,15 +73,6 @@ namespace Supervision.ViewModels
                 RaisePropertyChanged();
             } 
         }
-
-        //public ICommand GetReport
-        //{
-
-        //    get
-        //    {
-        //        return new DelegateCommand(() => DailyReport.GetReport());
-        //    }
-        //}
 
         private double frameOpacity;
         public double FrameOpacity
@@ -1142,15 +1133,104 @@ namespace Supervision.ViewModels
         private void OpenWindow(Window w, BasePropertyChanged vm)
         {
             w.DataContext = vm;
-            w.ShowDialog();
+            w.Show();
         }
-        
+
+        private ICommand mainMenuOpen;
+
         public ICommand MainMenuOpen
         {
             get
             {
-                    Page page = new MainMenu();
-                    return new DelegateCommand(() => SlowOpacity(page));
+                return mainMenuOpen ??
+                (
+                    mainMenuOpen = new DelegateCommand(() =>
+                    {
+                        Page page = new MainMenu();
+                        page.DataContext = this;
+                        SlowOpacity(page);
+                    })
+                );
+            }
+        }
+
+        private ICommand castGateValveMenuOpen;
+        public ICommand CastGateValveMenuOpen
+        {
+            get
+            {
+                return castGateValveMenuOpen ??
+                (
+                    castGateValveMenuOpen = new DelegateCommand(() =>
+                    {
+                        Page page = new CastGateValveMenu();
+                        page.DataContext = this;
+                        SlowOpacity(page);
+                    })
+                );
+            }
+        }
+
+        private ICommand sheetGateValveMenuOpen;
+        public ICommand SheetGateValveMenuOpen
+        {
+            get
+            {
+                return sheetGateValveMenuOpen ??
+                (
+                    sheetGateValveMenuOpen = new DelegateCommand(() =>
+                    {
+                        Page page = new SheetGateValveMenu();
+                        page.DataContext = this;
+                        SlowOpacity(page);
+                    })
+                );
+            }
+        }
+
+        private ICommand compactGateValveMenuOpen;
+        public ICommand CompactGateValveMenuOpen
+        {
+            get
+            {
+                return compactGateValveMenuOpen ??
+                (
+                    compactGateValveMenuOpen = new DelegateCommand(() =>
+                    {
+                        Page page = new CompactGateValveMenu();
+                        page.DataContext = this;
+                        SlowOpacity(page);
+                    })
+                );
+            }
+        }
+
+        private ICommand reverseShutterMenuOpen;
+        public ICommand ReverseShutterMenuOpen
+        {
+            get
+            {
+                return reverseShutterMenuOpen ??
+                (
+                    reverseShutterMenuOpen = new DelegateCommand(() =>
+                    {
+                        Page page = new ReverseShutterMenu();
+                        page.DataContext = this;
+                        SlowOpacity(page);
+                    })
+                );
+            }
+        }
+
+        private ICommand dailyReportOpen;
+        public ICommand DailyReportOpen
+        {
+            get
+            {
+                return dailyReportOpen ??
+                (
+                    dailyReportOpen = new DelegateCommand(() => OpenWindow(new DailyReportView(), new DailyReportVM()))
+                );
             }
         }
     }

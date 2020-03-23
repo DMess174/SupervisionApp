@@ -7,9 +7,9 @@ namespace Supervision.Views
     /// <summary>
     /// Логика взаимодействия для MainMenu.xaml
     /// </summary>
-    public partial class MainMenu : Page
+    public partial class ReverseShutterMenu : Page
     {
-        public MainMenu()
+        public ReverseShutterMenu()
         {
             InitializeComponent();
         }

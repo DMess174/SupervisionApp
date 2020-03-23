@@ -261,7 +261,26 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         #region Cover
         private IEnumerable<SheetGateValveCover> covers;
         private ICommand editCover;
+        private ICommand editSpindle;
 
+        public ICommand EditSpindle
+        {
+            get
+            {
+                return editSpindle ?? (
+                           editSpindle = new DelegateCommand<Window>((w) =>
+                           {
+                               if (SelectedItem.WeldGateValveCover.Spindle != null)
+                               {
+                                   var wn = new SpindleEditView();
+                                   var vm = new SpindleEditVM(SelectedItem.WeldGateValveCover.Spindle.Id, SelectedItem);
+                                   wn.DataContext = vm;
+                                   wn.Show();
+                               }
+                               else MessageBox.Show("Для просмотра привяжите деталь", "Ошибка");
+                           }));
+            }
+        }
         public ICommand EditCover
         {
             get

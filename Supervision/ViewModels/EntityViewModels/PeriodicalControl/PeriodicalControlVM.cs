@@ -236,7 +236,7 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical
         public PeriodicalControlVM()
         {
             db = new DataContext();
-            db.Set<TEntity>().Load();
+            db.Set<TEntity>().Include(i => i.ProductType).Load();
             AllInstances = db.Set<TEntity>().Local.ToObservableCollection();
             AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
         }

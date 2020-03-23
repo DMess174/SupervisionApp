@@ -14,64 +14,87 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="50"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" 
+                        Margin="5" >
+            <TextBlock Style="{StaticResource StandardTextBlock}" 
+                           Text="Номер" 
+                           Margin="5" 
+                           VerticalAlignment="Center"/>
+            
+            <TextBox Style="{StaticResource SearchTextBox}" 
+                     Width="200"
+                         VerticalAlignment="Center" 
+                         Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="5"/>
+        </StackPanel>
 
-        <DataGrid Style="{StaticResource StandardDataGrid}"
+        <Separator Style="{StaticResource HorizontalSeparator}"
+                   Grid.Row="1"/>
+        
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <DataGrid Style="{StaticResource StandardDataGrid}"
                 IsReadOnly="False"
                 Height="auto" 
                 HorizontalContentAlignment="Stretch"
                 ItemsSource="{Binding AllInstancesView}"
                 SelectedItem="{Binding SelectedItem}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID"
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID"
                                     Width="35"
                                     Binding="{Binding Path = Id}" 
                                     TextBlock.TextAlignment="Center">
-                </DataGridTextColumn>
+                    </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Номер" 
+                    <DataGridTextColumn Header="Номер" 
                                     Width="150" 
                                     Binding="{Binding Path = Number}" 
                                     TextBlock.TextAlignment="Center" >
-                </DataGridTextColumn>
+                    </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Программа&#x0a;  поставки"
+                    <DataGridTextColumn Header="Программа&#x0a;  поставки"
                                     Width="85" 
                                     Binding="{Binding Path= Program}"/>
 
-                <DataGridTemplateColumn 
+                    <DataGridTemplateColumn 
                     Header="Заказчик"
                     Width="auto">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ComboBox  VerticalContentAlignment="Center"
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox  VerticalContentAlignment="Center"
                                        IsEditable="True"
                                        ItemsSource="{Binding Path=DataContext.Customers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                                        SelectedValuePath="Id"
                                        SelectedValue="{Binding Path=CustomerId, UpdateSourceTrigger=PropertyChanged}"
                                        DisplayMemberPath="ShortName">
-                            </ComboBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Объект"
+                    <DataGridTextColumn Header="Объект"
                                     Width="150*" 
                                     Binding="{Binding Path= Facility}"/>
 
-                <DataGridTemplateColumn Header="Грузополучатель" 
-                                    Width="400*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding Path = Consignee, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridTemplateColumn Header="Грузополучатель" 
+                                    Width="350*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Path = Consignee, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
                                      AcceptsTab="True"
@@ -80,49 +103,60 @@
                                      MaxLines="50"
                                      SpellCheck.IsEnabled="True"
                                      Language="ru-ru"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-        <Separator Style="{StaticResource HorizontalSeparator}" 
+                    <DataGridTemplateColumn Header="Заявка на ТН" 
+                                    Width="100*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Path=IsSupervisionRequest, UpdateSourceTrigger=PropertyChanged}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Separator Style="{StaticResource HorizontalSeparator}" 
                    Grid.Row="1"/>
 
-        <Grid Grid.Row="2"  Height="50" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-                <Button Style="{StaticResource StandardButton}"
+            <Grid Grid.Row="2"  Height="50" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                    <Button Style="{StaticResource StandardButton}"
                     Content="Добавить" Margin="10" Command="{Binding AddItem}"
                     Width="100"/>
 
-                <Button
+                    <Button
                     Style="{StaticResource StandardButton}"
                     Width="100"
                     Content="Сохранить" Margin="10" 
                     Command="{Binding SaveItem}" 
                     CommandParameter="{Binding ElementName=AllInstances, Path=SelectedItem}" />
-            </StackPanel>
+                </StackPanel>
 
-            <Button Grid.Column="1" Style="{StaticResource StandardButton}" 
+                <Button Grid.Column="1" Style="{StaticResource StandardButton}" 
                     Content="Удалить" Margin="10" Command="{Binding RemoveItem}"
                     CommandParameter="{Binding ElementName=AllInstances, Path=SelectedItem}"
                     Width="100"
                     HorizontalAlignment="Right"/>
-        </Grid>
-        
-        <Separator Style="{StaticResource HorizontalSeparator}" 
+            </Grid>
+
+            <Separator Style="{StaticResource HorizontalSeparator}" 
                    Grid.Row="3"/>
 
-        <Label Style="{StaticResource StandardLabel}"
+            <Label Style="{StaticResource StandardLabel}"
                Grid.Row="4"
                Content="PID"
                VerticalContentAlignment="Center"/>
 
-        <DataGrid Style="{StaticResource StandardDataGrid}"
+            <DataGrid Style="{StaticResource StandardDataGrid}"
                   Grid.Row="5"
                   MinRowHeight="5"
                   RowHeight="20"
@@ -131,64 +165,65 @@
                   HorizontalContentAlignment="Stretch"
                   ItemsSource="{Binding SelectedItem.PIDs}"
                   SelectedItem="{Binding SelectedPID}">
-            <DataGrid.InputBindings>
-                <MouseBinding
+                <DataGrid.InputBindings>
+                    <MouseBinding
                     MouseAction="LeftDoubleClick"
                     Command="{Binding EditPID}"
                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-            </DataGrid.InputBindings>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Номер" 
+                </DataGrid.InputBindings>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Номер" 
                                     Width="120" 
                                     Binding="{Binding Path = Number}" 
                                     TextBlock.TextAlignment="Center" >
-                </DataGridTextColumn>
+                    </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Наименование&#x0a;      изделия"
+                    <DataGridTextColumn Header="Наименование&#x0a;      изделия"
                                     Width="5*" 
                                     Binding="{Binding Path= ProductType.Name}"/>
 
-                <DataGridTextColumn Header="Обозначение"
+                    <DataGridTextColumn Header="Обозначение"
                                     Width="10*" 
                                     Binding="{Binding Path= Designation}"/>
 
-                <DataGridTextColumn Header="Количество"
+                    <DataGridTextColumn Header="Количество"
                                     Width="100" 
                                     Binding="{Binding Path= Amount}"/>
-                
-                <DataGridTextColumn Header="Отгружено"
+
+                    <DataGridTextColumn Header="Отгружено"
                                     Width="100" 
                                     Binding="{Binding Path= AmountShipped}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                </DataGrid.Columns>
+            </DataGrid>
 
-        <Separator Style="{StaticResource HorizontalSeparator}"
+            <Separator Style="{StaticResource HorizontalSeparator}"
                    Grid.Row="6"/>
 
-        <Grid Grid.Row="7"  Height="50" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-                <Button Style="{StaticResource StandardButton}"
+            <Grid Grid.Row="7"  Height="50" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                    <Button Style="{StaticResource StandardButton}"
                     Content="Добавить" Margin="10" Command="{Binding AddPID}"
                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                     Width="100"/>
 
-                <Button
+                    <Button
                     Style="{StaticResource StandardButton}"
                     Width="100"
                     Content="Изменить" Margin="10" 
                     Command="{Binding EditPID}" 
                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
-            </StackPanel>
+                </StackPanel>
 
-            <Button Grid.Column="1" Style="{StaticResource StandardButton}" 
+                <Button Grid.Column="1" Style="{StaticResource StandardButton}" 
                     Content="Удалить" Margin="10" Command="{Binding RemovePID}"
                     CommandParameter="{Binding ElementName=SelectedItem.PIDs, Path=SelectedPID}"
                     Width="100"
                     HorizontalAlignment="Right"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

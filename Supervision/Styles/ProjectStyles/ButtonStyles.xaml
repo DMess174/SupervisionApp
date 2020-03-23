@@ -28,7 +28,11 @@
 							<Setter Property="BorderBrush" Value="{StaticResource BorderBrushHighlighted}" />
 							<Setter Property="Background" Value="{StaticResource BackgroundHighlighted}" />
 						</Trigger>
-						<Trigger Property="IsPressed" Value="True">
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource BorderBrushHighlighted}" />
+                            <Setter Property="Background" Value="{StaticResource BackgroundHighlighted}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
 							<Setter Property="Background" Value="{StaticResource BackgroundSelected}"/>
 							<Setter Property="BorderBrush" Value="{StaticResource BorderBrushSelected}"/>
 						</Trigger>

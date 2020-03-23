@@ -7,6 +7,8 @@ namespace DataLayer.Entities.Materials.AnticorrosiveCoating
     {
         public string Color { get; set; }
 
+        public new string FullName => string.Format($"{Batch}/{Name} - {Color}/{Status}");
+
         public IEnumerable<AbovegroundCoatingJournal> AbovegroundCoatingJournals { get; set; }
     }
 }

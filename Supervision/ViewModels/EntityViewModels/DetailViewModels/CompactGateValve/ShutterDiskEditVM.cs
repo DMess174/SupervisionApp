@@ -33,7 +33,18 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateVa
         private ICommand closeWindow;
         private ICommand addOperation;
         private ICommand editMaterial;
+        private ICommand addDate;
+        public ICommand AddDate
+        {
+            get
+            {
+                return addDate ?? (
+                    addDate = new DelegateCommand(() =>
+                    {
 
+                    }));
+            }
+        }
         public ShutterDisk SelectedItem
         {
             get => selectedItem;

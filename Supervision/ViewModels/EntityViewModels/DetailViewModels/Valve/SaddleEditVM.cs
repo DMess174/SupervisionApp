@@ -357,7 +357,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
             Drawings = db.Saddles.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
             Materials = db.MetalMaterials.ToList();
-            FrontalSaddleSeals = db.FrontalSaddleSeals.ToList();
+            FrontalSaddleSeals = db.FrontalSaddleSeals.Where(i => i.AmountRemaining > 0).ToList();
             Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
             Points = db.Set<SaddleTCP>().ToList();
         }

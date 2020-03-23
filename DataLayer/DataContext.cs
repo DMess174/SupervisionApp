@@ -320,6 +320,7 @@ namespace DataLayer
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //optionsBuilder.UseSqlite(@"Filename = T:\06-01-06 - БДУКП\СМТО ОП УТН\SupervisionData\SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
             optionsBuilder.UseSqlite("Filename=SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
             base.OnConfiguring(optionsBuilder);
         }

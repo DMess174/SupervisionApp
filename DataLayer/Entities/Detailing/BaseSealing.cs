@@ -15,6 +15,6 @@ namespace DataLayer.Entities.Detailing
         public int? AmountRemaining { get; set; }
 
         [NotMapped]
-        public new string FullName => string.Format($"{Certificate} - {Batch} - {Status}/{Name}");
+        public new string FullName => string.Format($"{Certificate} - {Batch} - {Status}/{Name} {Drawing}");
     }
 }

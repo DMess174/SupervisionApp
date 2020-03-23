@@ -174,7 +174,7 @@
                     <Separator.Style>
                         <Style TargetType="Separator" BasedOn="{StaticResource VerticalSeparator}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedItem.ReverseShutter}"
+                                <DataTrigger Binding="{Binding SelectedItem.CastGateValve}"
                                              Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
@@ -195,7 +195,7 @@
                                 <Style TargetType="TextBlock" 
                                        BasedOn="{StaticResource StandardTextBlock}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedItem.ReverseShutter}"
+                                        <DataTrigger Binding="{Binding SelectedItem.CastGateValve}"
                                                      Value="{x:Null}">
                                             <Setter Property="Visibility" Value="Collapsed">
                                             </Setter>
@@ -206,7 +206,7 @@
                         </TextBlock>
                         <TextBlock Style="{StaticResource StandardTextBlock}"
                                    Margin="5 0 5 0" 
-                                   Text="{Binding SelectedItem.ReverseShutter.Name}"></TextBlock>
+                                   Text="{Binding SelectedItem.CastGateValve.Name}"></TextBlock>
                         <TextBlock Name="Number"
                                Width="auto" 
                                Margin="5 5 5 0" 
@@ -216,7 +216,7 @@
                             </TextBlock.Style>
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}№ {0}">
-                                    <Binding Path="SelectedItem.ReverseShutter.Number"/>
+                                    <Binding Path="SelectedItem.CastGateValve.Number"/>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>

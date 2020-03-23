@@ -26,6 +26,25 @@ namespace Supervision.ViewModels
         private ICommand editPID;
         private ICommand removePID;
         private IEnumerable<Customer> customers;
+        private string number = "";
+
+        public string Number
+        {
+            get => number;
+            set
+            {
+                number = value;
+                RaisePropertyChanged();
+                allInstancesView.Filter += (obj) =>
+                {
+                    if (obj is Specification item && item.Number != null)
+                    {
+                        return item.Number.ToLower().Contains(Number.ToLower());
+                    }
+                    else return true;
+                };
+            }
+        }
 
         public ICommand AddItem
         {

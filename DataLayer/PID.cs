@@ -22,6 +22,7 @@ namespace DataLayer
         public string Designation { get; set; }
         public string Purpose { get; set; }
         public int? Weight { get; set; }
+        public string Description { get; set; }
         public string Comment { get; set; }
 
         public int? SpecificationId { get; set; }

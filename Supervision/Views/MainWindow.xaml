@@ -26,13 +26,16 @@
                 <MenuItem Header="Главное меню" Command="{Binding MainMenuOpen}"/>
                 <Separator />
                 <MenuItem Header="Выход" Command="{Binding AppExit}"/>
-                <MenuItem Header="Рапорт" Command="{Binding GetReport}"/>
             </MenuItem>
 
             <MenuItem Header="Заказ" >
                 <MenuItem Header="Вид изделия" Command="{Binding ProductTypeOpen}"/>
                 <MenuItem Header="Заказчик" Command="{Binding CustomerOpen}"/>
                 <MenuItem Header="Спецификация" Command="{Binding SpecificationOpen}" />
+            </MenuItem>
+            
+            <MenuItem Header="Отчетность" >
+                <MenuItem Header="Отчет по продукции в работе" Command="{Binding DailyReportOpen}"/>
             </MenuItem>
 
             <MenuItem Header="Изделие" >
@@ -332,6 +335,9 @@
                                 Content="Кольцо уплотнительное"/>
                         <Button Style="{StaticResource TreeViewButton}"
                                 Command="{Binding SaddleOpen}"
+                                Content="Пружина"/>
+                        <Button Style="{StaticResource TreeViewButton}"
+                                Command="{Binding SpringOpen}"
                                 Content="Седло"/>
                         <Button Style="{StaticResource TreeViewButton}"
                                 Command="{Binding CounterFlangeOpen}"

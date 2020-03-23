@@ -7,4 +7,6 @@ namespace DataLayer.Entities.Materials.AnticorrosiveCoating
     {
         public IEnumerable<UndergroundCoatingJournal> UndergroundCoatingJournals { get; set; }
     }
+
+    
 }
