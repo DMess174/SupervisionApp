@@ -1,12 +1,12 @@
 ﻿using DataLayer.Journals.Materials;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.TechnicalControlPlans.Materials
 {
     public class MetalMaterialTCP : BaseTCP
     {
-        public IEnumerable<SheetMaterialJournal> SheetMaterialJournals { get; set; }
-        public IEnumerable<ForgingMaterialJournal> ForgingMaterialJournals { get; set; }
-        public IEnumerable<RolledMaterialJournal> RolledMaterialJournals { get; set; }
+        public ObservableCollection<SheetMaterialJournal> SheetMaterialJournals { get; set; }
+        public ObservableCollection<ForgingMaterialJournal> ForgingMaterialJournals { get; set; }
+        public ObservableCollection<RolledMaterialJournal> RolledMaterialJournals { get; set; }
     }
 }

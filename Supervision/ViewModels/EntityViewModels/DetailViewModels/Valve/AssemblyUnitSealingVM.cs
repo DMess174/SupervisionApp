@@ -1,29 +1,26 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
 using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Journals.Detailing;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
+using Supervision.Commands;
 using Supervision.Views.EntityViews.DetailViews.Valve;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 {
-    public class AssemblyUnitSealingVM : BasePropertyChanged
+    public class AssemblyUnitSealingVM : ViewModelBase
     {
+        private readonly AssemblyUnitSealingRepository sealRepo;
         private readonly DataContext db;
         private IEnumerable<AssemblyUnitSealing> allInstances;
         private ICollectionView allInstancesView;
         private AssemblyUnitSealing selectedItem;
-        private ICommand removeItem;
-        private ICommand editItem;
-        private ICommand addItem;
-        private ICommand copyItem;
-        private ICommand closeWindow;
 
         private string name;
         private string number = "";
@@ -34,7 +31,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
         private string batch = "";
 
         #region Filter
-        public string Number 
+        public string Number
         {
             get => number;
             set
@@ -43,9 +40,9 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is AssemblyUnitSealing item && item.Name != null)
+                    if (obj is AssemblyUnitSealing item && item.Number != null)
                     {
-                        return item.Name.ToLower().Contains(Number.ToLower());
+                        return item.Number.ToLower().Contains(Number.ToLower());
                     }
                     else return true;
                 };
@@ -138,146 +135,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
         }
         #endregion
 
-        #region Commands              
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        w?.Close();
-                    }));
-            }
-        }
-        public ICommand EditItem
-        {
-            get
-            {
-                return editItem ?? (
-                    editItem = new DelegateCommand<Window>((w) =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var wn = new AssemblyUnitSealingEditView();
-                            var vm = new AssemblyUnitSealingEditVM(SelectedItem.Id, SelectedItem);
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand CopyItem
-        {
-            get
-            {
-                return copyItem ?? (
-                    copyItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var item = new AssemblyUnitSealing()
-                            {
-                                Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
-                                Drawing = SelectedItem.Drawing,
-                                Certificate = SelectedItem.Certificate,
-                                Status = SelectedItem.Status,
-                                Name = SelectedItem.Name,
-                                Material = SelectedItem.Material,
-                                Series = SelectedItem.Series,
-                                Batch = SelectedItem.Batch,
-                            };
-                            db.AssemblyUnitSeals.Add(item);
-                            db.SaveChanges();
-                            var Journal = db.AssemblyUnitSealingJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
-                            foreach (var record in Journal)
-                            {
-                                var Record = new AssemblyUnitSealingJournal()
-                                {
-                                    Date = record.Date,
-                                    DetailId = item.Id,
-                                    Description = record.Description,
-                                    DetailName = item.Name,
-                                    DetailNumber = item.Number,
-                                    DetailDrawing = item.Drawing,
-                                    InspectorId = record.InspectorId,
-                                    Point = record.Point,
-                                    PointId = record.PointId,
-                                    RemarkIssued = record.RemarkIssued,
-                                    RemarkClosed = record.RemarkClosed,
-                                    Comment = record.Comment,
-                                    Status = record.Status,
-                                    JournalNumber = record.JournalNumber,
-                                };
-                                db.AssemblyUnitSealingJournals.Add(Record);
-                                db.SaveChanges();
-                            }
-
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand AddItem
-        {
-            get
-            {
-                return addItem ?? (
-                    addItem = new DelegateCommand<Window>((w) =>
-                    {
-                        var item = new AssemblyUnitSealing();
-                        db.AssemblyUnitSeals.Add(item);
-                        db.SaveChanges();
-                        SelectedItem = item;
-                        var tcpPoints = db.AssemblyUnitSealingTCPs.ToList();
-                        foreach (var i in tcpPoints)
-                        {
-                            var journal = new AssemblyUnitSealingJournal()
-                            {
-                                DetailId = SelectedItem.Id,
-                                PointId = i.Id,
-                                DetailName = SelectedItem.Name,
-                                DetailNumber = SelectedItem.Number,
-                                DetailDrawing = SelectedItem.Drawing,
-                                Point = i.Point,
-                                Description = i.Description,
-                            };
-                            if (journal != null)
-                            {
-                                db.AssemblyUnitSealingJournals.Add(journal);
-                                db.SaveChanges();
-                            }
-                        }
-                        var wn = new AssemblyUnitSealingEditView();
-                        var vm = new AssemblyUnitSealingEditVM(SelectedItem.Id, SelectedItem);
-                        wn.DataContext = vm;
-                        w?.Close();
-                        wn.ShowDialog();
-                    }));
-            }
-        }
-        public ICommand RemoveItem
-        {
-            get
-            {
-                return removeItem ?? (
-                    removeItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.AssemblyUnitSeals.Remove(SelectedItem);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не выбран!", "Ошибка");
-                    }));
-            }
-        }
-        #endregion
-
         public string Name
         {
             get => name;
@@ -317,16 +174,106 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public AssemblyUnitSealingVM()
+        public static AssemblyUnitSealingVM LoadVM(DataContext context)
         {
-            db = new DataContext();
-            db.AssemblyUnitSeals.Load();
-            AllInstances = db.AssemblyUnitSeals.Local.ToObservableCollection();
-            AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
-            if (AllInstances.Any())
+            AssemblyUnitSealingVM vm = new AssemblyUnitSealingVM(context);
+            vm.UpdateListCommand.ExecuteAsync();
+            return vm;
+        }
+
+        public IAsyncCommand UpdateListCommand { get; private set; }
+        private async Task UpdateList()
+        {
+            try
             {
-                Name = AllInstances.First().Name;
+                IsBusy = true;
+                AllInstances = new ObservableCollection<AssemblyUnitSealing>();
+                AllInstances = await Task.Run(() => sealRepo.GetAllAsync());
+                AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddNewItemCommand { get; private set; }
+        private async Task AddNewItem()
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await sealRepo.AddAsync(new AssemblyUnitSealing());
+                var tcpPoints = await sealRepo.GetTCPsAsync();
+                var records = new List<AssemblyUnitSealingJournal>();
+                foreach (var tcp in tcpPoints)
+                {
+                    var journal = new AssemblyUnitSealingJournal(SelectedItem, tcp);
+                    if (journal != null)
+                        records.Add(journal);
+                }
+                await sealRepo.AddJournalRecordAsync(records);
+                EditSelectedItem();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand CopySelectedItemCommand { get; private set; }
+        private async Task CopySelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                try
+                {
+                    IsBusy = true;
+                    var temp = await sealRepo.GetByIdIncludeAsync(SelectedItem.Id);
+                    var copy = await sealRepo.AddAsync(new AssemblyUnitSealing(temp));
+                    var jour = new ObservableCollection<AssemblyUnitSealingJournal>();
+                    foreach (var i in temp.AssemblyUnitSealingJournals)
+                    {
+                        var record = new AssemblyUnitSealingJournal(copy.Id, i);
+                        jour.Add(record);
+                    }
+                    sealRepo.UpdateJournalRecord(jour);
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+        }
+
+        public IAsyncCommand RemoveSelectedItemCommand { get; private set; }
+
+        public ICommand EditSelectedItemCommand { get; private set; }
+        private void EditSelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                _ = new AssemblyUnitSealingEditView
+                {
+                    DataContext = AssemblyUnitSealingEditVM.LoadVM(SelectedItem.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public AssemblyUnitSealingVM(DataContext context)
+        {
+            db = context;
+            sealRepo = new AssemblyUnitSealingRepository(db);
+            UpdateListCommand = new AsyncCommand(UpdateList, CanExecute);
+            AddNewItemCommand = new AsyncCommand(AddNewItem, CanExecute);
+            CopySelectedItemCommand = new AsyncCommand(CopySelectedItem, CanExecute);
+            EditSelectedItemCommand = new Command(o => EditSelectedItem());
         }
     }
 }

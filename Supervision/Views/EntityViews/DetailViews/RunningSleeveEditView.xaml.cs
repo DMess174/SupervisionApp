@@ -10,6 +10,7 @@ namespace Supervision.Views.EntityViews.DetailViews
         public RunningSleeveEditView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

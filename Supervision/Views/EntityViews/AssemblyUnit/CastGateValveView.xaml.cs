@@ -7,6 +7,7 @@ namespace Supervision.Views.EntityViews.AssemblyUnit
         public CastGateValveView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

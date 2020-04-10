@@ -1,34 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using DataLayer;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using DataLayer;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
+using Supervision.Commands;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 using DataLayer.Entities.Detailing.CompactGateValveDetails;
-using DataLayer.Entities.Detailing.WeldGateValveDetails;
-using DataLayer.Journals;
 using DataLayer.Journals.Detailing.CompactGateValveDetails;
-using DataLayer.TechnicalControlPlans;
-using DataLayer.TechnicalControlPlans.Detailing.CompactGateValveDetails;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
 using Supervision.Views.EntityViews.DetailViews.CompactGateValve;
-using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateValve
 {
-    public class ShutterVM : BasePropertyChanged
+    public class ShutterVM : ViewModelBase
     {
         private readonly DataContext db;
-        private IEnumerable<Shutter> allInstances;
+        private IList<Shutter> allInstances;
         private ICollectionView allInstancesView;
         private Shutter selectedItem;
-        private ICommand removeItem;
-        private ICommand editItem;
-        private ICommand addItem;
-        private ICommand copyItem;
-        private ICommand closeWindow;
+        private readonly ShutterRepository repo;
 
         private string name;
         private string number = "";
@@ -36,7 +28,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateVa
         private string status = "";
 
         #region Filter
-        public string Number 
+        public string Number
         {
             get => number;
             set
@@ -89,141 +81,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateVa
         }
         #endregion
 
-        #region Commands              
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        w?.Close();
-                    }));
-            }
-        }
-        public ICommand EditItem
-        {
-            get
-            {
-                return editItem ?? (
-                    editItem = new DelegateCommand<Window>((w) =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var wn = new ShutterEditView();
-                            var vm = new ShutterEditVM(SelectedItem.Id, SelectedItem);
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand CopyItem
-        {
-            get
-            {
-                return copyItem ?? (
-                    copyItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var item = new Shutter()
-                            {
-                                Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер:"),
-                                Drawing = SelectedItem.Drawing,
-                                Status = SelectedItem.Status,
-                                Name = SelectedItem.Name,
-                            };
-                            db.Set<Shutter>().Add(item);
-                            db.SaveChanges();
-                            var Journal = db.Set<ShutterJournal>().Where(i => i.DetailId == SelectedItem.Id).ToList();
-                            foreach (var record in Journal)
-                            {
-                                var Record = new ShutterJournal()
-                                {
-                                    Date = record.Date,
-                                    DetailId = item.Id,
-                                    Description = record.Description,
-                                    DetailName = item.Name,
-                                    DetailNumber = item.Number,
-                                    DetailDrawing = item.Drawing,
-                                    InspectorId = record.InspectorId,
-                                    Point = record.Point,
-                                    PointId = record.PointId,
-                                    RemarkIssued = record.RemarkIssued,
-                                    RemarkClosed = record.RemarkClosed,
-                                    Comment = record.Comment,
-                                    Status = record.Status,
-                                    JournalNumber = record.JournalNumber
-                                };
-                                db.Set<ShutterJournal>().Add(Record);
-                                db.SaveChanges();
-                            }
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand AddItem
-        {
-            get
-            {
-                return addItem ?? (
-                    addItem = new DelegateCommand<Window>((w) =>
-                    {
-                        var item = new Shutter();
-                        db.Set<Shutter>().Add(item);
-                        db.SaveChanges();
-                        SelectedItem = item;
-                        var tcpPoints = db.Set<ShutterTCP>().ToList();
-                        foreach (var i in tcpPoints)
-                        {
-                            var journal = new ShutterJournal()
-                            {
-                                DetailId = SelectedItem.Id,
-                                PointId = i.Id,
-                                DetailName = SelectedItem.Name,
-                                DetailNumber = SelectedItem.Number,
-                                DetailDrawing = SelectedItem.Drawing,
-                                Point = i.Point,
-                                Description = i.Description
-                            };
-                            if (journal != null)
-                            {
-                                db.Set<ShutterJournal>().Add(journal);
-                                db.SaveChanges();
-                            }
-                        }
-                        var wn = new ShutterEditView();
-                        var vm = new ShutterEditVM(SelectedItem.Id, SelectedItem);
-                        wn.DataContext = vm;
-                        w?.Close();
-                        wn.ShowDialog();
-                    }));
-            }
-        }
-        public ICommand RemoveItem
-        {
-            get
-            {
-                return removeItem ?? (
-                    removeItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.Set<Shutter>().Remove(SelectedItem);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не выбран!", "Ошибка");
-                    }));
-            }
-        }
-        #endregion
-
         public string Name
         {
             get => name;
@@ -243,8 +100,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateVa
                 RaisePropertyChanged();
             }
         }
-
-        public IEnumerable<Shutter> AllInstances
+        public IList<Shutter> AllInstances
         {
             get => allInstances;
             set
@@ -263,16 +119,113 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateVa
             }
         }
 
-        public ShutterVM()
+        public static ShutterVM LoadVM(DataContext context)
         {
-            db = new DataContext();
-            db.Set<Shutter>().Load();
-            AllInstances = db.Set<Shutter>().Local.ToObservableCollection();
-            AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
-            if (AllInstances.Count() != 0)
+            ShutterVM vm = new ShutterVM(context);
+            vm.UpdateListCommand.ExecuteAsync();
+            return vm;
+        }
+
+        public IAsyncCommand UpdateListCommand { get; private set; }
+        private async Task UpdateList()
+        {
+            try
             {
-                Name = AllInstances.First().Name;
+                IsBusy = true;
+                AllInstances = new ObservableCollection<Shutter>();
+                AllInstances = await Task.Run(() => repo.GetAllAsync());
+                AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddNewItemCommand { get; private set; }
+        private async Task AddNewItem()
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await repo.AddAsync(new Shutter());
+                var tcpPoints = await repo.GetTCPsAsync();
+                var records = new List<ShutterJournal>();
+                foreach (var tcp in tcpPoints)
+                {
+                    var journal = new ShutterJournal(SelectedItem, tcp);
+                    if (journal != null)
+                        records.Add(journal);
+                }
+                await repo.AddJournalRecordAsync(records);
+                EditSelectedItem();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand CopySelectedItemCommand { get; private set; }
+        private async Task CopySelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                try
+                {
+                    IsBusy = true;
+                    var temp = await repo.GetByIdIncludeAsync(SelectedItem.Id);
+                    var copy = await repo.AddAsync(new Shutter(temp));
+                    var jour = new ObservableCollection<ShutterJournal>();
+                    foreach (var i in temp.ShutterJournals)
+                    {
+                        var record = new ShutterJournal(copy.Id, i);
+                        jour.Add(record);
+                    }
+                    repo.UpdateJournalRecord(jour);
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+        }
+
+        public IAsyncCommand RemoveSelectedItemCommand { get; private set; }
+
+        public ICommand EditSelectedItemCommand { get; private set; }
+        private void EditSelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                _ = new ShutterEditView
+                {
+                    DataContext = ShutterEditVM.LoadVM(SelectedItem.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            Window w = obj as Window;
+            w?.Close();
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public ShutterVM(DataContext context)
+        {
+            db = context;
+            repo = new ShutterRepository(db);
+            UpdateListCommand = new AsyncCommand(UpdateList, CanExecute);
+            AddNewItemCommand = new AsyncCommand(AddNewItem, CanExecute);
+            CopySelectedItemCommand = new AsyncCommand(CopySelectedItem, CanExecute);
+            EditSelectedItemCommand = new Command(o => EditSelectedItem());
+            CloseWindowCommand = new Command(o => CloseWindow(o));
         }
     }
 }

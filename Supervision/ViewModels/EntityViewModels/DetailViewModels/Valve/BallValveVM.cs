@@ -1,38 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using DataLayer;
+using DataLayer.Entities.Detailing;
+using DataLayer.Journals.Detailing;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using DataLayer;
-using DataLayer.Entities.Detailing;
-using DataLayer.Journals.Detailing;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
+using Supervision.Commands;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 using Supervision.Views.EntityViews.DetailViews.Valve;
+using Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve;
 
-namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
+namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
-    public class BallValveVM : BasePropertyChanged
+    public class BallValveVM : ViewModelBase
     {
         private readonly DataContext db;
-        private IEnumerable<BallValve> allInstances;
+        private IList<BallValve> allInstances;
         private ICollectionView allInstancesView;
         private BallValve selectedItem;
-        private ICommand removeItem;
-        private ICommand editItem;
-        private ICommand addItem;
-        private ICommand copyItem;
-        private ICommand closeWindow;
+        private readonly BallValveRepository repo;
 
         private string name;
         private string number = "";
         private string designation = "";
         private string status = "";
-        private string certificate = "";
+        private string material = "";
 
         #region Filter
-        public string Number 
+        public string Number
         {
             get => number;
             set
@@ -83,158 +81,21 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 };
             }
         }
-        public string Certificate
+        public string Material
         {
-            get => certificate;
+            get => material;
             set
             {
-                certificate = value;
+                material = value;
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is BallValve item && item.Certificate != null)
+                    if (obj is BallValve item && item.Material != null)
                     {
-                        return item.Certificate.ToLower().Contains(Certificate.ToLower());
+                        return item.Material.ToLower().Contains(Material.ToLower());
                     }
                     else return true;
                 };
-            }
-        }
-        #endregion
-
-        #region Commands              
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        w?.Close();
-                    }));
-            }
-        }
-        public ICommand EditItem
-        {
-            get
-            {
-                return editItem ?? (
-                    editItem = new DelegateCommand<Window>((w) =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var wn = new BallValveEditView();
-                            var vm = new BallValveEditVM(SelectedItem.Id, SelectedItem);
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand CopyItem
-        {
-            get
-            {
-                return copyItem ?? (
-                    copyItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var item = new BallValve()
-                            {
-                                Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
-                                Designation = SelectedItem.Designation,
-                                Status = SelectedItem.Status,
-                                Name = SelectedItem.Name,
-                                Material = SelectedItem.Material,
-                            };
-                            db.BallValves.Add(item);
-                            db.SaveChanges();
-                            var Journal = db.BallValveJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
-                            foreach (var record in Journal)
-                            {
-                                var Record = new BallValveJournal()
-                                {
-                                    Date = record.Date,
-                                    DetailId = item.Id,
-                                    Description = record.Description,
-                                    DetailName = item.Name,
-                                    DetailNumber = item.Number,
-                                    DetailDrawing = item.Drawing,
-                                    InspectorId = record.InspectorId,
-                                    Point = record.Point,
-                                    PointId = record.PointId,
-                                    RemarkIssued = record.RemarkIssued,
-                                    RemarkClosed = record.RemarkClosed,
-                                    Comment = record.Comment,
-                                    Status = record.Status,
-                                    JournalNumber = record.JournalNumber
-                                };
-                                db.BallValveJournals.Add(Record);
-                                db.SaveChanges();
-                            }
-
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand AddItem
-        {
-            get
-            {
-                return addItem ?? (
-                    addItem = new DelegateCommand<Window>((w) =>
-                    {
-                        var item = new BallValve();
-                        db.BallValves.Add(item);
-                        db.SaveChanges();
-                        SelectedItem = item;
-                        var tcpPoints = db.BallValveTCPs.ToList();
-                        foreach (var i in tcpPoints)
-                        {
-                            var journal = new BallValveJournal()
-                            {
-                                DetailId = SelectedItem.Id,
-                                PointId = i.Id,
-                                DetailName = SelectedItem.Name,
-                                DetailNumber = SelectedItem.Number,
-                                DetailDrawing = SelectedItem.Drawing,
-                                Point = i.Point,
-                                Description = i.Description
-                            };
-                            if (journal != null)
-                            {
-                                db.BallValveJournals.Add(journal);
-                                db.SaveChanges();
-                            }
-                        }
-                        var wn = new BallValveEditView();
-                        var vm = new BallValveEditVM(SelectedItem.Id, SelectedItem);
-                        wn.DataContext = vm;
-                        w?.Close();
-                        wn.ShowDialog();
-                    }));
-            }
-        }
-        public ICommand RemoveItem
-        {
-            get
-            {
-                return removeItem ?? (
-                    removeItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.BallValves.Remove(SelectedItem);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не выбран!", "Ошибка");
-                    }));
             }
         }
         #endregion
@@ -258,8 +119,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
             }
         }
-
-        public IEnumerable<BallValve> AllInstances
+        public IList<BallValve> AllInstances
         {
             get => allInstances;
             set
@@ -278,16 +138,113 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public BallValveVM()
+        public static BallValveVM LoadVM(DataContext context)
         {
-            db = new DataContext();
-            db.BallValves.Load();
-            AllInstances = db.BallValves.Local.ToObservableCollection();
-            AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
-            if (AllInstances.Count() != 0)
+            BallValveVM vm = new BallValveVM(context);
+            vm.UpdateListCommand.ExecuteAsync();
+            return vm;
+        }
+
+        public IAsyncCommand UpdateListCommand { get; private set; }
+        private async Task UpdateList()
+        {
+            try
             {
-                Name = AllInstances.First().Name;
+                IsBusy = true;
+                AllInstances = new ObservableCollection<BallValve>();
+                AllInstances = await Task.Run(() => repo.GetAllAsync());
+                AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddNewItemCommand { get; private set; }
+        private async Task AddNewItem()
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await repo.AddAsync(new BallValve());
+                var tcpPoints = await repo.GetTCPsAsync();
+                var records = new List<BallValveJournal>();
+                foreach (var tcp in tcpPoints)
+                {
+                    var journal = new BallValveJournal(SelectedItem, tcp);
+                    if (journal != null)
+                        records.Add(journal);
+                }
+                await repo.AddJournalRecordAsync(records);
+                EditSelectedItem();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand CopySelectedItemCommand { get; private set; }
+        private async Task CopySelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                try
+                {
+                    IsBusy = true;
+                    var temp = await repo.GetByIdIncludeAsync(SelectedItem.Id);
+                    var copy = await repo.AddAsync(new BallValve(temp));
+                    var jour = new ObservableCollection<BallValveJournal>();
+                    foreach (var i in temp.BallValveJournals)
+                    {
+                        var record = new BallValveJournal(copy.Id, i);
+                        jour.Add(record);
+                    }
+                    repo.UpdateJournalRecord(jour);
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+        }
+
+        public IAsyncCommand RemoveSelectedItemCommand { get; private set; }
+
+        public ICommand EditSelectedItemCommand { get; private set; }
+        private void EditSelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                _ = new BallValveEditView
+                {
+                    DataContext = BallValveEditVM.LoadVM(SelectedItem.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            Window w = obj as Window;
+            w?.Close();
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public BallValveVM(DataContext context)
+        {
+            db = context;
+            repo = new BallValveRepository(db);
+            UpdateListCommand = new AsyncCommand(UpdateList, CanExecute);
+            AddNewItemCommand = new AsyncCommand(AddNewItem, CanExecute);
+            CopySelectedItemCommand = new AsyncCommand(CopySelectedItem, CanExecute);
+            EditSelectedItemCommand = new Command(o => EditSelectedItem());
+            CloseWindowCommand = new Command(o => CloseWindow(o));
         }
     }
 }

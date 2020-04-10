@@ -1,10 +1,10 @@
 ﻿using DataLayer.Journals.Periodical;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.TechnicalControlPlans.Periodical
 {
     public class NDTControlTCP : BaseTCP
     {
-        public IEnumerable<NDTControlJournal> NDTControlJournals { get; set; }
+        public ObservableCollection<NDTControlJournal> NDTControlJournals { get; set; }
     }
 }

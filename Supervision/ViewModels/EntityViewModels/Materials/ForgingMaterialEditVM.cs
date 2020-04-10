@@ -1,17 +1,17 @@
 ﻿using DataLayer;
-using DevExpress.Mvvm;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using DataLayer.TechnicalControlPlans.Materials;
 using DataLayer.Journals.Materials;
 using DataLayer.Entities.Materials;
-using Supervision.Views.EntityViews.MaterialViews;
+using BusinessLayer.Repository.Implementations.Entities.Material;
+using BusinessLayer.Repository.Implementations.Entities;
+using System.Threading.Tasks;
+using Supervision.Commands;
 
 namespace Supervision.ViewModels.EntityViewModels.Materials
 {
-    public class ForgingMaterialEditVM : BasePropertyChanged
+    public class ForgingMaterialEditVM : ViewModelBase
     {
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
@@ -23,12 +23,22 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<ForgingMaterialJournal> journal;
         private readonly BaseTable parentEntity;
+        private readonly ForgingMaterialRepository materialRepo;
+        private readonly InspectorRepository inspectorRepo;
+        private readonly JournalNumberRepository journalRepo;
         private MetalMaterialTCP selectedTCPPoint;
-
         private ForgingMaterial selectedItem;
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
+        private ForgingMaterialJournal operation;
+
+        public ForgingMaterialJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public ForgingMaterial SelectedItem
         {
@@ -65,70 +75,6 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             {
                 inspectors = value;
                 RaisePropertyChanged();
-            }
-        }
-
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.ForgingMaterials.Update(SelectedItem);
-                            db.SaveChanges();
-                            db.ForgingMaterialJournals.UpdateRange(Journal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (!(parentEntity is ForgingMaterial)) w?.Close();
-                        else
-                        {
-                            var wn = new ForgingMaterialView();
-                            var vm = new ForgingMaterialVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new ForgingMaterialJournal()
-                            {
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.ForgingMaterialJournals.Add(item);
-                            db.SaveChanges();
-                            Journal = db.ForgingMaterialJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
             }
         }
 
@@ -191,19 +137,120 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public ForgingMaterialEditVM(int id, BaseTable entity)
+        public IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
         {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => materialRepo.GetByIdIncludeAsync(id));
+                Materials = await Task.Run(() => materialRepo.GetPropertyValuesDistinctAsync(i => i.Material));
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Points = await Task.Run(() => materialRepo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+                FirstSizes = await Task.Run(() => materialRepo.GetPropertyValuesDistinctAsync(i => i.FirstSize));
+                SecondSizes = await Task.Run(() => materialRepo.GetPropertyValuesDistinctAsync(i => i.SecondSize));
+                ThirdSizes = await Task.Run(() => materialRepo.GetPropertyValuesDistinctAsync(i => i.ThirdSize));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => materialRepo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.ForgingMaterialJournals.Add(new ForgingMaterialJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.ForgingMaterialJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (materialRepo.HasChanges(SelectedItem) || materialRepo.HasChanges(SelectedItem.ForgingMaterialJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        public static ForgingMaterialEditVM LoadForgingMaterialEditVM(int id, BaseTable entity, DataContext context)
+        {
+            ForgingMaterialEditVM vm = new ForgingMaterialEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public ForgingMaterialEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.ForgingMaterials.Find(id);
-            Journal = db.Set<ForgingMaterialJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Materials = db.ForgingMaterials.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            FirstSizes = db.ForgingMaterials.Select(t => t.FirstSize).Distinct().OrderBy(x => x).ToList();
-            SecondSizes = db.ForgingMaterials.Select(t => t.SecondSize).Distinct().OrderBy(x => x).ToList();
-            ThirdSizes = db.ForgingMaterials.Select(d => d.ThirdSize).Distinct().OrderBy(x => x).ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.MetalMaterialTCPs.ToList();
+            materialRepo = new ForgingMaterialRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            LoadItemCommand = new AsyncCommand<int>(Load);
+            SaveItemCommand = new AsyncCommand(SaveItem);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            AddOperationCommand = new AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new AsyncCommand(RemoveOperation);
         }
     }
 }

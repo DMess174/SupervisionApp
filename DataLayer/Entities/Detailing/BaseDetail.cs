@@ -5,5 +5,15 @@
         public string Material { get; set; }
 
         public string Melt { get; set; }
+
+        public BaseDetail()
+        {
+        }
+
+        public BaseDetail(BaseDetail detail) : base(detail)
+        {
+            Material = detail.Material;
+            Melt = detail.Melt;
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace Supervision.Views.EntityViews
         public CustomerView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

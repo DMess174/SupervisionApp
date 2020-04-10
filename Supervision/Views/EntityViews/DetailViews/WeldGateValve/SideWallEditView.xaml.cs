@@ -7,6 +7,7 @@ namespace Supervision.Views.EntityViews.DetailViews.WeldGateValve
         public SideWallEditView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

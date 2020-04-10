@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Supervision.Views"
+        xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
         mc:Ignorable="d"
-        Title="DailyReport" Height="450" Width="800"
+        Title="Отчет по продукции, находящейся в работе" Height="450" Width="800"
         Style="{StaticResource StandardWindow}">
     <Grid>
         <Grid.RowDefinitions>
@@ -578,15 +579,18 @@
                 Grid.Row="3"
                 HorizontalAlignment="Left"
                 Content="Сформировать"
-                Command="{Binding GetReport}"/>
+                Command="{Binding GetReportCommand}"/>
 
         <Button Style="{StaticResource StandardButton}" 
                 Grid.Row="3"
                 Content="Закрыть"
                 HorizontalAlignment="Right"
                 Margin="10 2" 
-                Command="{Binding CloseWindow}"
+                Command="{Binding CloseWindowCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-        
+
+        <wpfx:BusyIndicator Grid.Row="2" 
+                            IsBusy="{Binding IsBusy}"
+                            BusyContent="Обработка запроса, ждите..."/>
     </Grid>
 </Window>

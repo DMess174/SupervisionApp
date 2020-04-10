@@ -5,5 +5,12 @@ namespace DataLayer.Journals.Materials
 {
     public class ForgingMaterialJournal : BaseJournal<ForgingMaterial, MetalMaterialTCP>
     {
+        public ForgingMaterialJournal() { }
+
+        public ForgingMaterialJournal(ForgingMaterial entity, MetalMaterialTCP entityTCP) : base(entity, entityTCP)
+        { }
+
+        public ForgingMaterialJournal(int id, ForgingMaterialJournal journal) : base(id, journal)
+        { }
     }
 }

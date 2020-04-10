@@ -1,8 +1,7 @@
 ﻿using DataLayer;
 using DataLayer.Entities.AssemblyUnits;
-using DataLayer.Entities.Detailing;
-using DevExpress.Mvvm;
 using Microsoft.EntityFrameworkCore;
+using Supervision.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,7 +15,18 @@ namespace Supervision.ViewModels
 {
     public class DailyReportVM : BasePropertyChanged
     {
-        private DataContext db;
+        private readonly DataContext db;
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            set
+            {
+                isBusy = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private IEnumerable<ProductType> productTypes;
         public IEnumerable<ProductType> ProductTypes
         {
@@ -128,154 +138,6 @@ namespace Supervision.ViewModels
             }
         }
 
-        private ICommand getReport;
-        public ICommand GetReport
-        {
-            get
-            {
-                return getReport ??
-                    (
-                    getReport = new DelegateCommand(() =>
-                    {
-                        GetAllCastGateValveData().ContinueWith(task =>
-                        {
-                            if (task.Exception == null)
-                            {
-                                var result = task.Result;
-                                CastGateValves = new List<DailyReport>();
-                                foreach (var i in result)
-                                {
-                                    var record = new DailyReport
-                                    {
-                                        CustomerName = i.PID?.Specification?.Customer?.Name,
-                                        SpecificationNumber = i.PID?.Specification?.Number,
-                                        PIDNumber = i.PID?.Number,
-                                        Facility = i.PID?.Specification?.Facility,
-                                        Designation = i.PID?.Designation,
-                                        UnitNumber = i.Number,
-                                        GateNumber = i.Gate?.Number,
-                                        AssemblyDate = i.CastGateValveJournals?.Where(e => e.Point == "6.4").Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                        TestDate = i.CastGateValveJournals?.Where(e => e.Point == "7.17").Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                        CoatingDate = i.CoatingJournals?.Where(e => e.Point == "9 (АКП)" && e.Description.Contains("адгез")).Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                        ShippingDate = i.CastGateValveJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                    };
-                                    record.StringAssemblyDate = record.AssemblyDate.Value.ToShortDateString();
-                                    record.StringTestDate = record.TestDate.Value.ToShortDateString();
-                                    record.StringCoatingDate = record.CoatingDate.Value.ToShortDateString();
-                                    record.StringShippingDate = record.ShippingDate.Value.ToShortDateString();
-                                    CastGateValves.Add(record);
-                                }
-                                CastGateValvesView = CollectionViewSource.GetDefaultView(CastGateValves);
-                            }
-                        });
-                        GetAllSheetGateValveData().ContinueWith(task =>
-                        {
-                            if (task.Exception == null)
-                            {
-                                var result = task.Result;
-                                SheetGateValves = new List<DailyReport>();
-                                foreach (var i in result)
-                                {
-                                    var record = new DailyReport
-                                    {
-                                        CustomerName = i.PID?.Specification?.Customer?.Name,
-                                        SpecificationNumber = i.PID?.Specification?.Number,
-                                        PIDNumber = i.PID?.Number,
-                                        Facility = i.PID?.Specification?.Facility,
-                                        Designation = i.PID?.Designation,
-                                        UnitNumber = i.Number,
-                                        GateNumber = i.Gate?.Number,
-                                        AssemblyDate = i.SheetGateValveJournals?.Where(e => e.Point == "5.4").Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                        TestDate = i.SheetGateValveJournals?.Where(e => e.Point == "6.17").Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                        CoatingDate = i.CoatingJournals?.Where(e => e.Point == "9 (АКП)" && e.Description.Contains("адгез")).Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                        ShippingDate = i.SheetGateValveJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                    };
-                                    record.StringAssemblyDate = record.AssemblyDate.Value.ToShortDateString();
-                                    record.StringTestDate = record.TestDate.Value.ToShortDateString();
-                                    record.StringCoatingDate = record.CoatingDate.Value.ToShortDateString();
-                                    record.StringShippingDate = record.ShippingDate.Value.ToShortDateString();
-                                    SheetGateValves.Add(record);
-                                }
-                                SheetGateValvesView = CollectionViewSource.GetDefaultView(SheetGateValves);
-                            }
-                        });
-                        GetAllCompactGateValveData().ContinueWith(task =>
-                        {
-                            if (task.Exception == null)
-                            {
-                                var result = task.Result;
-                                CompactGateValves = new List<DailyReport>();
-                                foreach (var i in result)
-                                {
-                                    var record = new DailyReport
-                                    {
-                                        CustomerName = i.PID?.Specification?.Customer?.Name,
-                                        SpecificationNumber = i.PID?.Specification?.Number,
-                                        PIDNumber = i.PID?.Number,
-                                        Facility = i.PID?.Specification?.Facility,
-                                        Designation = i.PID?.Designation,
-                                        UnitNumber = i.Number,
-                                        AssemblyDate = i.CompactGateValveJournals?.Where(e => e.Point == "5.4").Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                        TestDate = i.CompactGateValveJournals?.Where(e => e.Point == "6.17").Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                        CoatingDate = i.CoatingJournals?.Where(e => e.Point == "9 (АКП)" && e.Description.Contains("адгез")).Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                        ShippingDate = i.CompactGateValveJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                    };
-                                    record.StringAssemblyDate = record.AssemblyDate.Value.ToShortDateString();
-                                    record.StringTestDate = record.TestDate.Value.ToShortDateString();
-                                    record.StringCoatingDate = record.CoatingDate.Value.ToShortDateString();
-                                    record.StringShippingDate = record.ShippingDate.Value.ToShortDateString();
-                                    CompactGateValves.Add(record);
-                                }
-                                CompactGateValvesView = CollectionViewSource.GetDefaultView(CompactGateValves);
-                            }
-                        });
-                        GetAllReverseShutterData().ContinueWith(task =>
-                        {
-                            if (task.Exception == null)
-                            {
-                                var result = task.Result;
-                                ReverseShutters = new List<DailyReport>();
-                                foreach (var i in result)
-                                {
-                                    var record = new DailyReport
-                                    {
-                                        CustomerName = i.PID?.Specification?.Customer?.Name,
-                                        SpecificationNumber = i.PID?.Specification?.Number,
-                                        PIDNumber = i.PID?.Number,
-                                        Facility = i.PID?.Specification?.Facility,
-                                        Designation = i.PID?.Designation,
-                                        UnitNumber = i.Number,
-                                        AssemblyDate = i.ReverseShutterJournals?.Where(e => e.Point == "7.1" && e.Description.Contains("сбор")).Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                        TestDate = i.ReverseShutterJournals?.Where(e => e.Point == "7.6").Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                        CoatingDate = i.CoatingJournals?.Where(e => e.Point == "9 (АКП)" && e.Description.Contains("адгез")).Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                        ShippingDate = i.ReverseShutterJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date,
-                                    };
-                                    record.StringAssemblyDate = record.AssemblyDate.Value.ToShortDateString();
-                                    record.StringTestDate = record.TestDate.Value.ToShortDateString();
-                                    record.StringCoatingDate = record.CoatingDate.Value.ToShortDateString();
-                                    record.StringShippingDate = record.ShippingDate.Value.ToShortDateString();
-                                    ReverseShutters.Add(record);
-                                }
-                                ReverseShuttersView = CollectionViewSource.GetDefaultView(ReverseShutters);
-                            }
-                        });
-                    }));
-            }
-        }
-
-        private ICommand closeWindow;
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        w?.Close();
-                    }));
-            }
-        }
-
         private async Task<IEnumerable<CastGateValve>> GetAllCastGateValveData()
         {
             return await db.CastGateValves.Include(i => i.PID)
@@ -326,15 +188,102 @@ namespace Supervision.ViewModels
                 .ThenInclude(i => i.EntityTCP)
                 .ThenInclude(i => i.OperationType).ToListAsync();
         }
-        //private async Task<IEnumerable<Gate>> GetAllGateData()
-        //{
 
-        //}
-
-        public DailyReportVM()
+        private async Task Report()
         {
-            db = new DataContext();
-            ProductTypes = db.ProductTypes.ToList();
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => GetAllCastGateValveData().ContinueWith(task =>
+                {
+                    if (task.Exception == null)
+                    {
+                        var result = task.Result;
+                        CastGateValves = new List<DailyReport>();
+                        foreach (var i in result)
+                        {
+                            var record = new DailyReport(i);
+                            CastGateValves.Add(record);
+                        }
+                        CastGateValvesView = CollectionViewSource.GetDefaultView(CastGateValves);
+                    }
+                }));
+                await Task.Run(() => GetAllSheetGateValveData().ContinueWith(task =>
+                {
+                    if (task.Exception == null)
+                    {
+                        var result = task.Result;
+                        SheetGateValves = new List<DailyReport>();
+                        foreach (var i in result)
+                        {
+                            var record = new DailyReport(i);
+                            SheetGateValves.Add(record);
+                        }
+                        SheetGateValvesView = CollectionViewSource.GetDefaultView(SheetGateValves);
+                    }
+                }));
+                await Task.Run(() => GetAllCompactGateValveData().ContinueWith(task =>
+                {
+                    if (task.Exception == null)
+                    {
+                        var result = task.Result;
+                        CompactGateValves = new List<DailyReport>();
+                        foreach (var i in result)
+                        {
+                            var record = new DailyReport(i);
+                            CompactGateValves.Add(record);
+                        }
+                        CompactGateValvesView = CollectionViewSource.GetDefaultView(CompactGateValves);
+                    }
+                }));
+                await Task.Run(() => GetAllCompactGateValveData().ContinueWith(task =>
+                {
+                    if (task.Exception == null)
+                    {
+                        var result = task.Result;
+                        CompactGateValves = new List<DailyReport>();
+                        foreach (var i in result)
+                        {
+                            var record = new DailyReport(i);
+                            CompactGateValves.Add(record);
+                        }
+                        CompactGateValvesView = CollectionViewSource.GetDefaultView(CompactGateValves);
+                    }
+                }));
+                await Task.Run(() => GetAllReverseShutterData().ContinueWith(task =>
+                {
+                    if (task.Exception == null)
+                    {
+                        var result = task.Result;
+                        ReverseShutters = new List<DailyReport>();
+                        foreach (var i in result)
+                        {
+                            var record = new DailyReport(i);
+                            ReverseShutters.Add(record);
+                        }
+                        ReverseShuttersView = CollectionViewSource.GetDefaultView(ReverseShutters);
+                    }
+                }));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+        public IAsyncCommand GetReportCommand { get; private set; }
+
+        public ICommand CloseWindowCommand { get; set; }
+        private void CloseWindow(object obj)
+        {
+            Window w = obj as Window;
+            w?.Close();
+        }
+
+        public DailyReportVM(DataContext context)
+        {
+            db = context;
+            GetReportCommand = new AsyncCommand(Report);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
         }
     }
 
@@ -357,5 +306,84 @@ namespace Supervision.ViewModels
         public string StringShippingDate { get; set; }
         public string Remark { get; set; }
         public string RemarkClosed { get; set; }
+
+        public DailyReport()
+        {
+
+        }
+
+        public DailyReport(CastGateValve valve)
+        {
+            CustomerName = valve.PID?.Specification?.Customer?.Name;
+            SpecificationNumber = valve.PID?.Specification?.Number;
+            PIDNumber = valve.PID?.Number;
+            Facility = valve.PID?.Specification?.Facility;
+            Designation = valve.PID?.Designation;
+            UnitNumber = valve.Number;
+            GateNumber = valve.Gate?.Number;
+            AssemblyDate = valve.CastGateValveJournals?.Where(e => e.Point == "6.4").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            TestDate = valve.CastGateValveJournals?.Where(e => e.Point == "7.17").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            CoatingDate = valve.CoatingJournals?.Where(e => e.Point == "9 (АКП)" && e.Description.Contains("адгез")).Select(a => a.Date).Max().GetValueOrDefault().Date;
+            ShippingDate = valve.CastGateValveJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            StringAssemblyDate = AssemblyDate.Value.ToShortDateString();
+            StringTestDate = TestDate.Value.ToShortDateString();
+            StringCoatingDate = CoatingDate.Value.ToShortDateString();
+            StringShippingDate = ShippingDate.Value.ToShortDateString();
+        }
+
+        public DailyReport(SheetGateValve valve)
+        {
+            CustomerName = valve.PID?.Specification?.Customer?.Name;
+            SpecificationNumber = valve.PID?.Specification?.Number;
+            PIDNumber = valve.PID?.Number;
+            Facility = valve.PID?.Specification?.Facility;
+            Designation = valve.PID?.Designation;
+            UnitNumber = valve.Number;
+            GateNumber = valve.Gate?.Number;
+            AssemblyDate = valve.SheetGateValveJournals?.Where(e => e.Point == "5.4").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            TestDate = valve.SheetGateValveJournals?.Where(e => e.Point == "6.17").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            CoatingDate = valve.CoatingJournals?.Where(e => e.Point == "9 (АКП)" && e.Description.Contains("адгез")).Select(a => a.Date).Max().GetValueOrDefault().Date;
+            ShippingDate = valve.SheetGateValveJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            StringAssemblyDate = AssemblyDate.Value.ToShortDateString();
+            StringTestDate = TestDate.Value.ToShortDateString();
+            StringCoatingDate = CoatingDate.Value.ToShortDateString();
+            StringShippingDate = ShippingDate.Value.ToShortDateString();
+        }
+
+        public DailyReport(CompactGateValve valve)
+        {
+            CustomerName = valve.PID?.Specification?.Customer?.Name;
+            SpecificationNumber = valve.PID?.Specification?.Number;
+            PIDNumber = valve.PID?.Number;
+            Facility = valve.PID?.Specification?.Facility;
+            Designation = valve.PID?.Designation;
+            UnitNumber = valve.Number;
+            AssemblyDate = valve.CompactGateValveJournals?.Where(e => e.Point == "5.4").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            TestDate = valve.CompactGateValveJournals?.Where(e => e.Point == "6.17").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            CoatingDate = valve.CoatingJournals?.Where(e => e.Point == "9 (АКП)" && e.Description.Contains("адгез")).Select(a => a.Date).Max().GetValueOrDefault().Date;
+            ShippingDate = valve.CompactGateValveJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            StringAssemblyDate = AssemblyDate.Value.ToShortDateString();
+            StringTestDate = TestDate.Value.ToShortDateString();
+            StringCoatingDate = CoatingDate.Value.ToShortDateString();
+            StringShippingDate = ShippingDate.Value.ToShortDateString();
+        }
+
+        public DailyReport(ReverseShutter shutter)
+        {
+            CustomerName = shutter.PID?.Specification?.Customer?.Name;
+            SpecificationNumber = shutter.PID?.Specification?.Number;
+            PIDNumber = shutter.PID?.Number;
+            Facility = shutter.PID?.Specification?.Facility;
+            Designation = shutter.PID?.Designation;
+            UnitNumber = shutter.Number;
+            AssemblyDate = shutter.ReverseShutterJournals?.Where(e => e.Point == "7.1" && e.Description.Contains("сбор")).Select(a => a.Date).Max().GetValueOrDefault().Date;
+            TestDate = shutter.ReverseShutterJournals?.Where(e => e.Point == "7.6").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            CoatingDate = shutter.CoatingJournals?.Where(e => e.Point == "9 (АКП)" && e.Description.Contains("адгез")).Select(a => a.Date).Max().GetValueOrDefault().Date;
+            ShippingDate = shutter.ReverseShutterJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            StringAssemblyDate = AssemblyDate.Value.ToShortDateString();
+            StringTestDate = TestDate.Value.ToShortDateString();
+            StringCoatingDate = CoatingDate.Value.ToShortDateString();
+            StringShippingDate = ShippingDate.Value.ToShortDateString();
+        }
     }
 }

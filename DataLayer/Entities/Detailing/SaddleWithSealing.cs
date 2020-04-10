@@ -1,9 +1,7 @@
 ﻿namespace DataLayer.Entities.Detailing
 {
-    public class SaddleWithSealing
+    public class SaddleWithSealing : BaseTable
     {
-        public int Id { get; set; }
-
         public int SaddleId { get; set; }
         public Saddle Saddle { get; set; }
 

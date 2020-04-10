@@ -4,11 +4,12 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-      mc:Ignorable="d" 
+        xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+        mc:Ignorable="d" 
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="700" d:DesignWidth="1000"
       WindowStartupLocation="CenterScreen"
-      Title="{Binding SelectedItem.Name}">
+      Title="Редактирование захлопки">
     <Window.Resources>
         <CollectionViewSource x:Key="Inspectors" Source="{Binding Inspectors}"/>
         <CollectionViewSource x:Key="Points" Source="{Binding Points}" />
@@ -229,29 +230,30 @@
 
         <TabControl Style="{StaticResource StandardTabControl}"
                     Grid.Row="2">
-                    <TabItem Header="Входной контроль">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="50"/>
-                            </Grid.RowDefinitions>
-                            <DataGrid Style="{StaticResource StandardDataGrid}"
+            <TabItem Header="Входной контроль">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid Style="{StaticResource StandardDataGrid}"
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding InputControlJournal}"
+                                      SelectedItem="{Binding Operation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="Дата"
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Дата"
                                         MinWidth="100"
                                         Width="auto">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
                                         SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
                             <DataGridTemplateColumn 
                                 Header="Пункт"
@@ -387,13 +389,13 @@
                     </DataGrid>
 
                     <StackPanel Grid.Row="5" Orientation="Horizontal">
-                                <TextBlock Text="Выбор пункта:"
+                        <TextBlock Text="Выбор пункта:"
                    Margin="5 0 10 0"
                    FontSize="{StaticResource Hi}"
                    Style="{StaticResource StandardTextBlock}"
                    VerticalAlignment="Center"/>
 
-                                <ComboBox Style="{StaticResource StandardComboBox}" 
+                        <ComboBox Style="{StaticResource StandardComboBox}" 
                       VerticalContentAlignment="Center" 
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
@@ -401,66 +403,72 @@
                                           MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <StackPanel.Width>
-                                                    <Binding ElementName="PointColumn" Path="ActualWidth"/>
-                                                </StackPanel.Width>
-                                                <TextBlock Width="auto">
-                                                    <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0}("/>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-                                                <TextBlock Width="auto">
-                                                    <TextBlock.Text>
-                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-                                                <TextBlock TextWrapping="Wrap" >
-                                                    <TextBlock.Text>
-                                                        <Binding Path="Description"/>
-                                                    </TextBlock.Text>
-                                                    <TextBlock.Width>
-                                                        <Binding ElementName="PointColumn" Path="ActualWidth"/>
-                                                    </TextBlock.Width>
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.Width>
+                                            <Binding ElementName="PointColumn" Path="ActualWidth"/>
+                                        </StackPanel.Width>
+                                        <TextBlock Width="auto">
+                                            <TextBlock.Text>
+                                                <Binding Path="Point" StringFormat="{}{0}("/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock Width="auto">
+                                            <TextBlock.Text>
+                                                <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" >
+                                            <TextBlock.Text>
+                                                <Binding Path="Description"/>
+                                            </TextBlock.Text>
+                                            <TextBlock.Width>
+                                                <Binding ElementName="PointColumn" Path="ActualWidth"/>
+                                            </TextBlock.Width>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                                <Button Style="{StaticResource StandardButton}" 
-                            Content="Добавить операцию" 
-                            Margin="10" 
-                            Command="{Binding AddOperation}" />
-                            </StackPanel>
-                        </Grid>
-                    </TabItem>
+                        <Button Style="{StaticResource StandardButton}" 
+                                    Content="Добавить операцию" 
+                                    Margin="10" 
+                                    Command="{Binding AddOperationCommand}" />
 
-                    <TabItem Header="Входной контроль (НК)">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="50"/>
-                            </Grid.RowDefinitions>
-                            <DataGrid Style="{StaticResource StandardDataGrid}"
+                        <Button Style="{StaticResource StandardButton}" 
+                                    Content="Удалить операцию" 
+                                    Margin="10" 
+                                    Command="{Binding RemoveOperationCommand}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Входной контроль (НК)">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid Style="{StaticResource StandardDataGrid}"
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding InputNDTControlJournal}"
+                                      SelectedItem="{Binding Operation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="Дата"
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Дата"
                                         MinWidth="100"
                                         Width="auto">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
                                         SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
                             <DataGridTemplateColumn 
                                 Header="Пункт"
@@ -596,13 +604,13 @@
                     </DataGrid>
 
                     <StackPanel Grid.Row="5" Orientation="Horizontal">
-                                <TextBlock Text="Выбор пункта:"
+                        <TextBlock Text="Выбор пункта:"
                    Margin="5 0 10 0"
                    FontSize="{StaticResource Hi}"
                    Style="{StaticResource StandardTextBlock}"
                    VerticalAlignment="Center"/>
 
-                                <ComboBox Style="{StaticResource StandardComboBox}" 
+                        <ComboBox Style="{StaticResource StandardComboBox}" 
                       VerticalContentAlignment="Center" 
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
@@ -610,68 +618,74 @@
                                           MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <StackPanel.Width>
-                                                    <Binding ElementName="PointColumn" Path="ActualWidth"/>
-                                                </StackPanel.Width>
-                                                <TextBlock Width="auto">
-                                                    <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0}("/>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-                                                <TextBlock Width="auto">
-                                                    <TextBlock.Text>
-                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-                                                <TextBlock TextWrapping="Wrap" >
-                                                    <TextBlock.Text>
-                                                        <Binding Path="Description"/>
-                                                    </TextBlock.Text>
-                                                    <TextBlock.Width>
-                                                        <Binding ElementName="PointColumn" Path="ActualWidth"/>
-                                                    </TextBlock.Width>
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.Width>
+                                            <Binding ElementName="PointColumn" Path="ActualWidth"/>
+                                        </StackPanel.Width>
+                                        <TextBlock Width="auto">
+                                            <TextBlock.Text>
+                                                <Binding Path="Point" StringFormat="{}{0}("/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock Width="auto">
+                                            <TextBlock.Text>
+                                                <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" >
+                                            <TextBlock.Text>
+                                                <Binding Path="Description"/>
+                                            </TextBlock.Text>
+                                            <TextBlock.Width>
+                                                <Binding ElementName="PointColumn" Path="ActualWidth"/>
+                                            </TextBlock.Width>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                                <Button Style="{StaticResource StandardButton}" 
-                            Content="Добавить операцию" 
-                            Margin="10" 
-                            Command="{Binding AddOperation}" />
-                            </StackPanel>
+                        <Button Style="{StaticResource StandardButton}" 
+                                    Content="Добавить операцию" 
+                                    Margin="10" 
+                                    Command="{Binding AddOperationCommand}" />
+
+                        <Button Style="{StaticResource StandardButton}" 
+                                    Content="Удалить операцию" 
+                                    Margin="10" 
+                                    Command="{Binding RemoveOperationCommand}" />
+                    </StackPanel>
 
 
-                        </Grid>
-                    </TabItem>
+                </Grid>
+            </TabItem>
 
-                    <TabItem Header="Механическая обработка">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="50"/>
-                            </Grid.RowDefinitions>
-                            <DataGrid Style="{StaticResource StandardDataGrid}"
+            <TabItem Header="Механическая обработка">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid Style="{StaticResource StandardDataGrid}"
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding MechanicalJournal}"
+                                      SelectedItem="{Binding Operation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="Дата"
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Дата"
                                         MinWidth="100"
                                         Width="auto">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
                                         SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
                             <DataGridTemplateColumn 
                                 Header="Пункт"
@@ -807,13 +821,13 @@
                     </DataGrid>
 
                     <StackPanel Grid.Row="5" Orientation="Horizontal">
-                                <TextBlock Text="Выбор пункта:"
+                        <TextBlock Text="Выбор пункта:"
                    Margin="5 0 10 0"
                    FontSize="{StaticResource Hi}"
                    Style="{StaticResource StandardTextBlock}"
                    VerticalAlignment="Center"/>
 
-                                <ComboBox Style="{StaticResource StandardComboBox}" 
+                        <ComboBox Style="{StaticResource StandardComboBox}" 
                       VerticalContentAlignment="Center" 
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
@@ -821,68 +835,74 @@
                                           MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <StackPanel.Width>
-                                                    <Binding ElementName="PointColumn" Path="ActualWidth"/>
-                                                </StackPanel.Width>
-                                                <TextBlock Width="auto">
-                                                    <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0}("/>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-                                                <TextBlock Width="auto">
-                                                    <TextBlock.Text>
-                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-                                                <TextBlock TextWrapping="Wrap" >
-                                                    <TextBlock.Text>
-                                                        <Binding Path="Description"/>
-                                                    </TextBlock.Text>
-                                                    <TextBlock.Width>
-                                                        <Binding ElementName="PointColumn" Path="ActualWidth"/>
-                                                    </TextBlock.Width>
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.Width>
+                                            <Binding ElementName="PointColumn" Path="ActualWidth"/>
+                                        </StackPanel.Width>
+                                        <TextBlock Width="auto">
+                                            <TextBlock.Text>
+                                                <Binding Path="Point" StringFormat="{}{0}("/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock Width="auto">
+                                            <TextBlock.Text>
+                                                <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" >
+                                            <TextBlock.Text>
+                                                <Binding Path="Description"/>
+                                            </TextBlock.Text>
+                                            <TextBlock.Width>
+                                                <Binding ElementName="PointColumn" Path="ActualWidth"/>
+                                            </TextBlock.Width>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                                <Button Style="{StaticResource StandardButton}" 
-                            Content="Добавить операцию" 
-                            Margin="10" 
-                            Command="{Binding AddOperation}" />
-                            </StackPanel>
+                        <Button Style="{StaticResource StandardButton}" 
+                                    Content="Добавить операцию" 
+                                    Margin="10" 
+                                    Command="{Binding AddOperationCommand}" />
+
+                        <Button Style="{StaticResource StandardButton}" 
+                                    Content="Удалить операцию" 
+                                    Margin="10" 
+                                    Command="{Binding RemoveOperationCommand}" />
+                    </StackPanel>
 
 
-                        </Grid>
-                    </TabItem>
+                </Grid>
+            </TabItem>
 
-                    <TabItem Header="Наплавка">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="50"/>
-                            </Grid.RowDefinitions>
-                            <DataGrid Style="{StaticResource StandardDataGrid}"
+            <TabItem Header="Наплавка">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid Style="{StaticResource StandardDataGrid}"
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding OverlayingJournal}"
+                                      SelectedItem="{Binding Operation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="Дата"
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Дата"
                                         MinWidth="100"
                                         Width="auto">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker Style="{StaticResource StandardDatepicker}" VerticalAlignment="Stretch" 
                                         SelectedDate="{Binding Path = Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
                             <DataGridTemplateColumn 
                                 Header="Пункт"
@@ -1018,13 +1038,13 @@
                     </DataGrid>
 
                     <StackPanel Grid.Row="5" Orientation="Horizontal">
-                                <TextBlock Text="Выбор пункта:"
+                        <TextBlock Text="Выбор пункта:"
                    Margin="5 0 10 0"
                    FontSize="{StaticResource Hi}"
                    Style="{StaticResource StandardTextBlock}"
                    VerticalAlignment="Center"/>
 
-                                <ComboBox Style="{StaticResource StandardComboBox}" 
+                        <ComboBox Style="{StaticResource StandardComboBox}" 
                       VerticalContentAlignment="Center" 
                       ItemsSource="{Binding Points}"
                       SelectedItem="{Binding SelectedTCPPoint}"
@@ -1032,49 +1052,54 @@
                                           MaxWidth="500"
                       MinWidth="300"
                       Width="auto">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <StackPanel.Width>
-                                                    <Binding ElementName="PointColumn" Path="ActualWidth"/>
-                                                </StackPanel.Width>
-                                                <TextBlock Width="auto">
-                                                    <TextBlock.Text>
-                                                        <Binding Path="Point" StringFormat="{}{0}("/>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-                                                <TextBlock Width="auto">
-                                                    <TextBlock.Text>
-                                                        <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-                                                <TextBlock TextWrapping="Wrap" >
-                                                    <TextBlock.Text>
-                                                        <Binding Path="Description"/>
-                                                    </TextBlock.Text>
-                                                    <TextBlock.Width>
-                                                        <Binding ElementName="PointColumn" Path="ActualWidth"/>
-                                                    </TextBlock.Width>
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.Width>
+                                            <Binding ElementName="PointColumn" Path="ActualWidth"/>
+                                        </StackPanel.Width>
+                                        <TextBlock Width="auto">
+                                            <TextBlock.Text>
+                                                <Binding Path="Point" StringFormat="{}{0}("/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock Width="auto">
+                                            <TextBlock.Text>
+                                                <Binding Path="ProductType.ShortName" StringFormat="{}{0}) - "/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" >
+                                            <TextBlock.Text>
+                                                <Binding Path="Description"/>
+                                            </TextBlock.Text>
+                                            <TextBlock.Width>
+                                                <Binding ElementName="PointColumn" Path="ActualWidth"/>
+                                            </TextBlock.Width>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                                <Button Style="{StaticResource StandardButton}" 
-                            Content="Добавить операцию" 
-                            Margin="10" 
-                            Command="{Binding AddOperation}" />
-                            </StackPanel>
+                        <Button Style="{StaticResource StandardButton}" 
+                                    Content="Добавить операцию" 
+                                    Margin="10" 
+                                    Command="{Binding AddOperationCommand}" />
 
+                        <Button Style="{StaticResource StandardButton}" 
+                                    Content="Удалить операцию" 
+                                    Margin="10" 
+                                    Command="{Binding RemoveOperationCommand}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
 
-                        </Grid>
-                    </TabItem>
-                </TabControl>
+        <wpfx:BusyIndicator IsBusy="{Binding IsBusy}"
+                            Grid.Row="2"
+                            BusyContent="Обработка запроса, ждите..."/>
 
-
-
-                <Separator Style="{StaticResource HorizontalSeparator}"
+        <Separator Style="{StaticResource HorizontalSeparator}"
                    Grid.Row="3"/>
 
         <Grid Grid.Row="4">
@@ -1111,13 +1136,12 @@
                     <Button Style="{StaticResource StandardButton}" 
                             Content="Сохранить" 
                             Margin="10" 
-                            Command="{Binding SaveItem}" 
-                            CommandParameter="{Binding SelectedItem}"/>
+                            Command="{Binding SaveItemCommand}" />
 
                     <Button Style="{StaticResource StandardButton}" 
                             Content="Закрыть" 
                             Margin="10" 
-                            Command="{Binding CloseWindow}"
+                            Command="{Binding CloseWindowCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
                 </StackPanel>
     </Grid>

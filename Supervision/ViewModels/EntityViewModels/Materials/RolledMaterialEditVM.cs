@@ -1,17 +1,17 @@
 ﻿using DataLayer;
-using DevExpress.Mvvm;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using DataLayer.TechnicalControlPlans.Materials;
 using DataLayer.Journals.Materials;
 using DataLayer.Entities.Materials;
-using Supervision.Views.EntityViews.MaterialViews;
+using BusinessLayer.Repository.Implementations.Entities.Material;
+using BusinessLayer.Repository.Implementations.Entities;
+using Supervision.Commands;
+using System.Threading.Tasks;
 
 namespace Supervision.ViewModels.EntityViewModels.Materials
 {
-    public class RolledMaterialEditVM : BasePropertyChanged
+    public class RolledMaterialEditVM : ViewModelBase
     {
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
@@ -23,12 +23,23 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<RolledMaterialJournal> journal;
         private readonly BaseTable parentEntity;
+        private readonly RolledMaterialRepository materialRepo;
         private MetalMaterialTCP selectedTCPPoint;
 
         private RolledMaterial selectedItem;
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
+        private RolledMaterialJournal operation;
+        private InspectorRepository inspectorRepo;
+        private JournalNumberRepository journalRepo;
+
+        public RolledMaterialJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public RolledMaterial SelectedItem
         {
@@ -65,70 +76,6 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             {
                 inspectors = value;
                 RaisePropertyChanged();
-            }
-        }
-
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.RolledMaterials.Update(SelectedItem);
-                            db.SaveChanges();
-                            db.RolledMaterialJournals.UpdateRange(Journal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (!(parentEntity is RolledMaterial)) w?.Close();
-                        else
-                        {
-                            var wn = new RolledMaterialView();
-                            var vm = new RolledMaterialVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new RolledMaterialJournal()
-                            {
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.RolledMaterialJournals.Add(item);
-                            db.SaveChanges();
-                            Journal = db.RolledMaterialJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
             }
         }
 
@@ -191,19 +138,120 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public RolledMaterialEditVM(int id, BaseTable entity)
+        public IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
         {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => materialRepo.GetByIdIncludeAsync(id));
+                Materials = await Task.Run(() => materialRepo.GetPropertyValuesDistinctAsync(i => i.Material));
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Points = await Task.Run(() => materialRepo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+                FirstSizes = await Task.Run(() => materialRepo.GetPropertyValuesDistinctAsync(i => i.FirstSize));
+                SecondSizes = await Task.Run(() => materialRepo.GetPropertyValuesDistinctAsync(i => i.SecondSize));
+                ThirdSizes = await Task.Run(() => materialRepo.GetPropertyValuesDistinctAsync(i => i.ThirdSize));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => materialRepo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.RolledMaterialJournals.Add(new RolledMaterialJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.RolledMaterialJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (materialRepo.HasChanges(SelectedItem) || materialRepo.HasChanges(SelectedItem.RolledMaterialJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        public static RolledMaterialEditVM LoadRolledMaterialEditVM(int id, BaseTable entity, DataContext context)
+        {
+            RolledMaterialEditVM vm = new RolledMaterialEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public RolledMaterialEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.RolledMaterials.Find(id);
-            Journal = db.Set<RolledMaterialJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Materials = db.RolledMaterials.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            FirstSizes = db.RolledMaterials.Select(t => t.FirstSize).Distinct().OrderBy(x => x).ToList();
-            SecondSizes = db.RolledMaterials.Select(t => t.SecondSize).Distinct().OrderBy(x => x).ToList();
-            ThirdSizes = db.RolledMaterials.Select(d => d.ThirdSize).Distinct().OrderBy(x => x).ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.MetalMaterialTCPs.ToList();
+            materialRepo = new RolledMaterialRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            LoadItemCommand = new AsyncCommand<int>(Load);
+            SaveItemCommand = new AsyncCommand(SaveItem);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            AddOperationCommand = new AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new AsyncCommand(RemoveOperation);
         }
     }
 }

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
         mc:Ignorable="d" 
         Style="{StaticResource StandardWindow}"
         d:DesignHeight="500" d:DesignWidth="800"
@@ -61,29 +62,29 @@
                   HorizontalContentAlignment="Stretch">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" 
-                                    Width="35*" 
+                                    Width="auto" 
                                     Binding="{Binding Path = Id}" 
                                     TextBlock.TextAlignment="Center">
                 </DataGridTextColumn>
                 
                 <DataGridTextColumn Header="ФИО" 
-                                    Width="200*" 
+                                    Width="auto" 
                                     Binding="{Binding Path = Name}" 
                                     TextBlock.TextAlignment="Center" >
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="Должность" 
-                                    Width="200*" 
+                                    Width="auto" 
                                     Binding="{Binding Path = Apointment}" 
                                     TextBlock.TextAlignment="Center" >
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="Служба" 
-                                    Width="200*" 
+                                    Width="auto" 
                                     Binding="{Binding Path= Department}"/>
                 
                 <DataGridTextColumn Header="Управление" 
-                                    Width="200*" 
+                                    Width="auto" 
                                     Binding ="{Binding Path = Subdivision}"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -98,22 +99,31 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
                 <Button Style="{StaticResource StandardButton}"
-                    Content="Добавить" Margin="10" Command="{Binding AddItem}"
+                    Content="Добавить" Margin="10" Command="{Binding AddNewItemCommand}"
                     Width="100"/>
 
-                <Button
-                    Style="{StaticResource StandardButton}"
-                    Width="100"
-                    Content="Сохранить" Margin="10" 
-                    Command="{Binding SaveItem}" 
-                    CommandParameter="{Binding ElementName=AllInstances, Path=SelectedItem}" />
-            </StackPanel>
-
-            <Button Grid.Column="1" Style="{StaticResource StandardButton}" 
-                    Content="Удалить" Margin="10" Command="{Binding RemoveItem}"
-                    CommandParameter="{Binding ElementName=AllInstances, Path=SelectedItem}"
+                <Button  Style="{StaticResource StandardButton}" 
+                    Content="Удалить" Margin="10" Command="{Binding RemoveSelectedItemCommand}"
                     Width="100"
                     HorizontalAlignment="Right"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Button Style="{StaticResource StandardButton}"
+                    Content="Сохранить" Margin="10" Command="{Binding SaveItemsCommand}"
+                    Width="100"/>
+
+                <Button Style="{StaticResource StandardButton}" 
+                    Content="Закрыть" Margin="10" Command="{Binding CloseWindowCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                    Width="100"
+                    HorizontalAlignment="Right"/>
+            </StackPanel>
+            
         </Grid>
+
+        <wpfx:BusyIndicator IsBusy="{Binding IsBusy}"
+                            Grid.Row="2"
+                            BusyContent="Обработка запроса, ждите..."/>
     </Grid>
 </Window>

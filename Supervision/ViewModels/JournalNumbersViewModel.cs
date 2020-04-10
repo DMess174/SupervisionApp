@@ -1,86 +1,22 @@
-﻿using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
-using DataLayer;
+﻿using DataLayer;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Input;
 using System.Collections.Generic;
-using DataLayer.TechnicalControlPlans;
-using System.Linq;
 using DataLayer.Journals;
+using BusinessLayer.Repository.Implementations.Entities;
+using Supervision.Commands;
+using System.Threading.Tasks;
 
 namespace Supervision.ViewModels.TCPViewModels
 {
-    public class JournalNumbersViewModel : BasePropertyChanged
+    public class JournalNumbersViewModel : ViewModelBase
     {
         private readonly DataContext db;
-
+        private readonly JournalNumberRepository repo;
         private IEnumerable<JournalNumber> allInstances;
         private ICollectionView allInstancesView;
         private JournalNumber selectedPoint;
-        private ICommand addPoint;
-        private ICommand savePoint;
-        private ICommand removePoint;
-
-        public ICommand AddPoint
-        {
-            get
-            {
-                return addPoint ??
-                    (
-                    addPoint = new DelegateCommand(() =>
-                            {
-                                JournalNumber point = new JournalNumber();
-                                db.Set<JournalNumber>().Add(point);
-                                db.SaveChanges();
-                                SelectedPoint = point;
-                            })
-                    );
-            }
-        }
-
-        public ICommand SavePoint
-        {
-            get
-            {
-                return savePoint??
-                    (
-                    savePoint = new DelegateCommand(() =>
-                            {
-                                if (AllInstances != null)
-                                {
-                                    db.Set<JournalNumber>().UpdateRange(AllInstances);
-                                    db.SaveChanges();
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Объект не выбран!", "Ошибка");
-                                }
-                            })
-                    );
-            }
-        }
-
-        public ICommand RemovePoint
-        {
-            get
-            {
-                return removePoint ??
-                    (
-                    removePoint = new DelegateCommand(() =>
-                            {
-                                JournalNumber point = SelectedPoint;
-                                if (point != null)
-                                {
-                                    db.Set<JournalNumber>().Remove(point);
-                                    db.SaveChanges();
-                                }
-                                else MessageBox.Show("Объект не выбран!", "Ошибка");
-                            })
-                    );
-            }
-        }
 
         public JournalNumber SelectedPoint
         {
@@ -98,7 +34,7 @@ namespace Supervision.ViewModels.TCPViewModels
             set
             {
                 allInstances = value;
-                RaisePropertyChanged("TCPs");
+                RaisePropertyChanged();
             }
         }
 
@@ -108,16 +44,90 @@ namespace Supervision.ViewModels.TCPViewModels
             set
             {
                 allInstancesView = value;
-                RaisePropertyChanged("TCPsView");
+                RaisePropertyChanged();
             }
         }
 
-        public JournalNumbersViewModel()
+        public IAsyncCommand SaveItemsCommand { get; private set; }
+        private async Task SaveItems()
         {
-            db = new DataContext();
-            db.Set<JournalNumber>().Load();
-            AllInstances = db.Set<JournalNumber>().Local.ToObservableCollection();
-            AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(AllInstances));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddNewItemCommand { get; private set; }
+        private async Task AddNewItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await repo.AddAsync(new JournalNumber());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand UpdateListCommand { get; private set; }
+        private async Task UpdateList()
+        {
+            try
+            {
+                IsBusy = true;
+                AllInstances = await Task.Run(() => repo.GetAllAsync());
+                AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(AllInstances))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    base.CloseWindow(obj);
+                }
+            }
+            else
+            {
+                base.CloseWindow(obj);
+            }
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public static JournalNumbersViewModel LoadVM(DataContext context)
+        {
+            JournalNumbersViewModel vm = new JournalNumbersViewModel(context);
+            vm.UpdateListCommand.ExecuteAsync();
+            return vm;
+        }
+
+        public JournalNumbersViewModel(DataContext context)
+        {
+            db = context;
+            repo = new JournalNumberRepository(db);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            UpdateListCommand = new AsyncCommand(UpdateList, CanExecute);
+            AddNewItemCommand = new AsyncCommand(AddNewItem);
+            SaveItemsCommand = new AsyncCommand(SaveItems);
         }
     }
 }

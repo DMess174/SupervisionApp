@@ -1,34 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities.Material;
 using DataLayer;
 using DataLayer.Entities.Materials;
-using DataLayer.Journals;
 using DataLayer.Journals.Materials;
-using DataLayer.TechnicalControlPlans;
-using DataLayer.TechnicalControlPlans.Materials;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
+using Supervision.Commands;
 using Supervision.Views.EntityViews.MaterialViews;
 
 namespace Supervision.ViewModels.EntityViewModels.Materials
 {
-    public class ControlWeldVM<TEntity, TEntityTCP, TEntityJournal> : BasePropertyChanged
-        where TEntity : ControlWeld, new()
-        where TEntityTCP : ControlWeldTCP
-        where TEntityJournal : ControlWeldJournal, new()
+    public class ControlWeldVM : ViewModelBase
     {
         private readonly DataContext db;
-        private IEnumerable<TEntity> allInstances;
+        private readonly ControlWeldRepository repo;
+        private IEnumerable<ControlWeld> allInstances;
         private ICollectionView allInstancesView;
-        private TEntity selectedItem;
-        private ICommand removeItem;
-        private ICommand editItem;
-        private ICommand addItem;
-        private ICommand closeWindow;
+        private ControlWeld selectedItem;
 
         private string name;
         private string number = "";
@@ -45,7 +36,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.Name != null)
+                    if (obj is ControlWeld item && item.Name != null)
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
@@ -62,7 +53,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.Status != null)
+                    if (obj is ControlWeld item && item.Status != null)
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
@@ -79,99 +70,12 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
-                    if (obj is TEntity item && item.WeldingMethod != null)
+                    if (obj is ControlWeld item && item.WeldingMethod != null)
                     {
                         return item.WeldingMethod.ToLower().Contains(WeldingMethod.ToLower());
                     }
                     else return false;
                 };
-            }
-        }
-        #endregion
-
-        #region Commands              
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        w?.Close();
-                    }));
-            }
-        }
-        public ICommand EditItem
-        {
-            get
-            {
-                return editItem ?? (
-                    editItem = new DelegateCommand<Window>((w) =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var wn = new ControlWeldEditView();
-                            var vm = new ControlWeldEditVM<TEntity, TEntityTCP, TEntityJournal>(SelectedItem.Id, SelectedItem);
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand AddItem
-        {
-            get
-            {
-                return addItem ?? (
-                    addItem = new DelegateCommand<Window>((w) =>
-                    {
-                        var item = new TEntity();
-                        db.Set<TEntity>().Add(item);
-                        db.SaveChanges();
-                        SelectedItem = item;
-                        var tcpPoints = db.Set<TEntityTCP>().ToList();
-                        foreach (var i in tcpPoints)
-                        {
-                            var journal = new TEntityJournal()
-                            {
-                                DetailId = SelectedItem.Id,
-                                PointId = i.Id,
-                                DetailName = SelectedItem.Name,
-                                DetailNumber = SelectedItem.Number,
-                                Point = i.Point,
-                                Description = i.Description,
-                            };
-                            if (journal != null)
-                            {
-                                db.Set<TEntityJournal>().Add(journal);
-                                db.SaveChanges();
-                            }
-                        }
-                        var wn = new ControlWeldEditView();
-                        var vm = new ControlWeldEditVM<TEntity, TEntityTCP, TEntityJournal>(SelectedItem.Id, SelectedItem);
-                        wn.DataContext = vm;
-                        w?.Close();
-                        wn.ShowDialog();
-                    }));
-            }
-        }
-        public ICommand RemoveItem
-        {
-            get
-            {
-                return removeItem ?? (
-                    removeItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.Set<TEntity>().Remove(SelectedItem);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не выбран!", "Ошибка");
-                    }));
             }
         }
         #endregion
@@ -186,7 +90,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public TEntity SelectedItem
+        public ControlWeld SelectedItem
         {
             get => selectedItem;
             set
@@ -196,7 +100,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public IEnumerable<TEntity> AllInstances
+        public IEnumerable<ControlWeld> AllInstances
         {
             get => allInstances;
             set
@@ -215,16 +119,79 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public ControlWeldVM()
+        public IAsyncCommand AddNewItemCommand { get; private set; }
+        private async Task AddNewItem()
         {
-            db = new DataContext();
-            db.Set<TEntity>().Load();
-            AllInstances = db.Set<TEntity>().Local.ToObservableCollection();
-            AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
-            if (AllInstances.Any())
+            try
             {
-                Name = AllInstances.First().Name;
+                IsBusy = true;
+                SelectedItem = await repo.AddAsync(new ControlWeld());
+                var tcpPoints = await repo.GetTCPsAsync();
+                var records = new List<ControlWeldJournal>();
+                foreach (var tcp in tcpPoints)
+                {
+                    var journal = new ControlWeldJournal(SelectedItem, tcp);
+                    if (journal != null)
+                        records.Add(journal);
+                }
+                await repo.AddJournalRecordAsync(records);
+                EditSelectedItem();
             }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand RemoveSelectedItemCommand { get; private set; }
+
+        public ICommand EditSelectedItemCommand { get; private set; }
+        private void EditSelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                _ = new ControlWeldEditView
+                {
+                    DataContext = ControlWeldEditVM.LoadVM(SelectedItem.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public static ControlWeldVM LoadVM(DataContext context)
+        {
+            ControlWeldVM vm = new ControlWeldVM(context);
+            vm.UpdateListCommand.ExecuteAsync();
+            return vm;
+        }
+
+        public IAsyncCommand UpdateListCommand { get; private set; }
+        private async Task UpdateList()
+        {
+            try
+            {
+                IsBusy = true;
+                AllInstances = await Task.Run(() => repo.GetAllAsync());
+                AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public ControlWeldVM(DataContext context)
+        {
+            db = context;
+            repo = new ControlWeldRepository(db);
+            UpdateListCommand = new AsyncCommand(UpdateList, CanExecute);
+            AddNewItemCommand = new AsyncCommand(AddNewItem, CanExecute);
+            EditSelectedItemCommand = new Command(o => EditSelectedItem());
         }
     }
 }

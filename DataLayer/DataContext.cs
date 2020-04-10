@@ -123,6 +123,7 @@ namespace DataLayer
         public DbSet<CastGateValveJournal> CastGateValveJournals { get; set; }
         public DbSet<BaseValveWithCoating> BaseValveWithCoatings { get; set; }
 
+        public DbSet<BaseAssemblyUnit> BaseAssemblyUnit { get; set; }
         public DbSet<SheetGateValve> SheetGateValves { get; set; }
         public DbSet<SheetGateValveTCP> SheetGateValveTCPs { get; set; }
         public DbSet<SheetGateValveJournal> SheetGateValveJournals { get; set; }
@@ -317,11 +318,18 @@ namespace DataLayer
                 });
         }
 
-
+            
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+#if DEBUG
+            optionsBuilder.UseSqlite("Filename=SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
+            //optionsBuilder.UseSqlite(@"Filename = O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\БД\SupervisionData\SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
+#else
             //optionsBuilder.UseSqlite(@"Filename = T:\06-01-06 - БДУКП\СМТО ОП УТН\SupervisionData\SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
             optionsBuilder.UseSqlite("Filename=SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
+            //optionsBuilder.UseSqlite(@"Filename = O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\БД\SupervisionTest (Челябинск)\SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
+
+#endif
             base.OnConfiguring(optionsBuilder);
         }
     }

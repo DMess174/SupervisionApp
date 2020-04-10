@@ -2,13 +2,14 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="700" d:DesignWidth="1200"
         WindowStartupLocation="CenterScreen"
-        Title="{Binding SelectedItem.Name}">
+        Title="Редактирование седла">
     <Window.Resources>
         <CollectionViewSource x:Key="Inspectors" Source="{Binding Inspectors}"/>
         <CollectionViewSource x:Key="Points" Source="{Binding Points}" />
@@ -262,8 +263,7 @@
                         Height="30"
                         Margin="5 0 5 0"
                         Content="Открыть"
-                        Command="{Binding EditMaterial}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                        Command="{Binding EditMaterialCommand}"/>
 
             <Separator Style="{StaticResource VerticalSeparator}"
                        Grid.Column="3"
@@ -295,8 +295,7 @@
                       SelectedItem="{Binding SelectedFrontalSaddleSealingFromList}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding EditFrontalSaddleSealing}"
-                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                        <i:InvokeCommandAction Command="{Binding EditSealCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
@@ -318,8 +317,7 @@
                             Height="30"
                             Margin="5"
                             Content="Открыть"
-                            Command="{Binding EditFrontalSaddleSealing}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditSealCommand}"/>
 
             <Button Style="{StaticResource StandardButton}"
                             Grid.Row="2"
@@ -327,8 +325,7 @@
                             Margin="5"
                             Height="30"
                             Content="Удалить"
-                            Command="{Binding DeleteFrontalSaddleSealingFromSaddle}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding RemoveSealFromSaddleCommand}"/>
 
             <Button Style="{StaticResource StandardButton}" 
                             Grid.Row="0"
@@ -336,8 +333,7 @@
                             Margin="5"
                             Height="30"
                             Content="Добавить"
-                            Command="{Binding AddFrontalSaddleSealingToSaddle}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding AddSealToSaddleCommand}"/>
         </Grid>
 
         <Separator Style="{StaticResource HorizontalSeparator}" 
@@ -352,6 +348,7 @@
                             Grid.Column="0" 
                             MinRowHeight="50"
                             ItemsSource="{Binding CastJournal}"
+                              SelectedItem="{Binding Operation}"
                             IsReadOnly="False"
                             VerticalScrollBarVisibility="Auto"
                             HorizontalScrollBarVisibility="Visible">
@@ -508,6 +505,7 @@
                             Grid.Column="0" 
                             MinRowHeight="50"
                             ItemsSource="{Binding SheetJournal}"
+                              SelectedItem="{Binding Operation}"
                             IsReadOnly="False"
                             VerticalScrollBarVisibility="Auto"
                             HorizontalScrollBarVisibility="Visible">
@@ -665,6 +663,7 @@
                         Grid.Column="0" 
                         MinRowHeight="50"
                         ItemsSource="{Binding CompactJournal}"
+                              SelectedItem="{Binding Operation}"
                         IsReadOnly="False"
                         HorizontalScrollBarVisibility="Visible">
                         <DataGrid.Columns>
@@ -862,7 +861,12 @@
             <Button Style="{StaticResource StandardButton}" 
                             Content="Добавить операцию" 
                             Margin="10" 
-                            Command="{Binding AddOperation}" />
+                            Command="{Binding AddOperationCommand}" />
+
+            <Button Style="{StaticResource StandardButton}" 
+                            Content="Удалить операцию" 
+                            Margin="10" 
+                            Command="{Binding RemoveOperationCommand}" />
         </StackPanel>
 
         <Separator Style="{StaticResource HorizontalSeparator}" 
@@ -903,16 +907,19 @@
                             Width="70"
                             Content="Сохранить" 
                             Margin="10 2 10 2" 
-                            Command="{Binding SaveItem}" 
-                            CommandParameter="{Binding SelectedItem}"/>
+                            Command="{Binding SaveItemCommand}"/>
 
                 <Button Style="{StaticResource StandardButton}" 
                             Width="70"
                             Content="Закрыть" 
                             Margin="10 2 10 2" 
-                            Command="{Binding CloseWindow}"
+                            Command="{Binding CloseWindowCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
             </StackPanel>
         </Grid>
+
+        <wpfx:BusyIndicator Grid.Row="4" 
+                            IsBusy="{Binding IsBusy}"
+                            BusyContent="Обработка запроса, ждите..."/>
     </Grid>
 </Window>

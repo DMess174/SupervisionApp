@@ -28,6 +28,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
     <Style TargetType="TextBox" x:Key="SearchTextBox">
         <Setter Property="Background" Value="{StaticResource TextBoxBackground}"/>
         <Setter Property="BorderThickness" Value="1"/>

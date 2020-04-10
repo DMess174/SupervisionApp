@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DataLayer.Entities.Detailing.WeldGateValveDetails;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
@@ -10,7 +11,11 @@ namespace DataLayer.Entities.Detailing.CompactGateValveDetails
         {
             Name = "Крышка ЗШК";
         }
+        public CompactGateValveCover(CompactGateValveCover cover) : base(cover)
+        {
 
-        public IEnumerable<CompactGateValveCoverJournal> CompactGateValveCoverJournals { get; set; }
+        }
+
+        public ObservableCollection<CompactGateValveCoverJournal> CompactGateValveCoverJournals { get; set; }
     }
 }

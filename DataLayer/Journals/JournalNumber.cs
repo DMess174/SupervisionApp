@@ -2,9 +2,8 @@
 {/// <summary>
 /// Номера журналов
 /// </summary>
-    public class JournalNumber : BasePropertyChanged
+    public class JournalNumber : BaseTable
     {
-        public int Id { get; set; }
         /// <summary>
         /// Номер журнала
         /// </summary>

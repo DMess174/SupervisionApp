@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
 namespace DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails
 {
     public class FrontWallTCP : BaseTCP
     {
-        public IEnumerable<FrontWallJournal> FrontWallJournals { get; set; }
+        public ObservableCollection<FrontWallJournal> FrontWallJournals { get; set; }
     }
 }

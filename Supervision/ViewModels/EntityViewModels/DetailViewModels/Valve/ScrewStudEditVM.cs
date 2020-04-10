@@ -1,33 +1,54 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
 using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Journals.Detailing;
 using DataLayer.TechnicalControlPlans.Detailing;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
-using Supervision.Views.EntityViews.DetailViews.Valve;
+using Supervision.Commands;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 {
-    public class ScrewStudEditVM: BasePropertyChanged
+    public class ScrewStudEditVM : BasePropertyChanged
     {
         private readonly DataContext db;
+        private readonly ScrewStudRepository screwStudRepo;
+        private readonly InspectorRepository inspectorRepo;
+        private readonly JournalNumberRepository journalRepo;
+
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
         private IEnumerable<string> drawings;
         private IEnumerable<ScrewStudTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<ScrewStudJournal> journal;
         private readonly BaseTable parentEntity;
         private ScrewStud selectedItem;
         private ScrewStudTCP selectedTCPPoint;
 
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            protected set
+            {
+                isBusy = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private ScrewStudJournal operation;
+        public ScrewStudJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
         public ScrewStud SelectedItem
         {
             get => selectedItem;
@@ -37,15 +58,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<ScrewStudJournal> Journal
-        {
-            get => journal;
-            set
-            {
-                journal = value;
-                RaisePropertyChanged();
-            }
-        } 
+
         public IEnumerable<ScrewStudTCP> Points
         {
             get => points;
@@ -65,75 +78,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            if (SelectedItem.AmountRemaining == null && SelectedItem.Amount > 0) 
-                                SelectedItem.AmountRemaining = SelectedItem.Amount;
-                            else 
-                                SelectedItem.AmountRemaining = SelectedItem.Amount - SelectedItem.BaseValveWithScrewStuds?.Select(i => i.ScrewStudAmount).Sum();
-                            db.ScrewStuds.Update(SelectedItem);
-                            db.SaveChanges();
-                            db.ScrewStudJournals.UpdateRange(Journal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is ScrewStud)
-                        {
-                            var wn = new ScrewStudView();
-                            var vm = new ScrewStudVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new ScrewStudJournal()
-                            {
-                                DetailDrawing = SelectedItem.Drawing,
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.ScrewStudJournals.Add(item);
-                            db.SaveChanges();
-                            Journal = db.ScrewStudJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-                        }
-                    }));
-            }
-        }
-     
         public IEnumerable<string> Materials
         {
             get => materials;
@@ -172,17 +116,139 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public ScrewStudEditVM(int id, BaseTable entity)
+
+
+        public static ScrewStudEditVM LoadVM(int id, BaseTable entity, DataContext context)
         {
+            ScrewStudEditVM vm = new ScrewStudEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        public IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => screwStudRepo.GetByIdIncludeAsync(id));
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Materials = await Task.Run(() => screwStudRepo.GetPropertyValuesDistinctAsync(i => i.Material));
+                Drawings = await Task.Run(() => screwStudRepo.GetPropertyValuesDistinctAsync(i => i.Drawing));
+                Points = await Task.Run(() => screwStudRepo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+
+
+        public IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task Save()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedItem != null)
+                {
+                    if (SelectedItem.AmountRemaining == null && SelectedItem.Amount > 0)
+                        SelectedItem.AmountRemaining = SelectedItem.Amount;
+                    else
+                        SelectedItem.AmountRemaining = await screwStudRepo.GetAmountRemaining(SelectedItem);
+                }
+                await Task.Run(() => screwStudRepo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.ScrewStudJournals.Add(new ScrewStudJournal()
+                {
+                    DetailDrawing = SelectedItem.Drawing,
+                    DetailNumber = SelectedItem.Number,
+                    DetailName = SelectedItem.Name,
+                    DetailId = SelectedItem.Id,
+                    Point = SelectedTCPPoint.Point,
+                    Description = SelectedTCPPoint.Description,
+                    PointId = SelectedTCPPoint.Id,
+                });
+                await SaveItemCommand.ExecuteAsync();
+            }
+        }
+
+
+        public IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.ScrewStudJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        public ICommand CloseWindowCommand { get; private set; }
+        private void CloseWindow(object obj)
+        {
+            if (screwStudRepo.HasChanges(SelectedItem) || screwStudRepo.HasChanges(SelectedItem.ScrewStudJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public ScrewStudEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.ScrewStuds.Include(i => i.BaseValveWithScrewStuds).ThenInclude(i => i.BaseValve).SingleOrDefault(i => i.Id == id);
-            Journal = db.ScrewStudJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Drawings = db.ScrewStuds.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            Materials = db.ScrewStuds.Select(s => s.Material).Distinct().OrderBy(x => x).ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<ScrewStudTCP>().Include(i => i.ProductType).ToList();
+            screwStudRepo = new ScrewStudRepository(context);
+            inspectorRepo = new InspectorRepository(context);
+            journalRepo = new JournalNumberRepository(context);
+            LoadItemCommand = new AsyncCommand<int>(Load);
+            SaveItemCommand = new AsyncCommand(Save);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            AddOperationCommand = new AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new AsyncCommand(RemoveOperation);
         }
     }
 }

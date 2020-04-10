@@ -1,5 +1,5 @@
 ﻿using DataLayer.Journals.Materials;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Materials
 {
@@ -10,6 +10,12 @@ namespace DataLayer.Entities.Materials
             Name = "Прокат";
         }
 
-        public IEnumerable<RolledMaterialJournal> RolledMaterialJournals { get; set; }
+
+        public RolledMaterial(RolledMaterial material) : base(material)
+        { 
+
+        }
+
+        public ObservableCollection<RolledMaterialJournal> RolledMaterialJournals { get; set; }
     }
 }

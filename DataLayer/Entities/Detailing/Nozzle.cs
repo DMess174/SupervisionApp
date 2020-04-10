@@ -1,6 +1,7 @@
 ﻿using DataLayer.Entities.Materials;
 using DataLayer.Journals.Detailing;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Entities.Detailing
@@ -10,6 +11,12 @@ namespace DataLayer.Entities.Detailing
         public Nozzle()
         {
             Name = "Катушка";
+        }
+
+        public Nozzle(Nozzle nozzle) : base(nozzle)
+        {
+            ThicknessJoin = nozzle.ThicknessJoin;
+            MetalMaterialId = nozzle.MetalMaterialId;
         }
 
         public string Diameter { get; set; }
@@ -22,7 +29,7 @@ namespace DataLayer.Entities.Detailing
         public int? CastingCaseId { get; set; }
         public BaseCastingCase CastingCase { get; set; }
 
-        public IEnumerable<NozzleJournal> NozzleJournals { get; set; }
+        public ObservableCollection<NozzleJournal> NozzleJournals { get; set; }
 
         [NotMapped]
         public new string FullName => string.Format($"{Name}/{Number}/{Diameter}/{Thickness}");

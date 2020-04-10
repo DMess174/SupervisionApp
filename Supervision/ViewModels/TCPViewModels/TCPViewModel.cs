@@ -1,85 +1,27 @@
-﻿using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
-using DataLayer;
+﻿using DataLayer;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Input;
 using System.Collections.Generic;
 using DataLayer.TechnicalControlPlans;
-using System.Linq;
+using Supervision.Commands;
+using System.Threading.Tasks;
+using BusinessLayer.Repository.Implementations.Entities;
 
 namespace Supervision.ViewModels.TCPViewModels
 {
-    class TCPViewModel<TEntityTCP> : BasePropertyChanged
+    class TCPViewModel<TEntityTCP> : ViewModelBase
         where TEntityTCP : BaseTCP, new()
     {
         private readonly DataContext db;
+        private readonly TCPRepository<TEntityTCP> repo;
+        private readonly ProductTypeRepository productTypeRepo;
+        private readonly OperationTypeRepository operationTypeRepo;
         private IEnumerable<ProductType> productTypes;
         private IEnumerable<OperationType> operationTypes;
         private IEnumerable<TEntityTCP> tCPs;
         private ICollectionView tCPsView;
         private TEntityTCP selectedPoint;
-        private ICommand addPoint;
-        private ICommand savePoint;
-        private ICommand removePoint;
-
-        public ICommand AddPoint
-        {
-            get
-            {
-                return addPoint ??
-                    (
-                    addPoint = new DelegateCommand(() =>
-                            {
-                                TEntityTCP point = new TEntityTCP();
-                                db.Set<TEntityTCP>().Add(point);
-                                db.SaveChanges();
-                                SelectedPoint = point;
-                            })
-                    );
-            }
-        }
-
-        public ICommand SavePoint
-        {
-            get
-            {
-                return savePoint??
-                    (
-                    savePoint = new DelegateCommand(() =>
-                            {
-                                if (TCPs != null)
-                                {
-                                    db.Set<TEntityTCP>().UpdateRange(TCPs);
-                                    db.SaveChanges();
-                                }
-                                else
-                                    MessageBox.Show("Записи отсутствуют!", "Ошибка");
-                            })
-                    );
-            }
-        }
-
-        public ICommand RemovePoint
-        {
-            get
-            {
-                return removePoint ??
-                    (
-                    removePoint = new DelegateCommand(() =>
-                            {
-                                TEntityTCP point = SelectedPoint;
-                                if (point != null)
-                                {
-                                    db.Set<TEntityTCP>().Remove(point);
-                                    db.SaveChanges();
-                                }
-                                else MessageBox.Show("Объект не выбран!", "Ошибка");
-                            })
-                    );
-            }
-        }
 
         public TEntityTCP SelectedPoint
         {
@@ -131,14 +73,113 @@ namespace Supervision.ViewModels.TCPViewModels
             }
         }
 
-        public TCPViewModel()
+        public IAsyncCommand SaveItemsCommand { get; private set; }
+        private async Task SaveItems()
         {
-            db = new DataContext();
-            db.Set<TEntityTCP>().Include(i => i.OperationType).Load();
-            TCPs = db.Set<TEntityTCP>().Local.ToObservableCollection();
-            TCPsView = CollectionViewSource.GetDefaultView(TCPs);
-            OperationTypes = db.OperationTypes.ToList();
-            ProductTypes = db.ProductTypes.ToList();
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(TCPs));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddNewItemCommand { get; private set; }
+        private async Task AddNewItem()
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedPoint = await repo.AddAsync(new TEntityTCP());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand RemoveSelectedItemCommand { get; private set; }
+        private async Task RemoveSelectedItem()
+        {
+            if (SelectedPoint != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        IsBusy = true;
+                        await repo.RemoveAsync(SelectedPoint);
+                    }
+                    finally
+                    {
+                        IsBusy = false;
+                    }
+                }
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(TCPs))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    base.CloseWindow(obj);
+                }
+            }
+            else
+            {
+                base.CloseWindow(obj);
+            }
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public IAsyncCommand UpdateListCommand { get; private set; }
+        private async Task UpdateList()
+        {
+            try
+            {
+                IsBusy = true;
+                TCPs = await Task.Run(() => repo.GetAllAsync());
+                ProductTypes = await Task.Run(() => productTypeRepo.GetAllAsync());
+                OperationTypes = await Task.Run(() => operationTypeRepo.GetAllAsync());
+                TCPsView = CollectionViewSource.GetDefaultView(TCPs);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public static TCPViewModel<T> LoadVM<T>(DataContext context) where T : BaseTCP, new()
+        {
+            TCPViewModel<T> vm = new TCPViewModel<T>(context);
+            vm.UpdateListCommand.ExecuteAsync();
+            return vm;
+        }
+
+        public TCPViewModel(DataContext context)
+        {
+            db = context;
+            repo = new TCPRepository<TEntityTCP>(db);
+            productTypeRepo = new ProductTypeRepository(db);
+            operationTypeRepo = new OperationTypeRepository(db);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            UpdateListCommand = new AsyncCommand(UpdateList, CanExecute);
+            AddNewItemCommand = new AsyncCommand(AddNewItem);
+            RemoveSelectedItemCommand = new AsyncCommand(RemoveSelectedItem);
+            SaveItemsCommand = new AsyncCommand(SaveItems);
         }
     }
 }

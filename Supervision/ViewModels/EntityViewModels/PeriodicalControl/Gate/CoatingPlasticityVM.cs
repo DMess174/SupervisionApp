@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities;
 using DataLayer;
 using DataLayer.Journals.Periodical;
 using DataLayer.TechnicalControlPlans.Periodical;
-using DevExpress.Mvvm;
+using Supervision.Commands;
 
 namespace Supervision.ViewModels.EntityViewModels.Periodical.Gate
 {
-    public class CoatingPlasticityVM : BasePropertyChanged
+    public class CoatingPlasticityVM : ViewModelBase
     {
         private readonly DataContext db;
+        private readonly CoatingPlasticityRepository repo;
+        private readonly JournalNumberRepository journalRepo;
+        private readonly InspectorRepository inspectorRepo;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<CoatingPlasticityTCP> points;
         private IEnumerable<Inspector> inspectors;
@@ -20,10 +23,17 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical.Gate
         private CoatingPlasticityTCP selectedTCPPoint;
         private DateTime lastInspection;
         private DateTime nextInspection;
+        private CoatingPlasticityJournal operation;
 
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
+        public CoatingPlasticityJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public IEnumerable<CoatingPlasticityJournal> Journal
         {
@@ -71,58 +81,6 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical.Gate
             }
         }
 
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                saveItem = new DelegateCommand(() =>
-                {
-                    db.Set<CoatingPlasticityJournal>().UpdateRange(Journal);
-                    db.SaveChanges();
-                    if (Journal != null)
-                    {
-                        LastInspection = Convert.ToDateTime(db.CoatingPlasticityJournals.Select(i => i.Date).Max());
-                        NextInspection = LastInspection.AddYears(3);
-                    }
-                }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    { 
-                        w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new CoatingPlasticityJournal()
-                            {
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.Set<CoatingPlasticityJournal>().Add(item);
-                            db.SaveChanges();
-                            Journal = db.Set<CoatingPlasticityJournal>().OrderByDescending(x => x.Date).ToList();
-                        }
-                    }));
-            }
-        }
-
         public IEnumerable<string> JournalNumbers
         {
             get => journalNumbers;
@@ -143,18 +101,124 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical.Gate
             }
         }
 
-        public CoatingPlasticityVM()
+        public IAsyncCommand LoadItemsCommand { get; private set; }
+        public async Task Load()
         {
-            db = new DataContext();
-            Journal = db.Set<CoatingPlasticityJournal>().OrderByDescending(x => x.Date).ToList();
-            if (Journal != null)
+            try
             {
-                LastInspection = Convert.ToDateTime(db.CoatingPlasticityJournals.Select(i => i.Date).Max());
-                NextInspection = LastInspection.AddYears(3);
+                IsBusy = true;
+                Journal = await Task.Run(() => repo.GetAllAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Points = await Task.Run(() => repo.GetTCPsAsync());
+                if (Journal != null)
+                {
+                    LastInspection = await Task.Run(() => repo.GetLastDateControl());
+                    NextInspection = await Task.Run(() => repo.GetNextDateControl(LastInspection));
+                }
             }
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<CoatingPlasticityTCP>().ToList();
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(Journal));
+                if (Journal != null)
+                {
+                    LastInspection = await Task.Run(() => repo.GetLastDateControl());
+                    NextInspection = await Task.Run(() => repo.GetNextDateControl(LastInspection));
+                }
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                await repo.AddAsync(new CoatingPlasticityJournal(SelectedTCPPoint));
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        await repo.RemoveAsync(Operation);
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(Journal))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        public static CoatingPlasticityVM LoadVM(DataContext context)
+        {
+            CoatingPlasticityVM vm = new CoatingPlasticityVM(context);
+            vm.LoadItemsCommand.ExecuteAsync();
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+
+        public CoatingPlasticityVM(DataContext context)
+        {
+            db = context;
+            repo = new CoatingPlasticityRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            LoadItemsCommand = new AsyncCommand(Load);
+            SaveItemCommand = new AsyncCommand(SaveItem);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            AddOperationCommand = new AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new AsyncCommand(RemoveOperation);
         }
     }
 }

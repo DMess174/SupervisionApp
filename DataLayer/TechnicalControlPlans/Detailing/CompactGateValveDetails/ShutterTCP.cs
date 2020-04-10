@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using DataLayer.Journals.Detailing.CompactGateValveDetails;
 
 namespace DataLayer.TechnicalControlPlans.Detailing.CompactGateValveDetails
 {
     public class ShutterTCP : BaseTCP
     {
-        public IEnumerable<ShutterJournal> ShutterJournals{ get; set; }
+        public ObservableCollection<ShutterJournal> ShutterJournals{ get; set; }
     }
 }

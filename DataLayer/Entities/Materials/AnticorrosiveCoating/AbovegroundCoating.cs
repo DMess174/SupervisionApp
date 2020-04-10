@@ -1,5 +1,5 @@
 ﻿using DataLayer.Journals.Materials.AnticorrosiveCoating;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Materials.AnticorrosiveCoating
 {
@@ -9,6 +9,15 @@ namespace DataLayer.Entities.Materials.AnticorrosiveCoating
 
         public new string FullName => string.Format($"{Batch}/{Name} - {Color}/{Status}");
 
-        public IEnumerable<AbovegroundCoatingJournal> AbovegroundCoatingJournals { get; set; }
+        public ObservableCollection<AbovegroundCoatingJournal> AbovegroundCoatingJournals { get; set; }
+
+        public AbovegroundCoating()
+        {
+        }
+
+        public AbovegroundCoating(AbovegroundCoating coating) : base(coating)
+        {
+            Color = coating.Color;
+        }
     }
 }

@@ -21,13 +21,13 @@ namespace DataLayer.Entities
 
         public BaseEntity()
         {
-
+            Status = "Годен";
         }
 
-        public BaseEntity(BaseEntity entity)
+        public BaseEntity(BaseEntity entity) : base (entity)
         {
             Name = entity.Name;
-            Number = entity.Number;
+            Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер:");
             Drawing = entity.Drawing;
             Certificate = entity.Certificate;
             Status = entity.Status;

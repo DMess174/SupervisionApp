@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
 
@@ -10,9 +11,13 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
         {
             Name = "Корпус затвора";
         }
+        public ReverseShutterCase(ReverseShutterCase shutterCase) : base(shutterCase)
+        {
+
+        }
 
         public ReverseShutter ReverseShutter { get; set; }
 
-        public IEnumerable<ReverseShutterCaseJournal> ReverseShutterCaseJournals { get; set; }
+        public ObservableCollection<ReverseShutterCaseJournal> ReverseShutterCaseJournals { get; set; }
     }
 }

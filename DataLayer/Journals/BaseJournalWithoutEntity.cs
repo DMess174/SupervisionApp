@@ -23,5 +23,16 @@ namespace DataLayer.Journals
         public int? PointId { get; set; }
         [ForeignKey("PointId")]
         public TEntityTCP EntityTCP { get; set; }
+
+        public BaseJournal()
+        {
+        }
+
+        public BaseJournal(TEntityTCP tCP)
+        {
+            PointId = tCP.Id;
+            Point = tCP.Point;
+            Description = tCP.Description;
+        }
     }
 }

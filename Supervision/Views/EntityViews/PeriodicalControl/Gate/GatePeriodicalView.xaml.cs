@@ -7,6 +7,7 @@ namespace Supervision.Views.EntityViews.PeriodicalControl.Gate
         public GatePeriodicalView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

@@ -4,6 +4,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Entities\HumanResources\**" />
+    <EmbeddedResource Remove="Entities\HumanResources\**" />
+    <None Remove="Entities\HumanResources\**" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="Migrations\20200118072948_Init.cs" />
     <Compile Remove="Migrations\20200118072948_Init.Designer.cs" />
@@ -42,7 +52,6 @@
 
   <ItemGroup>
     <Folder Include="Entities\Periodical\Gate\" />
-    <Folder Include="Entities\HumanResources\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,11 +3,12 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      mc:Ignorable="d"
+        xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+        mc:Ignorable="d"
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="700" d:DesignWidth="1200"
         WindowStartupLocation="CenterScreen"
-        Title="{Binding SelectedItem.Name}">
+        Title="Редактирование шибера">
     <Window.Resources>
         <CollectionViewSource x:Key="Inspectors" Source="{Binding Inspectors}"/>
         <CollectionViewSource x:Key="Points" Source="{Binding Points}" />
@@ -262,8 +263,7 @@
                         Height="30"
                         Margin="5 0 5 0"
                         Content="Открыть"
-                        Command="{Binding EditMaterial}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                        Command="{Binding EditMaterialCommand}"/>
 
             <Separator Style="{StaticResource VerticalSeparator}"
                        Grid.Column="3"
@@ -293,8 +293,7 @@
                             Height="30"
                             Margin="5 0 5 0"
                             Content="Открыть"
-                            Command="{Binding EditPID}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditPIDCommand}"/>
             
             <TextBlock Style="{StaticResource StandardTextBlock}" 
                                Text="Спецификация:" 
@@ -326,6 +325,7 @@
                         Grid.Column="0" 
                         MinRowHeight="50"
                         ItemsSource="{Binding InputControlJournal}"
+                              SelectedItem="{Binding Operation}"
                         IsReadOnly="False"
                         HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -481,6 +481,7 @@
                         Grid.Column="0" 
                         MinRowHeight="50"
                         ItemsSource="{Binding PreparationJournal}"
+                              SelectedItem="{Binding Operation}"
                         IsReadOnly="False"
                         HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -636,6 +637,7 @@
                         Grid.Column="0" 
                         MinRowHeight="50"
                         ItemsSource="{Binding CoatingJournal}"
+                              SelectedItem="{Binding Operation}"
                         IsReadOnly="False"
                         HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -791,6 +793,7 @@
                         Grid.Column="0" 
                         MinRowHeight="50"
                         ItemsSource="{Binding TestJournal}"
+                              SelectedItem="{Binding Operation}"
                         IsReadOnly="False"
                         HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -946,6 +949,7 @@
                         Grid.Column="0" 
                         MinRowHeight="50"
                         ItemsSource="{Binding DocumentationJournal}"
+                              SelectedItem="{Binding Operation}"
                         IsReadOnly="False"
                         HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -1101,6 +1105,7 @@
                         Grid.Column="0" 
                         MinRowHeight="50"
                         ItemsSource="{Binding ShippedJournal}"
+                              SelectedItem="{Binding Operation}"
                         IsReadOnly="False"
                         HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -1258,27 +1263,31 @@
                         <Button Style="{StaticResource StandardButton}"
                                     Margin="5"
                                     Content="Хим. состав среды для обезжиривания"
-                                    Command="{Binding DegreasingChemicalCompositionOpen}"/>
+                                    Command="{Binding DegreasingChemicalCompositionOpenCommand}"/>
                         <Button Style="{StaticResource StandardButton}"
                                     Margin="5"
                                     Content="Хим. состав раствора для нанесения покрытия"
-                                    Command="{Binding CoatingChemicalCompositionOpen}"/>
+                                    Command="{Binding CoatingChemicalCompositionOpenCommand}"/>
                         <Button Style="{StaticResource StandardButton}"
                                     Margin="5"
                                     Content="Пористость покрытия"
-                                    Command="{Binding CoatingPorosityOpen}"/>
+                                    Command="{Binding CoatingPorosityOpenCommand}"/>
                         <Button Style="{StaticResource StandardButton}"
                                     Margin="5"
                                     Content="Пластичность покрытия"
-                                    Command="{Binding CoatingPlasticityOpen}"/>
+                                    Command="{Binding CoatingPlasticityOpenCommand}"/>
                         <Button Style="{StaticResource StandardButton}"
                                     Margin="5"
                                     Content="Защитные свойства покрытия"
-                                    Command="{Binding CoatingProtectivePropertiesOpen}"/>
+                                    Command="{Binding CoatingProtectivePropertiesOpenCommand}"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>
+
+        <wpfx:BusyIndicator Grid.Row="4" 
+                            IsBusy="{Binding IsBusy}"
+                            BusyContent="Обработка запроса, ждите..."/>
 
         <StackPanel Grid.Row="5" Orientation="Horizontal">
             <TextBlock Text="Выбор пункта:"
@@ -1327,7 +1336,12 @@
             <Button Style="{StaticResource StandardButton}" 
                             Content="Добавить операцию" 
                             Margin="10" 
-                            Command="{Binding AddOperation}" />
+                            Command="{Binding AddOperationCommand}" />
+
+            <Button Style="{StaticResource StandardButton}" 
+                            Content="Удалить операцию" 
+                            Margin="10" 
+                            Command="{Binding RemoveOperationCommand}" />
         </StackPanel>
         <Separator Style="{StaticResource HorizontalSeparator}" 
                    Grid.Row="6"/>
@@ -1366,14 +1380,13 @@
                             Width="70"
                             Content="Сохранить" 
                             Margin="10 2 10 2" 
-                            Command="{Binding SaveItem}" 
-                            CommandParameter="{Binding SelectedItem}"/>
+                            Command="{Binding SaveItemCommand}" />
 
                 <Button Style="{StaticResource StandardButton}" 
                             Width="70"
                             Content="Закрыть" 
                             Margin="10 2 10 2" 
-                            Command="{Binding CloseWindow}"
+                            Command="{Binding CloseWindowCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
             </StackPanel>
         </Grid>

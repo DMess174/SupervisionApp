@@ -10,6 +10,7 @@ namespace Supervision.Views.EntityViews.DetailViews.Valve
         public CastGateValveCaseEditView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

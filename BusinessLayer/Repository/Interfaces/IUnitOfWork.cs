@@ -19,6 +19,5 @@ namespace BusinessLayer.Repository.Interfaces
 
         IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : BaseTable;
-
     }
 }

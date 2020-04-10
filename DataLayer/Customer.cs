@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 
 namespace DataLayer
 {
@@ -7,7 +7,7 @@ namespace DataLayer
         public string Name { get; set; }
         public string ShortName { get; set; }
 
-        public IEnumerable<Specification> Specifications { get; set; }
+        public ObservableCollection<Specification> Specifications { get; set; }
 
         public Customer()
         {

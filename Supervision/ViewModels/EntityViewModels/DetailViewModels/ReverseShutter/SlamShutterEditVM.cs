@@ -1,42 +1,47 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
 using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Entities.Detailing.ReverseShutterDetails;
-using DataLayer.Journals;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
-using DataLayer.TechnicalControlPlans;
 using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
-using DevExpress.Mvvm;
-using DevExpress.Mvvm.Native;
-using Microsoft.EntityFrameworkCore;
-using Supervision.Views.EntityViews.DetailViews;
-using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter
 {
-    public class SlamShutterEditVM : BasePropertyChanged
+    public class SlamShutterEditVM : ViewModelBase
     {
+        private readonly BaseTable parentEntity;
+        private readonly SlamShutterRepository repo;
+        private readonly InspectorRepository inspectorRepo;
+        private readonly JournalNumberRepository journalRepo;
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
         private IEnumerable<string> drawings;
         private IEnumerable<SlamShutterTCP> points;
         private IEnumerable<Inspector> inspectors;
-        
         private IEnumerable<SlamShutterJournal> inputControlJournal;
         private IEnumerable<SlamShutterJournal> inputNDTControlJournal;
         private IEnumerable<SlamShutterJournal> mechanicalJournal;
         private IEnumerable<SlamShutterJournal> overlayingJournal;
-        private readonly BaseTable parentEntity;
+
         private SlamShutter selectedItem;
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
         private SlamShutterTCP selectedTCPPoint;
+        private SlamShutterJournal operation;
+
+        public SlamShutterJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public SlamShutter SelectedItem
         {
@@ -103,85 +108,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.SlamShutters.Update(SelectedItem);
-                            db.SaveChanges();
-                            db.SlamShutterJournals.UpdateRange(InputControlJournal);
-                            db.SlamShutterJournals.UpdateRange(InputNDTControlJournal);
-                            db.SlamShutterJournals.UpdateRange(MechanicalJournal);
-                            db.SlamShutterJournals.UpdateRange(OverlayingJournal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is SlamShutter)
-                        {
-                            var wn = new SlamShutterView();
-                            var vm = new SlamShutterVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new SlamShutterJournal()
-                            {
-                                DetailDrawing = SelectedItem.Drawing,
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.SlamShutterJournals.Add(item);
-                            db.SaveChanges();
-                            InputControlJournal = db.SlamShutterJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль")
-                                .OrderBy(x => x.PointId).ToList();
-                            InputNDTControlJournal = db.SlamShutterJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль (НК)")
-                                .OrderBy(x => x.PointId).ToList();
-                            MechanicalJournal = db.SlamShutterJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка")
-                                .OrderBy(x => x.PointId).ToList();
-                            OverlayingJournal = db.SlamShutterJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Наплавка")
-                                .OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
-            }
-        }
-
         public SlamShutterTCP SelectedTCPPoint
         {
             get => selectedTCPPoint;
@@ -220,33 +146,127 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public SlamShutterEditVM(int id, BaseTable entity)
+        public static SlamShutterEditVM LoadVM(int id, BaseTable entity, DataContext context)
         {
-            parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.SlamShutters
-                .Include(i => i.ReverseShutter)
-                .SingleOrDefault(i => i.Id == id);
-            if (SelectedItem != null)
+            SlamShutterEditVM vm = new SlamShutterEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public Commands.IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
+        {
+            try
             {
-                InputControlJournal = db.SlamShutterJournals
-                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль")
-                    .OrderBy(x => x.PointId).ToList();
-                InputNDTControlJournal = db.SlamShutterJournals
-                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль (НК)")
-                    .OrderBy(x => x.PointId).ToList();
-                MechanicalJournal = db.SlamShutterJournals
-                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка")
-                    .OrderBy(x => x.PointId).ToList();
-                OverlayingJournal = db.SlamShutterJournals
-                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Наплавка")
-                    .OrderBy(x => x.PointId).ToList();
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => repo.GetByIdIncludeAsync(id));
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Drawings = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Drawing));
+                Materials = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Material));
+                Points = await Task.Run(() => repo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+                InputControlJournal = SelectedItem.SlamShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId);
+                InputNDTControlJournal = SelectedItem.SlamShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль (НК)").OrderBy(x => x.PointId);
+                MechanicalJournal = SelectedItem.SlamShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId);
+                OverlayingJournal = SelectedItem.SlamShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Наплавка").OrderBy(x => x.PointId);
             }
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Materials = db.SlamShutters.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            Drawings = db.SlamShutters.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.SlamShutterTCPs.ToList();
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.SlamShutterJournals.Add(new SlamShutterJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                InputControlJournal = SelectedItem.SlamShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId);
+                InputNDTControlJournal = SelectedItem.SlamShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль (НК)").OrderBy(x => x.PointId);
+                MechanicalJournal = SelectedItem.SlamShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId);
+                OverlayingJournal = SelectedItem.SlamShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Наплавка").OrderBy(x => x.PointId);
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public Commands.IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.SlamShutterJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                        InputControlJournal = SelectedItem.SlamShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId);
+                        InputNDTControlJournal = SelectedItem.SlamShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль (НК)").OrderBy(x => x.PointId);
+                        MechanicalJournal = SelectedItem.SlamShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId);
+                        OverlayingJournal = SelectedItem.SlamShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Наплавка").OrderBy(x => x.PointId);
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(SelectedItem) || repo.HasChanges(SelectedItem.SlamShutterJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    base.CloseWindow(obj);
+                }
+            }
+            else
+            {
+                base.CloseWindow(obj);
+            }
+        }
+
+        public SlamShutterEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
+            parentEntity = entity;
+            repo = new SlamShutterRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            LoadItemCommand = new Supervision.Commands.AsyncCommand<int>(Load);
+            SaveItemCommand = new Supervision.Commands.AsyncCommand(SaveItem);
+            CloseWindowCommand = new Supervision.Commands.Command(o => CloseWindow(o));
+            AddOperationCommand = new Supervision.Commands.AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new Supervision.Commands.AsyncCommand(RemoveOperation);
         }
     }
 }

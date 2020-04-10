@@ -1,22 +1,22 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
 using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Journals.Detailing;
 using DataLayer.TechnicalControlPlans.Detailing;
-using DevExpress.Mvvm;
-using DevExpress.Mvvm.Native;
-using Microsoft.EntityFrameworkCore;
-using Supervision.Views.EntityViews.DetailViews;
+using Supervision.Commands;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
-    public class RunningSleeveEditVM : BasePropertyChanged
+    public class RunningSleeveEditVM : ViewModelBase
     {
         private readonly DataContext db;
         private readonly BaseTable parentEntity;
+        private readonly RunningSleeveRepository repo;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
         private IEnumerable<string> drawings;
@@ -25,10 +25,18 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         private IEnumerable<RunningSleeveJournal> journal;
 
         private RunningSleeve selectedItem;
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
         private RunningSleeveTCP selectedTCPPoint;
+        private RunningSleeveJournal operation;
+
+        public RunningSleeveJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public RunningSleeve SelectedItem
         {
@@ -65,75 +73,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             {
                 inspectors = value;
                 RaisePropertyChanged();
-            }
-        }
-
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.RunningSleeves.Update(SelectedItem);
-                            db.SaveChanges();
-                            db.RunningSleeveJournals.UpdateRange(Journal);
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Объект не найден!", "Ошибка");
-                        }
-
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is RunningSleeve)
-                        {
-                            var wn = new CastingCaseView();
-                            var vm = new RunningSleeveVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new RunningSleeveJournal()
-                            {
-                                DetailDrawing = SelectedItem.Drawing,
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.RunningSleeveJournals.Add(item);
-                            db.SaveChanges();
-                            Journal = db.RunningSleeveJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
             }
         }
 
@@ -175,17 +114,121 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
             }
         }
 
-        public RunningSleeveEditVM(int id, BaseTable entity)
+        private readonly InspectorRepository inspectorRepo;
+        private readonly JournalNumberRepository journalRepo;
+
+        public IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
         {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => repo.GetByIdIncludeAsync(id));
+                Drawings = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Drawing));
+                Materials = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Material));
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Points = await Task.Run(() => repo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.RunningSleeveJournals.Add(new RunningSleeveJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.RunningSleeveJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(SelectedItem) || repo.HasChanges(SelectedItem.RunningSleeveJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        public static RunningSleeveEditVM LoadVM(int id, BaseTable entity, DataContext context)
+        {
+            RunningSleeveEditVM vm = new RunningSleeveEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public RunningSleeveEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.RunningSleeves.Include(i => i.BaseValveCover).SingleOrDefault(i => i.Id == id);
-            Journal = db.Set<RunningSleeveJournal>().Where(i => i.DetailId == SelectedItem.Id).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Materials = db.RunningSleeves.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            Drawings = db.RunningSleeves.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.RunningSleeveTCPs.ToList();
+            repo = new RunningSleeveRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            LoadItemCommand = new AsyncCommand<int>(Load);
+            SaveItemCommand = new AsyncCommand(SaveItem);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            AddOperationCommand = new AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new AsyncCommand(RemoveOperation);
         }
     }
 }

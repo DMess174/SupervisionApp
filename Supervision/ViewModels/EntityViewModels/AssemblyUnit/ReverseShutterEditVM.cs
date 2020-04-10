@@ -1,32 +1,36 @@
-﻿using DataLayer;
+﻿using BusinessLayer.Repository.Implementations.Entities;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
+using BusinessLayer.Repository.Implementations.Entities.Material;
+using DataLayer;
 using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Entities.Detailing.ReverseShutterDetails;
 using DataLayer.Entities.Materials.AnticorrosiveCoating;
 using DataLayer.Journals.AssemblyUnits;
-using DataLayer.Journals.Detailing.ReverseShutterDetails;
-using DataLayer.Journals.Materials.AnticorrosiveCoating;
 using DataLayer.TechnicalControlPlans.AssemblyUnits;
-using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
-using DataLayer.TechnicalControlPlans.Materials.AnticorrosiveCoating;
-using DevExpress.Mvvm;
 using DevExpress.Mvvm.Native;
-using Microsoft.EntityFrameworkCore;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter;
 using Supervision.ViewModels.EntityViewModels.Materials.AnticorrosiveCoating;
 using Supervision.Views.EntityViews;
-using Supervision.Views.EntityViews.AssemblyUnit;
 using Supervision.Views.EntityViews.DetailViews.ReverseShutter;
 using Supervision.Views.EntityViews.MaterialViews.AnticorrosiveCoating;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
 {
-    public class ReverseShutterEditVM : BasePropertyChanged
+    public class ReverseShutterEditVM : ViewModelBase
     {
         private readonly DataContext db;
+        private readonly SlamShutterRepository slamRepo;
+        private readonly ShaftShutterRepository shaftRepo;
+        private readonly BronzeSleeveShutterRepository bronzeSleeveRepo;
+        private readonly SteelSleeveShutterRepository steelSleeveRepo;
+        private readonly StubShutterRepository stubRepo;
+        private readonly BaseAnticorrosiveCoatingRepository materialRepo;
+        private readonly PIDRepository pIDRepo;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<BronzeSleeveShutter> bronzeSleeves;
         private IEnumerable<SteelSleeveShutter> steelSleeves;
@@ -35,15 +39,9 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         private BronzeSleeveShutter selectedBronzeSleeveFromList;
         private StubShutter selectedStub;
         private StubShutter selectedStubFromList;
-        private ICommand editBronzeSleeve;
-        private ICommand addBronzeSleeveToShutter;
-        private ICommand deleteBronzeSleeveFromShutter;
         private IEnumerable<BaseAnticorrosiveCoating> anticorrosiveMaterials;
         private SteelSleeveShutter selectedSteelSleeve;
         private SteelSleeveShutter selectedSteelSleeveFromList;
-        private ICommand editSteelSleeve;
-        private ICommand addSteelSleeveToShutter;
-        private ICommand deleteSteelSleeveFromShutter;
         private IEnumerable<string> drawings;
         private IEnumerable<ReverseShutterTCP> points;
         private IEnumerable<ReverseShutterCase> cases;
@@ -52,33 +50,45 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<ReverseShutterJournal> assemblyJournal;
         private readonly BaseTable parentEntity;
+        private readonly ReverseShutterRepository repo;
+        private readonly InspectorRepository inspectorRepo;
+        private readonly JournalNumberRepository journalRepo;
+        private readonly ReverseShutterCaseRepository caseRepo;
         private ReverseShutter selectedItem;
         private ReverseShutterTCP selectedTCPPoint;
+        private ReverseShutterJournal operation;
+        private CoatingJournal coatingOperation;
 
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
-        private ICommand editCase;
-        private ICommand editSlam;
-        private ICommand editShaft;
+        public CoatingJournal CoatingOperation
+        {
+            get => coatingOperation;
+            set
+            {
+                coatingOperation = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ReverseShutterJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private IEnumerable<ReverseShutterJournal> testJournal;
         private IEnumerable<ReverseShutterJournal> afterTestJournal;
         private IEnumerable<ReverseShutterJournal> documentationJournal;
         private IEnumerable<ReverseShutterJournal> shippingJournal;
         private IEnumerable<CoatingJournal> coatingJournal;
-        private ICommand addStubToShutter;
-        private ICommand editStub;
-        private ICommand deleteStubFromShutter;
-        private ICommand editPID;
         private IEnumerable<PID> pIDs;
         private CoatingTCP selectedCoatingTCPPoint;
         private IEnumerable<CoatingTCP> coatingPoints;
-        private ICommand addCoatingOperation;
         private BaseAnticorrosiveCoating selectedMaterial;
         private ReverseShutterWithCoating selectedMaterialFromList;
-        private ICommand addMaterialToShutter;
-        private ICommand editMaterial;
-        private ICommand deleteMaterialFromShutter;
 
         public ReverseShutter SelectedItem
         {
@@ -171,133 +181,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            if (SelectedItem.ReverseShutterCaseId != null)
-                            {
-                                var detail = db.ReverseShutterCases.Include(i => i.ReverseShutter).SingleOrDefault(i => i.Id == SelectedItem.ReverseShutterCaseId);
-                                if (detail?.ReverseShutter != null && detail.ReverseShutter.Id != SelectedItem.Id)
-                                {
-                                    MessageBox.Show($"Корпус применен в {detail.ReverseShutter.Name} № {detail.ReverseShutter.Number}", "Ошибка");
-                                    return;
-                                }
-                            }
-                            if (SelectedItem.SlamShutterId != null)
-                            {
-                                var detail = db.SlamShutters.Include(i => i.ReverseShutter).SingleOrDefault(i => i.Id == SelectedItem.SlamShutterId);
-                                if (detail?.ReverseShutter != null && detail.ReverseShutter.Id != SelectedItem.Id)
-                                {
-                                    MessageBox.Show($"Захлопка применена в {detail.ReverseShutter.Name} № {detail.ReverseShutter.Number}", "Ошибка");
-                                    return;
-                                }
-                            }
-                            if (SelectedItem.ShaftShutterId != null)
-                            {
-                                var detail = db.ShaftShutters.Include(i => i.ReverseShutter).SingleOrDefault(i => i.Id == SelectedItem.ShaftShutterId);
-                                if (detail?.ReverseShutter != null && detail.ReverseShutter.Id != SelectedItem.Id)
-                                {
-                                    MessageBox.Show($"Ось применена в {detail.ReverseShutter.Name} № {detail.ReverseShutter.Number}", "Ошибка");
-                                    return;
-                                }
-                            }
-                            db.Set<ReverseShutter>().Update(SelectedItem);
-                            db.SaveChanges();
-                            db.Set<ReverseShutterJournal>().UpdateRange(AssemblyJournal);
-                            db.Set<ReverseShutterJournal>().UpdateRange(AfterTestJournal);
-                            db.Set<CoatingJournal>().UpdateRange(CoatingJournal);
-                            db.Set<ReverseShutterJournal>().UpdateRange(TestJournal);
-                            db.Set<ReverseShutterJournal>().UpdateRange(DocumentationJournal);
-                            db.Set<ReverseShutterJournal>().UpdateRange(ShippingJournal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is ReverseShutter)
-                        {
-                            var wn = new ReverseShutterView();
-                            var vm = new ReverseShutterVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                           addOperation = new DelegateCommand(() =>
-                           {
-                               if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                               else
-                               {
-                                   var item = new ReverseShutterJournal()
-                                   {
-                                       DetailDrawing = SelectedItem.Drawing,
-                                       DetailNumber = SelectedItem.Number,
-                                       DetailName = SelectedItem.Name,
-                                       DetailId = SelectedItem.Id,
-                                       Point = SelectedTCPPoint.Point,
-                                       Description = SelectedTCPPoint.Description,
-                                       PointId = SelectedTCPPoint.Id,
-                                   };
-                                   db.Set<ReverseShutterJournal>().Add(item);
-                                   db.SaveChanges();
-                                   AssemblyJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId).ToList();
-                                   TestJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
-                                   AfterTestJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ВИК после ПСИ").OrderBy(x => x.PointId).ToList();
-                                   DocumentationJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId).ToList();
-                                   ShippingJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId).ToList();
-                               }
-                           }));
-            }
-        }
-        public ICommand AddCoatingOperation
-        {
-            get
-            {
-                return addCoatingOperation ?? (
-                           addCoatingOperation = new DelegateCommand(() =>
-                           {
-                               if (SelectedCoatingTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                               else
-                               {
-                                   var item = new CoatingJournal()
-                                   {
-                                       DetailDrawing = SelectedItem.Drawing,
-                                       DetailNumber = SelectedItem.Number,
-                                       DetailName = SelectedItem.Name,
-                                       DetailId = SelectedItem.Id,
-                                       Point = SelectedCoatingTCPPoint.Point,
-                                       Description = SelectedCoatingTCPPoint.Description,
-                                       PointId = SelectedCoatingTCPPoint.Id,
-                                   };
-                                   db.Set<CoatingJournal>().Add(item);
-                                   db.SaveChanges();
-                                   CoatingJournal = db.Set<CoatingJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                               }
-                           }));
-            }
-        }
+        
         public BronzeSleeveShutter SelectedBronzeSleeve
         {
             get => selectedBronzeSleeve;
@@ -317,70 +201,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
-        public ICommand AddBronzeSleeveToShutter
-        {
-            get
-            {
-                return addBronzeSleeveToShutter ?? (
-                           addBronzeSleeveToShutter = new DelegateCommand(() =>
-                           {
-                                if (SelectedItem.BronzeSleeveShutters.Count() < 2)
-                                {
-                                    if (SelectedBronzeSleeve != null)
-                                    {
-                                        var item = SelectedBronzeSleeve;
-                                        item.ReverseShutterId = SelectedItem.Id;
-                                        db.BronzeSleeveShutters.Update(item);
-                                        db.SaveChanges();
-                                        BronzeSleeves = null;
-                                        BronzeSleeves = db.BronzeSleeveShutters.Local.Where(i => i.ReverseShutterId == null).ToObservableCollection();
-                                    }
-                                    else MessageBox.Show("Объект не выбран!", "Ошибка");
-                                }
-                                else MessageBox.Show("Невозможно привязать более 2 втулок!", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditBronzeSleeve
-        {
-            get
-            {
-                return editBronzeSleeve ?? (
-                           editBronzeSleeve = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedBronzeSleeveFromList != null)
-                               {
-                                   var wn = new ReverseShutterDetailEditView();
-                                   var vm = new ReverseShutterDetailEditVM<BronzeSleeveShutter, BronzeSleeveShutterTCP, BronzeSleeveShutterJournal>(SelectedBronzeSleeveFromList.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
-
-        public ICommand DeleteBronzeSleeveFromShutter
-        {
-            get
-            {
-                return deleteBronzeSleeveFromShutter ?? (
-                    deleteBronzeSleeveFromShutter = new DelegateCommand<Window>((w) =>
-                    {
-                        if (SelectedBronzeSleeveFromList != null)
-                        {
-                            var item = SelectedBronzeSleeveFromList;
-                            item.ReverseShutterId = null;
-                            item.ReverseShutter = null;
-                            db.BronzeSleeveShutters.Update(item);
-                            db.SaveChanges();
-                            BronzeSleeves = null;
-                            BronzeSleeves = db.BronzeSleeveShutters.Local.Where(i => i.ReverseShutterId == null).ToObservableCollection();
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
+        
         public SteelSleeveShutter SelectedSteelSleeve
         {
             get => selectedSteelSleeve;
@@ -400,69 +221,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
-        public ICommand AddSteelSleeveToShutter
-        {
-            get
-            {
-                return addSteelSleeveToShutter ?? (
-                           addSteelSleeveToShutter = new DelegateCommand(() =>
-                           {
-                               if (SelectedItem.SteelSleeveShutters.Count() < 2)
-                               {
-                                   if (SelectedSteelSleeve != null)
-                                   {
-                                       var item = SelectedSteelSleeve;
-                                       item.ReverseShutterId = SelectedItem.Id;
-                                       db.SteelSleeveShutters.Update(item);
-                                       db.SaveChanges();
-                                       SteelSleeves = null;
-                                       SteelSleeves = db.SteelSleeveShutters.Local.Where(i => i.ReverseShutterId == null).ToObservableCollection();
-                                   }
-                                   else MessageBox.Show("Объект не выбран!", "Ошибка");
-                               }
-                               else MessageBox.Show("Невозможно привязать более 2 втулок!", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditSteelSleeve
-        {
-            get
-            {
-                return editSteelSleeve ?? (
-                           editSteelSleeve = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedSteelSleeveFromList != null)
-                               {
-                                   var wn = new ReverseShutterDetailEditView();
-                                   var vm = new ReverseShutterDetailEditVM<SteelSleeveShutter, SteelSleeveShutterTCP, SteelSleeveShutterJournal>(SelectedSteelSleeveFromList.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
-
-        public ICommand DeleteSteelSleeveFromShutter
-        {
-            get
-            {
-                return deleteSteelSleeveFromShutter ?? (
-                           deleteSteelSleeveFromShutter = new DelegateCommand(() =>
-                           {
-                               if (SelectedSteelSleeveFromList != null)
-                               {
-                                   var item = SelectedSteelSleeveFromList;
-                                   item.ReverseShutterId = null;
-                                   db.SteelSleeveShutters.Update(item);
-                                   db.SaveChanges();
-                                   SteelSleeves = null;
-                                   SteelSleeves = db.SteelSleeveShutters.Local.Where(i => i.ReverseShutterId == null).ToObservableCollection();
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
+        
         public StubShutter SelectedStub
         {
             get => selectedStub;
@@ -482,69 +241,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
-        public ICommand AddStubToShutter
-        {
-            get
-            {
-                return addStubToShutter ?? (
-                           addStubToShutter = new DelegateCommand(() =>
-                           {
-                               if (SelectedItem.StubShutters.Count() < 2)
-                               {
-                                   if (SelectedStub != null)
-                                   {
-                                       var item = SelectedStub;
-                                       item.ReverseShutterId = SelectedItem.Id;
-                                       db.StubShutters.Update(item);
-                                       db.SaveChanges();
-                                       Stubs = null;
-                                       Stubs = db.StubShutters.Local.Where(i => i.ReverseShutterId == null).ToObservableCollection();
-                                   }
-                                   else MessageBox.Show("Объект не выбран!", "Ошибка");
-                               }
-                               else MessageBox.Show("Невозможно привязать более 2 заглушек!", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditStub
-        {
-            get
-            {
-                return editStub ?? (
-                           editStub = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedStubFromList != null)
-                               {
-                                   var wn = new ReverseShutterDetailEditView();
-                                   var vm = new ReverseShutterDetailEditVM<StubShutter, StubShutterTCP, StubShutterJournal>(SelectedStubFromList.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
-
-        public ICommand DeleteStubFromShutter
-        {
-            get
-            {
-                return deleteStubFromShutter ?? (
-                           deleteStubFromShutter = new DelegateCommand(() =>
-                           {
-                               if (SelectedStubFromList != null)
-                               {
-                                   var item = SelectedStubFromList;
-                                   item.ReverseShutterId = null;
-                                   db.StubShutters.Update(item);
-                                   db.SaveChanges();
-                                   Stubs = null;
-                                   Stubs = db.StubShutters.Local.Where(i => i.ReverseShutterId == null).ToObservableCollection();
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
+        
         public BaseAnticorrosiveCoating SelectedMaterial
         {
             get => selectedMaterial;
@@ -564,160 +261,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
-        public ICommand AddMaterialToShutter
-        {
-            get
-            {
-                return addMaterialToShutter ?? (
-                           addMaterialToShutter = new DelegateCommand(() =>
-                           {
-                               if (SelectedMaterial != null)
-                               {
-                                   var item = new ReverseShutterWithCoating()
-                                   {
-                                       ReverseShutterId = SelectedItem.Id,
-                                       BaseAnticorrosiveCoatingId = SelectedMaterial.Id
-                                   };
-                                   db.ReverseShutterWithCoatings.Add(item);
-                                   db.SaveChanges();
-                               }
-                               else MessageBox.Show("Объект не выбран!", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditMaterial
-        {
-            get
-            {
-                return editMaterial ?? (
-                           editMaterial = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedMaterialFromList != null)
-                               {
-                                   if (SelectedMaterialFromList.BaseAnticorrosiveCoating is Undercoat)
-                                   {
-                                       var wn = new BaseAnticorrosiveCoatingEditView();
-                                       var vm = new BaseAnticorrosiveCoatingEditVM<Undercoat, AnticorrosiveCoatingTCP, UndercoatJournal>(SelectedMaterialFromList.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                                   if (SelectedMaterialFromList.BaseAnticorrosiveCoating is AbovegroundCoating)
-                                   {
-                                       var wn = new BaseAnticorrosiveCoatingEditView();
-                                       var vm = new BaseAnticorrosiveCoatingEditVM<AbovegroundCoating, AnticorrosiveCoatingTCP, AbovegroundCoatingJournal>(SelectedMaterialFromList.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                                   if (SelectedMaterialFromList.BaseAnticorrosiveCoating is UndergroundCoating)
-                                   {
-                                       var wn = new BaseAnticorrosiveCoatingEditView();
-                                       var vm = new BaseAnticorrosiveCoatingEditVM<UndergroundCoating, AnticorrosiveCoatingTCP, UndergroundCoatingJournal>(SelectedMaterialFromList.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                                   if (SelectedMaterialFromList.BaseAnticorrosiveCoating is AbrasiveMaterial)
-                                   {
-                                       var wn = new BaseAnticorrosiveCoatingEditView();
-                                       var vm = new BaseAnticorrosiveCoatingEditVM<AbrasiveMaterial, AnticorrosiveCoatingTCP, AbrasiveMaterialJournal>(SelectedMaterialFromList.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
-
-        public ICommand DeleteMaterialFromShutter
-        {
-            get
-            {
-                return deleteMaterialFromShutter ?? (
-                           deleteMaterialFromShutter = new DelegateCommand(() =>
-                           {
-                               if (SelectedMaterialFromList != null)
-                               {
-                                   var item = db.ReverseShutterWithCoatings.SingleOrDefault(i => i.ReverseShutterId == SelectedItem.Id && i.BaseAnticorrosiveCoatingId == SelectedMaterialFromList.Id);
-                                   db.ReverseShutterWithCoatings.Remove(item);
-                                   db.SaveChanges();
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditCase
-        {
-            get
-            {
-                return editCase ?? (
-                           editCase = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.ReverseShutterCase != null)
-                               {
-                                   var wn = new ReverseShutterCaseEditView();
-                                   var vm = new ReverseShutterCaseEditVM(SelectedItem.ReverseShutterCase.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Для просмотра привяжите деталь", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditSlam
-        {
-            get
-            {
-                return editSlam ?? (
-                           editSlam = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.SlamShutter != null)
-                               {
-                                   var wn = new SlamShutterEditView();
-                                   var vm = new SlamShutterEditVM(SelectedItem.SlamShutter.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Для просмотра привяжите деталь", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditShaft
-        {
-            get
-            {
-                return editShaft ?? (
-                           editShaft = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.ShaftShutter != null)
-                               {
-                                   var wn = new ReverseShutterDetailEditView();
-                                   var vm = new ReverseShutterDetailEditVM<ShaftShutter, ShaftShutterTCP, ShaftShutterJournal>(SelectedItem.ShaftShutter.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Для просмотра привяжите деталь", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditPID
-        {
-            get
-            {
-                return editPID ?? (
-                           editPID = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.PIDId != null)
-                               {
-                                   var wn = new PIDEditView();
-                                   var vm = new PIDEditVM(SelectedItem.PID.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Для просмотра привяжите деталь", "Ошибка");
-                           }));
-            }
-        }
-
+        
         public IEnumerable<PID> PIDs
         {
             get => pIDs;
@@ -727,6 +271,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
+
         public IEnumerable<ReverseShutterCase> Cases
         {
             get => cases;
@@ -736,6 +281,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
+
         public IEnumerable<SlamShutter> Slams
         {
             get => slams;
@@ -745,6 +291,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
+
         public IEnumerable<ShaftShutter> Shafts
         {
             get => shafts;
@@ -754,6 +301,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
+
         public IEnumerable<BronzeSleeveShutter> BronzeSleeves
         {
             get => bronzeSleeves;
@@ -763,6 +311,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
+
         public IEnumerable<SteelSleeveShutter> SteelSleeves
         {
             get => steelSleeves;
@@ -772,6 +321,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
+
         public IEnumerable<StubShutter> Stubs
         {
             get => stubs;
@@ -781,6 +331,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
+
         public IEnumerable<BaseAnticorrosiveCoating> AnticorrosiveMaterials
         {
             get => anticorrosiveMaterials;
@@ -790,6 +341,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
+
         public IEnumerable<string> Drawings
         {
             get => drawings;
@@ -799,6 +351,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
+
         public IEnumerable<string> JournalNumbers
         {
             get => journalNumbers;
@@ -818,6 +371,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 RaisePropertyChanged();
             }
         }
+
         public CoatingTCP SelectedCoatingTCPPoint
         {
             get => selectedCoatingTCPPoint;
@@ -828,39 +382,566 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             }
         }
 
-        public ReverseShutterEditVM(int id, BaseTable entity)
+        public Supervision.Commands.IAsyncCommand AddMaterialToShutterCommand { get; private set; }
+        private async Task AddMaterialToShutter()
         {
+            try
+            {
+                if (SelectedMaterial != null)
+                {
+                    IsBusy = true;
+                    SelectedItem.ReverseShutterWithCoatings.Add(new ReverseShutterWithCoating() { ReverseShutterId = SelectedItem.Id, BaseAnticorrosiveCoatingId = SelectedMaterial.Id });
+                    materialRepo.Update(SelectedMaterial);
+                    SelectedMaterial = null;
+                    await SaveItemCommand.ExecuteAsync();
+                }
+                else MessageBox.Show("Объект не выбран!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand DeleteMaterialFromShutterCommand { get; private set; }
+        private async Task DeleteMaterialFromShutter()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedMaterialFromList != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedMaterial = SelectedMaterialFromList.BaseAnticorrosiveCoating;
+                        SelectedItem.ReverseShutterWithCoatings.Remove(SelectedMaterialFromList);
+                        materialRepo.Update(SelectedMaterial);
+                        SelectedMaterial = null;
+                        await SaveItemCommand.ExecuteAsync();
+                    }
+                }
+                else MessageBox.Show("Объект не выбран!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public ICommand EditMaterialCommand { get; private set; }
+        private void EditMaterial()
+        {
+            if (SelectedMaterialFromList != null)
+            {
+                if (SelectedMaterialFromList.BaseAnticorrosiveCoating is Undercoat)
+                {
+                    _ = new BaseAnticorrosiveCoatingEditView
+                    {
+                        DataContext = UndercoatEditVM.LoadVM(SelectedMaterialFromList.BaseAnticorrosiveCoatingId, SelectedItem, db)
+                    };
+                }
+                if (SelectedMaterialFromList.BaseAnticorrosiveCoating is AbovegroundCoating)
+                {
+                    _ = new BaseAnticorrosiveCoatingEditView
+                    {
+                        DataContext = AbovegroundCoatingEditVM.LoadVM(SelectedMaterialFromList.BaseAnticorrosiveCoatingId, SelectedItem, db)
+                    };
+                }
+                if (SelectedMaterialFromList.BaseAnticorrosiveCoating is UndergroundCoating)
+                {
+                    _ = new BaseAnticorrosiveCoatingEditView
+                    {
+                        DataContext = UndergroundCoatingEditVM.LoadVM(SelectedMaterialFromList.BaseAnticorrosiveCoatingId, SelectedItem, db)
+                    };
+                }
+                if (SelectedMaterialFromList.BaseAnticorrosiveCoating is AbrasiveMaterial)
+                {
+                    _ = new BaseAnticorrosiveCoatingEditView
+                    {
+                        DataContext = AbrasiveMaterialEditVM.LoadVM(SelectedMaterialFromList.BaseAnticorrosiveCoatingId, SelectedItem, db)
+                    };
+                }
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        public Supervision.Commands.IAsyncCommand AddBronzeSleeveToShutterCommand { get; private set; }
+        private async Task AddBronzeSleeveToShutter()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedItem.BronzeSleeveShutters?.Count() < 2 || SelectedItem.BronzeSleeveShutters == null)
+                {
+                    if (SelectedBronzeSleeve != null)
+                    {
+                        if (!await bronzeSleeveRepo.IsAssembliedAsync(SelectedBronzeSleeve))
+                        {
+                            SelectedBronzeSleeve.ReverseShutterId = SelectedItem.Id;
+                            bronzeSleeveRepo.Update(SelectedBronzeSleeve);
+                            SelectedBronzeSleeve = null;
+                            BronzeSleeves = bronzeSleeveRepo.UpdateList();
+                        }
+                    }
+                    else MessageBox.Show("Объект не выбран!", "Ошибка");
+                }
+                else MessageBox.Show("Невозможно привязать более 2 втулок!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand DeleteBronzeSleeveFromShutterCommand { get; private set; }
+        private async Task DeleteBronzeSleeveFromShutter()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedBronzeSleeveFromList != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedBronzeSleeveFromList.ReverseShutterId = null;
+                        bronzeSleeveRepo.Update(SelectedBronzeSleeveFromList);
+                        BronzeSleeves = bronzeSleeveRepo.UpdateList();
+                    }
+                }
+                else MessageBox.Show("Объект не выбран!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public ICommand EditBronzeSleeveCommand { get; private set; }
+        private void EditBronzeSleeve()
+        {
+            if (SelectedBronzeSleeveFromList != null)
+            {
+                _ = new BronzeSleeveShutterEditView
+                {
+                    DataContext = BronzeSleeveShutterEditVM.LoadVM(SelectedBronzeSleeveFromList.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        public Supervision.Commands.IAsyncCommand AddSteelSleeveToShutterCommand { get; private set; }
+        private async Task AddSteelSleeveToShutter()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedItem.SteelSleeveShutters?.Count() < 2 || SelectedItem.SteelSleeveShutters == null)
+                {
+                    if (SelectedSteelSleeve != null)
+                    {
+                        if (!await steelSleeveRepo.IsAssembliedAsync(SelectedSteelSleeve))
+                        {
+                            SelectedSteelSleeve.ReverseShutterId = SelectedItem.Id;
+                            steelSleeveRepo.Update(SelectedSteelSleeve);
+                            SelectedSteelSleeve = null;
+                            SteelSleeves = steelSleeveRepo.UpdateList();
+                        }
+                    }
+                    else MessageBox.Show("Объект не выбран!", "Ошибка");
+                }
+                else MessageBox.Show("Невозможно привязать более 2 втулок!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand DeleteSteelSleeveFromShutterCommand { get; private set; }
+        private async Task DeleteSteelSleeveFromShutter()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedSteelSleeveFromList != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedSteelSleeveFromList.ReverseShutterId = null;
+                        steelSleeveRepo.Update(SelectedSteelSleeveFromList);
+                        SteelSleeves = steelSleeveRepo.UpdateList();
+                    }
+                }
+                else MessageBox.Show("Объект не выбран!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public ICommand EditSteelSleeveCommand { get; private set; }
+        private void EditSteelSleeve()
+        {
+            if (SelectedSteelSleeveFromList != null)
+            {
+                _ = new ReverseShutterDetailEditView
+                {
+                    DataContext = SteelSleeveShutterEditVM.LoadVM(SelectedSteelSleeveFromList.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        public Supervision.Commands.IAsyncCommand AddStubToShutterCommand { get; private set; }
+        private async Task AddStubToShutter()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedItem.StubShutters?.Count() < 2 || SelectedItem.StubShutters == null)
+                {
+                    if (SelectedStub != null)
+                    {
+                        if (!await stubRepo.IsAssembliedAsync(SelectedStub))
+                        {
+                            SelectedStub.ReverseShutterId = SelectedItem.Id;
+                            stubRepo.Update(SelectedStub);
+                            SelectedStub = null;
+                            Stubs = stubRepo.UpdateList();
+                        }
+                    }
+                    else MessageBox.Show("Объект не выбран!", "Ошибка");
+                }
+                else MessageBox.Show("Невозможно привязать более 2 заглушек!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand DeleteStubFromShutterCommand { get; private set; }
+        private async Task DeleteStubFromShutter()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedStubFromList != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedStubFromList.ReverseShutterId = null;
+                        stubRepo.Update(SelectedStubFromList);
+                        Stubs = stubRepo.UpdateList();
+                    }
+                }
+                else MessageBox.Show("Объект не выбран!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public ICommand EditStubCommand { get; private set; }
+        private void EditStub()
+        {
+            if (SelectedStubFromList != null)
+            {
+                _ = new ReverseShutterDetailEditView
+                {
+                    DataContext = StubShutterEditVM.LoadVM(SelectedStubFromList.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        public ICommand EditCaseCommand { get; private set; }
+        private void EditCase()
+        {
+            if (SelectedItem.ReverseShutterCase != null)
+            {
+                _ = new ReverseShutterCaseEditView
+                {
+                    DataContext = ReverseShutterCaseEditVM.LoadVM(SelectedItem.ReverseShutterCase.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Для просмотра привяжите корпус", "Ошибка");
+        }
+
+        public ICommand EditShaftCommand { get; private set; }
+        private void EditShaft()
+        {
+            if (SelectedItem.ShaftShutter != null)
+            {
+                _ = new ReverseShutterDetailEditView
+                {
+                    DataContext = ShaftShutterEditVM.LoadVM(SelectedItem.ShaftShutter.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Для просмотра привяжите ось", "Ошибка");
+        }
+
+        public ICommand EditSlamCommand { get; private set; }
+        private void EditSlam()
+        {
+            if (SelectedItem.SlamShutter != null)
+            {
+                _ = new SlamShutterEditView
+                {
+                    DataContext = SlamShutterEditVM.LoadVM(SelectedItem.SlamShutter.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Для просмотра привяжите захлопку", "Ошибка");
+        }
+
+        public ICommand EditPIDCommand { get; private set; }
+        private void EditPID()
+        {
+            if (SelectedItem.PID != null)
+            {
+                _ = new PIDEditView
+                {
+                    DataContext = PIDEditVM.LoadPIDEditVM(SelectedItem.PID.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Для просмотра привяжите PID", "Ошибка");
+        }
+
+        public Supervision.Commands.IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                //if (SelectedItem.PIDId != null)
+                //{
+                //    if (!await Task.Run(() => pIDRepo.IsAmountRemaining(SelectedItem)))
+                //    {
+                //        SelectedItem.PID = null;
+                //    }
+                //}
+                if (SelectedItem.ReverseShutterCaseId != null)
+                {
+                    if (await Task.Run(() => caseRepo.IsAssembliedAsync(SelectedItem)))
+                    {
+                        SelectedItem.ReverseShutterCase = null;
+                    }
+                }
+                if (SelectedItem.SlamShutterId != null)
+                {
+                    if (await Task.Run(() => slamRepo.IsAssembliedAsync(SelectedItem)))
+                    {
+                        SelectedItem.SlamShutter = null;
+                    }
+                }
+                if (SelectedItem.ShaftShutterId != null)
+                {
+                    if (await Task.Run(() => shaftRepo.IsAssembliedAsync(SelectedItem)))
+                    {
+                        SelectedItem.ShaftShutter = null;
+                    }
+                }
+                await Task.Run(() => repo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.ReverseShutterJournals.Add(new ReverseShutterJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                AssemblyJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId);
+                TestJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId);
+                AfterTestJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "ВИК после ПСИ").OrderBy(x => x.PointId);
+                DocumentationJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId);
+                ShippingJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId);
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public Commands.IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.ReverseShutterJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                        AssemblyJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId);
+                        TestJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId);
+                        AfterTestJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "ВИК после ПСИ").OrderBy(x => x.PointId);
+                        DocumentationJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId);
+                        ShippingJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId);
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand AddCoatingOperationCommand { get; private set; }
+        public async Task AddCoatingOperation()
+        {
+            if (SelectedCoatingTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.CoatingJournals.Add(new CoatingJournal(SelectedItem, SelectedCoatingTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                CoatingJournal = SelectedItem.CoatingJournals.OrderBy(x => x.PointId);
+                SelectedCoatingTCPPoint = null;
+            }
+        }
+
+        public Commands.IAsyncCommand RemoveCoatingOperationCommand { get; private set; }
+        private async Task RemoveCoatingOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (CoatingOperation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.CoatingJournals.Remove(CoatingOperation);
+                        await SaveItemCommand.ExecuteAsync();
+                        CoatingJournal = SelectedItem.CoatingJournals.OrderBy(x => x.PointId);
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(SelectedItem) || repo.HasChanges(SelectedItem.ReverseShutterJournals) || repo.HasChanges(SelectedItem.CoatingJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    base.CloseWindow(obj);
+                }
+            }
+            else
+            {
+                base.CloseWindow(obj);
+            }
+        }
+
+        public static ReverseShutterEditVM LoadVM(int id, BaseTable entity, DataContext context)
+        {
+            ReverseShutterEditVM vm = new ReverseShutterEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        
+
+        public Commands.IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => repo.GetByIdIncludeAsync(id));
+                PIDs = await Task.Run(() => pIDRepo.GetAllAsync());
+                Cases = await Task.Run(() => caseRepo.GetAllAsync());
+                Slams = await Task.Run(() => slamRepo.GetAllAsync());
+                Shafts = await Task.Run(() => shaftRepo.GetAllAsync());
+                await Task.Run(() => bronzeSleeveRepo.Load());
+                await Task.Run(() => steelSleeveRepo.Load());
+                await Task.Run(() => stubRepo.Load());
+                AnticorrosiveMaterials = await Task.Run(() => materialRepo.GetAllAsync());
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Drawings = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Drawing));
+                Points = await Task.Run(() => repo.GetTCPsAsync());
+                CoatingPoints = await Task.Run(() => repo.GetCoatingTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+                BronzeSleeves = bronzeSleeveRepo.UpdateList();
+                SteelSleeves = steelSleeveRepo.UpdateList();
+                Stubs = stubRepo.UpdateList();
+                AssemblyJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId);
+                TestJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId);
+                AfterTestJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "ВИК после ПСИ").OrderBy(x => x.PointId);
+                CoatingJournal = SelectedItem.CoatingJournals.OrderBy(x => x.PointId);
+                DocumentationJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId);
+                ShippingJournal = SelectedItem.ReverseShutterJournals.Where(i => i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public ReverseShutterEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.Set<ReverseShutter>().SingleOrDefault(i => i.Id == id);
-            PIDs = db.PIDs.Include(i => i.Specification).ToList();
-            AssemblyJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId).ToList();
-            TestJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
-            AfterTestJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ВИК после ПСИ").OrderBy(x => x.PointId).ToList();
-            CoatingJournal = db.Set<CoatingJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            DocumentationJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId).ToList();
-            ShippingJournal = db.Set<ReverseShutterJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Drawings = db.Set<ReverseShutter>().Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            db.BronzeSleeveShutters.Load();
-            SelectedItem.BronzeSleeveShutters = db.BronzeSleeveShutters.Local.Where(i => i.ReverseShutterId == SelectedItem.Id).ToObservableCollection();
-            db.SteelSleeveShutters.Load();
-            SelectedItem.SteelSleeveShutters = db.SteelSleeveShutters.Local.Where(i => i.ReverseShutterId == SelectedItem.Id).ToObservableCollection();
-            db.StubShutters.Load();
-            SelectedItem.StubShutters = db.StubShutters.Local.Where(i => i.ReverseShutterId == SelectedItem.Id).ToObservableCollection();
-            db.ReverseShutterWithCoatings.Load();
-            SelectedItem.ReverseShutterWithCoatings = db.ReverseShutterWithCoatings.Local.Where(i => i.ReverseShutterId == SelectedItem.Id).ToObservableCollection();
-            Cases = db.ReverseShutterCases.ToList();
-            Slams = db.SlamShutters.ToList();
-            Shafts = db.ShaftShutters.ToList();
-            BronzeSleeves = db.BronzeSleeveShutters.Local.Where(i => i.ReverseShutterId == null).ToObservableCollection();
-            SteelSleeves = db.SteelSleeveShutters.Local.Where(i => i.ReverseShutterId == null).ToObservableCollection();
-            Stubs = db.StubShutters.Local.Where(i => i.ReverseShutterId == null).ToObservableCollection();
-            db.BaseAnticorrosiveCoatings.Load();
-            AnticorrosiveMaterials = db.BaseAnticorrosiveCoatings.ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<ReverseShutterTCP>().ToList();
-            CoatingPoints = db.CoatingTCPs.ToList();
+            repo = new ReverseShutterRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            caseRepo = new ReverseShutterCaseRepository(db);
+            slamRepo = new SlamShutterRepository(db);
+            shaftRepo = new ShaftShutterRepository(db);
+            bronzeSleeveRepo = new BronzeSleeveShutterRepository(db);
+            steelSleeveRepo = new SteelSleeveShutterRepository(db);
+            stubRepo = new StubShutterRepository(db);
+            materialRepo = new BaseAnticorrosiveCoatingRepository(db);
+            pIDRepo = new PIDRepository(db);
+            LoadItemCommand = new Supervision.Commands.AsyncCommand<int>(Load);
+            SaveItemCommand = new Supervision.Commands.AsyncCommand(SaveItem);
+            CloseWindowCommand = new Supervision.Commands.Command(o => CloseWindow(o));
+            AddOperationCommand = new Supervision.Commands.AsyncCommand(AddOperation);
+            RemoveOperationCommand = new Supervision.Commands.AsyncCommand(RemoveOperation);
+            AddCoatingOperationCommand = new Supervision.Commands.AsyncCommand(AddCoatingOperation);
+            RemoveCoatingOperationCommand = new Supervision.Commands.AsyncCommand(RemoveCoatingOperation);
+            AddBronzeSleeveToShutterCommand = new Supervision.Commands.AsyncCommand(AddBronzeSleeveToShutter);
+            DeleteBronzeSleeveFromShutterCommand = new Supervision.Commands.AsyncCommand(DeleteBronzeSleeveFromShutter);
+            EditBronzeSleeveCommand = new Supervision.Commands.Command(o => EditBronzeSleeve());
+            AddSteelSleeveToShutterCommand = new Supervision.Commands.AsyncCommand(AddSteelSleeveToShutter);
+            DeleteSteelSleeveFromShutterCommand = new Supervision.Commands.AsyncCommand(DeleteSteelSleeveFromShutter);
+            EditSteelSleeveCommand = new Supervision.Commands.Command(o => EditSteelSleeve());
+            AddStubToShutterCommand = new Supervision.Commands.AsyncCommand(AddStubToShutter);
+            DeleteStubFromShutterCommand = new Supervision.Commands.AsyncCommand(DeleteStubFromShutter);
+            EditStubCommand = new Supervision.Commands.Command(o => EditStub());
+            AddMaterialToShutterCommand = new Supervision.Commands.AsyncCommand(AddMaterialToShutter);
+            DeleteMaterialFromShutterCommand = new Supervision.Commands.AsyncCommand(DeleteMaterialFromShutter);
+            EditMaterialCommand = new Supervision.Commands.Command(o => EditMaterial());
+            EditCaseCommand = new Supervision.Commands.Command(o => EditCase());
+            EditSlamCommand = new Supervision.Commands.Command(o => EditSlam());
+            EditShaftCommand = new Supervision.Commands.Command(o => EditShaft());
+            EditPIDCommand = new Supervision.Commands.Command(o => EditPID());
         }
     }
 }

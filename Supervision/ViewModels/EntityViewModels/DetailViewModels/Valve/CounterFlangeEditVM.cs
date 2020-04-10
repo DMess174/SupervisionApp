@@ -1,37 +1,39 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using DataLayer;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
-using DataLayer;
-using DataLayer.Entities.Detailing;
 using DataLayer.Entities.Materials;
-using DataLayer.Journals.Detailing;
-using DataLayer.TechnicalControlPlans.Detailing;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
 using Supervision.ViewModels.EntityViewModels.Materials;
-using Supervision.Views.EntityViews.DetailViews.Valve;
 using Supervision.Views.EntityViews.MaterialViews;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
+using BusinessLayer.Repository.Implementations.Entities;
+using BusinessLayer.Repository.Implementations.Entities.Material;
+using System.Threading.Tasks;
+using System.Linq;
+using DataLayer.TechnicalControlPlans.Detailing;
+using DataLayer.Journals.Detailing;
+using DataLayer.Entities.Detailing;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 {
-    public class CounterFlangeEditVM: BasePropertyChanged
+    public class CounterFlangeEditVM : ViewModelBase
     {
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
-        private IEnumerable<MetalMaterial> materials;
+        private IList<MetalMaterial> materials;
         private IEnumerable<string> drawings;
         private IEnumerable<CounterFlangeTCP> points;
-        private IEnumerable<Inspector> inspectors;
-        private IEnumerable<CounterFlangeJournal> journal;
+        private IList<Inspector> inspectors;
+        private IEnumerable<CounterFlangeJournal> castJournal;
+        private IEnumerable<CounterFlangeJournal> shutterJournal;
         private readonly BaseTable parentEntity;
+        private CounterFlangeJournal operation;
         private CounterFlange selectedItem;
         private CounterFlangeTCP selectedTCPPoint;
-
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
-        private ICommand editMaterial;
+        private readonly CounterFlangeRepository repo;
+        private readonly InspectorRepository inspectorRepo;
+        private readonly MetalMaterialRepository materialRepo;
+        private readonly JournalNumberRepository journalRepo;
 
         public CounterFlange SelectedItem
         {
@@ -42,13 +44,31 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
             }
         }
-
-        public IEnumerable<CounterFlangeJournal> Journal
+        public CounterFlangeJournal Operation
         {
-            get => journal;
+            get => operation;
             set
             {
-                journal = value;
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public IEnumerable<CounterFlangeJournal> CastJournal
+        {
+            get => castJournal;
+            set
+            {
+                castJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<CounterFlangeJournal> ShutterJournal
+        {
+            get => shutterJournal;
+            set
+            {
+                shutterJournal = value;
                 RaisePropertyChanged();
             }
         }
@@ -61,7 +81,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<Inspector> Inspectors
+        public IList<Inspector> Inspectors
         {
             get => inspectors;
             set
@@ -71,114 +91,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.CounterFlanges.Update(SelectedItem);
-                            db.SaveChanges();
-                            db.CounterFlangeJournals.UpdateRange(Journal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is CounterFlange)
-                        {
-                            var wn = new CounterFlangeView();
-                            var vm = new CounterFlangeVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new CounterFlangeJournal()
-                            {
-                                DetailDrawing = SelectedItem.Drawing,
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.CounterFlangeJournals.Add(item);
-                            db.SaveChanges();
-                            Journal = db.CounterFlangeJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
-            }
-        }
-        public ICommand EditMaterial
-        {
-            get
-            {
-                return editMaterial ?? (
-                           editMaterial = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.MetalMaterial is PipeMaterial)
-                               {
-                                   var wn = new PipeMaterialEditView();
-                                   var vm = new PipeMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else if (SelectedItem.MetalMaterial != null)
-                               {
-                                   if (SelectedItem.MetalMaterial is SheetMaterial)
-                                   {
-                                       var wn = new SheetMaterialEditView();
-                                       var vm = new SheetMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                                   else if (SelectedItem.MetalMaterial is ForgingMaterial)
-                                   {
-                                       var wn = new ForgingMaterialEditView();
-                                       var vm = new ForgingMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                                   else if (SelectedItem.MetalMaterial is RolledMaterial)
-                                   {
-                                       var wn = new RolledMaterialEditView();
-                                       var vm = new RolledMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                               }
-                               else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
-                           }));
-            }
-        }
-
-        public IEnumerable<MetalMaterial> Materials
+        public IList<MetalMaterial> Materials
         {
             get => materials;
             set
@@ -216,17 +129,165 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public CounterFlangeEditVM(int id, BaseTable entity)
+
+        public static CounterFlangeEditVM LoadVM(int id, BaseTable entity, DataContext context)
         {
+            CounterFlangeEditVM vm = new CounterFlangeEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public Commands.IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => repo.GetByIdIncludeAsync(id));
+                Materials = await Task.Run(() => materialRepo.GetAllAsync());
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Drawings = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Drawing));
+                Points = await Task.Run(() => repo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+                CastJournal = SelectedItem.CounterFlangeJournals.Where(i => i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId);
+                ShutterJournal = SelectedItem.CounterFlangeJournals.Where(i => i.EntityTCP.ProductType.ShortName == "ЗО").OrderBy(x => x.PointId);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.CounterFlangeJournals.Add(new CounterFlangeJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                CastJournal = SelectedItem.CounterFlangeJournals.Where(i => i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId);
+                ShutterJournal = SelectedItem.CounterFlangeJournals.Where(i => i.EntityTCP.ProductType.ShortName == "ЗО").OrderBy(x => x.PointId);
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public Commands.IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.CounterFlangeJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                        CastJournal = SelectedItem.CounterFlangeJournals.Where(i => i.EntityTCP.ProductType.ShortName == "ЗШ").OrderBy(x => x.PointId);
+                        ShutterJournal = SelectedItem.CounterFlangeJournals.Where(i => i.EntityTCP.ProductType.ShortName == "ЗО").OrderBy(x => x.PointId);
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        public ICommand EditMaterialCommand { get; private set; }
+        private void EditMaterial()
+        {
+            if (SelectedItem.MetalMaterial != null)
+            {
+                if (SelectedItem.MetalMaterial is PipeMaterial)
+                {
+                    _ = new PipeMaterialEditView
+                    {
+                        DataContext = PipeMaterialEditVM.LoadPipeMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem, db)
+                    };
+                }
+
+                if (SelectedItem.MetalMaterial is SheetMaterial)
+                {
+                    _ = new SheetMaterialEditView
+                    {
+                        DataContext = SheetMaterialEditVM.LoadSheetMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem, db)
+                    };
+                }
+                else if (SelectedItem.MetalMaterial is ForgingMaterial)
+                {
+                    _ = new ForgingMaterialEditView
+                    {
+                        DataContext = ForgingMaterialEditVM.LoadForgingMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem, db)
+                    };
+                }
+                else if (SelectedItem.MetalMaterial is RolledMaterial)
+                {
+                    _ = new RolledMaterialEditView
+                    {
+                        DataContext = RolledMaterialEditVM.LoadRolledMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem, db)
+                    };
+                }
+            }
+            else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(SelectedItem) || repo.HasChanges(SelectedItem.CounterFlangeJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        public CounterFlangeEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.CounterFlanges.Include(i => i.BaseValve).SingleOrDefault(i => i.Id == id);
-            Journal = db.CounterFlangeJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Drawings = db.CounterFlanges.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            Materials = db.MetalMaterials.ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<CounterFlangeTCP>().ToList();
+            repo = new CounterFlangeRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            materialRepo = new MetalMaterialRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            LoadItemCommand = new Supervision.Commands.AsyncCommand<int>(Load);
+            SaveItemCommand = new Supervision.Commands.AsyncCommand(SaveItem);
+            CloseWindowCommand = new Supervision.Commands.Command(o => CloseWindow(o));
+            AddOperationCommand = new Supervision.Commands.AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new Supervision.Commands.AsyncCommand(RemoveOperation);
+            EditMaterialCommand = new Supervision.Commands.Command(o => EditMaterial());
         }
     }
 }

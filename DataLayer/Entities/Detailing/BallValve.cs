@@ -1,6 +1,7 @@
 ﻿using DataLayer.Journals.Detailing;
 using System.Collections.Generic;
 using DataLayer.Entities.AssemblyUnits;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Detailing
 {
@@ -16,9 +17,17 @@ namespace DataLayer.Entities.Detailing
             Name = "Кран шаровой";
         }
 
+        public BallValve(BallValve valve) : base(valve)
+        {
+            Material = valve.Material;
+            Diameter = valve.Diameter;
+            Pressure = valve.Pressure;
+            Designation = valve.Designation;
+        }
+
         public int? BaseValveId { get; set; }
         public BaseValve BaseValve { get; set; }
 
-        public IEnumerable<BallValveJournal> BallValveJournals { get; set; }
+        public ObservableCollection<BallValveJournal> BallValveJournals { get; set; }
     }
 }

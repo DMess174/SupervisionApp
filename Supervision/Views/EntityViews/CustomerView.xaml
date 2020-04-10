@@ -2,8 +2,9 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      mc:Ignorable="d" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+        mc:Ignorable="d" 
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="500" d:DesignWidth="800"
       WindowStartupLocation="CenterScreen" 
@@ -51,22 +52,30 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
                 <Button Style="{StaticResource StandardButton}"
-                    Content="Добавить" Margin="10" Command="{Binding AddItem}"
+                    Content="Добавить" Margin="10" Command="{Binding AddNewItemCommand}"
                     Width="100"/>
+                
+                <Button Grid.Column="1" Style="{StaticResource StandardButton}" 
+                    Content="Удалить" Margin="10" Command="{Binding RemoveSelectedItemCommand}"
+                    Width="100"/>
+            </StackPanel>
 
+            <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <Button
                     Style="{StaticResource StandardButton}"
                     Width="100"
                     Content="Сохранить" Margin="10" 
-                    Command="{Binding SaveItem}" 
-                    CommandParameter="{Binding ElementName=AllInstances, Path=SelectedItem}" />
-            </StackPanel>
+                    Command="{Binding SaveItemsCommand}" 
+                    HorizontalAlignment="Right"/>
 
-            <Button Grid.Column="1" Style="{StaticResource StandardButton}" 
-                    Content="Удалить" Margin="10" Command="{Binding RemoveItem}"
-                    CommandParameter="{Binding ElementName=AllInstances, Path=SelectedItem}"
+                <Button Style="{StaticResource StandardButton}" 
+                    Content="Закрыть" Margin="10" Command="{Binding CloseWindowCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                     Width="100"
                     HorizontalAlignment="Right"/>
+            </StackPanel>
         </Grid>
+        <wpfx:BusyIndicator IsBusy="{Binding IsBusy}"
+                            BusyContent="Обработка запроса, ждите..."/>
     </Grid>
 </Window>

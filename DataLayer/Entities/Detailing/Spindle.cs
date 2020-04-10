@@ -1,5 +1,6 @@
 ﻿using DataLayer.Journals.Detailing;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Detailing
 {
@@ -10,6 +11,10 @@ namespace DataLayer.Entities.Detailing
             Name = "Шпиндель";
         }
 
-        public IEnumerable<SpindleJournal> SpindleJournals { get; set; }
+        public Spindle(Spindle spindle) : base(spindle)
+        {
+        }
+
+        public ObservableCollection<SpindleJournal> SpindleJournals { get; set; }
     }
 }

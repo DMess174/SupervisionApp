@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
 namespace DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails
 {
     public class SheetGateValveCaseTCP : BaseTCP
     {
-        public IEnumerable<SheetGateValveCaseJournal> SheetGateValveCaseJournals { get; set; }
+        public ObservableCollection<SheetGateValveCaseJournal> SheetGateValveCaseJournals { get; set; }
     }
 }

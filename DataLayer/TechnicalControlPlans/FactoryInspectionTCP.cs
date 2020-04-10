@@ -1,10 +1,11 @@
 ﻿using DataLayer.Journals;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.TechnicalControlPlans
 {
     public class FactoryInspectionTCP : BaseTCP
     {
-        public IEnumerable<FactoryInspectionJournal> FactoryIspectionJournals { get; set; }
+        public ObservableCollection<FactoryInspectionJournal> FactoryIspectionJournals { get; set; }
     }
 }

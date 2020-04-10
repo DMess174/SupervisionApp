@@ -6,12 +6,7 @@ using DataLayer.TechnicalControlPlans.Detailing;
 
 namespace BusinessLayer.Repository.Interfaces.Entities.Detailing
 {
-    public interface INozzleRepository : IRepository<Nozzle>
+    public interface INozzleRepository : IRepositoryWithJournal<Nozzle, NozzleJournal, NozzleTCP>
     {
-        Task<Nozzle> GetInclude(int id);
-
-        Task<IEnumerable<NozzleJournal>> GetJournal(Nozzle nozzle);
-
-        Task<IEnumerable<NozzleTCP>> GetPoints();
     }
 }

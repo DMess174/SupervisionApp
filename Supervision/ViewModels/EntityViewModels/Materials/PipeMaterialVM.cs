@@ -1,29 +1,26 @@
 ﻿using DataLayer;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using DataLayer.Entities.Materials;
 using Supervision.Views.EntityViews.MaterialViews;
 using DataLayer.Journals.Materials;
+using System.Collections.ObjectModel;
+using Supervision.Commands;
+using System.Threading.Tasks;
+using BusinessLayer.Repository.Implementations.Entities.Material;
 
 namespace Supervision.ViewModels.EntityViewModels.Materials
 {
-    public class PipeMaterialVM : BasePropertyChanged
+    public class PipeMaterialVM : ViewModelBase
     {
         private readonly DataContext db;
+        private readonly PipeMaterialRepository materialRepo;
         private IEnumerable<PipeMaterial> allInstances;
         private ICollectionView allInstancesView;
         private PipeMaterial selectedItem;
-        private ICommand removeItem;
-        private ICommand editItem;
-        private ICommand addItem;
-        private ICommand copyItem;
-        private ICommand closeWindow;
 
         private string name;
         private string number = "";
@@ -138,146 +135,6 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
         }
         #endregion
 
-        #region Commands              
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        w?.Close();
-                    }));
-            }
-        }
-        public ICommand EditItem
-        {
-            get
-            {
-                return editItem ?? (
-                    editItem = new DelegateCommand<Window>((w) =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var wn = new PipeMaterialEditView();
-                            var vm = new PipeMaterialEditVM(SelectedItem.Id, SelectedItem);
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand CopyItem
-        {
-            get
-            {
-                return copyItem ?? (
-                    copyItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var item = new PipeMaterial()
-                            {
-                                Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
-                                MaterialCertificateNumber = SelectedItem.MaterialCertificateNumber,
-                                Material = SelectedItem.Material,
-                                Melt = SelectedItem.Melt,
-                                Batch = SelectedItem.Batch,
-                                Certificate = SelectedItem.Certificate,
-                                Status = SelectedItem.Status,
-                                Name = SelectedItem.Name,
-                                FirstSize = SelectedItem.FirstSize,
-                                SecondSize = SelectedItem.SecondSize,
-                                ThirdSize = SelectedItem.ThirdSize
-                            };
-                            db.PipeMaterials.Add(item);
-                            db.SaveChanges();
-                            var journal = db.PipeMaterialJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
-                            foreach (var record in journal)
-                            {
-                                var Record = new PipeMaterialJournal()
-                                {
-                                    Date = record.Date,
-                                    DetailId = item.Id,
-                                    Description = record.Description,
-                                    DetailName = item.Name,
-                                    DetailNumber = item.Number,
-                                    InspectorId = record.InspectorId,
-                                    Point = record.Point,
-                                    PointId = record.PointId,
-                                    RemarkIssued = record.RemarkIssued,
-                                    RemarkClosed = record.RemarkClosed,
-                                    Comment = record.Comment,
-                                    Status = record.Status,
-                                    JournalNumber = record.JournalNumber
-                                };
-                                db.PipeMaterialJournals.Add(Record);
-                                db.SaveChanges();
-                            }
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand AddItem
-        {
-            get
-            {
-                return addItem ?? (
-                    addItem = new DelegateCommand<Window>((w) =>
-                    {
-                        var item = new PipeMaterial();
-                        db.PipeMaterials.Add(item);
-                        db.SaveChanges();
-                        SelectedItem = item;
-                        var tcpPoints = db.MetalMaterialTCPs.ToList();
-                        foreach (var i in tcpPoints)
-                        {
-                            var journal = new PipeMaterialJournal()
-                            {
-                                DetailId = SelectedItem.Id,
-                                PointId = i.Id,
-                                DetailName = SelectedItem.Name,
-                                DetailNumber = SelectedItem.Number,
-                                Point = i.Point,
-                                Description = i.Description
-                            };
-                            if (journal != null)
-                            {
-                                db.PipeMaterialJournals.Add(journal);
-                                db.SaveChanges();
-                            }
-                        }
-                        var wn = new PipeMaterialEditView();
-                        var vm = new PipeMaterialEditVM(SelectedItem.Id, SelectedItem);
-                        wn.DataContext = vm;
-                        w?.Close();
-                        wn.ShowDialog();
-                    }));
-            }
-        }
-        public ICommand RemoveItem
-        {
-            get
-            {
-                return removeItem ?? (
-                    removeItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.PipeMaterials.Remove(SelectedItem);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не выбран!", "Ошибка");
-                    }));
-            }
-        }
-        #endregion
-
         public string Name
         {
             get => name;
@@ -317,16 +174,106 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public PipeMaterialVM()
+        public IAsyncCommand AddNewItemCommand { get; private set; }
+        private async Task AddNewItem()
         {
-            db = new DataContext();
-            db.PipeMaterials.Load();
-            AllInstances = db.PipeMaterials.Local.ToObservableCollection();
-            AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
-            if (AllInstances.Count() != 0)
+            try
             {
-                Name = AllInstances.First().Name;
+                IsBusy = true;
+                SelectedItem = await materialRepo.AddAsync(new PipeMaterial());
+                var tcpPoints = await materialRepo.GetTCPsAsync();
+                var records = new List<PipeMaterialJournal>();
+                foreach (var tcp in tcpPoints)
+                {
+                    var journal = new PipeMaterialJournal(SelectedItem, tcp);
+                    if (journal != null)
+                        records.Add(journal);
+                }
+                await materialRepo.AddJournalRecordAsync(records);
+                EditSelectedItem();
             }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand CopySelectedItemCommand { get; private set; }
+        private async Task CopySelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                try
+                {
+                    IsBusy = true;
+                    var temp = await materialRepo.GetByIdIncludeAsync(SelectedItem.Id);
+                    var copy = await materialRepo.AddAsync(new PipeMaterial(temp));
+                    var jour = new ObservableCollection<PipeMaterialJournal>();
+                    foreach (var i in temp.PipeMaterialJournals)
+                    {
+                        var record = new PipeMaterialJournal(copy.Id, i);
+                        jour.Add(record);
+                    }
+                    materialRepo.UpdateJournalRecord(jour);
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+        }
+
+        public IAsyncCommand RemoveSelectedItemCommand { get; private set; }
+
+        public ICommand EditSelectedItemCommand { get; private set; }
+        private void EditSelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                _ = new PipeMaterialEditView
+                {
+                    DataContext = PipeMaterialEditVM.LoadPipeMaterialEditVM(SelectedItem.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public static PipeMaterialVM LoadPipeMaterialVM(DataContext context)
+        {
+            PipeMaterialVM vm = new PipeMaterialVM(context);
+            vm.UpdateListCommand.ExecuteAsync();
+            return vm;
+        }
+
+        public IAsyncCommand UpdateListCommand { get; private set; }
+        private async Task UpdateList()
+        {
+            try
+            {
+                IsBusy = true;
+                AllInstances = new ObservableCollection<PipeMaterial>();
+                AllInstances = await Task.Run(() => materialRepo.GetAllAsync());
+                AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public PipeMaterialVM(DataContext context)
+        {
+            db = context;
+            materialRepo = new PipeMaterialRepository(db);
+            UpdateListCommand = new AsyncCommand(UpdateList, CanExecute);
+            AddNewItemCommand = new AsyncCommand(AddNewItem, CanExecute);
+            CopySelectedItemCommand = new AsyncCommand(CopySelectedItem, CanExecute);
+            EditSelectedItemCommand = new Command(o => EditSelectedItem());
         }
     }
 }

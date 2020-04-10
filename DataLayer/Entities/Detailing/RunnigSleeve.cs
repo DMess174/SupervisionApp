@@ -1,5 +1,5 @@
 ﻿using DataLayer.Journals.Detailing;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Detailing
 {
@@ -10,8 +10,12 @@ namespace DataLayer.Entities.Detailing
             Name = "Втулка ходовая";
         }
 
+        public RunningSleeve(RunningSleeve sleeve) : base(sleeve)
+        {
+        }
+
         public BaseValveCover BaseValveCover { get; set; }
 
-        public IEnumerable<RunningSleeveJournal> RunningSleeveJournals { get; set; }
+        public ObservableCollection<RunningSleeveJournal> RunningSleeveJournals { get; set; }
     }
 }

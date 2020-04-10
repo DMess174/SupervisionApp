@@ -1,5 +1,5 @@
 ﻿using DataLayer.Entities.AssemblyUnits;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Entities.Materials.AnticorrosiveCoating
@@ -17,7 +17,20 @@ namespace DataLayer.Entities.Materials.AnticorrosiveCoating
         [NotMapped] 
         public string FullName => string.Format($"{Batch}/{Name}/{Status}");
 
-        public IEnumerable<BaseValveWithCoating> BaseValveWithCoatings { get; set; }
-        public IEnumerable<ReverseShutterWithCoating> ReverseShutterWithCoatings { get; set; }
+        public ObservableCollection<BaseValveWithCoating> BaseValveWithCoatings { get; set; }
+        public ObservableCollection<ReverseShutterWithCoating> ReverseShutterWithCoatings { get; set; }
+
+        public BaseAnticorrosiveCoating()
+        {
+            Status = "Годен";
+        }
+
+        public BaseAnticorrosiveCoating(BaseAnticorrosiveCoating coating)
+        {
+            Name = coating.Name;
+            Factory = coating.Factory;
+            Status = coating.Status;
+            Comment = coating.Comment;
+        }
     }
 }

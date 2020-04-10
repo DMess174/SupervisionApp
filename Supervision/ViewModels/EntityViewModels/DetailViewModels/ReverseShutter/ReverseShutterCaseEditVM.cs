@@ -1,22 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
 using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Entities.Detailing.ReverseShutterDetails;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
 using DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails;
-using DevExpress.Mvvm;
-using DevExpress.Mvvm.Native;
-using Microsoft.EntityFrameworkCore;
+using Supervision.Commands;
 using Supervision.Views.EntityViews.DetailViews;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter
 {
-    public class ReverseShutterCaseEditVM : BasePropertyChanged
+    public class ReverseShutterCaseEditVM : ViewModelBase
     {
         private readonly BaseTable parentEntity;
+        private readonly ReverseShutterCaseRepository repo;
+        private readonly InspectorRepository inspectorRepo;
+        private readonly JournalNumberRepository journalRepo;
+        private readonly NozzleRepository nozzleRepo;
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
@@ -26,21 +31,26 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
         private IEnumerable<ReverseShutterCaseJournal> inputControlJournal;
         private IEnumerable<ReverseShutterCaseJournal> inputNDTControlJournal;
         private IEnumerable<ReverseShutterCaseJournal> mechanicalJournal;
-        private IEnumerable<ReverseShutterCaseJournal> overlayingJournal;
         private IEnumerable<ReverseShutterCaseJournal> assemblyJournal;
         private IEnumerable<ReverseShutterCaseJournal> nDTJournal;
+        private IEnumerable<ReverseShutterCaseJournal> overlayingJournal;
 
         private ReverseShutterCase selectedItem;
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
         private IEnumerable<Nozzle> nozzles;
-        private Nozzle selectedNozzle; 
+        private Nozzle selectedNozzle;
         private Nozzle selectedNozzleFromList;
-        private ICommand editNozzle;
-        private ICommand addNozzleToCase;
-        private ICommand deleteNozzleFromCase;
         private ReverseShutterCaseTCP selectedTCPPoint;
+        private ReverseShutterCaseJournal operation;
+
+        public ReverseShutterCaseJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public ReverseShutterCase SelectedItem
         {
@@ -145,137 +155,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ICommand EditNozzle
-        {
-            get
-            {
-                return editNozzle ?? (
-                    editNozzle = new DelegateCommand<Window>((w) =>
-                    {
-                        if (SelectedNozzleFromList != null)
-                        {
-                            var wn = new NozzleEditView();
-                            var vm = new NozzleEditVM(SelectedNozzleFromList.Id, SelectedItem);
-                            wn.DataContext = vm;
-                            wn.Show();
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand DeleteNozzleFromCase
-        {
-            get
-            {
-                return deleteNozzleFromCase ?? (
-                    deleteNozzleFromCase = new DelegateCommand<Window>((w) =>
-                    {
-                        if (SelectedNozzleFromList != null)
-                        {
-                            var item = SelectedNozzleFromList;
-                            item.CastingCaseId = null;
-                            db.Nozzles.Update(item);
-                            db.SaveChanges();
-                            Nozzles = null;
-                            Nozzles = db.Nozzles.Local.Where(i => i.CastingCaseId == null).ToObservableCollection();
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.ReverseShutterCases.Update(SelectedItem);
-                            db.SaveChanges();
-                            db.ReverseShutterCaseJournals.UpdateRange(InputControlJournal);
-                            db.ReverseShutterCaseJournals.UpdateRange(InputNDTControlJournal);
-                            db.ReverseShutterCaseJournals.UpdateRange(MechanicalJournal);
-                            db.ReverseShutterCaseJournals.UpdateRange(AssemblyJournal);
-                            db.ReverseShutterCaseJournals.UpdateRange(NDTJournal);
-                            db.ReverseShutterCaseJournals.UpdateRange(OverlayingJournal);
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Объект не найден!", "Ошибка");
-                        }
-
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is ReverseShutterCase)
-                        {
-                            var wn = new CastingCaseView();
-                            var vm = new ReverseShutterCaseVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new ReverseShutterCaseJournal()
-                            {
-                                DetailDrawing = SelectedItem.Drawing,
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.ReverseShutterCaseJournals.Add(item);
-                            db.SaveChanges();
-                            InputControlJournal = db.ReverseShutterCaseJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль")
-                                .OrderBy(x => x.PointId).ToList();
-                            InputNDTControlJournal = db.ReverseShutterCaseJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль (НК)")
-                                .OrderBy(x => x.PointId).ToList();
-                            MechanicalJournal = db.ReverseShutterCaseJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка")
-                                .OrderBy(x => x.PointId).ToList();
-                            AssemblyJournal = db.ReverseShutterCaseJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка")
-                                .OrderBy(x => x.PointId).ToList();
-                            NDTJournal = db.ReverseShutterCaseJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль")
-                                .OrderBy(x => x.PointId).ToList();
-                            OverlayingJournal = db.ReverseShutterCaseJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Наплавка")
-                                .OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
-            }
-        }
-
         public ReverseShutterCaseTCP SelectedTCPPoint
         {
             get => selectedTCPPoint;
@@ -283,31 +162,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             {
                 selectedTCPPoint = value;
                 RaisePropertyChanged();
-            }
-        }
-
-        public ICommand AddNozzleToCase
-        {
-            get
-            {
-                return addNozzleToCase ?? (
-                    addNozzleToCase = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem.Nozzles.Count() < 2)
-                        {
-                            if (SelectedNozzle != null)
-                            {
-                                var item = SelectedNozzle;
-                                item.CastingCaseId = SelectedItem.Id;
-                                db.Nozzles.Update(item);
-                                db.SaveChanges();
-                                Nozzles = null;
-                                Nozzles = db.Nozzles.Local.Where(i => i.CastingCaseId == null).ToObservableCollection();
-                            }
-                            else MessageBox.Show("Объект не выбран!", "Ошибка");
-                        }
-                        else MessageBox.Show("Невозможно привязать более 2 катушек!", "Ошибка");
-                    }));
             }
         }
 
@@ -349,44 +203,204 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ReverseShutterCaseEditVM(int id, BaseTable entity)
+        public Supervision.Commands.IAsyncCommand AddNozzleToCaseCommand { get; private set; }
+        private async Task AddNozzleToCase()
         {
-            parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.ReverseShutterCases
-                .Include(i => i.ReverseShutter)
-                .SingleOrDefault(i => i.Id == id);
-            if (SelectedItem != null)
+            try
             {
-                db.Nozzles.Include(i => i.MetalMaterial).Load();
-                SelectedItem.Nozzles = db.Nozzles.Local
-                    .Where(i => i.CastingCaseId == SelectedItem.Id)
-                    .ToObservableCollection();
-                InputControlJournal = db.ReverseShutterCaseJournals
-                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль")
-                    .OrderBy(x => x.PointId).ToList();
-                InputNDTControlJournal = db.ReverseShutterCaseJournals
-                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль (НК)")
-                    .OrderBy(x => x.PointId).ToList();
-                MechanicalJournal = db.ReverseShutterCaseJournals
-                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка")
-                    .OrderBy(x => x.PointId).ToList();
-                AssemblyJournal = db.ReverseShutterCaseJournals
-                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка")
-                    .OrderBy(x => x.PointId).ToList();
-                NDTJournal = db.ReverseShutterCaseJournals
-                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль")
-                    .OrderBy(x => x.PointId).ToList();
-                OverlayingJournal = db.ReverseShutterCaseJournals
-                    .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Наплавка")
-                    .OrderBy(x => x.PointId).ToList();
+                IsBusy = true;
+                if (SelectedItem.Nozzles?.Count() < 2 || SelectedItem.Nozzles == null)
+                {
+                    if (SelectedNozzle != null)
+                    {
+                        if (!await nozzleRepo.IsAssembliedAsync(SelectedNozzle))
+                        {
+                            SelectedNozzle.CastingCaseId = SelectedItem.Id;
+                            nozzleRepo.Update(SelectedNozzle);
+                            SelectedNozzle = null;
+                            Nozzles = nozzleRepo.UpdateList();
+                        }
+                    }
+                    else MessageBox.Show("Объект не выбран!", "Ошибка");
+                }
+                else MessageBox.Show("Невозможно привязать более 2 катушек!", "Ошибка");
             }
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Materials = db.ReverseShutterCases.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            Drawings = db.ReverseShutterCases.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.ReverseShutterCaseTCPs.ToList();
-            Nozzles = db.Nozzles.Local.Where(i => i.CastingCaseId == null).ToObservableCollection();
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand DeleteNozzleFromCaseCommand { get; private set; }
+        private async Task DeleteNozzleFromCase()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedNozzleFromList != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedNozzleFromList.CastingCaseId = null;
+                        nozzleRepo.Update(SelectedNozzleFromList);
+                        Nozzles = nozzleRepo.UpdateList();
+                    }
+                }
+                else MessageBox.Show("Объект не выбран!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public ICommand EditNozzleCommand { get; private set; }
+        private void EditNozzle()
+        {
+            if (SelectedNozzleFromList != null)
+            {
+                _ = new NozzleEditView
+                {
+                    DataContext = NozzleEditVM.LoadVM(SelectedNozzleFromList.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        public static ReverseShutterCaseEditVM LoadVM(int id, BaseTable entity, DataContext context)
+        {
+            ReverseShutterCaseEditVM vm = new ReverseShutterCaseEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public Commands.IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => repo.GetByIdIncludeAsync(id));
+                await Task.Run(() => nozzleRepo.Load());
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Drawings = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Drawing));
+                Materials = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Material));
+                Points = await Task.Run(() => repo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+                Nozzles = await Task.Run(() => nozzleRepo.UpdateList());
+                InputControlJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId);
+                InputNDTControlJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль (НК)").OrderBy(x => x.PointId);
+                MechanicalJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId);
+                AssemblyJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId);
+                NDTJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId);
+                OverlayingJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Наплавка").OrderBy(x => x.PointId);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.ReverseShutterCaseJournals.Add(new ReverseShutterCaseJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                InputControlJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId);
+                InputNDTControlJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль (НК)").OrderBy(x => x.PointId);
+                MechanicalJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId);
+                AssemblyJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId);
+                NDTJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId);
+                OverlayingJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Наплавка").OrderBy(x => x.PointId);
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public Commands.IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.ReverseShutterCaseJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                        InputControlJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId);
+                        InputNDTControlJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль (НК)").OrderBy(x => x.PointId);
+                        MechanicalJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId);
+                        AssemblyJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId);
+                        NDTJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId);
+                        OverlayingJournal = SelectedItem.ReverseShutterCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Наплавка").OrderBy(x => x.PointId);
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(SelectedItem) || repo.HasChanges(SelectedItem.ReverseShutterCaseJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    base.CloseWindow(obj);
+                }
+            }
+            else
+            {
+                base.CloseWindow(obj);
+            }
+        }
+
+        public ReverseShutterCaseEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
+            parentEntity = entity;
+            repo = new ReverseShutterCaseRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            nozzleRepo = new NozzleRepository(db);
+            LoadItemCommand = new Supervision.Commands.AsyncCommand<int>(Load);
+            SaveItemCommand = new Supervision.Commands.AsyncCommand(SaveItem);
+            CloseWindowCommand = new Supervision.Commands.Command(o => CloseWindow(o));
+            AddOperationCommand = new Supervision.Commands.AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new Supervision.Commands.AsyncCommand(RemoveOperation);
+            AddNozzleToCaseCommand = new AsyncCommand(AddNozzleToCase);
+            DeleteNozzleFromCaseCommand = new Supervision.Commands.AsyncCommand(DeleteNozzleFromCase);
+            EditNozzleCommand = new Supervision.Commands.Command(o => EditNozzle());
         }
     }
 }

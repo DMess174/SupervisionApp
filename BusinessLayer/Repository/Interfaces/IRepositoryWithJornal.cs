@@ -9,6 +9,7 @@ namespace BusinessLayer.Repository.Interfaces
     {
         int AddJournalRecord(TEntity entity, TEntityJournal record);
         int AddJournalRecord(TEntity entity, IEnumerable<TEntityJournal> records);
+
         Task<int> AddJournalRecordAsync(TEntity entity, TEntityJournal record);
         Task<int> AddJournalRecordAsync(TEntity entity, IEnumerable<TEntityJournal> records);
 
@@ -25,5 +26,8 @@ namespace BusinessLayer.Repository.Interfaces
 
         IEnumerable<TEntityJournal> GetSomeJournalRecords(Expression<Func<TEntityJournal, bool>> where);
         Task<IEnumerable<TEntityJournal>> GetSomeJournalRecordsAsync(Expression<Func<TEntityJournal, bool>> where);
+
+        IEnumerable<TEntityTCP> GetTCPs();
+        Task<IEnumerable<TEntityTCP>> GetTCPsAsync();
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using DataLayer.Journals.Detailing;
 
 namespace DataLayer.Entities.Detailing
@@ -9,8 +9,13 @@ namespace DataLayer.Entities.Detailing
         {
             Name = "Уплотнитель седла торцевой";
         }
-        public IEnumerable<SaddleWithSealing> SaddleWithSealings { get; set; }
 
-        public IEnumerable<FrontalSaddleSealingJournal> FrontalSaddleSealingJournals { get; set; }
+        public FrontalSaddleSealing(FrontalSaddleSealing sealing) : base(sealing)
+        {
+        }
+
+        public ObservableCollection<SaddleWithSealing> SaddleWithSealings { get; set; }
+
+        public ObservableCollection<FrontalSaddleSealingJournal> FrontalSaddleSealingJournals { get; set; }
     }
 }

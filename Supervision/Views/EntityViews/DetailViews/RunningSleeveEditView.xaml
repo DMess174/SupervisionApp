@@ -2,12 +2,13 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      mc:Ignorable="d" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+        mc:Ignorable="d" 
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="700" d:DesignWidth="1000"
       WindowStartupLocation="CenterScreen"
-      Title="{Binding SelectedItem.Name}">
+      Title="Редактирование втулки ходовой">
     <Window.Resources>
         <CollectionViewSource x:Key="Inspectors" Source="{Binding Inspectors}"/>
         <CollectionViewSource x:Key="Points" Source="{Binding Points}" />
@@ -233,7 +234,8 @@
                 Grid.Row="4" 
                 Grid.Column="0" 
                 MinRowHeight="50"
-                ItemsSource="{Binding Journal}"
+                ItemsSource="{Binding SelectedItem.RunningSleeveJournals}"
+                SelectedItem="{Binding Operation}"
                 IsReadOnly="False"
                 HorizontalScrollBarVisibility="Visible">
             <DataGrid.Columns>
@@ -381,6 +383,10 @@
             </DataGrid.Columns>
         </DataGrid>
 
+        <wpfx:BusyIndicator IsBusy="{Binding IsBusy}"
+                            Grid.Row="4"
+                            BusyContent="Обработка запроса, ждите..."/>
+
         <StackPanel Grid.Row="5" Orientation="Horizontal">
             <TextBlock Text="Выбор пункта:"
                    Margin="5 0 10 0"
@@ -428,7 +434,12 @@
             <Button Style="{StaticResource StandardButton}" 
                             Content="Добавить операцию" 
                             Margin="10" 
-                            Command="{Binding AddOperation}" />
+                            Command="{Binding AddOperationCommand}" />
+
+            <Button Style="{StaticResource StandardButton}" 
+                            Content="Удалить операцию" 
+                            Margin="10" 
+                            Command="{Binding RemoveOperationCommand}" />
         </StackPanel>
         
         <Separator Style="{StaticResource HorizontalSeparator}" 
@@ -468,14 +479,13 @@
                             Width="70"
                             Content="Сохранить" 
                             Margin="10 2 10 2" 
-                            Command="{Binding SaveItem}" 
-                            CommandParameter="{Binding SelectedItem}"/>
+                            Command="{Binding SaveItemCommand}"/>
 
                 <Button Style="{StaticResource StandardButton}" 
                             Width="70"
                             Content="Закрыть" 
                             Margin="10 2 10 2" 
-                            Command="{Binding CloseWindow}"
+                            Command="{Binding CloseWindowCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
             </StackPanel>
         </Grid>

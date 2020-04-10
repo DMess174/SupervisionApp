@@ -1,10 +1,10 @@
 ﻿using DataLayer.Journals.Detailing;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.TechnicalControlPlans.Detailing
 {
     public class BallValveTCP : BaseTCP
     {
-        public IEnumerable<BallValveJournal> BallValveJournals { get; set; }
+        public ObservableCollection<BallValveJournal> BallValveJournals { get; set; }
     }
 }

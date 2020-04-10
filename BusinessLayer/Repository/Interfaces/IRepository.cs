@@ -17,10 +17,12 @@ namespace BusinessLayer.Repository.Interfaces
 
         IEnumerable<TEntity> GetAll();
         IEnumerable<TEntity> GetAll<TEntitySortField>(Expression<Func<TEntity, TEntitySortField>> orderBy, bool ascending);
-        Task<IEnumerable<TEntity>> GetAllAsync();
+
+        Task<IList<TEntity>> GetAllAsync();
         Task<IEnumerable<TEntity>> GetAllAsync<TEntitySortField>(Expression<Func<TEntity, TEntitySortField>> orderBy, bool ascending);
 
         TEntity GetById(int? id);
+        Task<TEntity> GetByIdAsync(int? id);
 
         int Update(TEntity entity);
         int Update(IEnumerable<TEntity> entities);
@@ -28,6 +30,6 @@ namespace BusinessLayer.Repository.Interfaces
         int Delete(TEntity entity);
 
         IEnumerable<TEntity> GetSome(Expression<Func<TEntity, bool>> where);
-        Task<IEnumerable<TEntity>> GetSomeAsync (Expression<Func<TEntity, bool>> where);
+        Task<IList<TEntity>> GetSomeAsync (Expression<Func<TEntity, bool>> where);
     }
 }

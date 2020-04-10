@@ -11,5 +11,13 @@ namespace DataLayer.Entities.Detailing.WeldGateValveDetails
         public CoverSleeve CoverSleeve { get; set; }
 
         public BaseWeldValve BaseWeldValve { get; set; }
+
+        public WeldGateValveCover()
+        {
+        }
+        public WeldGateValveCover(WeldGateValveCover cover) : base(cover)
+        {
+
+        }
     }
 }

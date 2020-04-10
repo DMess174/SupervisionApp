@@ -1,41 +1,51 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using DataLayer;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
-using DataLayer;
-using DataLayer.Entities.Detailing;
-using DataLayer.Entities.Detailing.WeldGateValveDetails;
 using DataLayer.Entities.Materials;
+using Supervision.ViewModels.EntityViewModels.Materials;
+using Supervision.Views.EntityViews.MaterialViews;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
+using BusinessLayer.Repository.Implementations.Entities;
+using BusinessLayer.Repository.Implementations.Entities.Material;
+using System.Threading.Tasks;
+using System.Linq;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 using DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
-using Supervision.ViewModels.EntityViewModels.Materials;
+using DataLayer.Entities.Detailing.WeldGateValveDetails;
 using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
-using Supervision.Views.EntityViews.MaterialViews;
+using DataLayer.Entities.Detailing;
 
-namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
+namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
-    public class CoverSleeveEditVM: BasePropertyChanged
+    public class CoverSleeveEditVM : ViewModelBase
     {
-
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
-        private IEnumerable<MetalMaterial> materials;
-        private IEnumerable<CoverSealingRing> coverSealingRings;
+        private IList<MetalMaterial> materials;
         private IEnumerable<string> drawings;
         private IEnumerable<CoverSleeveTCP> points;
-        private IEnumerable<Inspector> inspectors;
-        private IEnumerable<CoverSleeveJournal> journal;
+        private IList<Inspector> inspectors;
         private readonly BaseTable parentEntity;
+        private CoverSleeveJournal operation;
         private CoverSleeve selectedItem;
         private CoverSleeveTCP selectedTCPPoint;
+        private readonly CoverSleeveRepository repo;
+        private readonly InspectorRepository inspectorRepo;
+        private readonly MetalMaterialRepository materialRepo;
+        private readonly JournalNumberRepository journalRepo;
+        private readonly CoverSealingRingRepository ringRepo;
+        private IEnumerable<CoverSealingRing> coverSealingRings;
 
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
-        private ICommand editMaterial;
-        private ICommand editCoverSealingRing;
+        public IEnumerable<CoverSealingRing> CoverSealingRings
+        {
+            get => coverSealingRings;
+            set
+            {
+                coverSealingRings = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public CoverSleeve SelectedItem
         {
@@ -46,16 +56,16 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 RaisePropertyChanged();
             }
         }
-
-        public IEnumerable<CoverSleeveJournal> Journal
+        public CoverSleeveJournal Operation
         {
-            get => journal;
+            get => operation;
             set
             {
-                journal = value;
+                operation = value;
                 RaisePropertyChanged();
             }
         }
+
         public IEnumerable<CoverSleeveTCP> Points
         {
             get => points;
@@ -65,7 +75,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<Inspector> Inspectors
+        public IList<Inspector> Inspectors
         {
             get => inspectors;
             set
@@ -74,160 +84,13 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 RaisePropertyChanged();
             }
         }
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            if (SelectedItem.CoverSealingRing != null)
-                            {
-                                var detail = db.CoverSealingRings.Include(i => i.CoverSleeve).Include(i => i.CastGateValveCover).SingleOrDefault(i => i.Id == SelectedItem.CoverSealingRingId);
-                                if (detail?.CoverSleeve != null && detail.CoverSleeve.Id != SelectedItem.Id)
-                                {
-                                    MessageBox.Show($"Кольцо уплотнительное собрано с {detail.CoverSleeve.Name} № {detail.CoverSleeve.Number}", "Ошибка");
-                                    return;
-                                }
-                                else if (detail?.CastGateValveCover != null)
-                                {
-                                    MessageBox.Show($"Кольцо уплотнительное собрано с {detail.CastGateValveCover.Name} № {detail.CastGateValveCover.Number}", "Ошибка");
-                                    return;
-                                }
-                            }
-                            db.CoverSleeves.Update(SelectedItem);
-                            db.SaveChanges();
-                            db.CoverSleeveJournals.UpdateRange(Journal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is CoverSleeve)
-                        {
-                            var wn = new CoverSleeveView();
-                            var vm = new CoverSleeveVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new CoverSleeveJournal()
-                            {
-                                DetailDrawing = SelectedItem.Drawing,
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.CoverSleeveJournals.Add(item);
-                            db.SaveChanges();
-                            Journal = db.CoverSleeveJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
-            }
-        }
-        public ICommand EditMaterial
-        {
-            get
-            {
-                return editMaterial ?? (
-                           editMaterial = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.MetalMaterial is PipeMaterial)
-                               {
-                                   var wn = new PipeMaterialEditView();
-                                   var vm = new PipeMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else if (SelectedItem.MetalMaterial != null)
-                               {
-                                   if (SelectedItem.MetalMaterial is SheetMaterial)
-                                   {
-                                       var wn = new SheetMaterialEditView();
-                                       var vm = new SheetMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                                   else if (SelectedItem.MetalMaterial is ForgingMaterial)
-                                   {
-                                       var wn = new ForgingMaterialEditView();
-                                       var vm = new ForgingMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                                   else if (SelectedItem.MetalMaterial is RolledMaterial)
-                                   {
-                                       var wn = new RolledMaterialEditView();
-                                       var vm = new RolledMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                               }
-                               else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditCoverSealingRing
-        {
-            get
-            {
-                return editCoverSealingRing ?? (
-                           editCoverSealingRing = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.CoverSealingRing != null)
-                               {
-                                   var wn = new CoverSealingRingEditView();
-                                   var vm = new CoverSealingRingEditVM(SelectedItem.CoverSealingRing.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
-                           }));
-            }
-        }
 
-        public IEnumerable<MetalMaterial> Materials
+        public IList<MetalMaterial> Materials
         {
             get => materials;
             set
             {
                 materials = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<CoverSealingRing> CoverSealingRings
-        {
-            get => coverSealingRings;
-            set
-            {
-                coverSealingRings = value;
                 RaisePropertyChanged();
             }
         }
@@ -260,18 +123,182 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
             }
         }
 
-        public CoverSleeveEditVM(int id, BaseTable entity)
+
+        public static CoverSleeveEditVM LoadVM(int id, BaseTable entity, DataContext context)
         {
+            CoverSleeveEditVM vm = new CoverSleeveEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public Commands.IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => repo.GetByIdIncludeAsync(id));
+                Materials = await Task.Run(() => materialRepo.GetAllAsync());
+                CoverSealingRings = await Task.Run(() => ringRepo.GetAllAsync());
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Drawings = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Drawing));
+                Points = await Task.Run(() => repo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                if (!await Task.Run(() => ringRepo.IsAssembliedInSleeveAsync(SelectedItem)))
+                {
+                    IsBusy = true;
+                    await Task.Run(() => repo.Update(SelectedItem));
+                }
+                else
+                {
+                    IsBusy = true;
+                    SelectedItem.CoverSealingRing = null;
+                    await Task.Run(() => repo.Update(SelectedItem));
+                }
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.CoverSleeveJournals.Add(new CoverSleeveJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public Commands.IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.CoverSleeveJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        public ICommand EditMaterialCommand { get; private set; }
+        private void EditMaterial()
+        {
+            if (SelectedItem.MetalMaterial != null)
+            {
+                if (SelectedItem.MetalMaterial is PipeMaterial)
+                {
+                    _ = new PipeMaterialEditView
+                    {
+                        DataContext = PipeMaterialEditVM.LoadPipeMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem, db)
+                    };
+                }
+
+                if (SelectedItem.MetalMaterial is SheetMaterial)
+                {
+                    _ = new SheetMaterialEditView
+                    {
+                        DataContext = SheetMaterialEditVM.LoadSheetMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem, db)
+                    };
+                }
+                else if (SelectedItem.MetalMaterial is ForgingMaterial)
+                {
+                    _ = new ForgingMaterialEditView
+                    {
+                        DataContext = ForgingMaterialEditVM.LoadForgingMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem, db)
+                    };
+                }
+                else if (SelectedItem.MetalMaterial is RolledMaterial)
+                {
+                    _ = new RolledMaterialEditView
+                    {
+                        DataContext = RolledMaterialEditVM.LoadRolledMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem, db)
+                    };
+                }
+            }
+            else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
+        }
+
+        public ICommand EditCoverSealingRingCommand { get; private set; }
+        private void EditCoverSealingRing()
+        {
+            if (SelectedItem.CoverSealingRing != null)
+            {
+                _ = new CoverSealingRingEditView
+                {
+                    DataContext = CoverSealingRingEditVM.LoadVM(SelectedItem.CoverSealingRing.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(SelectedItem) || repo.HasChanges(SelectedItem.CoverSleeveJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    base.CloseWindow(obj);
+                }
+            }
+            else
+            {
+                base.CloseWindow(obj);
+            }
+        }
+
+        public CoverSleeveEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.CoverSleeves.Include(i => i.WeldGateValveCover).SingleOrDefault(i => i.Id == id);
-            Journal = db.CoverSleeveJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Drawings = db.CoverSleeves.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            Materials = db.MetalMaterials.ToList();
-            CoverSealingRings = db.CoverSealingRings.ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<CoverSleeveTCP>().ToList();
+            repo = new CoverSleeveRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            materialRepo = new MetalMaterialRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            ringRepo = new CoverSealingRingRepository(db);
+            LoadItemCommand = new Supervision.Commands.AsyncCommand<int>(Load);
+            SaveItemCommand = new Supervision.Commands.AsyncCommand(SaveItem);
+            CloseWindowCommand = new Supervision.Commands.Command(o => CloseWindow(o));
+            AddOperationCommand = new Supervision.Commands.AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new Supervision.Commands.AsyncCommand(RemoveOperation);
+            EditMaterialCommand = new Supervision.Commands.Command(o => EditMaterial());
+            EditCoverSealingRingCommand = new Supervision.Commands.Command(o => EditCoverSealingRing());
         }
     }
 }

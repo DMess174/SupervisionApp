@@ -1,17 +1,17 @@
 ﻿using DataLayer;
-using DevExpress.Mvvm;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using DataLayer.TechnicalControlPlans.Materials;
 using DataLayer.Journals.Materials;
 using DataLayer.Entities.Materials;
-using Supervision.Views.EntityViews.MaterialViews;
+using BusinessLayer.Repository.Implementations.Entities.Material;
+using BusinessLayer.Repository.Implementations.Entities;
+using Supervision.Commands;
+using System.Threading.Tasks;
 
 namespace Supervision.ViewModels.EntityViewModels.Materials
 {
-    public class PipeMaterialEditVM : BasePropertyChanged
+    public class PipeMaterialEditVM : ViewModelBase
     {
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
@@ -23,12 +23,23 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
         private IEnumerable<Inspector> inspectors;
         private IEnumerable<PipeMaterialJournal> journal;
         private readonly BaseTable parentEntity;
+        private readonly PipeMaterialRepository materialRepo;
         private MetalMaterialTCP selectedTCPPoint;
 
         private PipeMaterial selectedItem;
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
+        private InspectorRepository inspectorRepo;
+        private JournalNumberRepository journalRepo;
+        private PipeMaterialJournal operation;
+
+        public PipeMaterialJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public PipeMaterial SelectedItem
         {
@@ -65,70 +76,6 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             {
                 inspectors = value;
                 RaisePropertyChanged();
-            }
-        }
-
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.PipeMaterials.Update(SelectedItem);
-                            db.SaveChanges();
-                            db.PipeMaterialJournals.UpdateRange(Journal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (!(parentEntity is PipeMaterial)) w?.Close();
-                        else
-                        {
-                            var wn = new PipeMaterialView();
-                            var vm = new PipeMaterialVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new PipeMaterialJournal()
-                            {
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.PipeMaterialJournals.Add(item);
-                            db.SaveChanges();
-                            Journal = db.PipeMaterialJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
             }
         }
 
@@ -191,19 +138,120 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public PipeMaterialEditVM(int id, BaseTable entity)
+        public IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
         {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => materialRepo.GetByIdIncludeAsync(id));
+                Materials = await Task.Run(() => materialRepo.GetPropertyValuesDistinctAsync(i => i.Material));
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Points = await Task.Run(() => materialRepo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+                FirstSizes = await Task.Run(() => materialRepo.GetPropertyValuesDistinctAsync(i => i.FirstSize));
+                SecondSizes = await Task.Run(() => materialRepo.GetPropertyValuesDistinctAsync(i => i.SecondSize));
+                ThirdSizes = await Task.Run(() => materialRepo.GetPropertyValuesDistinctAsync(i => i.ThirdSize));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => materialRepo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.PipeMaterialJournals.Add(new PipeMaterialJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.PipeMaterialJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (materialRepo.HasChanges(SelectedItem) || materialRepo.HasChanges(SelectedItem.PipeMaterialJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        public static PipeMaterialEditVM LoadPipeMaterialEditVM(int id, BaseTable entity, DataContext context)
+        {
+            PipeMaterialEditVM vm = new PipeMaterialEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public PipeMaterialEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.PipeMaterials.Find(id);
-            Journal = db.Set<PipeMaterialJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Materials = db.PipeMaterials.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            FirstSizes = db.PipeMaterials.Select(t => t.FirstSize).Distinct().OrderBy(x => x).ToList();
-            SecondSizes = db.PipeMaterials.Select(t => t.SecondSize).Distinct().OrderBy(x => x).ToList();
-            ThirdSizes = db.PipeMaterials.Select(d => d.ThirdSize).Distinct().OrderBy(x => x).ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.MetalMaterialTCPs.ToList();
+            materialRepo = new PipeMaterialRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            LoadItemCommand = new AsyncCommand<int>(Load);
+            SaveItemCommand = new AsyncCommand(SaveItem);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            AddOperationCommand = new AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new AsyncCommand(RemoveOperation);
         }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using DataLayer.Journals.Periodical;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Periodical
 {
     public class WeldingProcedures : PeriodicalControl
     {
-        public IEnumerable<WeldingProceduresJournal> WeldingProceduresJournals { get; set; }
+        public ObservableCollection<WeldingProceduresJournal> WeldingProceduresJournals { get; set; }
     }
 }

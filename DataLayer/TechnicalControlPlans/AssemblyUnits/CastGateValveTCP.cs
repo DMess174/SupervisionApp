@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using DataLayer.Journals.AssemblyUnits;
 
 namespace DataLayer.TechnicalControlPlans.AssemblyUnits
 {
     public class CastGateValveTCP: BaseTCP
     {
-        public IEnumerable<CastGateValveJournal> CastGateValveJournals{ get; set; }
+        public ObservableCollection<CastGateValveJournal> CastGateValveJournals{ get; set; }
     }
 }

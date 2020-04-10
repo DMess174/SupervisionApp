@@ -10,6 +10,7 @@ namespace Supervision.Views.EntityViews.MaterialViews.AnticorrosiveCoating
         public BaseAnticorrosiveCoatingView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

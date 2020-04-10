@@ -153,6 +153,7 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="PropertyChanged, Version=3.1.3.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.3.1.3\lib\net40\PropertyChanged.dll</HintPath>
     </Reference>
@@ -358,13 +359,58 @@
     <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Infragistics.Themes.MetroLight.Wpf.1.0.0\lib\net40\WPFToolkit.dll</HintPath>
     </Reference>
+    <Reference Include="WPFToolkit.Extended, Version=1.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.8.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.8.1\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.8.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.8.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.8.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.8.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.8.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.8.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.8.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.8.1\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\AsyncCommand.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\IAsyncCommand.cs" />
+    <Compile Include="Commands\IErrorHandler.cs" />
+    <Compile Include="Commands\TaskUtilities.cs" />
     <Compile Include="Styles\ProjectStyles\CloseTabItemAction.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ShaftShutterEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ShaftShutterVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\BronzeSleeveShutterEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\BronzeSleeveShutterVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\StubShutterEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\StubShutterVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\SheetGateValveCoverEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\SheetGateValveCoverVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\SheetGateValveCaseEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\SheetGateValveCaseVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\AnticorrosiveCoating\AbovegroundCoatingEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\AnticorrosiveCoating\AbrasiveMaterialEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\AnticorrosiveCoating\UndercoatEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\AnticorrosiveCoating\AbrasiveMaterialVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\AnticorrosiveCoating\UndergroundCoatingEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\AnticorrosiveCoating\AbovegroundCoatingVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\AnticorrosiveCoating\UndercoatVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\Materials\AnticorrosiveCoating\UndergroundCoatingVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\NDTPeriodicalControlEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\NDTPeriodicalControlVM.cs" />
+    <Compile Include="ViewModels\FOMReportVM.cs" />
     <Compile Include="ViewModels\DailyReportVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\CompactGateValveEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\SheetGateValveEditVM.cs" />
@@ -375,8 +421,6 @@
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\SheetGateValveVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\AssemblyUnit\ReverseShutterVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\BaseVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CastingCaseEditVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CastingCaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CompactGateValve\ShutterGuideEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CompactGateValve\ShutterDiskEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\CompactGateValve\ShutterGuideVM.cs" />
@@ -391,8 +435,8 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\SlamShutterVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterCaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterCaseEditVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\ReverseShutterDetailEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\SteelSleeveShutterVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\ReverseShutter\SteelSleeveShutterEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\CastGateValve\CastGateValveCaseEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\CastGateValve\CastGateValveCaseVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\Valve\CastGateValve\CastGateValveCoverEditVM.cs" />
@@ -424,12 +468,12 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverFlangeVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSealingRingEditVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldGateValveCaseEditVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldGateValveCoverEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CompactGateValveCaseEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CompactGateValveCoverEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSleeveEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSealingRingVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldGateValveCaseVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldGateValveCoverVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CompactGateValveCaseVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CompactGateValveCoverVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\FrontWallEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CoverSleeveVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\SideWallEditVM.cs" />
@@ -441,8 +485,6 @@
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\WeldNozzleVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CaseFlangeVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\DetailViewModels\WeldGateValve\CaseBottomVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\Materials\AnticorrosiveCoating\BaseAnticorrosiveCoatingEditVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\Materials\AnticorrosiveCoating\BaseAnticorrosiveCoatingVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\ControlWeldEditVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\FactoryInspectionVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\Materials\StoresControlVM.cs" />
@@ -463,13 +505,23 @@
     <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\Gate\CoatingPorosityVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\Gate\CoatingChemicalCompositionVM.cs" />
     <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\Gate\DegreasingChemicalCompositionVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\PeriodicalControlEditVM.cs" />
-    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\PeriodicalControlVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\WeldingPeriodicalControlEditVM.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PeriodicalControl\WeldingPeriodicalControlVM.cs" />
     <Compile Include="ViewModels\PIDEditVM.cs" />
     <Compile Include="ViewModels\SpecificationVM.cs" />
     <Compile Include="ViewModels\ProductTypeViewModel.cs" />
     <Compile Include="ViewModels\JournalNumbersViewModel.cs" />
     <Compile Include="ViewModels\TCPViewModels\TCPViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\EntityViews\DetailViews\ReverseShutter\BronzeSleeveShutterEditView.xaml.cs">
+      <DependentUpon>BronzeSleeveShutterEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EntityViews\DetailViews\ReverseShutter\BronzeSleeveShutterView.xaml.cs">
+      <DependentUpon>BronzeSleeveShutterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FOMReportView.xaml.cs">
+      <DependentUpon>FOMReportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DailyReportView.xaml.cs">
       <DependentUpon>DailyReportView.xaml</DependentUpon>
     </Compile>
@@ -892,6 +944,18 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\ProjectStyles\WindowStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\ReverseShutter\BronzeSleeveShutterEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EntityViews\DetailViews\ReverseShutter\BronzeSleeveShutterView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\FOMReportView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

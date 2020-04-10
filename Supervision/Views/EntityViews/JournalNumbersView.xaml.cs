@@ -3,13 +3,14 @@
 namespace Supervision.Views.EntityViews
 {
     /// <summary>
-    /// Логика взаимодействия для Inspector.xaml
+    /// Логика взаимодействия для JournalNumbers.xaml
     /// </summary>
     public partial class JournalNumbersView: Window
     {
         public JournalNumbersView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

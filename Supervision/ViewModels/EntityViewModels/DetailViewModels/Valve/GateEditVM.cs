@@ -1,60 +1,43 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
+using BusinessLayer.Repository.Implementations.Entities.Material;
 using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Entities.Materials;
 using DataLayer.Journals.Detailing;
 using DataLayer.TechnicalControlPlans.Detailing;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
 using Supervision.ViewModels.EntityViewModels.Materials;
 using Supervision.ViewModels.EntityViewModels.Periodical.Gate;
 using Supervision.Views.EntityViews;
-using Supervision.Views.EntityViews.DetailViews.Valve;
 using Supervision.Views.EntityViews.MaterialViews;
-using Supervision.Views.EntityViews.PeriodicalControl;
 using Supervision.Views.EntityViews.PeriodicalControl.Gate;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 {
-    public class GateEditVM: BasePropertyChanged
+    public class GateEditVM: ViewModelBase
     {
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<MetalMaterial> materials;
         private IEnumerable<string> drawings;
-        private ICommand editPID;
         private IEnumerable<PID> pIDs;
-        private ICommand degreasingChemicalCompositionOpen;
+        private GateJournal operation;
 
-        private ICommand coatingChemicalCompositionOpen;
-
-        private ICommand coatingPlasticityOpen;
-
-        private ICommand coatingProtectivePropertiesOpen;
-
-        private ICommand coatingPorosityOpen;
-
-        public ICommand EditPID
+        public GateJournal Operation
         {
-            get
+            get => operation;
+            set
             {
-                return editPID ?? (
-                           editPID = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.PIDId != null)
-                               {
-                                   var wn = new PIDEditView();
-                                   var vm = new PIDEditVM(SelectedItem.PID.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Для просмотра привяжите деталь", "Ошибка");
-                           }));
+                operation = value;
+                RaisePropertyChanged();
             }
         }
+
         public IEnumerable<PID> PIDs
         {
             get => pIDs;
@@ -73,13 +56,13 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
         private IEnumerable<GateJournal> documentationJournal;
         private IEnumerable<GateJournal> shippedJournal;
         private readonly BaseTable parentEntity;
+        private readonly GateRepository gateRepo;
+        private readonly InspectorRepository inspectorRepo;
+        private readonly MetalMaterialRepository materialRepo;
+        private readonly PIDRepository pIDRepo;
+        private readonly JournalNumberRepository journalRepo;
         private Gate selectedItem;
         private GateTCP selectedTCPPoint;
-
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
-        private ICommand editMaterial;
 
         public Gate SelectedItem
         {
@@ -165,123 +148,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.Gates.Update(SelectedItem);
-                            db.SaveChanges();
-                            db.GateJournals.UpdateRange(InputControlJournal);
-                            db.GateJournals.UpdateRange(PreparationJournal);
-                            db.GateJournals.UpdateRange(CoatingJournal);
-                            db.GateJournals.UpdateRange(TestJournal);
-                            db.GateJournals.UpdateRange(DocumentationJournal);
-                            db.GateJournals.UpdateRange(ShippedJournal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is Gate)
-                        {
-                            var wn = new GateView();
-                            var vm = new GateVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new GateJournal()
-                            {
-                                DetailDrawing = SelectedItem.Drawing,
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.GateJournals.Add(item);
-                            db.SaveChanges();
-                            InputControlJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId).ToList();
-                            PreparationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Подготовка поверхности").OrderBy(x => x.PointId).ToList();
-                            CoatingJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Покрытие").OrderBy(x => x.PointId).ToList();
-                            TestJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
-                            DocumentationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId).ToList();
-                            ShippedJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
-            }
-        }
-        public ICommand EditMaterial
-        {
-            get
-            {
-                return editMaterial ?? (
-                           editMaterial = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.MetalMaterial is PipeMaterial)
-                               {
-                                   var wn = new PipeMaterialEditView();
-                                   var vm = new PipeMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else if (SelectedItem.MetalMaterial != null)
-                               {
-                                   if (SelectedItem.MetalMaterial is SheetMaterial)
-                                   {
-                                       var wn = new SheetMaterialEditView();
-                                       var vm = new SheetMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                                   else if (SelectedItem.MetalMaterial is ForgingMaterial)
-                                   {
-                                       var wn = new ForgingMaterialEditView();
-                                       var vm = new ForgingMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                                   else if (SelectedItem.MetalMaterial is RolledMaterial)
-                                   {
-                                       var wn = new RolledMaterialEditView();
-                                       var vm = new RolledMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem);
-                                       wn.DataContext = vm;
-                                       wn.Show();
-                                   }
-                               }
-                               else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
-                           }));
-            }
-        }
-
         public IEnumerable<MetalMaterial> Materials
         {
             get => materials;
@@ -320,94 +186,242 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public ICommand DegreasingChemicalCompositionOpen
+
+        public static GateEditVM LoadVM(int id, BaseTable entity, DataContext context)
         {
-            get
-            {
-                return degreasingChemicalCompositionOpen ?? (
-                           degreasingChemicalCompositionOpen = new DelegateCommand<Window>((w) =>
-                           {
-                               var wn = new GatePeriodicalView();
-                               var vm = new DegreasingChemicalCompositionVM();
-                               wn.DataContext = vm;
-                               wn.Show();
-                           }));
-            }
+            GateEditVM vm = new GateEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
         }
-        public ICommand CoatingChemicalCompositionOpen
+
+        private bool CanExecute()
         {
-            get
-            {
-                return coatingChemicalCompositionOpen ?? (
-                           coatingChemicalCompositionOpen = new DelegateCommand<Window>((w) =>
-                           {
-                               var wn = new GatePeriodicalView();
-                               var vm = new CoatingChemicalCompositionVM();
-                               wn.DataContext = vm;
-                               wn.Show();
-                           }));
-            }
+            return true;
         }
-        public ICommand CoatingPlasticityOpen
+
+        public ICommand DegreasingChemicalCompositionOpenCommand { get; private set; }
+        private void DegreasingChemicalCompositionOpen()
         {
-            get
+            _ = new GatePeriodicalView
             {
-                return coatingPlasticityOpen ?? (
-                           coatingPlasticityOpen = new DelegateCommand<Window>((w) =>
-                           {
-                               var wn = new GatePeriodicalView();
-                               var vm = new CoatingPlasticityVM();
-                               wn.DataContext = vm;
-                               wn.Show();
-                           }));
-            }
+                DataContext = DegreasingChemicalCompositionVM.LoadVM(db)
+            };
         }
-        public ICommand CoatingProtectivePropertiesOpen
+
+        public ICommand CoatingChemicalCompositionOpenCommand { get; private set; }
+        private void CoatingChemicalCompositionOpen()
         {
-            get
+            _ = new GatePeriodicalView
             {
-                return coatingProtectivePropertiesOpen ?? (
-                           coatingProtectivePropertiesOpen = new DelegateCommand<Window>((w) =>
-                           {
-                               var wn = new GatePeriodicalView();
-                               var vm = new CoatingProtectivePropertiesVM();
-                               wn.DataContext = vm;
-                               wn.Show();
-                           }));
-            }
+                DataContext = CoatingChemicalCompositionVM.LoadVM(db)
+            };
         }
-        public ICommand CoatingPorosityOpen
+
+        public ICommand CoatingPlasticityOpenCommand { get; private set; }
+        private void CoatingPlasticityOpen()
         {
-            get
+            _ = new GatePeriodicalView
             {
-                return coatingPorosityOpen ?? (
-                           coatingPorosityOpen = new DelegateCommand<Window>((w) =>
-                           {
-                               var wn = new CoatingPorosityView();
-                               var vm = new CoatingPorosityVM();
-                               wn.DataContext = vm;
-                               wn.Show();
-                           }));
+                DataContext = CoatingPlasticityVM.LoadVM(db)
+            };
+        }
+
+        public ICommand CoatingProtectivePropertiesOpenCommand { get; private set; }
+        private void CoatingProtectivePropertiesOpen()
+        {
+            _ = new GatePeriodicalView
+            {
+                DataContext = CoatingProtectivePropertiesVM.LoadVM(db)
+            };
+        }
+
+        public ICommand CoatingPorosityOpenCommand { get; private set; }
+        private void CoatingPorosityOpen()
+        {
+            _ = new CoatingPorosityView
+            {
+                DataContext = CoatingPorosityVM.LoadVM(db)
+            };
+        }
+
+        public Commands.IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => gateRepo.GetByIdIncludeAsync(id));
+                Materials = await Task.Run(() => materialRepo.GetAllAsync());
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                PIDs = await Task.Run(() => pIDRepo.GetAllAsync());
+                Drawings = await Task.Run(() => gateRepo.GetPropertyValuesDistinctAsync(i => i.Drawing));
+                Points = await Task.Run(() => gateRepo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+                InputControlJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId);
+                PreparationJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Подготовка поверхности").OrderBy(x => x.PointId);
+                CoatingJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Покрытие").OrderBy(x => x.PointId);
+                TestJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId);
+                DocumentationJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId);
+                ShippedJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId);
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
-        public GateEditVM(int id, BaseTable entity)
+        public Supervision.Commands.IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
         {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => gateRepo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.GateJournals.Add(new GateJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                InputControlJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId);
+                PreparationJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Подготовка поверхности").OrderBy(x => x.PointId);
+                CoatingJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Покрытие").OrderBy(x => x.PointId);
+                TestJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId);
+                DocumentationJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId);
+                ShippedJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId);
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.GateJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                        InputControlJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId);
+                        PreparationJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Подготовка поверхности").OrderBy(x => x.PointId);
+                        CoatingJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Покрытие").OrderBy(x => x.PointId);
+                        TestJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId);
+                        DocumentationJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId);
+                        ShippedJournal = SelectedItem.GateJournals.Where(i => i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId);
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        public ICommand EditPIDCommand { get; private set; }
+        private void EditPID()
+        {
+            if (SelectedItem.PID != null)
+            {
+                _ = new PIDEditView
+                {
+                    DataContext = PIDEditVM.LoadPIDEditVM(SelectedItem.PID.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("PID не выбран", "Ошибка");
+        }
+
+        public ICommand EditMaterialCommand { get; private set; }
+        private void EditMaterial()
+        {
+            if (SelectedItem.MetalMaterial != null)
+            {
+                if (SelectedItem.MetalMaterial is PipeMaterial)
+                {
+                    _ = new PipeMaterialEditView
+                    {
+                        DataContext = PipeMaterialEditVM.LoadPipeMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem, db)
+                    };
+                }
+
+                if (SelectedItem.MetalMaterial is SheetMaterial)
+                {
+                    _ = new SheetMaterialEditView
+                    {
+                        DataContext = SheetMaterialEditVM.LoadSheetMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem, db)
+                    };
+                }
+                else if (SelectedItem.MetalMaterial is ForgingMaterial)
+                {
+                    _ = new ForgingMaterialEditView
+                    {
+                        DataContext = ForgingMaterialEditVM.LoadForgingMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem, db)
+                    };
+                }
+                else if (SelectedItem.MetalMaterial is RolledMaterial)
+                {
+                    _ = new RolledMaterialEditView
+                    {
+                        DataContext = RolledMaterialEditVM.LoadRolledMaterialEditVM(SelectedItem.MetalMaterial.Id, SelectedItem, db)
+                    };
+                }
+            }
+            else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (gateRepo.HasChanges(SelectedItem) || gateRepo.HasChanges(SelectedItem.GateJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        public GateEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.Gates.Include(i => i.BaseValve).SingleOrDefault(i => i.Id == id);
-            PIDs = db.PIDs.Include(i => i.Specification).ToList();
-            InputControlJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId).ToList();
-            PreparationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Подготовка поверхности").OrderBy(x => x.PointId).ToList();
-            CoatingJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Покрытие").OrderBy(x => x.PointId).ToList();
-            TestJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "ПСИ").OrderBy(x => x.PointId).ToList();
-            DocumentationJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId).ToList();
-            ShippedJournal = db.Set<GateJournal>().Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Drawings = db.Gates.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            Materials = db.MetalMaterials.ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<GateTCP>().ToList();
+            gateRepo = new GateRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            materialRepo = new MetalMaterialRepository(db);
+            pIDRepo = new PIDRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            LoadItemCommand = new Supervision.Commands.AsyncCommand<int>(Load);
+            SaveItemCommand = new Supervision.Commands.AsyncCommand(SaveItem);
+            CloseWindowCommand = new Supervision.Commands.Command(o => CloseWindow(o));
+            AddOperationCommand = new Supervision.Commands.AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new Supervision.Commands.AsyncCommand(RemoveOperation);
+            EditMaterialCommand = new Supervision.Commands.Command(o => EditMaterial());
+            EditPIDCommand = new Supervision.Commands.Command(o => EditPID());
+            DegreasingChemicalCompositionOpenCommand = new Supervision.Commands.Command(o => DegreasingChemicalCompositionOpen());
+            CoatingChemicalCompositionOpenCommand = new Supervision.Commands.Command(o => CoatingChemicalCompositionOpen());
+            CoatingPlasticityOpenCommand = new Supervision.Commands.Command(o => CoatingPlasticityOpen());
+            CoatingPorosityOpenCommand = new Supervision.Commands.Command(o => CoatingPorosityOpen());
+            CoatingProtectivePropertiesOpenCommand = new Supervision.Commands.Command(o => CoatingProtectivePropertiesOpen());
         }
     }
 }

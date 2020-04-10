@@ -1,7 +1,7 @@
 ﻿using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Entities.Materials;
 using DataLayer.Journals.Detailing;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Detailing
 {
@@ -12,14 +12,19 @@ namespace DataLayer.Entities.Detailing
             Name = "Седло";
         }
 
+        public Saddle(Saddle saddle) : base(saddle)
+        {
+            MetalMaterialId = saddle.MetalMaterialId;
+        }
+
         public int? MetalMaterialId { get; set; }
         public MetalMaterial MetalMaterial { get; set; }
 
         public int? BaseValveId{ get; set; }
         public BaseValve BaseValve { get; set; }
 
-        public IEnumerable<SaddleWithSealing> SaddleWithSealings { get; set; }
+        public ObservableCollection<SaddleWithSealing> SaddleWithSealings { get; set; }
 
-        public IEnumerable<SaddleJournal> SaddleJournals { get; set; }
+        public ObservableCollection<SaddleJournal> SaddleJournals { get; set; }
     }
 }

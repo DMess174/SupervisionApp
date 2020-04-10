@@ -3,9 +3,7 @@ using DataLayer;
 using DataLayer.Entities.Materials;
 using DataLayer.Journals.Materials;
 using DataLayer.TechnicalControlPlans.Materials;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace BusinessLayer.Repository.Implementations.Entities.Material
@@ -13,6 +11,11 @@ namespace BusinessLayer.Repository.Implementations.Entities.Material
     public class SheetMaterialRepository : RepositoryWithJournal<SheetMaterial, SheetMaterialJournal, MetalMaterialTCP>, ISheetMaterialRepository
     {
         public SheetMaterialRepository(DataContext context) : base(context) { }
+
+        public async Task<SheetMaterial> GetByIdIncludeAsync(int id)
+        {
+            return await db.SheetMaterials.Include(i => i.SheetMaterialJournals).SingleOrDefaultAsync(i => i.Id == id);
+        }
 
         public override SheetMaterial AddCopy(SheetMaterial entity)
         {

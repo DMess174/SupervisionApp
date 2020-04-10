@@ -1,5 +1,5 @@
 ﻿using DataLayer.Journals.Materials;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Materials
 {
@@ -12,9 +12,8 @@ namespace DataLayer.Entities.Materials
 
         public SheetMaterial(SheetMaterial material) : base(material)
         {
-            Name = "Лист";
         }
 
-        public IEnumerable<SheetMaterialJournal> SheetMaterialJournals { get; set; }
+        public ObservableCollection<SheetMaterialJournal> SheetMaterialJournals { get; set; }
     }
 }

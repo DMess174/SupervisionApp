@@ -1,5 +1,5 @@
 ﻿using DataLayer.Journals.Materials;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Materials
 {
@@ -10,6 +10,11 @@ namespace DataLayer.Entities.Materials
             Name = "Труба";
         }
 
-        public IEnumerable<PipeMaterialJournal> PipeMaterialJournals { get; set; }
+        public PipeMaterial(PipeMaterial material) : base(material)
+        {
+
+        }
+
+        public ObservableCollection<PipeMaterialJournal> PipeMaterialJournals { get; set; }
     }
 }

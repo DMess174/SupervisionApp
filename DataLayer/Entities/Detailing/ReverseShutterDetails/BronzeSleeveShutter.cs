@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
 
 namespace DataLayer.Entities.Detailing.ReverseShutterDetails
@@ -12,7 +13,8 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
 
         public BronzeSleeveShutter(BronzeSleeveShutter sleeve) : base(sleeve)
         {
-            Name = sleeve.Name;
+            Material = sleeve.Material;
+            Melt = sleeve.Melt;
         }
 
         public string Material { get; set; }
@@ -20,6 +22,6 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
 
         public int? ReverseShutterId { get; set; }
 
-        public IEnumerable<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
+        public ObservableCollection<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
     }
 }

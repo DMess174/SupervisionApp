@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DataLayer.Journals.AssemblyUnits;
 
 namespace DataLayer.Entities.AssemblyUnits
@@ -9,7 +10,10 @@ namespace DataLayer.Entities.AssemblyUnits
         {
             Name = "ЗШЛ";
         }
+        public SheetGateValve(SheetGateValve valve) :base(valve)
+        {
+        }
 
-        public IEnumerable<SheetGateValveJournal> SheetGateValveJournals { get; set; }
+        public ObservableCollection<SheetGateValveJournal> SheetGateValveJournals { get; set; }
     }
 }

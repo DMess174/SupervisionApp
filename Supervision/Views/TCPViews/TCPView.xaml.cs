@@ -10,6 +10,7 @@ namespace Supervision.Views.TCPViews
         public TCPView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

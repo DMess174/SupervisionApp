@@ -11,6 +11,7 @@ namespace Supervision.Views.EntityViews.DetailViews
         public CastingCoverView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

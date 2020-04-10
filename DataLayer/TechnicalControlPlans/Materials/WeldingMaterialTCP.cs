@@ -1,10 +1,10 @@
 ﻿using DataLayer.Journals.Materials;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.TechnicalControlPlans.Materials
 {
     public class WeldingMaterialTCP : BaseTCP
     {
-        public IEnumerable<WeldingMaterialJournal> WeldingMaterialJournals { get; set; }
+        public ObservableCollection<WeldingMaterialJournal> WeldingMaterialJournals { get; set; }
     }
 }

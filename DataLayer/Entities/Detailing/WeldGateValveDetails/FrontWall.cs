@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DataLayer.Entities.Materials;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
@@ -10,6 +11,10 @@ namespace DataLayer.Entities.Detailing.WeldGateValveDetails
         {
             Name = "Стенка лицевая";
         }
+        public FrontWall(FrontWall wall) : base(wall)
+        {
+            MetalMaterialId = wall.MetalMaterialId;
+        }
 
         public int? MetalMaterialId { get; set; }
         public MetalMaterial MetalMaterial { get; set; }
@@ -20,6 +25,6 @@ namespace DataLayer.Entities.Detailing.WeldGateValveDetails
         public int? WeldNozzleId { get; set; }
         public WeldNozzle WeldNozzle { get; set; }
 
-        public IEnumerable<FrontWallJournal> FrontWallJournals{ get; set; }
+        public ObservableCollection<FrontWallJournal> FrontWallJournals{ get; set; }
     }
 }

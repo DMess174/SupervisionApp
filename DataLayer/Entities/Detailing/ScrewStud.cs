@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Journals.Detailing;
 
@@ -11,8 +12,13 @@ namespace DataLayer.Entities.Detailing
             Name = "Шпилька";
         }
 
-        public IEnumerable<BaseValveWithScrewStud> BaseValveWithScrewStuds { get; set; }
+        public ScrewStud(ScrewStud screwStud) : base(screwStud)
+        {
 
-        public  IEnumerable<ScrewStudJournal> ScrewStudJournals { get; set; }
+        }
+
+        public ObservableCollection<BaseValveWithScrewStud> BaseValveWithScrewStuds { get; set; }
+
+        public ObservableCollection<ScrewStudJournal> ScrewStudJournals { get; set; }
     }
 }

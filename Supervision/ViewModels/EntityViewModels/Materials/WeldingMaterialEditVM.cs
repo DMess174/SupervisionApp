@@ -1,35 +1,41 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities;
+using BusinessLayer.Repository.Implementations.Entities.Material;
 using DataLayer;
 using DataLayer.Entities.Materials;
-using DataLayer.Journals;
-using DataLayer.TechnicalControlPlans;
-using DevExpress.Mvvm;
-using Supervision.Views.EntityViews.MaterialViews;
+using DataLayer.Journals.Materials;
+using DataLayer.TechnicalControlPlans.Materials;
+using Supervision.Commands;
 
 namespace Supervision.ViewModels.EntityViewModels.Materials
 {
-    public class WeldingMaterialEditVM<TEntity, TEntityTCP, TEntityJournal> : BasePropertyChanged
-        where TEntity : WeldingMaterial, new()
-        where TEntityTCP : BaseTCP
-        where TEntityJournal : BaseJournal<TEntity, TEntityTCP>, new()
+    public class WeldingMaterialEditVM : ViewModelBase
     {
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> names;
-        private IEnumerable<TEntityTCP> points;
+        private IEnumerable<WeldingMaterialTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<TEntityJournal> journal;
+        private IEnumerable<WeldingMaterialJournal> journal;
         private readonly BaseTable parentEntity;
-        private TEntity selectedItem;
-        private TEntityTCP selectedTCPPoint;
+        private readonly WeldingMaterialRepository repo;
+        private WeldingMaterial selectedItem;
+        private WeldingMaterialTCP selectedTCPPoint;
+        private WeldingMaterialJournal operation;
 
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
-        public TEntity SelectedItem
+        public WeldingMaterialJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public WeldingMaterial SelectedItem
         {
             get => selectedItem;
             set
@@ -38,7 +44,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<TEntityJournal> Journal
+        public IEnumerable<WeldingMaterialJournal> Journal
         {
             get => journal;
             set
@@ -47,7 +53,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<TEntityTCP> Points
+        public IEnumerable<WeldingMaterialTCP> Points
         {
             get => points;
             set
@@ -63,71 +69,6 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             {
                 inspectors = value;
                 RaisePropertyChanged();
-            }
-        }
-
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.Set<TEntity>().Update(SelectedItem);
-                            db.SaveChanges();
-                            db.Set<TEntityJournal>().UpdateRange(Journal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is TEntity)
-                        {
-                            var wn = new WeldingMaterialView();
-                            var vm = new WeldingMaterialVM<TEntity, TEntityTCP, TEntityJournal>();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new TEntityJournal()
-                            {
-                                DetailDrawing = SelectedItem.Name,
-                                DetailNumber = SelectedItem.Batch,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.Set<TEntityJournal>().Add(item);
-                            db.SaveChanges();
-                            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
             }
         }
  
@@ -150,7 +91,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public TEntityTCP SelectedTCPPoint
+        public WeldingMaterialTCP SelectedTCPPoint
         {
             get => selectedTCPPoint;
             set
@@ -160,16 +101,120 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public WeldingMaterialEditVM(int id, BaseTable entity)
+        private readonly InspectorRepository inspectorRepo;
+        private readonly JournalNumberRepository journalRepo;
+
+        public IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
         {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => repo.GetByIdIncludeAsync(id));
+                Names = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Name));
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Points = await Task.Run(() => repo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.WeldingMaterialJournals.Add(new WeldingMaterialJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.WeldingMaterialJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(SelectedItem) || repo.HasChanges(SelectedItem.WeldingMaterialJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        public static WeldingMaterialEditVM LoadVM(int id, BaseTable entity, DataContext context)
+        {
+            WeldingMaterialEditVM vm = new WeldingMaterialEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public WeldingMaterialEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.Set<TEntity>().SingleOrDefault(i => i.Id == id);
-            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Names = db.Set<TEntity>().Select(s => s.Name).Distinct().OrderBy(x => x).ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<TEntityTCP>().ToList();
+            repo = new WeldingMaterialRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            LoadItemCommand = new AsyncCommand<int>(Load);
+            SaveItemCommand = new AsyncCommand(SaveItem);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            AddOperationCommand = new AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new AsyncCommand(RemoveOperation);
         }
     }
 }

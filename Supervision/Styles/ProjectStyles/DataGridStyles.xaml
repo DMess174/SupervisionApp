@@ -6,11 +6,12 @@
     <Style x:Key="StandardDataGrid" TargetType="DataGrid">
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="GridLinesVisibility" Value="All"/>
-        <Setter Property="HeadersVisibility" Value="Column"/>
+        <Setter Property="HeadersVisibility" Value="All"/>
         <Setter Property="BorderBrush" Value="{StaticResource Foreground}"/>
         <Setter Property="CanUserAddRows" Value="False"/>
         <Setter Property="CanUserDeleteRows" Value="False"/>
         <Setter Property="CanUserResizeColumns" Value="True"/>
+        <Setter Property="CanUserSortColumns" Value="True"/>
         <Setter Property="SelectionMode" Value="Single"/>
         <Setter Property="SelectionUnit" Value="FullRow"/>
         <Setter Property="Margin" Value="5 0 5 0"/>
@@ -34,6 +35,7 @@
                 <Setter Property="SnapsToDevicePixels" Value="True"/>
                 <Setter Property="MinWidth" Value="50"/>
                 <Setter Property="MinHeight" Value="25"/>
+                <Setter Property="SeparatorVisibility" Value="Visible"/>
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -53,7 +55,7 @@
                                     </TextBlock>
                                 </Grid>
                             </Grid>
-                           
+
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -61,7 +63,7 @@
             <Style TargetType="{x:Type DataGridCell}">
                 <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="MinHeight" Value="50" />
+                <Setter Property="Height" Value="auto"/>
                 <Setter Property="Margin" Value="0 0 0 5"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
                 <Setter Property="Foreground" Value="{StaticResource Foreground}"/>

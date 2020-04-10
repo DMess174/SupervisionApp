@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DataLayer.Entities.AssemblyUnits;
 
 namespace DataLayer.Entities.Detailing.WeldGateValveDetails
@@ -14,10 +15,17 @@ namespace DataLayer.Entities.Detailing.WeldGateValveDetails
         public int? CaseBottomId { get; set; }
         public CaseBottom CaseBottom { get; set; }
 
-        public IEnumerable<FrontWall> FrontWalls { get; set; }
-        public IEnumerable<SideWall> SideWalls { get; set; }
-        public IEnumerable<CaseEdge> CaseEdges { get; set; }
+        public ObservableCollection<FrontWall> FrontWalls { get; set; }
+        public ObservableCollection<SideWall> SideWalls { get; set; }
+        public ObservableCollection<CaseEdge> CaseEdges { get; set; }
 
         public BaseWeldValve BaseWeldValve { get; set; }
+
+        public WeldGateValveCase()
+        {
+        }
+        public WeldGateValveCase(WeldGateValveCase weldCase) : base(weldCase)
+        {
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using DataLayer.TechnicalControlPlans;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer
 {
@@ -7,6 +7,6 @@ namespace DataLayer
     {
         public string Name { get; set; }
 
-        public IEnumerable<BaseTCP> BaseTCPs { get; set; }
+        public ObservableCollection<BaseTCP> BaseTCPs { get; set; }
     }
 }

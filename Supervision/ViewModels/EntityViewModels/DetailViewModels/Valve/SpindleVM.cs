@@ -1,29 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using DataLayer;
+using DataLayer.Entities.Detailing;
+using DataLayer.Journals.Detailing;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using DataLayer;
-using DataLayer.Entities.Detailing;
-using DataLayer.Journals.Detailing;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
+using Supervision.Commands;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 using Supervision.Views.EntityViews.DetailViews.Valve;
 
-namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
+namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
-    public class SpindleVM : BasePropertyChanged
+    public class SpindleVM : ViewModelBase
     {
         private readonly DataContext db;
-        private IEnumerable<Spindle> allInstances;
+        private IList<Spindle> allInstances;
         private ICollectionView allInstancesView;
         private Spindle selectedItem;
-        private ICommand removeItem;
-        private ICommand editItem;
-        private ICommand addItem;
-        private ICommand copyItem;
-        private ICommand closeWindow;
+        private readonly SpindleRepository repo;
 
         private string name;
         private string number = "";
@@ -138,144 +135,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
         }
         #endregion
 
-        #region Commands              
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        w?.Close();
-                    }));
-            }
-        }
-        public ICommand EditItem
-        {
-            get
-            {
-                return editItem ?? (
-                    editItem = new DelegateCommand<Window>((w) =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var wn = new SpindleEditView();
-                            var vm = new SpindleEditVM(SelectedItem.Id, SelectedItem);
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand CopyItem
-        {
-            get
-            {
-                return copyItem ?? (
-                    copyItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var item = new Spindle()
-                            {
-                                Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
-                                Drawing = SelectedItem.Drawing,
-                                Certificate = SelectedItem.Certificate,
-                                Status = SelectedItem.Status,
-                                Name = SelectedItem.Name,
-                                MetalMaterialId = SelectedItem.MetalMaterialId
-                            };
-                            db.Spindles.Add(item);
-                            db.SaveChanges();
-                            var Journal = db.SpindleJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
-                            foreach (var record in Journal)
-                            {
-                                var Record = new SpindleJournal()
-                                {
-                                    Date = record.Date,
-                                    DetailId = item.Id,
-                                    Description = record.Description,
-                                    DetailName = item.Name,
-                                    DetailNumber = item.Number,
-                                    DetailDrawing = item.Drawing,
-                                    InspectorId = record.InspectorId,
-                                    Point = record.Point,
-                                    PointId = record.PointId,
-                                    RemarkIssued = record.RemarkIssued,
-                                    RemarkClosed = record.RemarkClosed,
-                                    Comment = record.Comment,
-                                    Status = record.Status,
-                                    JournalNumber = record.JournalNumber
-                                };
-                                db.SpindleJournals.Add(Record);
-                                db.SaveChanges();
-                            }
-
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand AddItem
-        {
-            get
-            {
-                return addItem ?? (
-                    addItem = new DelegateCommand<Window>((w) =>
-                    {
-                        var item = new Spindle();
-                        db.Spindles.Add(item);
-                        db.SaveChanges();
-                        SelectedItem = item;
-                        var tcpPoints = db.SpindleTCPs.ToList();
-                        foreach (var i in tcpPoints)
-                        {
-                            var journal = new SpindleJournal()
-                            {
-                                DetailId = SelectedItem.Id,
-                                PointId = i.Id,
-                                DetailName = SelectedItem.Name,
-                                DetailNumber = SelectedItem.Number,
-                                DetailDrawing = SelectedItem.Drawing,
-                                Point = i.Point,
-                                Description = i.Description
-                            };
-                            if (journal != null)
-                            {
-                                db.SpindleJournals.Add(journal);
-                                db.SaveChanges();
-                            }
-                        }
-                        var wn = new SpindleEditView();
-                        var vm = new SpindleEditVM(SelectedItem.Id, SelectedItem);
-                        wn.DataContext = vm;
-                        w?.Close();
-                        wn.ShowDialog();
-                    }));
-            }
-        }
-        public ICommand RemoveItem
-        {
-            get
-            {
-                return removeItem ?? (
-                    removeItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.Spindles.Remove(SelectedItem);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не выбран!", "Ошибка");
-                    }));
-            }
-        }
-        #endregion
-
         public string Name
         {
             get => name;
@@ -295,8 +154,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
             }
         }
-
-        public IEnumerable<Spindle> AllInstances
+        public IList<Spindle> AllInstances
         {
             get => allInstances;
             set
@@ -315,16 +173,113 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public SpindleVM()
+        public static SpindleVM LoadVM(DataContext context)
         {
-            db = new DataContext();
-            db.Spindles.Include(i => i.MetalMaterial).Load();
-            AllInstances = db.Spindles.Local.ToObservableCollection();
-            AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
-            if (AllInstances.Count() != 0)
+            SpindleVM vm = new SpindleVM(context);
+            vm.UpdateListCommand.ExecuteAsync();
+            return vm;
+        }
+
+        public IAsyncCommand UpdateListCommand { get; private set; }
+        private async Task UpdateList()
+        {
+            try
             {
-                Name = AllInstances.First().Name;
+                IsBusy = true;
+                AllInstances = new ObservableCollection<Spindle>();
+                AllInstances = await Task.Run(() => repo.GetAllAsync());
+                AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
             }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddNewItemCommand { get; private set; }
+        private async Task AddNewItem()
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await repo.AddAsync(new Spindle());
+                var tcpPoints = await repo.GetTCPsAsync();
+                var records = new List<SpindleJournal>();
+                foreach (var tcp in tcpPoints)
+                {
+                    var journal = new SpindleJournal(SelectedItem, tcp);
+                    if (journal != null)
+                        records.Add(journal);
+                }
+                await repo.AddJournalRecordAsync(records);
+                EditSelectedItem();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand CopySelectedItemCommand { get; private set; }
+        private async Task CopySelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                try
+                {
+                    IsBusy = true;
+                    var temp = await repo.GetByIdIncludeAsync(SelectedItem.Id);
+                    var copy = await repo.AddAsync(new Spindle(temp));
+                    var jour = new ObservableCollection<SpindleJournal>();
+                    foreach (var i in temp.SpindleJournals)
+                    {
+                        var record = new SpindleJournal(copy.Id, i);
+                        jour.Add(record);
+                    }
+                    repo.UpdateJournalRecord(jour);
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+        }
+
+        public IAsyncCommand RemoveSelectedItemCommand { get; private set; }
+
+        public ICommand EditSelectedItemCommand { get; private set; }
+        private void EditSelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                _ = new SpindleEditView
+                {
+                    DataContext = SpindleEditVM.LoadVM(SelectedItem.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            Window w = obj as Window;
+            w?.Close();
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public SpindleVM(DataContext context)
+        {
+            db = context;
+            repo = new SpindleRepository(db);
+            UpdateListCommand = new AsyncCommand(UpdateList, CanExecute);
+            AddNewItemCommand = new AsyncCommand(AddNewItem, CanExecute);
+            CopySelectedItemCommand = new AsyncCommand(CopySelectedItem, CanExecute);
+            EditSelectedItemCommand = new Command(o => EditSelectedItem());
+            CloseWindowCommand = new Command(o => CloseWindow(o));
         }
     }
 }

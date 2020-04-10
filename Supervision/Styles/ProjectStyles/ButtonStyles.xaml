@@ -10,16 +10,19 @@
 		<Setter Property="Background" Value="{StaticResource BackgroundNormal}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource BorderBrushNormal}"/>
 		<Setter Property="FontFamily" Value="{StaticResource BaseFont}"/>
-		<Setter Property="MinWidth" Value="80"/>
+        <Setter Property="Padding" Value="10 5"/>
+        <Setter Property="MinWidth" Value="80"/>
 		<Setter Property="MinHeight" Value="30"/>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="Button">
-					<Border SnapsToDevicePixels="True"
+                    <Border SnapsToDevicePixels="True"
 							BorderThickness="1"
+                            CornerRadius="3"
 							BorderBrush="{TemplateBinding BorderBrush}" 
-							Background="{TemplateBinding Background}">
-						<Grid SnapsToDevicePixels="True">
+							Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}">
+                        <Grid SnapsToDevicePixels="True">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Grid>
 					</Border>

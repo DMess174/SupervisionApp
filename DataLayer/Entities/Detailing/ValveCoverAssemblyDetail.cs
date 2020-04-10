@@ -8,5 +8,14 @@ namespace DataLayer.Entities.Detailing
         public MetalMaterial MetalMaterial { get; set; }
 
         public BaseValveCover BaseValveCover { get; set; }
+
+        public ValveCoverAssemblyDetail()
+        {
+        }
+
+        public ValveCoverAssemblyDetail(ValveCoverAssemblyDetail detail) : base(detail)
+        {
+            MetalMaterialId = detail.MetalMaterialId;
+        }
     }
 }

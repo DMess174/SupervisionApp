@@ -7,6 +7,7 @@ namespace Supervision.Views.EntityViews.MaterialViews
         public ControlWeldView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

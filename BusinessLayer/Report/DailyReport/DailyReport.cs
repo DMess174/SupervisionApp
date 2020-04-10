@@ -1,14 +1,10 @@
 ﻿using DataLayer;
-using DataLayer.Journals;
-using DataLayer.Journals.Materials;
-using DataLayer.TechnicalControlPlans;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace BusinessLayer.Report.DailyReport
 {

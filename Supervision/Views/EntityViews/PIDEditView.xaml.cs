@@ -7,6 +7,7 @@ namespace Supervision.Views.EntityViews
         public PIDEditView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

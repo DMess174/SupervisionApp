@@ -1,40 +1,40 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
 using DataLayer;
 using DataLayer.Entities.Detailing.CastGateValveDetails;
 using DataLayer.Journals.Detailing.CastGateValveDetails;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
+using Supervision.Commands;
+using Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter;
 using Supervision.Views.EntityViews.DetailViews;
+using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
 
-namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter
+namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve.CastGateValve
 {
-    public class CastGateValveCoverVM : BasePropertyChanged
+    public class CastGateValveCoverVM : ViewModelBase
     {
         private readonly DataContext db;
+        private readonly CastGateValveCoverRepository repo;
         private IEnumerable<CastGateValveCover> allInstances;
         private ICollectionView allInstancesView;
         private CastGateValveCover selectedItem;
-        private ICommand removeItem;
-        private ICommand editItem;
-        private ICommand addItem;
-        private ICommand copyItem;
-        private ICommand closeWindow;
 
         private string name;
         private string number = "";
         private string drawing = "";
         private string status = "";
         private string material = "";
-        private string certificate = "";
         private string melt = "";
+        private string certificate = "";
 
         #region Filter
-        public string Number 
+        public string Number
         {
             get => number;
             set
@@ -47,7 +47,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Number.ToLower().Contains(Number.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -64,7 +64,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Drawing.ToLower().Contains(Drawing.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -81,7 +81,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Status.ToLower().Contains(Status.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -90,7 +90,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             get => material;
             set
             {
-                material= value;
+                material = value;
                 RaisePropertyChanged();
                 allInstancesView.Filter += (obj) =>
                 {
@@ -98,24 +98,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Material.ToLower().Contains(Material.ToLower());
                     }
-                    else return false;
-                };
-            }
-        }
-        public string Certificate
-        {
-            get => certificate;
-            set
-            {
-                certificate = value;
-                RaisePropertyChanged();
-                allInstancesView.Filter += (obj) =>
-                {
-                    if (obj is CastGateValveCover item && item.Certificate != null)
-                    {
-                        return item.Certificate.ToLower().Contains(Certificate.ToLower());
-                    }
-                    else return false;
+                    else return true;
                 };
             }
         }
@@ -132,147 +115,25 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
                     {
                         return item.Melt.ToLower().Contains(Melt.ToLower());
                     }
-                    else return false;
+                    else return true;
                 };
             }
         }
-        #endregion
-
-        #region Commands              
-        public ICommand CloseWindow
+        public string Certificate
         {
-            get
+            get => certificate;
+            set
             {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
+                certificate = value;
+                RaisePropertyChanged();
+                allInstancesView.Filter += (obj) =>
+                {
+                    if (obj is CastGateValveCover item && item.Certificate != null)
                     {
-                        w?.Close();
-                    }));
-            }
-        }
-        public ICommand EditItem
-        {
-            get
-            {
-                return editItem ?? (
-                    editItem = new DelegateCommand<Window>((w) =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var wn = new CastingCoverEditView();
-                            var vm = new CastGateValveCoverEditVM(SelectedItem.Id, SelectedItem);
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand CopyItem
-        {
-            get
-            {
-                return copyItem ?? (
-                    copyItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var item = new CastGateValveCover()
-                            {
-                                Number = Microsoft.VisualBasic.Interaction.InputBox("Введите номер детали:"),
-                                Drawing = SelectedItem.Drawing,
-                                Material = SelectedItem.Material,
-                                Melt = SelectedItem.Melt,
-                                Certificate = SelectedItem.Certificate,
-                                Status = SelectedItem.Status,
-                                Name = SelectedItem.Name
-                            };
-                            db.CastGateValveCovers.Add(item);
-                            db.SaveChanges();
-                            var journal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id).ToList();
-                            foreach (var record in journal)
-                            {
-                                var Record = new CastGateValveCoverJournal()
-                                {
-                                    Date = record.Date,
-                                    DetailId = item.Id,
-                                    Description = record.Description,
-                                    DetailName = item.Name,
-                                    DetailNumber = item.Number,
-                                    DetailDrawing = item.Drawing,
-                                    InspectorId = record.InspectorId,
-                                    Point = record.Point,
-                                    PointId = record.PointId,
-                                    RemarkIssued = record.RemarkIssued,
-                                    RemarkClosed = record.RemarkClosed,
-                                    Comment = record.Comment,
-                                    Status = record.Status,
-                                    JournalNumber = record.JournalNumber
-                                };
-                                db.CastGateValveCoverJournals.Add(Record);
-                                db.SaveChanges();
-                            }
-
-                        }
-                        else MessageBox.Show("Объект не выбран", "Ошибка");
-                    }));
-            }
-        }
-
-        public ICommand AddItem
-        {
-            get
-            {
-                return addItem ?? (
-                    addItem = new DelegateCommand<Window>((w) =>
-                    {
-                        var item = new CastGateValveCover();
-                        db.CastGateValveCovers.Add(item);
-                        db.SaveChanges();
-                        SelectedItem = item;
-                        var tcpPoints = db.CastGateValveCoverTCPs.ToList();
-                        foreach (var i in tcpPoints)
-                        {
-                            var journal = new CastGateValveCoverJournal()
-                            {
-                                DetailId = SelectedItem.Id,
-                                PointId = i.Id,
-                                DetailName = SelectedItem.Name,
-                                DetailNumber = SelectedItem.Number,
-                                DetailDrawing = SelectedItem.Drawing,
-                                Point = i.Point,
-                                Description = i.Description
-                            };
-                            if (journal != null)
-                            {
-                                db.CastGateValveCoverJournals.Add(journal);
-                                db.SaveChanges();
-                            }
-                        }
-                        var wn = new CastingCoverEditView();
-                        var vm = new CastGateValveCoverEditVM(SelectedItem.Id, SelectedItem);
-                        wn.DataContext = vm;
-                        w?.Close();
-                        wn.ShowDialog();
-                    }));
-            }
-        }
-        public ICommand RemoveItem
-        {
-            get
-            {
-                return removeItem ?? (
-                    removeItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.CastGateValveCovers.Remove(SelectedItem);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не выбран!", "Ошибка");
-                    }));
+                        return item.Certificate.ToLower().Contains(Certificate.ToLower());
+                    }
+                    else return true;
+                };
             }
         }
         #endregion
@@ -316,16 +177,117 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public CastGateValveCoverVM()
+        public static CastGateValveCoverVM LoadVM(DataContext context)
         {
-            db = new DataContext();
-            db.CastGateValveCovers.Load();
-            AllInstances = db.CastGateValveCovers.Local.ToObservableCollection();
-            AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
-            if (AllInstances.Count() != 0)
+            CastGateValveCoverVM vm = new CastGateValveCoverVM(context);
+            vm.UpdateListCommand.ExecuteAsync();
+            return vm;
+        }
+
+        public IAsyncCommand UpdateListCommand { get; private set; }
+        private async Task UpdateList()
+        {
+            try
             {
-                Name = AllInstances.First().Name;
+                IsBusy = true;
+                AllInstances = new ObservableCollection<CastGateValveCover>();
+                AllInstances = await Task.Run(() => repo.GetAllAsync());
+                AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
+                if (AllInstances.Count() != 0)
+                {
+                    Name = AllInstances.First().Name;
+                }
             }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddNewItemCommand { get; private set; }
+        private async Task AddNewItem()
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await repo.AddAsync(new CastGateValveCover());
+                var tcpPoints = await repo.GetTCPsAsync();
+                var records = new List<CastGateValveCoverJournal>();
+                foreach (var tcp in tcpPoints)
+                {
+                    var journal = new CastGateValveCoverJournal(SelectedItem, tcp);
+                    if (journal != null)
+                        records.Add(journal);
+                }
+                await repo.AddJournalRecordAsync(records);
+                EditSelectedItem();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand CopySelectedItemCommand { get; private set; }
+        private async Task CopySelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                try
+                {
+                    IsBusy = true;
+                    var temp = await repo.GetByIdIncludeAsync(SelectedItem.Id);
+                    var copy = await repo.AddAsync(new CastGateValveCover(temp));
+                    var jour = new ObservableCollection<CastGateValveCoverJournal>();
+                    foreach (var i in temp.CastGateValveCoverJournals)
+                    {
+                        var record = new CastGateValveCoverJournal(copy.Id, i);
+                        jour.Add(record);
+                    }
+                    repo.UpdateJournalRecord(jour);
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+        }
+
+        public IAsyncCommand RemoveSelectedItemCommand { get; private set; }
+
+        public ICommand EditSelectedItemCommand { get; private set; }
+        private void EditSelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                _ = new CastingCoverEditView
+                {
+                    DataContext = CastGateValveCoverEditVM.LoadVM(SelectedItem.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            Window w = obj as Window;
+            w?.Close();
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public CastGateValveCoverVM(DataContext context)
+        {
+            db = context;
+            repo = new CastGateValveCoverRepository(db);
+            UpdateListCommand = new AsyncCommand(UpdateList, CanExecute);
+            AddNewItemCommand = new AsyncCommand(AddNewItem, CanExecute);
+            CopySelectedItemCommand = new AsyncCommand(CopySelectedItem, CanExecute);
+            EditSelectedItemCommand = new Command(o => EditSelectedItem());
+            CloseWindowCommand = new Command(o => CloseWindow(o));
         }
     }
 }

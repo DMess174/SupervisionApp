@@ -1,12 +1,19 @@
 ﻿using DataLayer.Journals.Materials.AnticorrosiveCoating;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Materials.AnticorrosiveCoating
 {
     public class UndergroundCoating : BaseAnticorrosiveCoating
     {
-        public IEnumerable<UndergroundCoatingJournal> UndergroundCoatingJournals { get; set; }
-    }
+        public ObservableCollection<UndergroundCoatingJournal> UndergroundCoatingJournals { get; set; }
 
-    
+        public UndergroundCoating()
+        {
+        }
+
+        public UndergroundCoating(UndergroundCoating coating) : base(coating)
+        {
+
+        }
+    }
 }

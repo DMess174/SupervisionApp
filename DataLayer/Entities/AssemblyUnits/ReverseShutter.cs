@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using DataLayer.Entities.Detailing.ReverseShutterDetails;
 using DataLayer.Journals.AssemblyUnits;
 
@@ -10,6 +10,9 @@ namespace DataLayer.Entities.AssemblyUnits
         {
             Name = "ЗО";
         }
+        public ReverseShutter(ReverseShutter shutter) : base(shutter)
+        {
+        }
 
         public int? ReverseShutterCaseId { get; set; }
         public ReverseShutterCase ReverseShutterCase { get; set; }
@@ -20,11 +23,11 @@ namespace DataLayer.Entities.AssemblyUnits
         public int? SlamShutterId { get; set; }
         public SlamShutter SlamShutter { get; set; }
 
-        public IEnumerable<BronzeSleeveShutter> BronzeSleeveShutters { get; set; }
-        public IEnumerable<SteelSleeveShutter> SteelSleeveShutters { get; set; }
-        public IEnumerable<StubShutter> StubShutters { get; set; }
-        public IEnumerable<ReverseShutterWithCoating> ReverseShutterWithCoatings { get; set; }
+        public ObservableCollection<BronzeSleeveShutter> BronzeSleeveShutters { get; set; }
+        public ObservableCollection<SteelSleeveShutter> SteelSleeveShutters { get; set; }
+        public ObservableCollection<StubShutter> StubShutters { get; set; }
+        public ObservableCollection<ReverseShutterWithCoating> ReverseShutterWithCoatings { get; set; }
 
-        public IEnumerable<ReverseShutterJournal> ReverseShutterJournals { get; set; }
+        public ObservableCollection<ReverseShutterJournal> ReverseShutterJournals { get; set; }
     }
 }

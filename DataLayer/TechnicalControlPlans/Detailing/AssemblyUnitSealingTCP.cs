@@ -1,10 +1,10 @@
 ﻿using DataLayer.Journals.Detailing;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.TechnicalControlPlans.Detailing
 {
     public class AssemblyUnitSealingTCP : BaseTCP
     {
-        public IEnumerable<AssemblyUnitSealingJournal> AssemblyUnitSealingJournals { get; set; }
+        public ObservableCollection<AssemblyUnitSealingJournal> AssemblyUnitSealingJournals { get; set; }
     }
 }

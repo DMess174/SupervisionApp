@@ -89,7 +89,7 @@
                     <Button Style="{StaticResource StandardButton}"
                             Grid.Row="1"
                         Margin="10"
-                        Content="Фланец"
+                        Content="Фланец корпуса"
                         FontSize="{StaticResource Hi}"
                         Command="{Binding CaseFlangeOpen}"/>
 
@@ -138,7 +138,7 @@
 
                     <Button Style="{StaticResource StandardButton}"
                         Margin="10"
-                        Content="Фланец"
+                        Content="Фланец крышки"
                         FontSize="{StaticResource Hi}"
                         Command="{Binding CoverFlangeOpen}"/>
 

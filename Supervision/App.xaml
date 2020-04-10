@@ -1,9 +1,10 @@
 ﻿<Application x:Class="Supervision.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:viewmodels="clr-namespace:Supervision.ViewModels.EntityViewModels.AssemblyUnit"
-             xmlns:views="clr-namespace:Supervision.Views.EntityViews.AssemblyUnit"
-             StartupUri="Views\MainWindow.xaml">
+             xmlns:viewmodels="clr-namespace:Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve"
+             xmlns:views="clr-namespace:Supervision.Views.EntityViews.DetailViews.Valve"
+             StartupUri="Views\MainWindow.xaml"
+             ShutdownMode="OnMainWindowClose">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -26,6 +27,10 @@
                 <ResourceDictionary Source="Styles/ProjectStyles/Resources.xaml"/>
                 <ResourceDictionary Source="Styles/ProjectStyles/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewmodels:SaddleEditVM}">
+                <views:SaddleEditView/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

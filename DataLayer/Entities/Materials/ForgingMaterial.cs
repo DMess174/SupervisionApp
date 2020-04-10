@@ -1,5 +1,5 @@
 ﻿using DataLayer.Journals.Materials;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Materials
 {
@@ -10,8 +10,12 @@ namespace DataLayer.Entities.Materials
             Name = "Поковка";
         }
 
+        public ForgingMaterial(ForgingMaterial material) : base(material)
+        {
+        }
+
         public string MetalCharge { get; set; }
 
-        public IEnumerable<ForgingMaterialJournal> ForgingMaterialJournals { get; set; }
+        public ObservableCollection<ForgingMaterialJournal> ForgingMaterialJournals { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using DataLayer.Journals.Detailing;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using DataLayer.Journals.AssemblyUnits;
 using DataLayer.Journals.Detailing.CastGateValveDetails;
@@ -10,6 +9,7 @@ using DataLayer.Journals.Detailing.WeldGateValveDetails;
 using DataLayer.Journals.Materials.AnticorrosiveCoating;
 using DataLayer.Journals.Materials;
 using DataLayer.Journals.Periodical;
+using System.Collections.ObjectModel;
 
 namespace DataLayer
 {
@@ -25,66 +25,66 @@ namespace DataLayer
 
         [NotMapped] public string FullName => string.Format($"{Name}\n{Apointment}");
 
-        public IEnumerable<CastGateValveJournal> CastGateValveJournals { get; set; }
-        public IEnumerable<CoatingJournal> CoatingJournals { get; set; }
-        public IEnumerable<CompactGateValveJournal> CompactGateValveJournals{ get; set; }
-        public IEnumerable<SheetGateValveJournal> SheetGateValveJournals { get; set; }
-        public IEnumerable<ReverseShutterJournal> ReverseShutterJournals { get; set; }
-        public IEnumerable<CastGateValveCaseJournal> CastGateValveCaseJournals { get; set; }
-        public IEnumerable<CastGateValveCoverJournal> CastGateValveCoverJournals { get; set; }
-        public IEnumerable<ShutterDiskJournal> ShutterDiskJournals { get; set; }
-        public IEnumerable<ShutterGuideJournal> ShutterGuideJournals { get; set; }
-        public IEnumerable<ShutterJournal> ShutterJournals { get; set; }
-        public IEnumerable<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
-        public IEnumerable<ReverseShutterCaseJournal> ReverseShutterCaseJournals { get; set; }
-        public IEnumerable<ShaftShutterJournal> ShaftShutterJournals { get; set; }
-        public IEnumerable<SlamShutterJournal> SlamShutterJournals { get; set; }
-        public IEnumerable<SteelSleeveShutterJournal> SteelSleeveShutterJournals { get; set; }
-        public IEnumerable<StubShutterJournal> StubShutterJournals { get; set; }
-        public IEnumerable<CaseBottomJournal> CaseBottomJournals { get; set; }
-        public IEnumerable<CaseFlangeJournal> CaseFlangeJournals { get; set; }
-        public IEnumerable<CaseEdgeJournal> CaseEdgeJournals { get; set; }
-        public IEnumerable<CompactGateValveCaseJournal> CompactGateValveCaseJournals { get; set; }
-        public IEnumerable<CompactGateValveCoverJournal> CompactGateValveCoverJournals { get; set; }
-        public IEnumerable<CoverFlangeJournal> CoverFlangeJournals { get; set; }
-        public IEnumerable<CoverSleeveJournal> CoverSleeveJournals { get; set; }
-        public IEnumerable<FrontWallJournal> FrontWallJournals { get; set; }
-        public IEnumerable<SheetGateValveCaseJournal> SheetGateValveCaseJournals { get; set; }
-        public IEnumerable<SheetGateValveCoverJournal> SheetGateValveCoverJournals { get; set; }
-        public IEnumerable<SideWallJournal> SideWallJournals { get; set; }
-        public IEnumerable<WeldNozzleJournal> WeldNozzleJournals { get; set; }
-        public IEnumerable<AssemblyUnitSealingJournal> AssemblyUnitSealingJournals { get; set; }
-        public IEnumerable<BallValveJournal> BallValveJournals { get; set; }
-        public IEnumerable<CounterFlangeJournal> CounterFlangeJournals { get; set; }
-        public IEnumerable<CoverSealingRingJournal> CoverSealingRingJournals { get; set; }
-        public IEnumerable<FrontalSaddleSealingJournal> FrontalSaddleSealingJournals { get; set; }
-        public IEnumerable<GateJournal> GateJournals { get; set; }
-        public IEnumerable<NozzleJournal> NozzleJournals { get; set; }
-        public IEnumerable<RunningSleeveJournal> RunningSleeveJournals { get; set; }
-        public IEnumerable<SaddleJournal> SaddleJournals { get; set; }
-        public IEnumerable<ScrewNutJournal> ScrewNutJournals { get; set; }
-        public IEnumerable<ScrewStudJournal> ScrewStudJournals { get; set; }
-        public IEnumerable<ShearPinJournal> ShearPinJournals { get; set; }
-        public IEnumerable<SpindleJournal> SpindleJournals { get; set; }
-        public IEnumerable<SpringJournal> SpringJournals { get; set; }
-        public IEnumerable<AbovegroundCoatingJournal> AbovegroundCoatingJournals { get; set; }
-        public IEnumerable<AbrasiveMaterialJournal> AbrasiveMaterialJournals { get; set; }
-        public IEnumerable<UndercoatJournal> UndercoatJournals { get; set; }
-        public IEnumerable<UndergroundCoatingJournal> UndergroundCoatingJournals{ get; set; }
-        public IEnumerable<ForgingMaterialJournal> ForgingMaterialJournals { get; set; }
-        public IEnumerable<PipeMaterialJournal> PipeMaterialJournals { get; set; }
-        public IEnumerable<RolledMaterialJournal> RolledMaterialJournals { get; set; }
-        public IEnumerable<SheetMaterialJournal> SheetMaterialJournals { get; set; }
-        public IEnumerable<WeldingMaterialJournal> WeldingMaterialJournals { get; set; }
-        public IEnumerable<ControlWeldJournal> ControlWeldJournals { get; set; }
-        public IEnumerable<StoresControlJournal> StoresControlJournals { get; set; }
-        public IEnumerable<FactoryInspectionJournal> FactoryInspectionJournals { get; set; }
-        public IEnumerable<NDTControlJournal> NDTControls { get; set; }
-        public IEnumerable<WeldingProceduresJournal> WeldingProceduresJournals { get; set; }
-        public IEnumerable<CoatingChemicalCompositionJournal> CoatingChemicalCompositionJournals { get; set; }
-        public IEnumerable<DegreasingChemicalCompositionJournal> DegreasingChemicalCompositionJournals { get; set; }
-        public IEnumerable<CoatingPlasticityJournal> CoatingPlasticityJournals { get; set; }
-        public IEnumerable<CoatingPorosityJournal> CoatingPorosityJournals { get; set; }
-        public IEnumerable<CoatingProtectivePropertiesJournal> CoatingProtectivePropertiesJournals { get; set; }
+        public ObservableCollection<CastGateValveJournal> CastGateValveJournals { get; set; }
+        public ObservableCollection<CoatingJournal> CoatingJournals { get; set; }
+        public ObservableCollection<CompactGateValveJournal> CompactGateValveJournals{ get; set; }
+        public ObservableCollection<SheetGateValveJournal> SheetGateValveJournals { get; set; }
+        public ObservableCollection<ReverseShutterJournal> ReverseShutterJournals { get; set; }
+        public ObservableCollection<CastGateValveCaseJournal> CastGateValveCaseJournals { get; set; }
+        public ObservableCollection<CastGateValveCoverJournal> CastGateValveCoverJournals { get; set; }
+        public ObservableCollection<ShutterDiskJournal> ShutterDiskJournals { get; set; }
+        public ObservableCollection<ShutterGuideJournal> ShutterGuideJournals { get; set; }
+        public ObservableCollection<ShutterJournal> ShutterJournals { get; set; }
+        public ObservableCollection<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
+        public ObservableCollection<ReverseShutterCaseJournal> ReverseShutterCaseJournals { get; set; }
+        public ObservableCollection<ShaftShutterJournal> ShaftShutterJournals { get; set; }
+        public ObservableCollection<SlamShutterJournal> SlamShutterJournals { get; set; }
+        public ObservableCollection<SteelSleeveShutterJournal> SteelSleeveShutterJournals { get; set; }
+        public ObservableCollection<StubShutterJournal> StubShutterJournals { get; set; }
+        public ObservableCollection<CaseBottomJournal> CaseBottomJournals { get; set; }
+        public ObservableCollection<CaseFlangeJournal> CaseFlangeJournals { get; set; }
+        public ObservableCollection<CaseEdgeJournal> CaseEdgeJournals { get; set; }
+        public ObservableCollection<CompactGateValveCaseJournal> CompactGateValveCaseJournals { get; set; }
+        public ObservableCollection<CompactGateValveCoverJournal> CompactGateValveCoverJournals { get; set; }
+        public ObservableCollection<CoverFlangeJournal> CoverFlangeJournals { get; set; }
+        public ObservableCollection<CoverSleeveJournal> CoverSleeveJournals { get; set; }
+        public ObservableCollection<FrontWallJournal> FrontWallJournals { get; set; }
+        public ObservableCollection<SheetGateValveCaseJournal> SheetGateValveCaseJournals { get; set; }
+        public ObservableCollection<SheetGateValveCoverJournal> SheetGateValveCoverJournals { get; set; }
+        public ObservableCollection<SideWallJournal> SideWallJournals { get; set; }
+        public ObservableCollection<WeldNozzleJournal> WeldNozzleJournals { get; set; }
+        public ObservableCollection<AssemblyUnitSealingJournal> AssemblyUnitSealingJournals { get; set; }
+        public ObservableCollection<BallValveJournal> BallValveJournals { get; set; }
+        public ObservableCollection<CounterFlangeJournal> CounterFlangeJournals { get; set; }
+        public ObservableCollection<CoverSealingRingJournal> CoverSealingRingJournals { get; set; }
+        public ObservableCollection<FrontalSaddleSealingJournal> FrontalSaddleSealingJournals { get; set; }
+        public ObservableCollection<GateJournal> GateJournals { get; set; }
+        public ObservableCollection<NozzleJournal> NozzleJournals { get; set; }
+        public ObservableCollection<RunningSleeveJournal> RunningSleeveJournals { get; set; }
+        public ObservableCollection<SaddleJournal> SaddleJournals { get; set; }
+        public ObservableCollection<ScrewNutJournal> ScrewNutJournals { get; set; }
+        public ObservableCollection<ScrewStudJournal> ScrewStudJournals { get; set; }
+        public ObservableCollection<ShearPinJournal> ShearPinJournals { get; set; }
+        public ObservableCollection<SpindleJournal> SpindleJournals { get; set; }
+        public ObservableCollection<SpringJournal> SpringJournals { get; set; }
+        public ObservableCollection<AbovegroundCoatingJournal> AbovegroundCoatingJournals { get; set; }
+        public ObservableCollection<AbrasiveMaterialJournal> AbrasiveMaterialJournals { get; set; }
+        public ObservableCollection<UndercoatJournal> UndercoatJournals { get; set; }
+        public ObservableCollection<UndergroundCoatingJournal> UndergroundCoatingJournals{ get; set; }
+        public ObservableCollection<ForgingMaterialJournal> ForgingMaterialJournals { get; set; }
+        public ObservableCollection<PipeMaterialJournal> PipeMaterialJournals { get; set; }
+        public ObservableCollection<RolledMaterialJournal> RolledMaterialJournals { get; set; }
+        public ObservableCollection<SheetMaterialJournal> SheetMaterialJournals { get; set; }
+        public ObservableCollection<WeldingMaterialJournal> WeldingMaterialJournals { get; set; }
+        public ObservableCollection<ControlWeldJournal> ControlWeldJournals { get; set; }
+        public ObservableCollection<StoresControlJournal> StoresControlJournals { get; set; }
+        public ObservableCollection<FactoryInspectionJournal> FactoryInspectionJournals { get; set; }
+        public ObservableCollection<NDTControlJournal> NDTControls { get; set; }
+        public ObservableCollection<WeldingProceduresJournal> WeldingProceduresJournals { get; set; }
+        public ObservableCollection<CoatingChemicalCompositionJournal> CoatingChemicalCompositionJournals { get; set; }
+        public ObservableCollection<DegreasingChemicalCompositionJournal> DegreasingChemicalCompositionJournals { get; set; }
+        public ObservableCollection<CoatingPlasticityJournal> CoatingPlasticityJournals { get; set; }
+        public ObservableCollection<CoatingPorosityJournal> CoatingPorosityJournals { get; set; }
+        public ObservableCollection<CoatingProtectivePropertiesJournal> CoatingProtectivePropertiesJournals { get; set; }
     }
 }

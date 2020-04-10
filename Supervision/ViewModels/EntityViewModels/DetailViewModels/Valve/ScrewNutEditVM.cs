@@ -1,48 +1,60 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
 using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Journals.Detailing;
 using DataLayer.TechnicalControlPlans.Detailing;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
-using Supervision.Views.EntityViews.DetailViews.Valve;
+using Supervision.Commands;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
 {
-    public class ScrewNutEditVM: BasePropertyChanged
+    public class ScrewNutEditVM : BasePropertyChanged
     {
         private readonly DataContext db;
+        private readonly ScrewNutRepository screwNutRepo;
+        private readonly InspectorRepository inspectorRepo;
+        private readonly JournalNumberRepository journalRepo;
+
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
         private IEnumerable<string> drawings;
         private IEnumerable<ScrewNutTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<ScrewNutJournal> journal;
         private readonly BaseTable parentEntity;
         private ScrewNut selectedItem;
         private ScrewNutTCP selectedTCPPoint;
 
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            protected set
+            {
+                isBusy = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private ScrewNutJournal operation;
+        public ScrewNutJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
         public ScrewNut SelectedItem
         {
             get => selectedItem;
             set
             {
                 selectedItem = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<ScrewNutJournal> Journal
-        {
-            get => journal;
-            set
-            {
-                journal = value;
                 RaisePropertyChanged();
             }
         }
@@ -66,75 +78,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            if (SelectedItem.AmountRemaining == null && SelectedItem.Amount > 0) 
-                                SelectedItem.AmountRemaining = SelectedItem.Amount;
-                            else 
-                                SelectedItem.AmountRemaining = SelectedItem.Amount - SelectedItem.BaseValveWithScrewNuts?.Select(i => i.ScrewNutAmount).Sum();
-                            db.ScrewNuts.Update(SelectedItem);
-                            db.SaveChanges();
-                            db.ScrewNutJournals.UpdateRange(Journal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is ScrewNut)
-                        {
-                            var wn = new ScrewNutView();
-                            var vm = new ScrewNutVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new ScrewNutJournal()
-                            {
-                                DetailDrawing = SelectedItem.Drawing,
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.ScrewNutJournals.Add(item);
-                            db.SaveChanges();
-                            Journal = db.ScrewNutJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-                        }
-                    }));
-            }
-        }
-     
         public IEnumerable<string> Materials
         {
             get => materials;
@@ -173,17 +116,139 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public ScrewNutEditVM(int id, BaseTable entity)
+
+
+        public static ScrewNutEditVM LoadVM(int id, BaseTable entity, DataContext context)
         {
+            ScrewNutEditVM vm = new ScrewNutEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        public IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => screwNutRepo.GetByIdIncludeAsync(id));
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Materials = await Task.Run(() => screwNutRepo.GetPropertyValuesDistinctAsync(i => i.Material));
+                Drawings = await Task.Run(() => screwNutRepo.GetPropertyValuesDistinctAsync(i => i.Drawing));
+                Points = await Task.Run(() => screwNutRepo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+
+
+        public IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task Save()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedItem != null)
+                {
+                    if (SelectedItem.AmountRemaining == null && SelectedItem.Amount > 0)
+                        SelectedItem.AmountRemaining = SelectedItem.Amount;
+                    else
+                        SelectedItem.AmountRemaining = await screwNutRepo.GetAmountRemaining(SelectedItem);
+                }
+                await Task.Run(() => screwNutRepo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.ScrewNutJournals.Add(new ScrewNutJournal()
+                {
+                    DetailDrawing = SelectedItem.Drawing,
+                    DetailNumber = SelectedItem.Number,
+                    DetailName = SelectedItem.Name,
+                    DetailId = SelectedItem.Id,
+                    Point = SelectedTCPPoint.Point,
+                    Description = SelectedTCPPoint.Description,
+                    PointId = SelectedTCPPoint.Id,
+                });
+                await SaveItemCommand.ExecuteAsync();
+            }
+        }
+
+
+        public IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.ScrewNutJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        public ICommand CloseWindowCommand { get; private set; }
+        private void CloseWindow(object obj)
+        {
+            if (screwNutRepo.HasChanges(SelectedItem) || screwNutRepo.HasChanges(SelectedItem.ScrewNutJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public ScrewNutEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.ScrewNuts.Include(i => i.BaseValveWithScrewNuts).ThenInclude(i => i.BaseValve).SingleOrDefault(i => i.Id == id);
-            Journal = db.ScrewNutJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList(); //TODO: говнокод
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Drawings = db.ScrewNuts.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            Materials = db.ScrewNuts.Select(s => s.Material).Distinct().OrderBy(x => x).ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<ScrewNutTCP>().Include(i => i.ProductType).ToList();
+            screwNutRepo = new ScrewNutRepository(context);
+            inspectorRepo = new InspectorRepository(context);
+            journalRepo = new JournalNumberRepository(context);
+            LoadItemCommand = new AsyncCommand<int>(Load);
+            SaveItemCommand = new AsyncCommand(Save);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            AddOperationCommand = new AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new AsyncCommand(RemoveOperation);
         }
     }
 }

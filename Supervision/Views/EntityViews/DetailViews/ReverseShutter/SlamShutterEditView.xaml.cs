@@ -10,6 +10,7 @@ namespace Supervision.Views.EntityViews.DetailViews.ReverseShutter
         public SlamShutterEditView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

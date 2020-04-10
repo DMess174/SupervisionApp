@@ -1,6 +1,6 @@
 ﻿using DataLayer.Entities.Periodical;
 using DataLayer.TechnicalControlPlans;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer
 {
@@ -9,9 +9,9 @@ namespace DataLayer
         public string Name { get; set; }
         public string ShortName { get; set; }
 
-        public IEnumerable<PID> PIDs { get; set; }
-        public IEnumerable<BaseTCP> BaseTCPs { get; set; }
-        public IEnumerable<WeldingProcedures> WeldingProcedures { get; set; }
-        public IEnumerable<NDTControl> NDTControls { get; set; }
+        public ObservableCollection<PID> PIDs { get; set; }
+        public ObservableCollection<BaseTCP> BaseTCPs { get; set; }
+        public ObservableCollection<WeldingProcedures> WeldingProcedures { get; set; }
+        public ObservableCollection<NDTControl> NDTControls { get; set; }
     }
 }

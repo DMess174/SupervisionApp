@@ -7,6 +7,7 @@ namespace Supervision.Views.EntityViews.DetailViews.CompactGateValve
         public ShutterEditView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

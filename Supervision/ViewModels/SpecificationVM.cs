@@ -1,30 +1,28 @@
 ﻿using System.Collections.Generic;
-using DevExpress.Mvvm;
 using DataLayer;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Microsoft.EntityFrameworkCore;
 using Supervision.Views.EntityViews;
 using DataLayer.Journals;
+using BusinessLayer.Repository.Implementations.Entities;
+using Supervision.Commands;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace Supervision.ViewModels
 {
-    class SpecificationVM : BasePropertyChanged
+    class SpecificationVM : ViewModelBase
     {
         private DataContext db;
+        private readonly SpecificationRepository specificationRepo;
+        private readonly CustomerRepository customerRepo;
+        private readonly PIDRepository pIDRepo;
         private IEnumerable<Specification> allInstances;
         private ICollectionView allInstancesView;
         private Specification selectedItem;
         private PID selectedPID;
-        private ICommand addItem;
-        private ICommand saveItem;
-        private ICommand removeItem;
-        private ICommand addPID;
-        private ICommand editPID;
-        private ICommand removePID;
         private IEnumerable<Customer> customers;
         private string number = "";
 
@@ -45,143 +43,7 @@ namespace Supervision.ViewModels
                 };
             }
         }
-
-        public ICommand AddItem
-        {
-            get
-            {
-                return addItem ??
-                    (
-                    addItem = new DelegateCommand(() =>
-                            {
-                                var item = new Specification();
-                                db.Specifications.Add(item);
-                                db.SaveChanges();
-                                SelectedItem = item;
-                            })
-                    );
-            }
-        }
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ??
-                    (
-                    saveItem = new DelegateCommand(() =>
-                            {
-                                if (AllInstances != null)
-                                {
-                                    db.Specifications.UpdateRange(AllInstances);
-                                    db.SaveChanges();
-                                }
-                                else MessageBox.Show("Записи отсутствуют!", "Ошибка");
-                            })
-                    );
-            }
-        }
-        public ICommand RemoveItem
-        {
-            get
-            {
-                return removeItem ??
-                    (
-                    removeItem = new DelegateCommand(() =>
-                            {
-                                if (SelectedItem != null)
-                                {
-                                    db.Specifications.Remove(SelectedItem);
-                                    db.SaveChanges();
-                                }
-                                else MessageBox.Show("Объект не выбран!", "Ошибка");
-                            })
-                    );
-            }
-        }
-        public ICommand AddPID
-        {
-            get
-            {
-                return addPID ??
-                    (
-                    addPID = new DelegateCommand<Window>((w) =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            var item = new PID()
-                            {
-                                SpecificationId = SelectedItem.Id,
-                            };
-                            db.PIDs.Add(item);
-                            db.SaveChanges();
-                            SelectedPID = item;
-                            var tcpPoints = db.PIDTCPs.ToList();
-                            foreach (var i in tcpPoints)
-                            {
-                                var journal = new PIDJournal()
-                                {
-                                    DetailId = SelectedPID.Id,
-                                    PointId = i.Id,
-                                    DetailName = "PID",
-                                    DetailNumber = SelectedPID.Number,
-                                    Point = i.Point,
-                                    Description = i.Description
-                                };
-                                if (journal != null)
-                                {
-                                    db.PIDJournals.Add(journal);
-                                    db.SaveChanges();
-                                }
-                            }
-                            var wn = new PIDEditView();
-                            var vm = new PIDEditVM(SelectedPID.Id, SelectedPID);
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else MessageBox.Show("Выберите спецификацию!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand EditPID
-        {
-            get
-            {
-                return editPID ??
-                    (
-                    editPID = new DelegateCommand<Window>((w) =>
-                    {
-                        if (SelectedItem != null && SelectedPID != null)
-                        { 
-                            var wn = new PIDEditView();
-                            var vm = new PIDEditVM(SelectedPID.Id, SelectedPID);
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else MessageBox.Show("Выберите PID!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand RemovePID
-        {
-            get
-            {
-                return removePID ??
-                    (
-                    removePID = new DelegateCommand(() =>
-                    {
-                        if (SelectedPID != null)
-                        {
-                            var item = db.PIDs.Find(SelectedPID.Id);
-                            db.PIDs.Remove(item);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не выбран!", "Ошибка");
-                    })
-                    );
-            }
-        }
+  
 
         public Specification SelectedItem
         {
@@ -231,13 +93,180 @@ namespace Supervision.ViewModels
             }
         }
 
-        public SpecificationVM()
+
+
+        public ICommand EditPIDCommand { get; private set; }
+        private void EditPID()
         {
-            db = new DataContext();
-            db.Specifications.Include(i => i.PIDs).ThenInclude(i => i.ProductType).OrderBy(i => i.Number).Load();
-            AllInstances = db.Specifications.Local.ToObservableCollection();
-            AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
-            Customers = db.Customers.OrderBy(i => i.Name).ToList();
+            if (SelectedPID != null)
+            {
+                _ = new PIDEditView
+                {
+                    DataContext = PIDEditVM.LoadPIDEditVM(SelectedPID.Id, SelectedPID, db)
+                };
+            }
+        }
+
+        public IAsyncCommand SaveItemsCommand { get; private set; }
+        private async Task SaveItems()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => specificationRepo.Update(AllInstances));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddNewItemCommand { get; private set; }
+        private async Task AddNewItem()
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await specificationRepo.AddAsync(new Specification());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddNewPIDCommand { get; private set; }
+        private async Task AddNewPID()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedItem != null)
+                {
+                    SelectedPID = await pIDRepo.AddAsync(new PID(SelectedItem));
+                    var tcpPoints = await pIDRepo.GetTCPsAsync();
+                    var records = new List<PIDJournal>();
+                    foreach (var tcp in tcpPoints)
+                    {
+                        var journal = new PIDJournal(SelectedPID, tcp);
+                        if (journal != null)
+                            records.Add(journal);
+                    }
+                    await pIDRepo.AddJournalRecordAsync(records);
+                    EditPID();
+                }
+                else MessageBox.Show("Выберите спецификацию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand RemoveSelectedItemCommand { get; private set; }
+        private async Task RemoveSelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                try
+                {
+                    IsBusy = true;
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                        await specificationRepo.RemoveAsync(SelectedItem);
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        public IAsyncCommand RemoveSelectedPIDCommand { get; private set; }
+        private async Task RemoveSelectedPID()
+        {
+            if (SelectedPID != null)
+            {
+                try
+                {
+                    IsBusy = true;
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.PIDs.Remove(SelectedPID);
+                        await SaveItemsCommand.ExecuteAsync();
+                    }
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+
+        public IAsyncCommand UpdateListCommand { get; private set; }
+        private async Task UpdateList()
+        {
+            try
+            {
+                IsBusy = true;
+                AllInstances = new ObservableCollection<Specification>();
+                AllInstances = await Task.Run(() => specificationRepo.GetAllAsync());
+                Customers = await Task.Run(() => customerRepo.GetAllAsync());
+                AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (specificationRepo.HasChanges(AllInstances))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    base.CloseWindow(obj);
+                }
+            }
+            else
+            {
+                base.CloseWindow(obj);
+            }
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public static SpecificationVM LoadSpecificationVM(DataContext context)
+        {
+            SpecificationVM vm = new SpecificationVM(context);
+            vm.UpdateListCommand.ExecuteAsync();
+            return vm;
+        }
+
+        public SpecificationVM(DataContext context)
+        {
+            db = context;
+            specificationRepo = new SpecificationRepository(db);
+            customerRepo = new CustomerRepository(db);
+            pIDRepo = new PIDRepository(db);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            UpdateListCommand = new AsyncCommand(UpdateList, CanExecute);
+            AddNewItemCommand = new AsyncCommand(AddNewItem);
+            AddNewPIDCommand = new AsyncCommand(AddNewPID);
+            RemoveSelectedItemCommand = new AsyncCommand(RemoveSelectedItem);
+            RemoveSelectedPIDCommand = new AsyncCommand(RemoveSelectedPID);
+            SaveItemsCommand = new AsyncCommand(SaveItems);
+            EditPIDCommand = new Command(_ => EditPID());
         }
     }
 }

@@ -1,18 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities;
 using DataLayer;
 using DataLayer.Journals.Periodical;
 using DataLayer.TechnicalControlPlans.Periodical;
-using DevExpress.Mvvm;
+using Supervision.Commands;
 
 namespace Supervision.ViewModels.EntityViewModels.Periodical.Gate
 {
-    public class CoatingPorosityVM : BasePropertyChanged
+    public class CoatingPorosityVM : ViewModelBase
     {
+        private int shippedAmount;
+
+        public int ShippedAmount
+        {
+            get => shippedAmount;
+            set
+            {
+                shippedAmount = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private readonly DataContext db;
+        private readonly CoatingPorosityRepository repo;
+        private readonly JournalNumberRepository journalRepo;
+        private readonly InspectorRepository inspectorRepo;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<CoatingPorosityTCP> points;
         private IEnumerable<Inspector> inspectors;
@@ -20,11 +35,17 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical.Gate
         private CoatingPorosityTCP selectedTCPPoint;
         private DateTime lastInspection;
         private DateTime nextInspection;
-        private int shippedAmount;
+        private CoatingPorosityJournal operation;
 
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
+        public CoatingPorosityJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public IEnumerable<CoatingPorosityJournal> Journal
         {
@@ -32,15 +53,6 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical.Gate
             set
             {
                 journal = value;
-                RaisePropertyChanged();
-            }
-        }
-        public int ShippedAmount
-        {
-            get => shippedAmount;
-            set
-            {
-                shippedAmount = value;
                 RaisePropertyChanged();
             }
         }
@@ -81,59 +93,6 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical.Gate
             }
         }
 
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                saveItem = new DelegateCommand(() =>
-                {
-                    db.Set<CoatingPorosityJournal>().UpdateRange(Journal);
-                    db.SaveChanges();
-                    if (Journal != null)
-                    {
-                        LastInspection = Convert.ToDateTime(db.CoatingPorosityJournals.Select(i => i.Date).Max());
-                        NextInspection = LastInspection.AddYears(1);
-                        ShippedAmount = Convert.ToInt32(db.GateJournals.Where(i => i.Date > LastInspection && i.EntityTCP.OperationType.Name == "Отгрузка").Select(i => i.DetailId).Distinct().Count());
-                    }
-                }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    { 
-                        w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new CoatingPorosityJournal()
-                            {
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.Set<CoatingPorosityJournal>().Add(item);
-                            db.SaveChanges();
-                            Journal = db.Set<CoatingPorosityJournal>().OrderByDescending(x => x.Date).ToList();
-                        }
-                    }));
-            }
-        }
-
         public IEnumerable<string> JournalNumbers
         {
             get => journalNumbers;
@@ -154,20 +113,127 @@ namespace Supervision.ViewModels.EntityViewModels.Periodical.Gate
             }
         }
 
-        public CoatingPorosityVM()
+        public IAsyncCommand LoadItemsCommand { get; private set; }
+        public async Task Load()
         {
-            db = new DataContext();
-            Journal = db.Set<CoatingPorosityJournal>().OrderByDescending(x => x.Date).ToList();
-            if (Journal != null)
+            try
             {
-                LastInspection = Convert.ToDateTime(db.CoatingPorosityJournals.Select(i => i.Date).Max());
-                NextInspection = LastInspection.AddYears(1);
-                ShippedAmount = Convert.ToInt32(db.GateJournals.Where(i => i.Date > LastInspection && i.EntityTCP.OperationType.Name == "Отгрузка").Select(i => i.DetailId).Distinct().Count());
+                IsBusy = true;
+                Journal = await Task.Run(() => repo.GetAllAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Points = await Task.Run(() => repo.GetTCPsAsync());
+                if (Journal != null)
+                {
+                    LastInspection = await Task.Run(() => repo.GetLastDateControl());
+                    NextInspection = await Task.Run(() => repo.GetNextDateControl(LastInspection));
+                    ShippedAmount = await Task.Run(() => repo.GetCoutedGatesCount(LastInspection));
+                }
             }
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<CoatingPorosityTCP>().ToList();
-            
+            finally
+            {
+                IsBusy = false;
+            }
         }
+
+        public IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(Journal));
+                if (Journal != null)
+                {
+                    LastInspection = await Task.Run(() => repo.GetLastDateControl());
+                    NextInspection = await Task.Run(() => repo.GetNextDateControl(LastInspection));
+                    ShippedAmount = await Task.Run(() => repo.GetCoutedGatesCount(LastInspection));
+                }
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                await repo.AddAsync(new CoatingPorosityJournal(SelectedTCPPoint));
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        await repo.RemoveAsync(Operation);
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(Journal))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        public static CoatingPorosityVM LoadVM(DataContext context)
+        {
+            CoatingPorosityVM vm = new CoatingPorosityVM(context);
+            vm.LoadItemsCommand.ExecuteAsync();
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+
+        public CoatingPorosityVM(DataContext context)
+        {
+            db = context;
+            repo = new CoatingPorosityRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            LoadItemsCommand = new AsyncCommand(Load);
+            SaveItemCommand = new AsyncCommand(SaveItem);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            AddOperationCommand = new AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new AsyncCommand(RemoveOperation);
+        }
+
     }
 }

@@ -7,6 +7,7 @@ namespace Supervision.Views.EntityViews.PeriodicalControl
         public PeriodicalControlView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

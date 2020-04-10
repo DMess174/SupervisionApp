@@ -4,19 +4,20 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
         Height="500pt"
       mc:Ignorable="d"
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="1000" d:DesignWidth="1200"
         WindowStartupLocation="CenterScreen"
-        Title="{Binding SelectedItem.Name}">
+        Title="Редактирование затвора обратного">
     <Window.Resources>
         <CollectionViewSource x:Key="Inspectors" Source="{Binding Inspectors}"/>
         <CollectionViewSource x:Key="Points" Source="{Binding Points}" />
         <CollectionViewSource x:Key="JournalNumbers" Source="{Binding JournalNumbers}"/>
     </Window.Resources>
 
-    <Grid >
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -128,8 +129,7 @@
                             Height="30"
                             Margin="5 0 5 0"
                             Content="Открыть"
-                            Command="{Binding EditPID}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditPIDCommand}"/>
 
                     <TextBlock Style="{StaticResource StandardTextBlock}" 
                               Grid.Row="1" 
@@ -253,8 +253,7 @@
                               SelectedItem="{Binding SelectedBronzeSleeveFromList}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding EditBronzeSleeve}"
-                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                <i:InvokeCommandAction Command="{Binding EditBronzeSleeveCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <ListBox.ItemTemplate>
@@ -277,8 +276,7 @@
                             Height="30"
                             Margin="5"
                             Content="Открыть"
-                            Command="{Binding EditBronzeSleeve}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditBronzeSleeveCommand}"/>
 
                     <Button Style="{StaticResource StandardButton}"
                             Grid.Row="4"
@@ -286,8 +284,7 @@
                             Margin="5"
                             Height="30"
                             Content="Удалить"
-                            Command="{Binding DeleteBronzeSleeveFromShutter}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding DeleteBronzeSleeveFromShutterCommand}"/>
 
                     <Button Style="{StaticResource StandardButton}" 
                             Grid.Row="2"
@@ -295,8 +292,7 @@
                             Margin="5"
                             Height="30"
                             Content="Добавить"
-                            Command="{Binding AddBronzeSleeveToShutter}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding AddBronzeSleeveToShutterCommand}"/>
 
                     <Separator Style="{StaticResource VerticalSeparator}"
                                Grid.Column="3"
@@ -332,8 +328,7 @@
                               SelectedItem="{Binding SelectedSteelSleeveFromList}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding EditSteelSleeve}"
-                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                <i:InvokeCommandAction Command="{Binding EditSteelSleeveCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <ListBox.ItemTemplate>
@@ -356,8 +351,7 @@
                             Height="30"
                             Margin="5"
                             Content="Открыть"
-                            Command="{Binding EditSteelSleeve}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditSteelSleeveCommand}"/>
 
                     <Button Style="{StaticResource StandardButton}"
                             Grid.Row="4"
@@ -365,8 +359,7 @@
                             Margin="5"
                             Height="30"
                             Content="Удалить"
-                            Command="{Binding DeleteSteelSleeveFromShutter}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding DeleteSteelSleeveFromShutterCommand}"/>
 
                     <Button Style="{StaticResource StandardButton}" 
                             Grid.Row="2"
@@ -374,8 +367,7 @@
                             Margin="5"
                             Height="30"
                             Content="Добавить"
-                            Command="{Binding AddSteelSleeveToShutter}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding AddSteelSleeveToShutterCommand}"/>
 
                     <Separator Style="{StaticResource VerticalSeparator}"
                                Grid.Column="7"
@@ -403,8 +395,7 @@
                             Height="30"
                             Margin="5 0 5 0"
                             Content="Открыть"
-                            Command="{Binding EditSlam}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditSlamCommand}"/>
 
                     <Label Style="{StaticResource StandardLabel}" 
                            FontSize="{StaticResource Hi}"
@@ -428,8 +419,7 @@
                             Height="30"
                             Margin="5 0 5 0"
                             Content="Открыть"
-                            Command="{Binding EditShaftShutter}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditShaftCommand}"/>
 
                     <Label Style="{StaticResource StandardLabel}" 
                            FontSize="{StaticResource Hi}"
@@ -453,8 +443,7 @@
                             Height="30"
                             Margin="5 0 5 0"
                             Content="Открыть"
-                            Command="{Binding EditCase}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditCaseCommand}"/>
 
                     <Separator Style="{StaticResource HorizontalSeparator}"
                                Grid.Row="1"
@@ -492,8 +481,7 @@
                               SelectedItem="{Binding SelectedStubFromList}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding EditStub}"
-                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                <i:InvokeCommandAction Command="{Binding EditStubCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <ListBox.ItemTemplate>
@@ -516,8 +504,7 @@
                             Height="30"
                             Margin="5"
                             Content="Открыть"
-                            Command="{Binding EditStub}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditStubCommand}"/>
 
                     <Button Style="{StaticResource StandardButton}"
                             Grid.Row="4"
@@ -525,8 +512,7 @@
                             Margin="5"
                             Height="30"
                             Content="Удалить"
-                            Command="{Binding DeleteStubFromShutter}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding DeleteStubFromShutterCommand}"/>
 
                     <Button Style="{StaticResource StandardButton}" 
                             Grid.Row="2"
@@ -534,8 +520,7 @@
                             Margin="5"
                             Height="30"
                             Content="Добавить"
-                            Command="{Binding AddStubToShutter}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding AddStubToShutterCommand}"/>
 
                     <Separator Style="{StaticResource HorizontalSeparator}"
                                Grid.Row="5"
@@ -573,18 +558,15 @@
                               SelectedItem="{Binding SelectedMaterialFromList}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding EditMaterial}"
-                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                <i:InvokeCommandAction Command="{Binding EditMaterialCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock>
                                     <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} - {1} - {2}">
-                                            <Binding Path="Name"/>
-                                            <Binding Path="Number"/>
-                                            <Binding Path="Status"/>
+                                        <MultiBinding StringFormat="{}{0}">
+                                            <Binding Path="BaseAnticorrosiveCoating.FullName"/>
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
@@ -598,8 +580,7 @@
                             Height="30"
                             Margin="5"
                             Content="Открыть"
-                            Command="{Binding EditMaterial}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditMaterialCommand}"/>
 
                     <Button Style="{StaticResource StandardButton}"
                             Grid.Row="8"
@@ -607,8 +588,7 @@
                             Margin="5"
                             Height="30"
                             Content="Удалить"
-                            Command="{Binding DeleteMaterialFromShutter}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding DeleteMaterialFromShutterCommand}"/>
 
                     <Button Style="{StaticResource StandardButton}" 
                             Grid.Row="6"
@@ -616,8 +596,7 @@
                             Margin="5"
                             Height="30"
                             Content="Добавить"
-                            Command="{Binding AddMaterialToShutter}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding AddMaterialToShutterCommand}"/>
                 </Grid>
             </TabItem>
 
@@ -633,6 +612,7 @@
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding AssemblyJournal}"
+                                      SelectedItem="{Binding Operation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -827,7 +807,12 @@
                                 <Button Style="{StaticResource StandardButton}" 
                             Content="Добавить операцию" 
                             Margin="10" 
-                            Command="{Binding AddOperation}" />
+                            Command="{Binding AddOperationCommand}" />
+
+                                <Button Style="{StaticResource StandardButton}" 
+                            Content="Удалить операцию" 
+                            Margin="10" 
+                            Command="{Binding RemoveOperationCommand}" />
                             </StackPanel>
                         </Grid>
                     </TabItem>
@@ -841,6 +826,7 @@
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding TestJournal}"
+                                      SelectedItem="{Binding Operation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -1035,7 +1021,12 @@
                                 <Button Style="{StaticResource StandardButton}" 
                             Content="Добавить операцию" 
                             Margin="10" 
-                            Command="{Binding AddOperation}" />
+                            Command="{Binding AddOperationCommand}" />
+
+                                <Button Style="{StaticResource StandardButton}" 
+                            Content="Удалить операцию" 
+                            Margin="10" 
+                            Command="{Binding RemoveOperationCommand}" />
                             </StackPanel>
                         </Grid>
                     </TabItem>
@@ -1049,6 +1040,7 @@
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding AfterTestJournal}"
+                                      SelectedItem="{Binding Operation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -1243,7 +1235,12 @@
                                 <Button Style="{StaticResource StandardButton}" 
                             Content="Добавить операцию" 
                             Margin="10" 
-                            Command="{Binding AddOperation}" />
+                            Command="{Binding AddOperationCommand}" />
+
+                                <Button Style="{StaticResource StandardButton}" 
+                            Content="Удалить операцию" 
+                            Margin="10" 
+                            Command="{Binding RemoveOperationCommand}" />
                             </StackPanel>
                         </Grid>
                     </TabItem>
@@ -1257,6 +1254,7 @@
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding CoatingJournal}"
+                                      SelectedItem="{Binding CoatingOperation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -1451,7 +1449,12 @@
                                 <Button Style="{StaticResource StandardButton}" 
                             Content="Добавить операцию" 
                             Margin="10" 
-                            Command="{Binding AddCoatingOperation}" />
+                            Command="{Binding AddCoatingOperationCommand}" />
+
+                                <Button Style="{StaticResource StandardButton}" 
+                            Content="Удалить операцию" 
+                            Margin="10" 
+                            Command="{Binding RemoveCoatingOperationCommand}" />
                             </StackPanel>
                         </Grid>
                     </TabItem>
@@ -1465,6 +1468,7 @@
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding DocumentationJournal}"
+                                      SelectedItem="{Binding Operation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -1659,7 +1663,12 @@
                                 <Button Style="{StaticResource StandardButton}" 
                             Content="Добавить операцию" 
                             Margin="10" 
-                            Command="{Binding AddOperation}" />
+                            Command="{Binding AddOperationCommand}" />
+
+                                <Button Style="{StaticResource StandardButton}" 
+                            Content="Удалить операцию" 
+                            Margin="10" 
+                            Command="{Binding RemoveOperationCommand}" />
                             </StackPanel>
                         </Grid>
                     </TabItem>
@@ -1667,12 +1676,14 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
+                                <RowDefinition Height="auto"/>
                                 <RowDefinition Height="50"/>
                             </Grid.RowDefinitions>
                             <DataGrid Style="{StaticResource StandardDataGrid}"
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding ShippingJournal}"
+                                      SelectedItem="{Binding Operation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -1820,7 +1831,34 @@
                                 </DataGrid.Columns>
                             </DataGrid>
 
-                            <StackPanel Grid.Row="5" Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal"
+                                     Grid.Row="1">
+                                <TextBlock Style="{StaticResource StandardTextBlock}"
+                                           VerticalAlignment="Center"
+                                           Text="Номер авто:"/>
+
+                                <TextBox Style="{StaticResource StandardTextBox}"
+                                         Margin="5"
+                                         VerticalAlignment="Center"
+                                         VerticalContentAlignment="Center"
+                                         Width="150"
+                                         Text="{Binding SelectedItem.AutoNumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+                                <TextBlock Style="{StaticResource StandardTextBlock}"
+                                           VerticalAlignment="Center"
+                                           Text="Грузополучатель:"/>
+
+                                <TextBox Style="{StaticResource StandardTextBox}"
+                                           Text="{Binding SelectedItem.PID.Consignee}"
+                                           Height="50"
+                                         IsReadOnly="True"
+                                           VerticalAlignment="Center"
+                                         VerticalContentAlignment="Center"
+                                           Width="auto"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" Orientation="Horizontal">
                                 <TextBlock Text="Выбор пункта:"
                    Margin="5 0 10 0"
                    FontSize="{StaticResource Hi}"
@@ -1867,7 +1905,12 @@
                                 <Button Style="{StaticResource StandardButton}" 
                             Content="Добавить операцию" 
                             Margin="10" 
-                            Command="{Binding AddOperation}" />
+                            Command="{Binding AddOperationCommand}" />
+
+                                <Button Style="{StaticResource StandardButton}" 
+                            Content="Удалить операцию" 
+                            Margin="10" 
+                            Command="{Binding RemoveOperationCommand}" />
                             </StackPanel>
                         </Grid>
                     </TabItem>
@@ -1875,6 +1918,10 @@
             </TabItem>
 
         </TabControl>
+
+        <wpfx:BusyIndicator IsBusy="{Binding IsBusy}"
+                            Grid.Row="2"
+                            BusyContent="Обработка запроса, ждите..."/>
 
         <Separator Style="{StaticResource HorizontalSeparator}" 
                    Grid.Row="3"/>
@@ -1902,10 +1949,6 @@
                    Text="{Binding SelectedItem.Comment, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         </Grid>
 
-
-
-
-
         <Separator Style="{StaticResource HorizontalSeparator}" 
                    Grid.Row="5"/>
 
@@ -1918,14 +1961,13 @@
                             Width="70"
                             Content="Сохранить" 
                             Margin="10 2 10 2" 
-                            Command="{Binding SaveItem}" 
-                            CommandParameter="{Binding SelectedItem}"/>
+                            Command="{Binding SaveItemCommand}" />
 
                 <Button Style="{StaticResource StandardButton}" 
                             Width="70"
                             Content="Закрыть" 
                             Margin="10 2 10 2" 
-                            Command="{Binding CloseWindow}"
+                            Command="{Binding CloseWindowCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
             </StackPanel>
         </Grid>

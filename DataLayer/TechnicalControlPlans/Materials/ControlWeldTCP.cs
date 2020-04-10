@@ -1,10 +1,10 @@
 ﻿using DataLayer.Journals.Materials;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.TechnicalControlPlans.Materials
 {
     public class ControlWeldTCP : BaseTCP
     {
-        public IEnumerable<ControlWeldJournal> ControlWeldJournals { get; set; }
+        public ObservableCollection<ControlWeldJournal> ControlWeldJournals { get; set; }
     }
 }

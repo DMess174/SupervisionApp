@@ -1,82 +1,21 @@
 ﻿using System.Collections.Generic;
-using DevExpress.Mvvm;
 using DataLayer;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Input;
-using Microsoft.EntityFrameworkCore;
+using BusinessLayer.Repository.Implementations.Entities;
+using Supervision.Commands;
+using System.Threading.Tasks;
 
 namespace Supervision.ViewModels
 {
-    class ProductTypeViewModel : BasePropertyChanged
+    class ProductTypeViewModel : ViewModelBase
     {
         private DataContext db;
+        private readonly ProductTypeRepository repo;
         private IEnumerable<ProductType> allInstances;
         private ICollectionView allInstancesView;
         private ProductType selectedItem;
-        private ICommand addItem;
-        private ICommand saveItem;
-        private ICommand removeItem;
-
-        public ICommand AddItem
-        {
-            get
-            {
-                return addItem ??
-                    (
-                    addItem = new DelegateCommand(() =>
-                            {
-                                ProductType item = new ProductType();
-                                db.ProductTypes.Add(item);
-                                db.SaveChanges();
-                                SelectedItem = item;
-                            })
-                    );
-            }
-        }
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ??
-                    (
-                    saveItem = new DelegateCommand(() =>
-                            {
-                                if (AllInstances != null)
-                                {
-                                    db.ProductTypes.UpdateRange(AllInstances);
-                                    db.SaveChanges();
-                                    db.Dispose();
-                                    db = new DataContext();
-                                    db.ProductTypes.OrderBy(i => i.Name).Load();
-                                    AllInstances = db.ProductTypes.Local.ToObservableCollection();
-                                    AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
-                                }
-                                else MessageBox.Show("Записи отсутствуют!", "Ошибка");
-                            })
-                    );
-            }
-        }
-        public ICommand RemoveItem
-        {
-            get
-            {
-                return removeItem ??
-                    (
-                    removeItem = new DelegateCommand(() =>
-                            {
-                                if (SelectedItem != null)
-                                {
-                                    db.ProductTypes.Remove(SelectedItem);
-                                    db.SaveChanges();
-                                }
-                                else MessageBox.Show("Объект не выбран!", "Ошибка");
-                            })
-                    );
-            }
-        }
 
         public ProductType SelectedItem
         {
@@ -108,12 +47,110 @@ namespace Supervision.ViewModels
             }
         }
 
-        public ProductTypeViewModel()
+        public IAsyncCommand SaveItemsCommand { get; private set; }
+        private async Task SaveItems()
         {
-            db = new DataContext();
-            db.ProductTypes.OrderBy(i => i.Name).Load();
-            AllInstances = db.ProductTypes.Local.ToObservableCollection();
-            AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(AllInstances));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddNewItemCommand { get; private set; }
+        private async Task AddNewItem()
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await repo.AddAsync(new ProductType());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand RemoveSelectedItemCommand { get; private set; }
+        private async Task RemoveSelectedItem()
+        {
+            if (SelectedItem != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        IsBusy = true;
+                        await repo.RemoveAsync(SelectedItem);
+                    }
+                    finally
+                    {
+                        IsBusy = false;
+                    }
+                }
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+
+        public IAsyncCommand UpdateListCommand { get; private set; }
+        private async Task UpdateList()
+        {
+            try
+            {
+                IsBusy = true;
+                AllInstances = await Task.Run(() => repo.GetAllAsync());
+                AllInstancesView = CollectionViewSource.GetDefaultView(AllInstances);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(AllInstances))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    base.CloseWindow(obj);
+                }
+            }
+            else
+            {
+                base.CloseWindow(obj);
+            }
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public static ProductTypeViewModel LoadVM(DataContext context)
+        {
+            ProductTypeViewModel vm = new ProductTypeViewModel(context);
+            vm.UpdateListCommand.ExecuteAsync();
+            return vm;
+        }
+
+        public ProductTypeViewModel(DataContext context)
+        {
+            db = context;
+            repo = new ProductTypeRepository(db);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            UpdateListCommand = new AsyncCommand(UpdateList, CanExecute);
+            AddNewItemCommand = new AsyncCommand(AddNewItem);
+            RemoveSelectedItemCommand = new AsyncCommand(RemoveSelectedItem);
+            SaveItemsCommand = new AsyncCommand(SaveItems);
         }
     }
 }

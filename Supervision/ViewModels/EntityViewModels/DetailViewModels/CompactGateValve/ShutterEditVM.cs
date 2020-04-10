@@ -1,49 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
 using DataLayer;
 using DataLayer.Entities.Detailing.CompactGateValveDetails;
-using DataLayer.Entities.Detailing.WeldGateValveDetails;
-using DataLayer.Journals;
-using DataLayer.Journals.Detailing.CompactGateValveDetails;
-using DataLayer.TechnicalControlPlans;
-using DataLayer.TechnicalControlPlans.Detailing.CompactGateValveDetails;
-using DevExpress.Mvvm;
-using DevExpress.Mvvm.Native;
-using Microsoft.EntityFrameworkCore;
 using Supervision.Views.EntityViews.DetailViews.CompactGateValve;
-using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateValve
 {
-    public class ShutterEditVM : BasePropertyChanged
+    public class ShutterEditVM : ViewModelBase
     {
         private readonly DataContext db;
-        private IEnumerable<string> journalNumbers;
         private IEnumerable<ShutterDisk> shutterDisks;
         private IEnumerable<ShutterGuide> shutterGuides;
         private ShutterDisk selectedShutterDisk;
         private ShutterDisk selectedShutterDiskFromList;
-        private ICommand editShutterDisk;
-        private ICommand addShutterDiskToShutter;
-        private ICommand deleteShutterDiskFromShutter;
         private ShutterGuide selectedShutterGuide;
         private ShutterGuide selectedShutterGuideFromList;
-        private ICommand editShutterGuide;
-        private ICommand addShutterGuideToShutter;
-        private ICommand deleteShutterGuideFromShutter;
         private IEnumerable<string> drawings;
-        private IEnumerable<ShutterTCP> points;
-        private IEnumerable<Inspector> inspectors;
-        private IEnumerable<ShutterJournal> journal;
         private readonly BaseTable parentEntity;
+        private readonly ShutterRepository repo;
+        private readonly ShutterDiskRepository shutterDiskRepo;
+        private readonly ShutterGuideRepository shutterGuideRepo;
         private Shutter selectedItem;
-        private ShutterTCP selectedTCPPoint;
-
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
 
         public Shutter SelectedItem
         {
@@ -55,97 +36,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateVa
             }
         }
 
-        public IEnumerable<ShutterJournal> Journal
-        {
-            get => journal;
-            set
-            {
-                journal = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<ShutterTCP> Points
-        {
-            get => points;
-            set
-            {
-                points = value;
-                RaisePropertyChanged();
-            }
-        }
-        public IEnumerable<Inspector> Inspectors
-        {
-            get => inspectors;
-            set
-            {
-                inspectors = value;
-                RaisePropertyChanged();
-            }
-        }
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.Set<Shutter>().Update(SelectedItem);
-                            db.SaveChanges();
-                            db.Set<ShutterJournal>().UpdateRange(Journal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is Shutter)
-                        {
-                            var wn = new ShutterView();
-                            var vm = new ShutterVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                           addOperation = new DelegateCommand(() =>
-                           {
-                               if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                               else
-                               {
-                                   var item = new ShutterJournal()
-                                   {
-                                       DetailDrawing = SelectedItem.Drawing,
-                                       DetailNumber = SelectedItem.Number,
-                                       DetailName = SelectedItem.Name,
-                                       DetailId = SelectedItem.Id,
-                                       Point = SelectedTCPPoint.Point,
-                                       Description = SelectedTCPPoint.Description,
-                                       PointId = SelectedTCPPoint.Id,
-                                   };
-                                   db.Set<ShutterJournal>().Add(item);
-                                   db.SaveChanges();
-                                   Journal = db.Set<ShutterJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                               }
-                           }));
-            }
-        }
         public ShutterDisk SelectedShutterDisk
         {
             get => selectedShutterDisk;
@@ -165,69 +55,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateVa
                 RaisePropertyChanged();
             }
         }
-        public ICommand AddShutterDiskToShutter
-        {
-            get
-            {
-                return addShutterDiskToShutter	 ?? (
-                           addShutterDiskToShutter	 = new DelegateCommand(() =>
-                           {
-                               if (SelectedItem.ShutterDisks.Count() < 2)
-                               {
-                                   if (SelectedShutterDisk != null)
-                                   {
-                                       var item = SelectedShutterDisk;
-                                       item.ShutterId = SelectedItem.Id;
-                                       db.ShutterDisks.Update(item);
-                                       db.SaveChanges();
-                                       ShutterDisks = null;
-                                       ShutterDisks = db.ShutterDisks.Local.Where(i => i.ShutterId == null).ToObservableCollection();
-                                   }
-                                   else MessageBox.Show("Объект не выбран!", "Ошибка");
-                               }
-                               else MessageBox.Show("Невозможно привязать более 2 дисков!", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditShutterDisk
-        {
-            get
-            {
-                return editShutterDisk	 ?? (
-                           editShutterDisk	 = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedShutterDiskFromList != null)
-                               { 
-                                   var wn = new ShutterDiskEditView(); 
-                                   var vm = new ShutterDiskEditVM(SelectedShutterDiskFromList.Id, SelectedItem); 
-                                   wn.DataContext = vm; 
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
-
-        public ICommand DeleteShutterDiskFromShutter
-        {
-            get
-            {
-                return deleteShutterDiskFromShutter	 ?? (
-                           deleteShutterDiskFromShutter	 = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedShutterDiskFromList != null)
-                               {
-                                   var item = SelectedShutterDiskFromList;
-                                   item.ShutterId = null;
-                                   db.ShutterDisks.Update(item);
-                                   db.SaveChanges();
-                                   ShutterDisks = null;
-                                   ShutterDisks = db.ShutterDisks.Local.Where(i => i.ShutterId == null).ToObservableCollection();
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
+        
         public ShutterGuide SelectedShutterGuide
         {
             get => selectedShutterGuide;
@@ -247,70 +75,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateVa
                 RaisePropertyChanged();
             }
         }
-        public ICommand AddShutterGuideToShutter
-        {
-            get
-            {
-                return addShutterGuideToShutter ?? (
-                           addShutterGuideToShutter = new DelegateCommand(() =>
-                           {
-                               if (SelectedItem.ShutterGuides.Count() < 2)
-                               {
-                                   if (SelectedShutterGuide != null)
-                                   {
-                                       var item = SelectedShutterGuide;
-                                       item.ShutterId = SelectedItem.Id;
-                                       db.ShutterGuides.Update(item);
-                                       db.SaveChanges();
-                                       ShutterGuides = null;
-                                       ShutterGuides = db.ShutterGuides.Local.Where(i => i.ShutterId == null).ToObservableCollection();
-                                   }
-                                   else MessageBox.Show("Объект не выбран!", "Ошибка");
-                               }
-                               else MessageBox.Show("Невозможно привязать более 2 направляющих!", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditShutterGuide
-        {
-            get
-            {
-                return editShutterGuide ?? (
-                           editShutterGuide = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedShutterGuideFromList != null)
-                               {
-                                   var wn = new ShutterGuideEditView();
-                                   var vm = new ShutterGuideEditVM(SelectedShutterGuideFromList.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
-
-        public ICommand DeleteShutterGuideFromShutter
-        {
-            get
-            {
-                return deleteShutterGuideFromShutter ?? (
-                           deleteShutterGuideFromShutter = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedShutterGuideFromList != null)
-                               {
-                                   var item = SelectedShutterGuideFromList;
-                                   item.ShutterId = null;
-                                   db.ShutterGuides.Update(item);
-                                   db.SaveChanges();
-                                   ShutterGuides = null;
-                                   ShutterGuides = db.ShutterGuides.Local.Where(i => i.ShutterId == null).ToObservableCollection();
-                               }
-                               else MessageBox.Show("Объект не выбран", "Ошибка");
-                           }));
-            }
-        }
-     
+       
         public IEnumerable<ShutterDisk> ShutterDisks
         {
             get => shutterDisks;
@@ -338,45 +103,215 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.CompactGateVa
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<string> JournalNumbers
+
+        public Supervision.Commands.IAsyncCommand AddShutterDiskToShutterCommand { get; private set; }
+        private async Task AddShutterDiskToShutter()
         {
-            get => journalNumbers;
-            set
+            try
             {
-                journalNumbers = value;
-                RaisePropertyChanged();
+                IsBusy = true;
+                if (SelectedItem.ShutterDisks?.Count() < 2 || SelectedItem.ShutterDisks == null)
+                {
+                    if (SelectedShutterDisk != null)
+                    {
+                        if (!await shutterDiskRepo.IsAssembliedAsync(SelectedShutterDisk))
+                        {
+                            SelectedShutterDisk.ShutterId = SelectedItem.Id;
+                            shutterDiskRepo.Update(SelectedShutterDisk);
+                            SelectedShutterDisk = null;
+                            ShutterDisks = shutterDiskRepo.UpdateList();
+                        }
+                    }
+                    else MessageBox.Show("Объект не выбран!", "Ошибка");
+                }
+                else MessageBox.Show("Невозможно привязать более 2 дисков!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
-        public ShutterTCP SelectedTCPPoint
+        public Supervision.Commands.IAsyncCommand DeleteShutterDiskFromShutterCommand { get; private set; }
+        private async Task DeleteShutterDiskFromShutter()
         {
-            get => selectedTCPPoint;
-            set
+            try
             {
-                selectedTCPPoint = value;
-                RaisePropertyChanged();
+                IsBusy = true;
+                if (SelectedShutterDiskFromList != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedShutterDiskFromList.ShutterId = null;
+                        shutterDiskRepo.Update(SelectedShutterDiskFromList);
+                        ShutterDisks = shutterDiskRepo.UpdateList();
+                    }
+                }
+                else MessageBox.Show("Объект не выбран!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
-        public ShutterEditVM(int id, BaseTable entity)
+        public ICommand EditShutterDiskCommand { get; private set; }
+        private void EditShutterDisk()
         {
+            if (SelectedShutterDiskFromList != null)
+            {
+                _ = new ShutterDiskEditView
+                {
+                    DataContext = ShutterDiskEditVM.LoadVM(SelectedShutterDiskFromList.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        public Supervision.Commands.IAsyncCommand AddShutterGuideToShutterCommand { get; private set; }
+        private async Task AddShutterGuideToShutter()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedItem.ShutterGuides?.Count() < 2 || SelectedItem.ShutterGuides == null)
+                {
+                    if (SelectedShutterGuide != null)
+                    {
+                        if (!await shutterGuideRepo.IsAssembliedAsync(SelectedShutterGuide))
+                        {
+                            SelectedShutterGuide.ShutterId = SelectedItem.Id;
+                            shutterGuideRepo.Update(SelectedShutterGuide);
+                            SelectedShutterGuide = null;
+                            ShutterGuides = shutterGuideRepo.UpdateList();
+                        }
+                    }
+                    else MessageBox.Show("Объект не выбран!", "Ошибка");
+                }
+                else MessageBox.Show("Невозможно привязать более 2 направляющих!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand DeleteShutterGuideFromShutterCommand { get; private set; }
+        private async Task DeleteShutterGuideFromShutter()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedShutterGuideFromList != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedShutterGuideFromList.ShutterId = null;
+                        shutterGuideRepo.Update(SelectedShutterGuideFromList);
+                        ShutterGuides = shutterGuideRepo.UpdateList();
+                    }
+                }
+                else MessageBox.Show("Объект не выбран!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public ICommand EditShutterGuideCommand { get; private set; }
+        private void EditShutterGuide()
+        {
+            if (SelectedShutterGuideFromList != null)
+            {
+                _ = new ShutterGuideEditView
+                {
+                    DataContext = ShutterGuideEditVM.LoadVM(SelectedShutterGuideFromList.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Объект не выбран", "Ошибка");
+        }
+
+        public Supervision.Commands.IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(SelectedItem))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    base.CloseWindow(obj);
+                }
+            }
+            else
+            {
+                base.CloseWindow(obj);
+            }
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public Commands.IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => repo.GetByIdIncludeAsync(id));
+                await Task.Run(() => shutterDiskRepo.Load());
+                await Task.Run(() => shutterGuideRepo.Load());
+                ShutterDisks = shutterDiskRepo.UpdateList();
+                ShutterGuides = shutterGuideRepo.UpdateList();
+                Drawings = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Drawing));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public static ShutterEditVM LoadVM(int id, BaseTable entity, DataContext context)
+        {
+            ShutterEditVM vm = new ShutterEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        public ShutterEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.Set<Shutter>()
-                .Include(i => i.ShutterGuides)
-                .Include(i => i.BaseValve)
-                .SingleOrDefault(i => i.Id == id);
-            db.ShutterDisks.Load();
-            SelectedItem.ShutterDisks = db.ShutterDisks.Local.Where(i => i.ShutterId == SelectedItem.Id).ToObservableCollection();
-            db.ShutterGuides.Load();
-            SelectedItem.ShutterGuides = db.ShutterGuides.Local.Where(i => i.ShutterId == SelectedItem.Id).ToObservableCollection();
-            Journal = db.Set<ShutterJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Drawings = db.Set<Shutter>().Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            ShutterDisks = db.ShutterDisks.Local.Where(i => i.ShutterId == null).ToObservableCollection();
-            ShutterGuides = db.ShutterGuides.Local.Where(i => i.ShutterId == null).ToObservableCollection();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<ShutterTCP>().ToList();
+            repo = new ShutterRepository(db);
+            shutterDiskRepo = new ShutterDiskRepository(db);
+            shutterGuideRepo = new ShutterGuideRepository(db);
+            LoadItemCommand = new Supervision.Commands.AsyncCommand<int>(Load);
+            SaveItemCommand = new Supervision.Commands.AsyncCommand(SaveItem);
+            CloseWindowCommand = new Supervision.Commands.Command(o => CloseWindow(o));
+            AddShutterDiskToShutterCommand = new Supervision.Commands.AsyncCommand(AddShutterDiskToShutter);
+            DeleteShutterDiskFromShutterCommand = new Supervision.Commands.AsyncCommand(DeleteShutterDiskFromShutter);
+            EditShutterDiskCommand = new Supervision.Commands.Command(o => EditShutterDisk());
+            AddShutterGuideToShutterCommand = new Supervision.Commands.AsyncCommand(AddShutterGuideToShutter);
+            DeleteShutterGuideFromShutterCommand = new Supervision.Commands.AsyncCommand(DeleteShutterGuideFromShutter);
+            EditShutterGuideCommand = new Supervision.Commands.Command(o => EditShutterGuide());
         }
     }
 }

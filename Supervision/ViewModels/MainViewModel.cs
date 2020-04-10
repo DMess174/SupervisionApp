@@ -92,9 +92,7 @@ namespace Supervision.ViewModels
                 return new DelegateCommand(() =>
                 {
                     var w = new SpecificationView();
-                    var vm = new SpecificationVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    w.DataContext = SpecificationVM.LoadSpecificationVM(new DataContext());
                 });
             }
         }
@@ -105,9 +103,7 @@ namespace Supervision.ViewModels
                 return new DelegateCommand(() =>
                 {
                     var w = new CustomerView();
-                    var vm = new CustomerVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    w.DataContext = CustomerVM.LoadCustomerVM(new DataContext());
                 });
             }
         }
@@ -118,9 +114,7 @@ namespace Supervision.ViewModels
                 return new DelegateCommand(() =>
                 {
                     var w = new InspectorView();
-                    var vm = new InspectorVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    w.DataContext = InspectorVM.LoadVM(new DataContext());
                 });
             }
         }
@@ -131,9 +125,7 @@ namespace Supervision.ViewModels
                 return new DelegateCommand(() =>
                 {
                     var w = new ProductTypeView();
-                    var vm = new ProductTypeViewModel();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    w.DataContext = ProductTypeViewModel.LoadVM(new DataContext());
                 });
             }
         }
@@ -144,9 +136,7 @@ namespace Supervision.ViewModels
                 return new DelegateCommand(() =>
                 {
                     var w = new JournalNumbersView();
-                    var vm = new JournalNumbersViewModel();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    w.DataContext = JournalNumbersViewModel.LoadVM(new DataContext());
                 });
             }
         }
@@ -158,10 +148,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new SheetMaterialView();
-                    var vm = new SheetMaterialVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new SheetMaterialView
+                    {
+                        DataContext = SheetMaterialVM.LoadSheetMaterialVM(new DataContext())
+                    };
                 });
             }
         }
@@ -171,10 +161,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new PipeMaterialView();
-                    var vm = new PipeMaterialVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new PipeMaterialView
+                    {
+                        DataContext = PipeMaterialVM.LoadPipeMaterialVM(new DataContext())
+                    };
                 });
             }
         }
@@ -184,10 +174,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ForgingMaterialView();
-                    var vm = new ForgingMaterialVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new ForgingMaterialView
+                    {
+                        DataContext = ForgingMaterialVM.LoadForgingMaterialVM(new DataContext())
+                    };
                 });
             }
         }
@@ -197,10 +187,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new RolledMaterialView();
-                    var vm = new RolledMaterialVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new RolledMaterialView
+                    {
+                        DataContext = RolledMaterialVM.LoadRolledMaterialVM(new DataContext())
+                    };
                 });
             }
         }
@@ -211,10 +201,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new BaseAnticorrosiveCoatingView();
-                    var vm = new BaseAnticorrosiveCoatingVM<AbrasiveMaterial, AnticorrosiveCoatingTCP, AbrasiveMaterialJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new BaseAnticorrosiveCoatingView
+                    {
+                        DataContext = AbrasiveMaterialVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -224,10 +214,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new BaseAnticorrosiveCoatingView();
-                    var vm = new BaseAnticorrosiveCoatingVM<Undercoat, AnticorrosiveCoatingTCP, UndercoatJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new BaseAnticorrosiveCoatingView
+                    {
+                        DataContext = UndercoatVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -237,10 +227,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new BaseAnticorrosiveCoatingView();
-                    var vm = new BaseAnticorrosiveCoatingVM<AbovegroundCoating, AnticorrosiveCoatingTCP, AbovegroundCoatingJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new BaseAnticorrosiveCoatingView
+                    {
+                        DataContext = AbovegroundCoatingVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -250,10 +240,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new BaseAnticorrosiveCoatingView();
-                    var vm = new BaseAnticorrosiveCoatingVM<UndergroundCoating, AnticorrosiveCoatingTCP, UndergroundCoatingJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new BaseAnticorrosiveCoatingView
+                    {
+                        DataContext = UndergroundCoatingVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -263,23 +253,23 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new WeldingMaterialView();
-                    var vm = new WeldingMaterialVM<WeldingMaterial, WeldingMaterialTCP, WeldingMaterialJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new WeldingMaterialView
+                    {
+                        DataContext = WeldingMaterialVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
         public ICommand ControlWeldOpen 
-        { 
+        {
             get
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ControlWeldView();
-                    var vm = new ControlWeldVM<ControlWeld, ControlWeldTCP, ControlWeldJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new ControlWeldView
+                    {
+                        DataContext = ControlWeldVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -287,49 +277,118 @@ namespace Supervision.ViewModels
         {
             get
             {
-                return new DelegateCommand(() => OpenWindow(new StoresControlView(), new StoresControlVM()));
+                return new DelegateCommand(() =>
+                {
+                    _ = new StoresControlView
+                    {
+                        DataContext = StoresControlVM.LoadVM(new DataContext())
+                    };
+                });
             }
         }
         public ICommand NDTControlOpen
         {
             get
             {
-                return new DelegateCommand(() => OpenWindow(new PeriodicalControlView(), new PeriodicalControlVM<NDTControl, NDTControlTCP, NDTControlJournal >()));
+                return new DelegateCommand(() =>
+                {
+                    _ = new PeriodicalControlView
+                    {
+                        DataContext = NDTPeriodicalControlVM.LoadVM(new DataContext())
+                    };
+                });
             }
         }
         public ICommand WeldingProceduresOpen
         {
             get
             {
-                return new DelegateCommand(() => OpenWindow(new PeriodicalControlView(), new PeriodicalControlVM<WeldingProcedures, WeldingProceduresTCP, WeldingProceduresJournal>()));
+                return new DelegateCommand(() =>
+                {
+                    _ = new PeriodicalControlView
+                    {
+                        DataContext = WeldingPeriodicalControlVM.LoadVM(new DataContext())
+                    };
+                });
             }
         }
         public ICommand FactoryInspectionOpen
         {
             get
             {
-                return new DelegateCommand(() => OpenWindow(new FactoryInspectionView(), new FactoryInspectionVM()));
+                return new DelegateCommand(() =>
+                {
+                    _ = new FactoryInspectionView
+                    {
+                        DataContext = FactoryInspectionVM.LoadVM(new DataContext())
+                    };
+                });
             }
         }
         public ICommand DegreasingChemicalCompositionOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new GatePeriodicalView(), new DegreasingChemicalCompositionVM()));
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    _ = new GatePeriodicalView
+                    {
+                        DataContext = DegreasingChemicalCompositionVM.LoadVM(new DataContext())
+                    };
+                });
+            }
         }
         public ICommand CoatingChemicalCompositionOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new GatePeriodicalView(), new CoatingChemicalCompositionVM()));
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    _ = new GatePeriodicalView
+                    {
+                        DataContext = CoatingChemicalCompositionVM.LoadVM(new DataContext())
+                    };
+                });
+            }
         }
         public ICommand CoatingPlasticityOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new GatePeriodicalView(), new CoatingPlasticityVM()));
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    _ = new GatePeriodicalView
+                    {
+                        DataContext = CoatingPlasticityVM.LoadVM(new DataContext())
+                    };
+                });
+            }
         }
         public ICommand CoatingProtectivePropertiesOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new GatePeriodicalView(), new CoatingProtectivePropertiesVM()));
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    _ = new GatePeriodicalView
+                    {
+                        DataContext = CoatingProtectivePropertiesVM.LoadVM(new DataContext())
+                    };
+                });
+            }
         }
         public ICommand CoatingPorosityOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new CoatingPorosityView(), new CoatingPorosityVM()));
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    _ = new CoatingPorosityView
+                    {
+                        DataContext = CoatingPorosityVM.LoadVM(new DataContext())
+                    };
+                });
+            }
         }
         public ICommand FrontalSaddleSealingOpen
         {
@@ -337,10 +396,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new FrontalSaddleSealingView();
-                    var vm = new FrontalSaddleSealingVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new FrontalSaddleSealingView
+                    {
+                        DataContext = FrontalSaddleSealingVM.LoadFrontalSaddleSealingVM(new DataContext())
+                    };
                 });
             }
         }
@@ -350,10 +409,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new AssemblyUnitSealingView();
-                    var vm = new AssemblyUnitSealingVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new AssemblyUnitSealingView
+                    {
+                        DataContext = AssemblyUnitSealingVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -366,10 +425,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ReverseShutterView();
-                    var vm = new ReverseShutterVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new ReverseShutterView
+                    {
+                        DataContext = ReverseShutterVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -379,10 +438,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CastGateValveView();
-                    var vm = new CastGateValveVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new CastGateValveView
+                    {
+                        DataContext = CastGateValveVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -392,10 +451,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new SheetGateValveView();
-                    var vm = new SheetGateValveVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new SheetGateValveView
+                    {
+                        DataContext = SheetGateValveVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -405,10 +464,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CompactGateValveView();
-                    var vm = new CompactGateValveVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new CompactGateValveView
+                    {
+                        DataContext = CompactGateValveVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -422,10 +481,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ReverseShutterDetailView();
-                    var vm = new ReverseShutterDetailVM<BronzeSleeveShutter, BronzeSleeveShutterTCP, BronzeSleeveShutterJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new BronzeSleeveShutterView
+                    {
+                        DataContext = BronzeSleeveShutterVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -435,10 +494,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ReverseShutterDetailView();
-                    var vm = new ReverseShutterDetailVM<SteelSleeveShutter, SteelSleeveShutterTCP, SteelSleeveShutterJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new ReverseShutterDetailView
+                    {
+                        DataContext = SteelSleeveShutterVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -448,10 +507,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CoverSleeveView();
-                    var vm = new CoverSleeveVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new CoverSleeveView
+                    {
+                        DataContext = CoverSleeveVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -461,10 +520,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new RunningSleeveView();
-                    var vm = new RunningSleeveVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new RunningSleeveView
+                    {
+                        DataContext = RunningSleeveVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -476,10 +535,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ScrewNutView();
-                    var vm = new ScrewNutVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new ScrewNutView
+                    {
+                        DataContext = ScrewNutVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -489,10 +548,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ReverseShutterDetailView();
-                    var vm = new ReverseShutterDetailVM<StubShutter, StubShutterTCP, StubShutterJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new ReverseShutterDetailView
+                    {
+                        DataContext = StubShutterVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -502,10 +561,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new SlamShutterView();
-                    var vm = new SlamShutterVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new SlamShutterView
+                    {
+                        DataContext = SlamShutterVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -516,10 +575,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ShutterDiskView();
-                    var vm = new ShutterDiskVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new ShutterDiskView
+                    {
+                        DataContext = ShutterDiskVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -529,10 +588,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ShutterGuideView();
-                    var vm = new ShutterGuideVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new ShutterGuideView
+                    {
+                        DataContext = ShutterGuideVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -542,10 +601,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ShutterView();
-                    var vm = new ShutterVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new ShutterView
+                    {
+                        DataContext = ShutterVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -556,10 +615,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new BallValveView();
-                    var vm = new BallValveVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new BallValveView
+                    {
+                        DataContext = BallValveVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -569,10 +628,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new NozzleView();
-                    var vm = new NozzleVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new NozzleView
+                    {
+                        DataContext = NozzleVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -583,10 +642,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CastingCaseView();
-                    var vm = new CastGateValveCaseVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new CastingCaseView
+                    {
+                        DataContext = CastGateValveCaseVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -596,10 +655,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CastingCaseView();
-                    var vm = new ReverseShutterCaseVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new CastingCaseView
+                    {
+                        DataContext = ReverseShutterCaseVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -609,10 +668,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new WeldGateValveCaseView();
-                    var vm = new WeldGateValveCaseVM<SheetGateValveCase, SheetGateValveCaseTCP, SheetGateValveCaseJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new WeldGateValveCaseView
+                    {
+                        DataContext = SheetGateValveCaseVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -622,10 +681,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new WeldGateValveCaseView();
-                    var vm = new WeldGateValveCaseVM<CompactGateValveCase, CompactGateValveCaseTCP, CompactGateValveCaseJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new WeldGateValveCaseView
+                    {
+                        DataContext = CompactGateValveCaseVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -636,10 +695,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CaseBottomView();
-                    var vm = new CaseBottomVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new CaseBottomView
+                    {
+                        DataContext = CaseBottomVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -649,16 +708,25 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CaseFlangeView();
-                    var vm = new CaseFlangeVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new CaseFlangeView
+                    {
+                        DataContext = CaseFlangeVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
         public ICommand CaseEdgeOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new CaseEdgeView(), new CaseEdgeVM()));
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    _ = new CaseEdgeView
+                    {
+                        DataContext = CaseEdgeVM.LoadVM(new DataContext())
+                    };
+                });
+            }
         }
         public ICommand FrontWallOpen
         {
@@ -666,10 +734,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new FrontWallView();
-                    var vm = new FrontWallVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new FrontWallView
+                    {
+                        DataContext = FrontWallVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -679,10 +747,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new SideWallView();
-                    var vm = new SideWallVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new SideWallView
+                    {
+                        DataContext = SideWallVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -692,10 +760,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new WeldNozzleView();
-                    var vm = new WeldNozzleVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new WeldNozzleView
+                    {
+                        DataContext = WeldNozzleVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -708,10 +776,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CastingCoverView();
-                    var vm = new CastGateValveCoverVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new CastingCoverView
+                    {
+                        DataContext = CastGateValveCoverVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -721,10 +789,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new WeldGateValveCoverView();
-                    var vm = new WeldGateValveCoverVM<SheetGateValveCover, SheetGateValveCoverTCP, SheetGateValveCoverJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new WeldGateValveCoverView
+                    {
+                        DataContext = SheetGateValveCoverVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -734,10 +802,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new WeldGateValveCoverView();
-                    var vm = new WeldGateValveCoverVM<CompactGateValveCover, CompactGateValveCoverTCP, CompactGateValveCoverJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new WeldGateValveCoverView
+                    {
+                        DataContext = CompactGateValveCoverVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -748,10 +816,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CoverFlangeView();
-                    var vm = new CoverFlangeVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new CoverFlangeView
+                    {
+                        DataContext = CoverFlangeVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -761,10 +829,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CoverSealingRingView();
-                    var vm = new CoverSealingRingVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new CoverSealingRingView
+                    {
+                        DataContext = CoverSealingRingVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -776,10 +844,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ReverseShutterDetailView();
-                    var vm = new ReverseShutterDetailVM<ShaftShutter, ShaftShutterTCP, ShaftShutterJournal>();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new ReverseShutterDetailView
+                    {
+                        DataContext = ShaftShutterVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -789,10 +857,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new SpringView();
-                    var vm = new SpringVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new SpringView
+                    {
+                        DataContext = SpringVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -803,9 +871,7 @@ namespace Supervision.ViewModels
                 return new DelegateCommand(() =>
                 {
                     var w = new SaddleView();
-                    var vm = new SaddleVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    w.DataContext = SaddleVM.LoadSaddleVM(new DataContext());
                 });
             }
         }
@@ -815,16 +881,25 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new CounterFlangeView();
-                    var vm = new CounterFlangeVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new CounterFlangeView
+                    {
+                        DataContext = CounterFlangeVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
         public ICommand GateOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new GateView(), new GateVM()));
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    _ = new GateView
+                    {
+                        DataContext = GateVM.LoadVM(new DataContext())
+                    };
+                });
+            }
         }
         public ICommand ScrewStudOpen
         {
@@ -832,10 +907,10 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new ScrewStudView();
-                    var vm = new ScrewStudVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new ScrewStudView
+                    {
+                        DataContext = ScrewStudVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
@@ -845,259 +920,279 @@ namespace Supervision.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var w = new SpindleView();
-                    var vm = new SpindleVM();
-                    w.DataContext = vm;
-                    w.ShowDialog();
+                    _ = new SpindleView
+                    {
+                        DataContext = SpindleVM.LoadVM(new DataContext())
+                    };
                 });
             }
         }
         public ICommand ShearPinOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new ShearPinView(), new ShearPinVM()));
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    _ = new ShearPinView
+                    {
+                        DataContext = ShearPinVM.LoadVM(new DataContext())
+                    };
+                });
+            }
         }
         #endregion
 
         #region TCP
+        private void LoadTCP<T>() where T : BaseTCP, new()
+        {
+            _ = new TCPView()
+            {
+                DataContext = TCPViewModel<T>.LoadVM<T>(new DataContext())
+            };
+        }
+
         public ICommand PIDTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<PIDTCP>()));
+            get
+            {
+                return new DelegateCommand(() => LoadTCP<PIDTCP>());
+            }
         }
         public ICommand CoatingTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoatingTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CoatingTCP>());
         }
         public ICommand ReverseShutterTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ReverseShutterTCP>()));
+            get => new DelegateCommand(() => LoadTCP<ReverseShutterTCP>());
         }
         public ICommand CastGateValveTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CastGateValveTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CastGateValveTCP>());
         }
         public ICommand SheetGateValveTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SheetGateValveTCP>()));
+            get => new DelegateCommand(() => LoadTCP<SheetGateValveTCP>());
         }
         public ICommand CompactGateValveTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CompactGateValveTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CompactGateValveTCP>());
         }
         public ICommand GateTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<GateTCP>()));
+            get => new DelegateCommand(() => LoadTCP<GateTCP>());
         }
         #region Details
         #region Sleeve
         public ICommand BronzeSleeveShutterTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<BronzeSleeveShutterTCP>()));
+            get => new DelegateCommand(() => LoadTCP<BronzeSleeveShutterTCP>());
         }
         public ICommand SteelSleeveShutterTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SteelSleeveShutterTCP>()));
+            get => new DelegateCommand(() => LoadTCP<SteelSleeveShutterTCP>());
         }
         public ICommand RunningSleeveTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<RunningSleeveTCP>()));
+            get => new DelegateCommand(() => LoadTCP<RunningSleeveTCP>());
         }
         #endregion
         public ICommand ScrewNutTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ScrewNutTCP>()));
+            get => new DelegateCommand(() => LoadTCP<ScrewNutTCP>());
         }
         public ICommand StubShutterTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<StubShutterTCP>()));
+            get => new DelegateCommand(() => LoadTCP<StubShutterTCP>());
         }
         public ICommand SlamShutterTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SlamShutterTCP>()));
+            get => new DelegateCommand(() => LoadTCP<SlamShutterTCP>());
         }
         #region Shutter
         public ICommand ShutterDiskTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ShutterDiskTCP>()));
+            get => new DelegateCommand(() => LoadTCP<ShutterDiskTCP>());
         }
         public ICommand ShutterTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ShutterTCP>()));
+            get => new DelegateCommand(() => LoadTCP<ShutterTCP>());
         }
         public ICommand ShutterGuideTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ShutterGuideTCP>()));
+            get => new DelegateCommand(() => LoadTCP<ShutterGuideTCP>());
         }
         #endregion
         public ICommand BallValveTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<BallValveTCP>()));
+            get => new DelegateCommand(() => LoadTCP<BallValveTCP>());
         }
         public ICommand NozzleTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<NozzleTCP>()));
+            get => new DelegateCommand(() => LoadTCP<NozzleTCP>());
         }
         #region Case
         public ICommand CastGateValveCaseTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CastGateValveCaseTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CastGateValveCaseTCP>());
         }
         public ICommand SheetGateValveCaseTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SheetGateValveCaseTCP>()));
+            get => new DelegateCommand(() => LoadTCP<SheetGateValveCaseTCP>());
         }
         public ICommand CompactGateValveCaseTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CompactGateValveCaseTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CompactGateValveCaseTCP>());
         }
         public ICommand ReverseShutterCaseTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ReverseShutterCaseTCP>()));
+            get => new DelegateCommand(() => LoadTCP<ReverseShutterCaseTCP>());
         }
         #region Details
         public ICommand CaseBottomTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CaseBottomTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CaseBottomTCP>());
         }
         public ICommand WeldNozzleTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<WeldNozzleTCP>()));
+            get => new DelegateCommand(() => LoadTCP<WeldNozzleTCP>());
         }
         public ICommand CaseEdgeTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CaseEdgeTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CaseEdgeTCP>());
         }
         public ICommand SideWallTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SideWallTCP>()));
+            get => new DelegateCommand(() => LoadTCP<SideWallTCP>());
         }
         public ICommand FrontWallTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<FrontWallTCP>()));
+            get => new DelegateCommand(() => LoadTCP<FrontWallTCP>());
         }
         public ICommand CaseFlangeTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CaseFlangeTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CaseFlangeTCP>());
         }
         #endregion
         #endregion
         #region Cover
         public ICommand CastGateValveCoverTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CastGateValveCoverTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CastGateValveCoverTCP>());
         }
         public ICommand SheetGateValveCoverTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SheetGateValveCoverTCP>()));
+            get => new DelegateCommand(() => LoadTCP<SheetGateValveCoverTCP>());
         }
         public ICommand CompactGateValveCoverTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CompactGateValveCoverTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CompactGateValveCoverTCP>());
         }
         #region Details
         public ICommand CoverFlangeTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoverFlangeTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CoverFlangeTCP>());
         }
         public ICommand CoverSealingRingTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoverSealingRingTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CoverSealingRingTCP>());
         }
         public ICommand CoverSleeveTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoverSleeveTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CoverSleeveTCP>());
         }
         #endregion
         #endregion
         public ICommand ShaftShutterTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ShaftShutterTCP>()));
+            get => new DelegateCommand(() => LoadTCP<ShaftShutterTCP>());
         }
         public ICommand SpringTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SpringTCP>()));
+            get => new DelegateCommand(() => LoadTCP<SpringTCP>());
         }
         public ICommand SaddleTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SaddleTCP>()));
+            get => new DelegateCommand(() => LoadTCP<SaddleTCP>());
         }
         public ICommand CounterFlangeTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CounterFlangeTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CounterFlangeTCP>());
         }
         public ICommand ScrewStudTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ScrewStudTCP>()));
+            get => new DelegateCommand(() => LoadTCP<ScrewStudTCP>());
         }
         public ICommand SpindleTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<SpindleTCP>()));
+            get => new DelegateCommand(() => LoadTCP<SpindleTCP>());
         }
         public ICommand ShearPinTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ShearPinTCP>()));
+            get => new DelegateCommand(() => LoadTCP<ShearPinTCP>());
         }
         #endregion
         #region Materials
         public ICommand AnticorrosiveCoatingTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<AnticorrosiveCoatingTCP>()));
+            get => new DelegateCommand(() => LoadTCP<AnticorrosiveCoatingTCP>());
         }
         public ICommand MetalMaterialTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<MetalMaterialTCP>()));
+            get => new DelegateCommand(() => LoadTCP<MetalMaterialTCP>());
         }
         public ICommand WeldingMaterialTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<WeldingMaterialTCP>()));
+            get => new DelegateCommand(() => LoadTCP<WeldingMaterialTCP>());
         }
         public ICommand FrontalSaddleSealingTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<FrontalSaddleSealingTCP>()));
+            get => new DelegateCommand(() => LoadTCP<FrontalSaddleSealingTCP>());
         }
         public ICommand AssemblyUnitSealingTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<AssemblyUnitSealingTCP>()));
+            get => new DelegateCommand(() => LoadTCP<AssemblyUnitSealingTCP>());
         }
         #endregion
         public ICommand ControlWeldTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<ControlWeldTCP>()));
+            get => new DelegateCommand(() => LoadTCP<ControlWeldTCP>());
         }
         public ICommand FactoryInspectionTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<FactoryInspectionTCP>()));
+            get => new DelegateCommand(() => LoadTCP<FactoryInspectionTCP>());
         }
         public ICommand StoresControlTCPOpen
         {
-                get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<StoresControlTCP>()));
+            get => new DelegateCommand(() => LoadTCP<StoresControlTCP>());
         }
         public ICommand NDTTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<NDTControlTCP>()));
+            get => new DelegateCommand(() => LoadTCP<NDTControlTCP>());
         }
         public ICommand WeldingProceduresTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<WeldingProceduresTCP>()));
+            get => new DelegateCommand(() => LoadTCP<WeldingProceduresTCP>());
         }
         public ICommand DegreasingChemicalCompositionTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<DegreasingChemicalCompositionTCP>()));
+            get => new DelegateCommand(() => LoadTCP<DegreasingChemicalCompositionTCP>());
         }
         public ICommand CoatingChemicalCompositionTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoatingChemicalCompositionTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CoatingChemicalCompositionTCP>());
         }
         public ICommand CoatingPlasticityTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoatingPlasticityTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CoatingPlasticityTCP>());
         }
         public ICommand CoatingProtectivePropertiesTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoatingProtectivePropertiesTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CoatingProtectivePropertiesTCP>());
         }
         public ICommand CoatingPorosityTCPOpen
         {
-            get => new DelegateCommand(() => OpenWindow(new TCPView(), new TCPViewModel<CoatingPorosityTCP>()));
+            get => new DelegateCommand(() => LoadTCP<CoatingPorosityTCP>());
         }
         #endregion
 
@@ -1229,7 +1324,19 @@ namespace Supervision.ViewModels
             {
                 return dailyReportOpen ??
                 (
-                    dailyReportOpen = new DelegateCommand(() => OpenWindow(new DailyReportView(), new DailyReportVM()))
+                    dailyReportOpen = new DelegateCommand(() => OpenWindow(new DailyReportView(), new DailyReportVM(new DataContext())))
+                );
+            }
+        }
+
+        private ICommand fOMReportOpen;
+        public ICommand FOMReportOpen
+        {
+            get
+            {
+                return fOMReportOpen ??
+                (
+                    fOMReportOpen = new DelegateCommand(() => OpenWindow(new FOMReportView(), new FOMReportVM(new DataContext())))
                 );
             }
         }

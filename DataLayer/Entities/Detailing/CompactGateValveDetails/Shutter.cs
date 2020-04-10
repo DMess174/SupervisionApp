@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Journals.Detailing.CompactGateValveDetails;
 
@@ -10,12 +11,16 @@ namespace DataLayer.Entities.Detailing.CompactGateValveDetails
         {
             Name = "Затвор";
         }
+        public Shutter(Shutter shutter) : base(shutter)
+        {
+
+        }
 
         public BaseValve BaseValve { get; set; }
 
-        public IEnumerable<ShutterDisk> ShutterDisks { get; set; }
-        public IEnumerable<ShutterGuide> ShutterGuides { get; set; }
+        public ObservableCollection<ShutterDisk> ShutterDisks { get; set; }
+        public ObservableCollection<ShutterGuide> ShutterGuides { get; set; }
 
-        public IEnumerable<ShutterJournal> ShutterJournals { get; set; }
+        public ObservableCollection<ShutterJournal> ShutterJournals { get; set; }
     }
 }

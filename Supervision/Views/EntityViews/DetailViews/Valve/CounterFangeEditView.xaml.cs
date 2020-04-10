@@ -7,6 +7,7 @@ namespace Supervision.Views.EntityViews.DetailViews.Valve
         public CounterFlangeEditView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

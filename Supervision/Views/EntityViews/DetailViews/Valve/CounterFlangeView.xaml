@@ -3,11 +3,12 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      mc:Ignorable="d"
+        xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+        mc:Ignorable="d"
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="450" d:DesignWidth="800"
       WindowStartupLocation="CenterScreen"
-      Title="{Binding Name}">
+      Title="Ответный фланец">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -124,8 +125,7 @@
             <DataGrid.InputBindings>
                 <MouseBinding
                     MouseAction="LeftDoubleClick"
-                    Command="{Binding EditItem}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                    Command="{Binding EditSelectedItemCommand}"/>
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" 
@@ -160,6 +160,10 @@
             </DataGrid.Columns>
         </DataGrid>
 
+        <wpfx:BusyIndicator IsBusy="{Binding IsBusy}"
+                            Grid.Row="2"
+                            BusyContent="Обработка запроса, ждите..."/>
+
         <DockPanel Grid.Row="3"  
                    Height="50" 
                    VerticalAlignment="Bottom" 
@@ -178,8 +182,7 @@
                     <Button Style="{StaticResource StandardButton}"
                         Content="Копировать запись" 
                         Margin="10" 
-                        Command="{Binding CopyItem}" 
-                        CommandParameter="{Binding ElementName=AllInstances, Path=SelectedItem}" />
+                        Command="{Binding CopySelectedItemCommand}" />
                 </StackPanel>
 
                 <StackPanel  DockPanel.Dock="Bottom"
@@ -191,14 +194,12 @@
                     <Button Style="{StaticResource StandardButton}"
                         Content="Добавить" 
                         Margin="10" 
-                        Command="{Binding AddItem}" 
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                        Command="{Binding AddNewItemCommand}" />
 
                     <Button Style="{StaticResource StandardButton}"
                         Content="Изменить" 
                         Margin="10" 
-                        Command="{Binding EditItem}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                        Command="{Binding EditSelectedItemCommand}"/>
 
                     <Button Style="{StaticResource StandardButton}"
                         Visibility="Collapsed"
@@ -216,7 +217,7 @@
                             HorizontalAlignment="Right"
                             Content="Закрыть" 
                             Margin="10" 
-                            Command="{Binding CloseWindow}"
+                            Command="{Binding CloseWindowCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
                 </StackPanel>
             </Grid>

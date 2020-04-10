@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DataLayer.Entities.Materials;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
@@ -11,6 +12,11 @@ namespace DataLayer.Entities.Detailing.WeldGateValveDetails
             Name = "Втулка крышки";
         }
 
+        public CoverSleeve(CoverSleeve sleeve) : base(sleeve)
+        {
+            MetalMaterialId = sleeve.MetalMaterialId;
+        }
+
         public int? MetalMaterialId { get; set; }
         public MetalMaterial MetalMaterial { get; set; }
 
@@ -19,6 +25,6 @@ namespace DataLayer.Entities.Detailing.WeldGateValveDetails
 
         public WeldGateValveCover WeldGateValveCover { get; set; }
 
-        public IEnumerable<CoverSleeveJournal> CoverSleeveJournals { get; set; }
+        public ObservableCollection<CoverSleeveJournal> CoverSleeveJournals { get; set; }
     }
 }

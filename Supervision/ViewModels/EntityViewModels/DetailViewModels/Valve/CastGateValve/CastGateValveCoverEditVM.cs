@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
 using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Entities.Detailing.CastGateValveDetails;
@@ -10,19 +13,22 @@ using DataLayer.TechnicalControlPlans.Detailing.CastGateValveDetails;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.Native;
 using Microsoft.EntityFrameworkCore;
-using Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve;
-using Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve;
 using Supervision.Views.EntityViews.DetailViews;
 using Supervision.Views.EntityViews.DetailViews.Valve;
 using Supervision.Views.EntityViews.DetailViews.WeldGateValve;
 
 namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter
 {
-    public class CastGateValveCoverEditVM : BasePropertyChanged
+    public class CastGateValveCoverEditVM : ViewModelBase
     {
 
         private readonly DataContext db;
         private readonly BaseTable parentEntity;
+        private readonly CastGateValveCoverRepository repo;
+        private readonly InspectorRepository inspectorRepo;
+        private readonly JournalNumberRepository journalRepo;
+        private readonly CoverSealingRingRepository coverSealingRingRepo;
+        private readonly RunningSleeveRepository runningSleeveRepo;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
         private IEnumerable<string> drawings;
@@ -34,18 +40,23 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
         private IEnumerable<CastGateValveCoverJournal> mechanicalJournal;
         private IEnumerable<CastGateValveCoverJournal> assemblyJournal;
         private IEnumerable<CastGateValveCoverJournal> nDTJournal;
-
         private CastGateValveCover selectedItem;
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
         private CastGateValveCoverTCP selectedTCPPoint;
         private IEnumerable<CoverSealingRing> coverSealingRings;
         private IEnumerable<RunningSleeve> runningSleeves;
         private IEnumerable<Spindle> spindles;
-        private ICommand editSpindle;
-        private ICommand editRunningSleeve;
-        private ICommand editCoverSealingRing;
+        private SpindleRepository spindleRepo;
+        private CastGateValveCoverJournal operation;
+
+        public CastGateValveCoverJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public CastGateValveCover SelectedItem
         {
@@ -130,177 +141,6 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            if (SelectedItem.CoverSealingRingId != null)
-                            {
-                                var detail = db.CoverSealingRings.Include(i => i.CastGateValveCover).Include(i => i.CoverSleeve).SingleOrDefault(i => i.Id == SelectedItem.CoverSealingRingId);
-                                if (detail?.CastGateValveCover != null && detail.CastGateValveCover.Id != SelectedItem.Id)
-                                {
-                                    MessageBox.Show($"Уплотнительное кольцо применено в {detail.CastGateValveCover.Name} № {detail.CastGateValveCover.Number}", "Ошибка");
-                                    return;
-                                }
-                                if (detail?.CoverSleeve != null)
-                                {
-                                    MessageBox.Show($"Уплотнительное кольцо применено в {detail.CoverSleeve.Name} № {detail.CoverSleeve.Number}", "Ошибка");
-                                    return;
-                                }
-                            }
-                            if (SelectedItem.SpindleId != null)
-                            {
-                                var detail = db.Spindles.Include(i => i.BaseValveCover).SingleOrDefault(i => i.Id == SelectedItem.SpindleId);
-                                if (detail?.BaseValveCover != null && detail.BaseValveCover.Id != SelectedItem.Id)
-                                {
-                                    MessageBox.Show($"Шпиндель применен в {detail.BaseValveCover.Name} № {detail.BaseValveCover.Number}", "Ошибка");
-                                    return;
-                                }
-                            }
-                            if (SelectedItem.RunningSleeveId != null)
-                            {
-                                var detail = db.RunningSleeves.Include(i => i.BaseValveCover).SingleOrDefault(i => i.Id == SelectedItem.RunningSleeveId);
-                                if (detail?.BaseValveCover != null && detail.BaseValveCover.Id != SelectedItem.Id)
-                                {
-                                    MessageBox.Show($"Втулка ходовая применена в {detail.BaseValveCover.Name} № {detail.BaseValveCover.Number}", "Ошибка");
-                                    return;
-                                }
-                            }
-                            db.Set<CastGateValveCover>().Update(SelectedItem);
-                            db.SaveChanges();
-                            db.CastGateValveCoverJournals.UpdateRange(InputControlJournal);
-                            db.CastGateValveCoverJournals.UpdateRange(InputNDTControlJournal);
-                            db.CastGateValveCoverJournals.UpdateRange(MechanicalJournal);
-                            db.CastGateValveCoverJournals.UpdateRange(AssemblyJournal);
-                            db.CastGateValveCoverJournals.UpdateRange(AssemblyWeldingJournal);
-                            db.CastGateValveCoverJournals.UpdateRange(NDTJournal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is CastGateValveCover)
-                        {
-                            var wn = new CastingCoverView();
-                            var vm = new CastGateValveCoverVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new CastGateValveCoverJournal()
-                            {
-                                DetailDrawing = SelectedItem.Drawing,
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.CastGateValveCoverJournals.Add(item);
-                            db.SaveChanges();
-                            InputControlJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId).ToList();
-                            InputNDTControlJournal = db.CastGateValveCoverJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль (НК)")
-                                .OrderBy(x => x.PointId).ToList();
-                            MechanicalJournal = db.CastGateValveCoverJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка")
-                                .OrderBy(x => x.PointId).ToList();
-                            AssemblyWeldingJournal = db.CastGateValveCoverJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка")
-                                .OrderBy(x => x.PointId).ToList();
-                            AssemblyJournal = db.CastGateValveCoverJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка")
-                                .OrderBy(x => x.PointId).ToList();
-                            NDTJournal = db.CastGateValveCoverJournals
-                                .Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль")
-                                .OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
-            }
-        }
-        public ICommand EditCoverSealingRing
-        {
-            get
-            {
-                return editCoverSealingRing ?? (
-                           editCoverSealingRing = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.CoverSealingRing != null)
-                               {
-                                   var wn = new CoverSealingRingEditView();
-                                   var vm = new CoverSealingRingEditVM(SelectedItem.CoverSealingRing.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Для просмотра привяжите деталь", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditSpindle
-        {
-            get
-            {
-                return editSpindle ?? (
-                           editSpindle = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.Spindle != null)
-                               {
-                                   var wn = new SpindleEditView();
-                                   var vm = new SpindleEditVM(SelectedItem.Spindle.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Для просмотра привяжите деталь", "Ошибка");
-                           }));
-            }
-        }
-        public ICommand EditRunningSleeve
-        {
-            get
-            {
-                return editRunningSleeve ?? (
-                           editRunningSleeve = new DelegateCommand<Window>((w) =>
-                           {
-                               if (SelectedItem.RunningSleeve != null)
-                               {
-                                   var wn = new RunningSleeveEditView();
-                                   var vm = new RunningSleeveEditVM(SelectedItem.RunningSleeve.Id, SelectedItem);
-                                   wn.DataContext = vm;
-                                   wn.Show();
-                               }
-                               else MessageBox.Show("Для просмотра привяжите деталь", "Ошибка");
-                           }));
-            }
-        }
-
         public CastGateValveCoverTCP SelectedTCPPoint
         {
             get => selectedTCPPoint;
@@ -366,25 +206,202 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutte
             }
         }
 
-        public CastGateValveCoverEditVM(int id, BaseTable entity)
+        public static CastGateValveCoverEditVM LoadVM(int id, BaseTable entity, DataContext context)
         {
+            CastGateValveCoverEditVM vm = new CastGateValveCoverEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public Commands.IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => repo.GetByIdIncludeAsync(id));
+                CoverSealingRings = await Task.Run(() => coverSealingRingRepo.GetAllAsync());
+                RunningSleeves = await Task.Run(() => runningSleeveRepo.GetAllAsync());
+                Spindles = await Task.Run(() => spindleRepo.GetAllAsync());
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Drawings = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Drawing));
+                Materials = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Material));
+                Points = await Task.Run(() => repo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+                InputControlJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId);
+                InputNDTControlJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль (НК)").OrderBy(x => x.PointId);
+                MechanicalJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId);
+                AssemblyWeldingJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId);
+                AssemblyJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId);
+                NDTJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                if (SelectedItem.SpindleId != null)
+                {
+                    if (await Task.Run(() => spindleRepo.IsAssembliedAsync(SelectedItem)))
+                    {
+                        SelectedItem.Spindle = null;
+                    }
+                }
+                if (SelectedItem.CoverSealingRingId != null)
+                {
+                    if (await Task.Run(() => coverSealingRingRepo.IsAssembliedInCoverAsync(SelectedItem)))
+                    {
+                        SelectedItem.CoverSealingRing = null;
+                    }
+                }
+                if (SelectedItem.RunningSleeveId != null)
+                {
+                    if (await Task.Run(() => runningSleeveRepo.IsAssembliedAsync(SelectedItem)))
+                    {
+                        SelectedItem.RunningSleeve = null;
+                    }
+                }
+                await Task.Run(() => repo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.CastGateValveCoverJournals.Add(new CastGateValveCoverJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                InputControlJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId);
+                InputNDTControlJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль (НК)").OrderBy(x => x.PointId);
+                MechanicalJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId);
+                AssemblyWeldingJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId);
+                AssemblyJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId);
+                NDTJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId);
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public Commands.IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.CastGateValveCoverJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                        InputControlJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId);
+                        InputNDTControlJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Входной контроль (НК)").OrderBy(x => x.PointId);
+                        MechanicalJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId);
+                        AssemblyWeldingJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId);
+                        AssemblyJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId);
+                        NDTJournal = SelectedItem.CastGateValveCoverJournals.Where(i => i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId);
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public ICommand EditSpindleCommand { get; private set; }
+        private void EditSpindle()
+        {
+            if (SelectedItem.Spindle != null)
+            {
+                _ = new SpindleEditView
+                {
+                    DataContext = SpindleEditVM.LoadVM(SelectedItem.Spindle.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Для просмотра привяжите шпиндель", "Ошибка");
+        }
+
+        public ICommand EditCoverSealingRingCommand { get; private set; }
+        private void EditCoverSealingRing()
+        {
+            if (SelectedItem.CoverSealingRing != null)
+            {
+                _ = new CoverSealingRingEditView
+                {
+                    DataContext = CoverSealingRingEditVM.LoadVM(SelectedItem.CoverSealingRing.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
+        }
+
+        public ICommand EditRunningSleeveCommand { get; private set; }
+        private void EditRunningSleeve()
+        {
+            if (SelectedItem.RunningSleeve != null)
+            {
+                _ = new RunningSleeveEditView
+                {
+                    DataContext = RunningSleeveEditVM.LoadVM(SelectedItem.RunningSleeve.Id, SelectedItem, db)
+                };
+            }
+            else MessageBox.Show("Для просмотра привяжите материал", "Ошибка");
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(SelectedItem) || repo.HasChanges(SelectedItem.CastGateValveCoverJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    base.CloseWindow(obj);
+                }
+            }
+            else
+            {
+                base.CloseWindow(obj);
+            }
+        }
+
+        public CastGateValveCoverEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.CastGateValveCovers.Include(i => i.CastGateValve).SingleOrDefault(i => i.Id == id);
-            InputControlJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль").OrderBy(x => x.PointId).ToList();
-            InputNDTControlJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Входной контроль (НК)").OrderBy(x => x.PointId).ToList();
-            MechanicalJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId).ToList();
-            AssemblyWeldingJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId).ToList();
-            AssemblyJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Сборка").OrderBy(x => x.PointId).ToList();
-            NDTJournal = db.CastGateValveCoverJournals.Where(i => i.DetailId == SelectedItem.Id && i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Materials = db.CastGateValveCovers.Select(d => d.Material).Distinct().OrderBy(x => x).ToList();
-            Drawings = db.CastGateValveCovers.Select(s => s.Drawing).Distinct().OrderBy(x => x).ToList();
-            CoverSealingRings = db.CoverSealingRings.ToList();
-            Spindles = db.Spindles.ToList();
-            RunningSleeves = db.RunningSleeves.ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.CastGateValveCoverTCPs.ToList();
+            repo = new CastGateValveCoverRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            coverSealingRingRepo = new CoverSealingRingRepository(db);
+            runningSleeveRepo = new RunningSleeveRepository(db);
+            spindleRepo = new SpindleRepository(db);
+            LoadItemCommand = new Supervision.Commands.AsyncCommand<int>(Load);
+            SaveItemCommand = new Supervision.Commands.AsyncCommand(SaveItem);
+            CloseWindowCommand = new Supervision.Commands.Command(o => CloseWindow(o));
+            AddOperationCommand = new Supervision.Commands.AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new Supervision.Commands.AsyncCommand(RemoveOperation);
+            EditSpindleCommand = new Supervision.Commands.Command(o => EditSpindle());
+            EditCoverSealingRingCommand = new Supervision.Commands.Command(o => EditCoverSealingRing());
+            EditRunningSleeveCommand = new Supervision.Commands.Command(o => EditRunningSleeve());
         }
     }
 }

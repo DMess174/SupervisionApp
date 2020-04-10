@@ -1,10 +1,10 @@
 ﻿using DataLayer.Journals.Detailing;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.TechnicalControlPlans.Detailing
 {
     public class RunningSleeveTCP : BaseTCP
     {
-        public IEnumerable<RunningSleeveJournal> RunningSleeveJournals { get; set; }
+        public ObservableCollection<RunningSleeveJournal> RunningSleeveJournals { get; set; }
     }
 }

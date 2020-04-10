@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
 namespace DataLayer.TechnicalControlPlans.Detailing.WeldGateValveDetails
 {
     public class CoverFlangeTCP : BaseTCP
     {
-        public IEnumerable<CoverFlangeJournal> CoverFlangeJournals { get; set; }
+        public ObservableCollection<CoverFlangeJournal> CoverFlangeJournals { get; set; }
     }
 }

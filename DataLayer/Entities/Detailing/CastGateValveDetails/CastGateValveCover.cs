@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Journals.Detailing.CastGateValveDetails;
 
@@ -10,6 +11,11 @@ namespace DataLayer.Entities.Detailing.CastGateValveDetails
         {
             Name = "Крышка ЗШ";
         }
+        public CastGateValveCover(CastGateValveCover cover) : base(cover)
+        {
+            Material = cover.Material;
+            Melt = cover.Melt;
+        }
 
         public string Material { get; set; }
 
@@ -20,6 +26,6 @@ namespace DataLayer.Entities.Detailing.CastGateValveDetails
 
         public CastGateValve CastGateValve { get; set; }
 
-        public IEnumerable<CastGateValveCoverJournal> CastGateValveCoverJournals { get; set; }
+        public ObservableCollection<CastGateValveCoverJournal> CastGateValveCoverJournals { get; set; }
     }
 }

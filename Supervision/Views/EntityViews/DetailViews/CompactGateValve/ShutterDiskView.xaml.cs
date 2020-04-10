@@ -10,6 +10,7 @@ namespace Supervision.Views.EntityViews.DetailViews.CompactGateValve
         public ShutterDiskView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

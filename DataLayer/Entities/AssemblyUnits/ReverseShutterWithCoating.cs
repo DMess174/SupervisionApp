@@ -1,5 +1,4 @@
-﻿using DataLayer.Entities.Detailing;
-using DataLayer.Entities.Materials.AnticorrosiveCoating;
+﻿using DataLayer.Entities.Materials.AnticorrosiveCoating;
 
 namespace DataLayer.Entities.AssemblyUnits
 {

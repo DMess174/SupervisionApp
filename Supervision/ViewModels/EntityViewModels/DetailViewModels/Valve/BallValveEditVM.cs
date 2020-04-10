@@ -1,34 +1,30 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Input;
-using DataLayer;
+﻿using DataLayer;
 using DataLayer.Entities.Detailing;
 using DataLayer.Journals.Detailing;
 using DataLayer.TechnicalControlPlans.Detailing;
-using DevExpress.Mvvm;
-using Microsoft.EntityFrameworkCore;
-using Supervision.Views.EntityViews.DetailViews.Valve;
+using System.Collections.Generic;
+using System.Windows;
+using BusinessLayer.Repository.Implementations.Entities.Detailing;
+using BusinessLayer.Repository.Implementations.Entities;
+using System.Threading.Tasks;
 
-namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
+namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
 {
-    public class BallValveEditVM: BasePropertyChanged
+    public class BallValveEditVM : ViewModelBase
     {
-
         private readonly DataContext db;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> designations;
-        private IEnumerable<string> materials;
         private IEnumerable<BallValveTCP> points;
-        private IEnumerable<Inspector> inspectors;
-        private IEnumerable<BallValveJournal> journal;
+        private IList<Inspector> inspectors;
         private readonly BaseTable parentEntity;
+        private BallValveJournal operation;
         private BallValve selectedItem;
         private BallValveTCP selectedTCPPoint;
-
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
+        private readonly BallValveRepository repo;
+        private readonly InspectorRepository inspectorRepo;
+        private readonly JournalNumberRepository journalRepo;
+        private IEnumerable<string> materials;
 
         public BallValve SelectedItem
         {
@@ -39,16 +35,16 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
             }
         }
-
-        public IEnumerable<BallValveJournal> Journal
+        public BallValveJournal Operation
         {
-            get => journal;
+            get => operation;
             set
             {
-                journal = value;
+                operation = value;
                 RaisePropertyChanged();
             }
         }
+
         public IEnumerable<BallValveTCP> Points
         {
             get => points;
@@ -58,7 +54,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<Inspector> Inspectors
+        public IList<Inspector> Inspectors
         {
             get => inspectors;
             set
@@ -68,86 +64,21 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.BallValves.Update(SelectedItem);
-                            db.SaveChanges();
-                            db.BallValveJournals.UpdateRange(Journal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is BallValve)
-                        {
-                            var wn = new BallValveView();
-                            var vm = new BallValveVM();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new BallValveJournal()
-                            {
-                                DetailDrawing = SelectedItem.Drawing,
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.BallValveJournals.Add(item);
-                            db.SaveChanges();
-                            Journal = db.BallValveJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
-            }
-        }
-     
-        public IEnumerable<string> Designations
-        {
-            get => designations;
-            set
-            {
-                designations = value;
-                RaisePropertyChanged();
-            }
-        }
         public IEnumerable<string> Materials
         {
             get => materials;
             set
             {
                 materials = value;
+                RaisePropertyChanged();
+            }
+        }
+        public IEnumerable<string> Designations
+        {
+            get => designations;
+            set
+            {
+                designations = value;
                 RaisePropertyChanged();
             }
         }
@@ -171,17 +102,118 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve
             }
         }
 
-        public BallValveEditVM(int id, BaseTable entity)
+
+        public static BallValveEditVM LoadVM(int id, BaseTable entity, DataContext context)
         {
+            BallValveEditVM vm = new BallValveEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public Commands.IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => repo.GetByIdIncludeAsync(id));
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Designations = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Designation));
+                Materials = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Material));
+                Points = await Task.Run(() => repo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public Supervision.Commands.IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.BallValveJournals.Add(new BallValveJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public Commands.IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.BallValveJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(SelectedItem) || repo.HasChanges(SelectedItem.BallValveJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        public BallValveEditVM(BaseTable entity, DataContext context)
+        {
+            db = context;
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.BallValves.Include(i => i.BaseValve).SingleOrDefault(i => i.Id == id);
-            Journal = db.BallValveJournals.Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Designations = db.BallValves.Select(s => s.Designation).Distinct().OrderBy(x => x).ToList();
-            Materials = db.BallValves.Select(s => s.Material).Distinct().OrderBy(x => x).ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<BallValveTCP>().ToList();
+            repo = new BallValveRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            LoadItemCommand = new Supervision.Commands.AsyncCommand<int>(Load);
+            SaveItemCommand = new Supervision.Commands.AsyncCommand(SaveItem);
+            CloseWindowCommand = new Supervision.Commands.Command(o => CloseWindow(o));
+            AddOperationCommand = new Supervision.Commands.AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new Supervision.Commands.AsyncCommand(RemoveOperation);
         }
     }
 }

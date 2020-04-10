@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DataLayer.Entities.Detailing.WeldGateValveDetails;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
@@ -10,7 +11,10 @@ namespace DataLayer.Entities.Detailing.SheetGateValveDetails
         {
             Name = "Корпус ЗШЛ";
         }
+        public SheetGateValveCase(SheetGateValveCase sheetCase) : base(sheetCase)
+        {
+        }
 
-        public IEnumerable<SheetGateValveCaseJournal> SheetGateValveCaseJournals { get; set; }
+        public ObservableCollection<SheetGateValveCaseJournal> SheetGateValveCaseJournals { get; set; }
     }
 }

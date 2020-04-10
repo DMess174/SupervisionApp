@@ -1,6 +1,6 @@
 ﻿using DataLayer.Journals.Materials;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Entities.Materials
@@ -25,6 +25,10 @@ namespace DataLayer.Entities.Materials
         [NotMapped] 
         public string FullName => string.Format($"{Name} № {Number}/{WeldingMethod}/ до {ExpiryDate}");
 
-        public IEnumerable<ControlWeldJournal> ControlWeldJournals { get; set; }
+        public ObservableCollection<ControlWeldJournal> ControlWeldJournals { get; set; }
+
+        public ControlWeld()
+        {
+        }
     }
 }

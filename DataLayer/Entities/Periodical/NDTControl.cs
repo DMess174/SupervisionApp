@@ -1,12 +1,10 @@
 ﻿using DataLayer.Journals.Periodical;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Periodical
 {
     public class NDTControl : PeriodicalControl
     {
-        public IEnumerable<NDTControlJournal> NDTControlJournals { get; set; }
+        public ObservableCollection<NDTControlJournal> NDTControlJournals { get; set; }
     }
 }

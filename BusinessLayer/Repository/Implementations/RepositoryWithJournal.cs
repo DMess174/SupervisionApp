@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BusinessLayer.Repository.Interfaces;
 using DataLayer;
 using DataLayer.Journals;
+using DataLayer.Journals.AssemblyUnits;
 using DataLayer.TechnicalControlPlans;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -44,6 +45,18 @@ namespace BusinessLayer.Repository.Implementations
             return SaveChanges();
         }
 
+        public virtual async Task<int> AddJournalRecordAsync(IEnumerable<TEntityJournal> records)
+        {
+            await journal.AddRangeAsync(records);
+            return SaveChanges();
+        }
+
+        public virtual async Task<int> AddCoatJournalRecordAsync(IEnumerable<CoatingJournal> records)
+        {
+            await db.CoatingJournals.AddRangeAsync(records);
+            return SaveChanges();
+        }
+
         public virtual int AddCopyJournalRecord(TEntity entity, TEntityJournal record)
         {
             TEntityJournal newEntity = new TEntityJournal();
@@ -76,6 +89,12 @@ namespace BusinessLayer.Repository.Implementations
             return SaveChanges();
         }
 
+        public int UpdateCoatJournalRecord(IEnumerable<CoatingJournal> records)
+        {
+            db.CoatingJournals.UpdateRange(records);
+            return SaveChanges();
+        }
+
         public int DeleteJournalRecord(TEntityJournal record)
         {
             db.Entry(record).State = EntityState.Deleted;
@@ -104,6 +123,38 @@ namespace BusinessLayer.Repository.Implementations
         {
             await journal.Where(where).LoadAsync();
             return journal.Local.ToObservableCollection();
+        }
+
+        public IEnumerable<TEntityTCP> GetTCPs()
+        {
+            return tcp.ToList();
+        }
+
+        public async Task<IEnumerable<TEntityTCP>> GetTCPsAsync()
+        {
+            return await tcp.ToListAsync();
+        }
+
+        public bool HasChanges(IEnumerable<TEntityJournal> saddleJournals)
+        {
+            foreach (var i in saddleJournals)
+            {
+                var result = db.Entry(i).State == EntityState.Modified;
+                if (result)
+                    return result;
+            }
+            return false;
+        }
+
+        public bool HasChanges(IEnumerable<CoatingJournal> coatingJournals)
+        {
+            foreach (var i in coatingJournals)
+            {
+                var result = db.Entry(i).State == EntityState.Modified;
+                if (result)
+                    return result;
+            }
+            return false;
         }
     }
 }

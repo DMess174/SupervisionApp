@@ -10,6 +10,7 @@ namespace Supervision.Views.EntityViews.MaterialViews
         public ForgingMaterialEditView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

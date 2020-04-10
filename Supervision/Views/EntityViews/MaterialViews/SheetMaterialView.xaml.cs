@@ -11,6 +11,7 @@ namespace Supervision.Views.EntityViews.MaterialViews
         public SheetMaterialView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

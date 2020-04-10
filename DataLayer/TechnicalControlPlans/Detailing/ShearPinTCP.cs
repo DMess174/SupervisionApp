@@ -1,10 +1,10 @@
 ﻿using DataLayer.Journals.Detailing;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.TechnicalControlPlans.Detailing
 {
     public class ShearPinTCP : BaseTCP
     {
-        public IEnumerable<ShearPinJournal> ShearPinJournals { get; set; }
+        public ObservableCollection<ShearPinJournal> ShearPinJournals { get; set; }
     }
 }

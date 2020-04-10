@@ -7,5 +7,14 @@
 
         public int? RunningSleeveId { get; set; }
         public RunningSleeve RunningSleeve { get; set; }
+
+        public BaseValveCover()
+        {
+        }
+
+        public BaseValveCover(BaseValveCover cover) : base(cover)
+        {
+
+        }
     }
 }

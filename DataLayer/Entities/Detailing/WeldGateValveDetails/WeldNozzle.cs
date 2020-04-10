@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using DataLayer.Entities.Materials;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
@@ -11,11 +12,16 @@ namespace DataLayer.Entities.Detailing.WeldGateValveDetails
             Name = "Патрубок";
         }
 
+        public WeldNozzle(WeldNozzle nozzle) : base(nozzle)
+        {
+            MetalMaterialId = nozzle.MetalMaterialId;
+        }
+
         public int? MetalMaterialId { get; set; }
         public MetalMaterial MetalMaterial { get; set; }
 
         public FrontWall FrontWall { get; set; }
 
-        public IEnumerable<WeldNozzleJournal> WeldNozzleJournals { get; set; }
+        public ObservableCollection<WeldNozzleJournal> WeldNozzleJournals { get; set; }
     }
 }

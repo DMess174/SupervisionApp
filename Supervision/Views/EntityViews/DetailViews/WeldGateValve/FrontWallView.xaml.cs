@@ -10,6 +10,7 @@ namespace Supervision.Views.EntityViews.DetailViews.WeldGateValve
         public FrontWallView()
         {
             InitializeComponent();
+            Show();
         }
     }
 }

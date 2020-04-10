@@ -4,7 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-      mc:Ignorable="d"
+        xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+        mc:Ignorable="d"
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="700" d:DesignWidth="1200"
         WindowStartupLocation="CenterScreen"
@@ -236,8 +237,7 @@
                               SelectedItem="{Binding SelectedFrontWallFromList}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding EditFrontWall}"
-                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                <i:InvokeCommandAction Command="{Binding EditFrontWallCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <ListBox.ItemTemplate>
@@ -260,8 +260,7 @@
                             Height="30"
                             Margin="5"
                             Content="Открыть"
-                            Command="{Binding EditFrontWall}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditFrontWallCommand}"/>
                     
                     <Button Style="{StaticResource StandardButton}"
                             Grid.Row="2"
@@ -269,8 +268,7 @@
                             Margin="5"
                             Height="30"
                             Content="Удалить"
-                            Command="{Binding DeleteFrontWallFromCase}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding DeleteFrontWallFromCaseCommand}"/>
                     
                     <Button Style="{StaticResource StandardButton}" 
                             Grid.Row="0"
@@ -278,8 +276,7 @@
                             Margin="5"
                             Height="30"
                             Content="Добавить"
-                            Command="{Binding AddFrontWallToCase}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding AddFrontWallToCaseCommand}"/>
 
                     <Label Style="{StaticResource StandardLabel}"
                            FontSize="{StaticResource Hi}"
@@ -293,13 +290,13 @@
                               Margin="5"
                               Grid.ColumnSpan="2"
                               Height="80"
+                              VerticalAlignment="Top"
                               Grid.Row="5"
                               Grid.RowSpan="2"
                               SelectedItem="{Binding SelectedWeldNozzleFromList}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding EditWeldNozzle}"
-                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                <i:InvokeCommandAction Command="{Binding EditWeldNozzleCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <ListBox.ItemTemplate>
@@ -316,14 +313,15 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <Button Style="{StaticResource StandardButton}"
-                            Grid.Row="5"
-                            Grid.Column="2"
-                            Height="30"
-                            Margin="5"
-                            Content="Открыть"
-                            Command="{Binding EditWeldNozzle}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                    <StackPanel Grid.Row="5" Grid.Column="2" Orientation="Vertical" VerticalAlignment="Top">
+                        <Button Style="{StaticResource StandardButton}"
+                                Grid.Row="5"
+                                Grid.Column="2"
+                                Height="30"
+                                Margin="5"
+                                Content="Открыть"
+                                Command="{Binding EditWeldNozzleCommand}"/>
+                    </StackPanel>
 
                     <Separator Style="{StaticResource VerticalSeparator}"
                                Grid.Column="3"
@@ -355,8 +353,7 @@
                               SelectedItem="{Binding SelectedSideWallFromList}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding EditSideWall}"
-                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                <i:InvokeCommandAction Command="{Binding EditSideWallCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <ListBox.ItemTemplate>
@@ -379,8 +376,7 @@
                             Height="30"
                             Margin="5"
                             Content="Открыть"
-                            Command="{Binding EditSideWall}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditSideWallCommand}"/>
 
                     <Button Style="{StaticResource StandardButton}"
                             Grid.Row="2"
@@ -388,8 +384,7 @@
                             Margin="5"
                             Height="30"
                             Content="Удалить"
-                            Command="{Binding DeleteSideWallFromCase}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding DeleteSideWallFromCaseCommand}"/>
 
                     <Button Style="{StaticResource StandardButton}" 
                             Grid.Row="0"
@@ -397,8 +392,7 @@
                             Margin="5"
                             Height="30"
                             Content="Добавить"
-                            Command="{Binding AddSideWallToCase}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding AddSideWallToCaseCommand}"/>
 
                     <Label Style="{StaticResource StandardLabel}"
                            FontSize="{StaticResource Hi}"
@@ -422,14 +416,16 @@
                               Margin="5"
                               Grid.Column="4"
                               Grid.ColumnSpan="2"
-                              Height="80"
+                              VerticalAlignment="Top"
+                              MinHeight="80"
+                              MaxHeight="180"
+                              Height="auto"
                               Grid.Row="5"
                               Grid.RowSpan="2"
                               SelectedItem="{Binding SelectedEdgeFromList}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
-                                <i:InvokeCommandAction Command="{Binding EditEdge}"
-                                                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                <i:InvokeCommandAction Command="{Binding EditEdgeCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <ListBox.ItemTemplate>
@@ -446,14 +442,14 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
+                    <StackPanel Grid.Row="5" Grid.Column="6" Orientation="Vertical">
                     <Button Style="{StaticResource StandardButton}"
                             Grid.Row="5"
                             Grid.Column="6"
                             Height="30"
                             Margin="5"
                             Content="Открыть"
-                            Command="{Binding EditEdge}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditEdgeCommand}"/>
 
                     <Button Style="{StaticResource StandardButton}"
                             Grid.Row="6"
@@ -461,8 +457,8 @@
                             Margin="5"
                             Height="30"
                             Content="Удалить"
-                            Command="{Binding DeleteEdgeFromCase}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding DeleteEdgeFromCaseCommand}"/>
+                    </StackPanel>
 
                     <Button Style="{StaticResource StandardButton}" 
                             Grid.Row="4"
@@ -470,8 +466,7 @@
                             Margin="5"
                             Height="30"
                             Content="Добавить"
-                            Command="{Binding AddEdgeToCase}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding AddEdgeToCaseCommand}"/>
 
                     <Separator Style="{StaticResource HorizontalSeparator}"
                                Grid.Row="7"
@@ -506,8 +501,7 @@
                             Height="30"
                             Margin="5 0 5 0"
                             Content="Открыть"
-                            Command="{Binding EditCaseBottom}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditCaseBottomCommand}"/>
                     
                     <Label Style="{StaticResource StandardLabel}" 
                            FontSize="{StaticResource Hi}"
@@ -531,8 +525,7 @@
                             Height="30"
                             Margin="5 0 5 0"
                             Content="Открыть"
-                            Command="{Binding EditCaseFlange}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                            Command="{Binding EditCaseFlangeCommand}"/>
 
                     <Separator Style="{StaticResource HorizontalSeparator}"
                                Grid.Row="3"
@@ -552,6 +545,7 @@
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding AssemblyJournal}"
+                                      SelectedItem="{Binding Operation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -746,7 +740,12 @@
                                 <Button Style="{StaticResource StandardButton}" 
                             Content="Добавить операцию" 
                             Margin="10" 
-                            Command="{Binding AddOperation}" />
+                            Command="{Binding AddOperationCommand}" />
+
+                                <Button Style="{StaticResource StandardButton}" 
+                            Content="Удалить операцию" 
+                            Margin="10" 
+                            Command="{Binding RemoveOperationCommand}" />
                             </StackPanel>
                         </Grid>
                     </TabItem>
@@ -761,6 +760,7 @@
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding MechanicalJournal}"
+                                      SelectedItem="{Binding Operation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -955,7 +955,12 @@
                                 <Button Style="{StaticResource StandardButton}" 
                             Content="Добавить операцию" 
                             Margin="10" 
-                            Command="{Binding AddOperation}" />
+                            Command="{Binding AddOperationCommand}" />
+
+                                <Button Style="{StaticResource StandardButton}" 
+                            Content="Удалить операцию" 
+                            Margin="10" 
+                            Command="{Binding RemoveOperationCommand}" />
                             </StackPanel>
 
 
@@ -972,6 +977,7 @@
                               Grid.Column="0" 
                               MinRowHeight="50"
                               ItemsSource="{Binding NDTJournal}"
+                                      SelectedItem="{Binding Operation}"
                               IsReadOnly="False"
                               HorizontalScrollBarVisibility="Visible">
                                 <DataGrid.Columns>
@@ -1166,19 +1172,22 @@
                                 <Button Style="{StaticResource StandardButton}" 
                             Content="Добавить операцию" 
                             Margin="10" 
-                            Command="{Binding AddOperation}" />
+                            Command="{Binding AddOperationCommand}" />
+
+                                <Button Style="{StaticResource StandardButton}" 
+                            Content="Удалить операцию" 
+                            Margin="10" 
+                            Command="{Binding RemoveOperationCommand}" />
                             </StackPanel>
-
-
                         </Grid>
                     </TabItem>
                 </TabControl>
-                
             </TabItem>
-
         </TabControl>
 
-
+        <wpfx:BusyIndicator IsBusy="{Binding IsBusy}"
+                            Grid.Row="4"
+                            BusyContent="Обработка запроса, ждите..."/>
 
         <Separator Style="{StaticResource HorizontalSeparator}" 
                    Grid.Row="5"/>
@@ -1218,14 +1227,13 @@
                             Width="70"
                             Content="Сохранить" 
                             Margin="10 2 10 2" 
-                            Command="{Binding SaveItem}" 
-                            CommandParameter="{Binding SelectedItem}"/>
+                            Command="{Binding SaveItemCommand}" />
 
                 <Button Style="{StaticResource StandardButton}" 
                             Width="70"
                             Content="Закрыть" 
                             Margin="10 2 10 2" 
-                            Command="{Binding CloseWindow}"
+                            Command="{Binding CloseWindowCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
             </StackPanel>
         </Grid>

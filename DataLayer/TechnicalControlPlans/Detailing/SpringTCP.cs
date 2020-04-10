@@ -1,10 +1,10 @@
 ﻿using DataLayer.Journals.Detailing;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.TechnicalControlPlans.Detailing
 {
     public class SpringTCP : BaseTCP
     {
-        public IEnumerable<SpringJournal> SpringJournals { get; set; }
+        public ObservableCollection<SpringJournal> SpringJournals { get; set; }
     }
 }

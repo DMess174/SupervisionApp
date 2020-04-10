@@ -1,38 +1,44 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
+using BusinessLayer.Repository.Implementations.Entities;
+using BusinessLayer.Repository.Implementations.Entities.Material;
 using DataLayer;
 using DataLayer.Entities.Materials;
 using DataLayer.Journals.Materials;
 using DataLayer.TechnicalControlPlans.Materials;
-using DevExpress.Mvvm;
-using Supervision.Views.EntityViews.MaterialViews;
+using Supervision.Commands;
 
 namespace Supervision.ViewModels.EntityViewModels.Materials
 {
-    public class ControlWeldEditVM<TEntity, TEntityTCP, TEntityJournal> : BasePropertyChanged
-        where TEntity : ControlWeld, new()
-        where TEntityTCP : ControlWeldTCP
-        where TEntityJournal : ControlWeldJournal, new()
+    public class ControlWeldEditVM : ViewModelBase
     {
         private readonly DataContext db;
+        private readonly ControlWeldRepository repo;
         private IEnumerable<string> journalNumbers;
         private IEnumerable<string> materials;
         private IEnumerable<string> weldingMethods;
         private IEnumerable<string> welders;
         private IEnumerable<string> stamps;
-        private IEnumerable<TEntityTCP> points;
+        private IEnumerable<ControlWeldTCP> points;
         private IEnumerable<Inspector> inspectors;
-        private IEnumerable<TEntityJournal> journal;
+        private IEnumerable<ControlWeldJournal> journal;
         private readonly BaseTable parentEntity;
-        private TEntity selectedItem;
-        private TEntityTCP selectedTCPPoint;
+        private ControlWeld selectedItem;
+        private ControlWeldTCP selectedTCPPoint;
+        private ControlWeldJournal operation;
 
-        private ICommand saveItem;
-        private ICommand closeWindow;
-        private ICommand addOperation;
-        public TEntity SelectedItem
+        public ControlWeldJournal Operation
+        {
+            get => operation;
+            set
+            {
+                operation = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ControlWeld SelectedItem
         {
             get => selectedItem;
             set
@@ -41,7 +47,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<TEntityJournal> Journal
+        public IEnumerable<ControlWeldJournal> Journal
         {
             get => journal;
             set
@@ -50,7 +56,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<TEntityTCP> Points
+        public IEnumerable<ControlWeldTCP> Points
         {
             get => points;
             set
@@ -66,70 +72,6 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             {
                 inspectors = value;
                 RaisePropertyChanged();
-            }
-        }
-
-        public ICommand SaveItem
-        {
-            get
-            {
-                return saveItem ?? (
-                    saveItem = new DelegateCommand(() =>
-                    {
-                        if (SelectedItem != null)
-                        {
-                            db.Set<TEntity>().Update(SelectedItem);
-                            db.SaveChanges();
-                            db.Set<TEntityJournal>().UpdateRange(Journal);
-                            db.SaveChanges();
-                        }
-                        else MessageBox.Show("Объект не найден!", "Ошибка");
-                    }));
-            }
-        }
-        public ICommand CloseWindow
-        {
-            get
-            {
-                return closeWindow ?? (
-                    closeWindow = new DelegateCommand<Window>((w) =>
-                    {
-                        if (parentEntity is TEntity)
-                        {
-                            var wn = new ControlWeldView();
-                            var vm = new ControlWeldVM<TEntity, TEntityTCP, TEntityJournal>();
-                            wn.DataContext = vm;
-                            w?.Close();
-                            wn.ShowDialog();
-                        }
-                        else w?.Close();
-                    }));
-            }
-        }
-        public ICommand AddOperation
-        {
-            get
-            {
-                return addOperation ?? (
-                    addOperation = new DelegateCommand(() =>
-                    {
-                        if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
-                        else
-                        {
-                            var item = new TEntityJournal()
-                            {
-                                DetailNumber = SelectedItem.Number,
-                                DetailName = SelectedItem.Name,
-                                DetailId = SelectedItem.Id,
-                                Point = SelectedTCPPoint.Point,
-                                Description = SelectedTCPPoint.Description,
-                                PointId = SelectedTCPPoint.Id,
-                            };
-                            db.Set<TEntityJournal>().Add(item);
-                            db.SaveChanges();
-                            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-                        }
-                    }));
             }
         }
  
@@ -179,7 +121,7 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public TEntityTCP SelectedTCPPoint
+        public ControlWeldTCP SelectedTCPPoint
         {
             get => selectedTCPPoint;
             set
@@ -189,19 +131,123 @@ namespace Supervision.ViewModels.EntityViewModels.Materials
             }
         }
 
-        public ControlWeldEditVM(int id, BaseTable entity)
+        private readonly InspectorRepository inspectorRepo;
+        private readonly JournalNumberRepository journalRepo;
+
+        public IAsyncCommand<int> LoadItemCommand { get; private set; }
+        public async Task Load(int id)
+        {
+            try
+            {
+                IsBusy = true;
+                SelectedItem = await Task.Run(() => repo.GetByIdIncludeAsync(id));
+                Materials = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.FirstMaterial));
+                WeldingMethods = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.WeldingMethod));
+                Welders = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Welder));
+                Stamps = await Task.Run(() => repo.GetPropertyValuesDistinctAsync(i => i.Stamp));
+                Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
+                Points = await Task.Run(() => repo.GetTCPsAsync());
+                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand SaveItemCommand { get; private set; }
+        private async Task SaveItem()
+        {
+            try
+            {
+                IsBusy = true;
+                await Task.Run(() => repo.Update(SelectedItem));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public IAsyncCommand AddOperationCommand { get; private set; }
+        public async Task AddJournalOperation()
+        {
+            if (SelectedTCPPoint == null) MessageBox.Show("Выберите пункт ПТК!", "Ошибка");
+            else
+            {
+                SelectedItem.ControlWeldJournals.Add(new ControlWeldJournal(SelectedItem, SelectedTCPPoint));
+                await SaveItemCommand.ExecuteAsync();
+                SelectedTCPPoint = null;
+            }
+        }
+
+        public IAsyncCommand RemoveOperationCommand { get; private set; }
+        private async Task RemoveOperation()
+        {
+            try
+            {
+                IsBusy = true;
+                if (Operation != null)
+                {
+                    MessageBoxResult result = MessageBox.Show("Подтвердите удаление", "Удаление", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        SelectedItem.ControlWeldJournals.Remove(Operation);
+                        await SaveItemCommand.ExecuteAsync();
+                    }
+                }
+                else MessageBox.Show("Выберите операцию!", "Ошибка");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
+        protected override void CloseWindow(object obj)
+        {
+            if (repo.HasChanges(SelectedItem) || repo.HasChanges(SelectedItem.ControlWeldJournals))
+            {
+                MessageBoxResult result = MessageBox.Show("Закрыть без сохранения изменений?", "Выход", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Window w = obj as Window;
+                    w?.Close();
+                }
+            }
+            else
+            {
+                Window w = obj as Window;
+                w?.Close();
+            }
+        }
+
+        public static ControlWeldEditVM LoadVM(int id, BaseTable entity, DataContext context)
+        {
+            ControlWeldEditVM vm = new ControlWeldEditVM(entity, context);
+            vm.LoadItemCommand.ExecuteAsync(id);
+            return vm;
+        }
+
+        private bool CanExecute()
+        {
+            return true;
+        }
+
+        public ControlWeldEditVM(BaseTable entity, DataContext context)
         {
             parentEntity = entity;
-            db = new DataContext();
-            SelectedItem = db.Set<TEntity>().SingleOrDefault(i => i.Id == id);
-            Journal = db.Set<TEntityJournal>().Where(i => i.DetailId == SelectedItem.Id).OrderBy(x => x.PointId).ToList();
-            JournalNumbers = db.JournalNumbers.Where(i => i.IsClosed == false).Select(i => i.Number).Distinct().ToList();
-            Materials = db.Set<TEntity>().Select(s => s.FirstMaterial).Distinct().OrderBy(x => x).ToList();
-            WeldingMethods = db.Set<TEntity>().Select(s => s.WeldingMethod).Distinct().OrderBy(x => x).ToList();
-            Welders = db.Set<TEntity>().Select(s => s.Welder).Distinct().OrderBy(x => x).ToList();
-            Stamps = db.Set<TEntity>().Select(s => s.Stamp).Distinct().OrderBy(x => x).ToList();
-            Inspectors = db.Inspectors.OrderBy(i => i.Name).ToList();
-            Points = db.Set<TEntityTCP>().ToList();
+            db = context;
+            repo = new ControlWeldRepository(db);
+            inspectorRepo = new InspectorRepository(db);
+            journalRepo = new JournalNumberRepository(db);
+            LoadItemCommand = new AsyncCommand<int>(Load);
+            SaveItemCommand = new AsyncCommand(SaveItem);
+            CloseWindowCommand = new Command(o => CloseWindow(o));
+            AddOperationCommand = new AsyncCommand(AddJournalOperation);
+            RemoveOperationCommand = new AsyncCommand(RemoveOperation);
         }
     }
 }

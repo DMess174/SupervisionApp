@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
 
 namespace DataLayer.TechnicalControlPlans.Detailing.ReverseShutterDetails
 {
     public class ShaftShutterTCP : BaseTCP
     {
-        public IEnumerable<ShaftShutterJournal> ShaftShutterJournals { get; set; }
+        public ObservableCollection<ShaftShutterJournal> ShaftShutterJournals { get; set; }
     }
 }

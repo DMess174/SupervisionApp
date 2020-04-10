@@ -1,10 +1,10 @@
 ﻿using DataLayer.Journals.Detailing;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.TechnicalControlPlans.Detailing
 {
     public class ScrewNutTCP : BaseTCP
     {
-        public IEnumerable<ScrewNutJournal> ScrewNutJournals { get; set; }
+        public ObservableCollection<ScrewNutJournal> ScrewNutJournals { get; set; }
     }
 }

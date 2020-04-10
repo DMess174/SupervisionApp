@@ -12,14 +12,9 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
 
 
         public ReverseShutterDetail() { }
-        public ReverseShutterDetail(ReverseShutterDetail detail)
+        public ReverseShutterDetail(ReverseShutterDetail detail) : base(detail)
         {
-            Certificate = detail.Certificate;
-            Number = detail.Number;
-            Drawing = detail.Drawing;
-            Status = detail.Status;
-            Comment = detail.Comment;
-            MetalMaterial = detail.MetalMaterial;
+            MetalMaterialId = detail.MetalMaterialId;
         }
     }
 }

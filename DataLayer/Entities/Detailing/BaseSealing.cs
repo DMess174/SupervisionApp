@@ -4,6 +4,14 @@ namespace DataLayer.Entities.Detailing
 {
     public class BaseSealing : BaseEntity
     {
+        public BaseSealing() { }
+        public BaseSealing(BaseSealing sealing) : base(sealing)
+        {
+            Material = sealing.Material;
+            Batch = sealing.Batch;
+            Series = sealing.Series;
+        }
+
         public string Material { get; set; }
 
         public string Batch { get; set; }
@@ -15,6 +23,6 @@ namespace DataLayer.Entities.Detailing
         public int? AmountRemaining { get; set; }
 
         [NotMapped]
-        public new string FullName => string.Format($"{Certificate} - {Batch} - {Status}/{Name} {Drawing}");
+        public new string FullName => string.Format($"{Certificate} - {Batch} - {Series}/{Status}/{Name} {Drawing}");
     }
 }
