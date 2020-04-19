@@ -96,6 +96,19 @@ namespace Supervision.ViewModels
                 });
             }
         }
+        public ICommand JournalReportOpen
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    _ = new JournalReportView
+                    {
+                        DataContext = JournalReportVM.LoadVM(new DataContext())
+                    };
+                });
+            }
+        }
         public ICommand CustomerOpen
         {
             get

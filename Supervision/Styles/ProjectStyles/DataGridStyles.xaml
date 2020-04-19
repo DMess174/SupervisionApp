@@ -64,7 +64,7 @@
                 <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="Height" Value="auto"/>
-                <Setter Property="Margin" Value="0 0 0 5"/>
+                <Setter Property="Padding" Value="5"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
                 <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
                 <Setter Property="Template">

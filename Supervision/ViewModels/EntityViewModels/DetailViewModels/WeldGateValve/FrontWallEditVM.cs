@@ -160,17 +160,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         {
             try
             {
-                if (!await Task.Run(() => weldNozzleRepo.IsNozzleAssembliedAsync(SelectedItem)))
+                IsBusy = true;
+                if (SelectedItem.WeldNozzleId != null)
                 {
-                    IsBusy = true;
-                    await Task.Run(() => repo.Update(SelectedItem));
+                    if (await Task.Run(() => weldNozzleRepo.IsNozzleAssembliedAsync(SelectedItem)))
+                    {
+                        SelectedItem.WeldNozzle = null;
+                    }
                 }
-                else
-                {
-                    IsBusy = true;
-                    SelectedItem.WeldNozzleId = null;
-                    await Task.Run(() => repo.Update(SelectedItem));
-                }
+                await Task.Run(() => repo.Update(SelectedItem));
             }
             finally
             {

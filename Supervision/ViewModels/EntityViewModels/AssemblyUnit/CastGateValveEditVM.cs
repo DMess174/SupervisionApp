@@ -1436,6 +1436,7 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             EditCoverCommand = new Supervision.Commands.Command(o => EditCover());
             EditGateCommand = new Supervision.Commands.Command(o => EditGate());
             EditPIDCommand = new Supervision.Commands.Command(o => EditPID());
+            EditSpindleCommand = new Supervision.Commands.Command(o => EditSpindle());
         }
     }
 }

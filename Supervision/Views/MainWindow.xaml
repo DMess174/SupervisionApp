@@ -37,6 +37,7 @@
             <MenuItem Header="Отчетность" >
                 <MenuItem Header="Отчет по продукции в работе" Command="{Binding DailyReportOpen}"/>
                 <MenuItem Header="Отчет ФОМ" Command="{Binding FOMReportOpen}"/>
+                <MenuItem Header="Рапорт" Command="{Binding JournalReportOpen}"/>
             </MenuItem>
 
             <MenuItem Header="Изделие" >

@@ -326,8 +326,8 @@ namespace DataLayer
             //optionsBuilder.UseSqlite(@"Filename = O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\БД\SupervisionData\SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
 #else
             //optionsBuilder.UseSqlite(@"Filename = T:\06-01-06 - БДУКП\СМТО ОП УТН\SupervisionData\SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
-            optionsBuilder.UseSqlite("Filename=SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
-            //optionsBuilder.UseSqlite(@"Filename = O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\БД\SupervisionTest (Челябинск)\SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
+            //optionsBuilder.UseSqlite("Filename=SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
+            optionsBuilder.UseSqlite(@"Filename = O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\БД\SupervisionTest (Челябинск)\SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
 
 #endif
             base.OnConfiguring(optionsBuilder);

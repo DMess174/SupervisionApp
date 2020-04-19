@@ -161,17 +161,15 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels
         {
             try
             {
-                if (!await Task.Run(() => ringRepo.IsAssembliedInSleeveAsync(SelectedItem)))
+                IsBusy = true;
+                if (SelectedItem.CoverSealingRing != null)
                 {
-                    IsBusy = true;
-                    await Task.Run(() => repo.Update(SelectedItem));
+                    if (await Task.Run(() => ringRepo.IsAssembliedInSleeveAsync(SelectedItem)))
+                    {
+                        SelectedItem.CoverSealingRing = null;
+                    }
                 }
-                else
-                {
-                    IsBusy = true;
-                    SelectedItem.CoverSealingRing = null;
-                    await Task.Run(() => repo.Update(SelectedItem));
-                }
+                await Task.Run(() => repo.Update(SelectedItem));
             }
             finally
             {

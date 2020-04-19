@@ -86,5 +86,6 @@ namespace DataLayer
         public ObservableCollection<CoatingPlasticityJournal> CoatingPlasticityJournals { get; set; }
         public ObservableCollection<CoatingPorosityJournal> CoatingPorosityJournals { get; set; }
         public ObservableCollection<CoatingProtectivePropertiesJournal> CoatingProtectivePropertiesJournals { get; set; }
+        public ObservableCollection<PIDJournal> PIDJournals { get; set; }
     }
 }
