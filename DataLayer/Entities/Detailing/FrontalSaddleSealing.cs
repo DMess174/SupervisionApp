@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using DataLayer.Files;
 using DataLayer.Journals.Detailing;
 
 namespace DataLayer.Entities.Detailing
@@ -17,5 +18,6 @@ namespace DataLayer.Entities.Detailing
         public ObservableCollection<SaddleWithSealing> SaddleWithSealings { get; set; }
 
         public ObservableCollection<FrontalSaddleSealingJournal> FrontalSaddleSealingJournals { get; set; }
+        public ObservableCollection<FrontalSaddleSealingWithFile> Files { get; set; }
     }
 }

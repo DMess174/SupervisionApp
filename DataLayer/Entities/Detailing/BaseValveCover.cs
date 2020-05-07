@@ -1,4 +1,7 @@
-﻿namespace DataLayer.Entities.Detailing
+﻿using DataLayer.Files;
+using System.Collections.ObjectModel;
+
+namespace DataLayer.Entities.Detailing
 {
     public class BaseValveCover : BaseEntity
     {
@@ -7,6 +10,8 @@
 
         public int? RunningSleeveId { get; set; }
         public RunningSleeve RunningSleeve { get; set; }
+
+        public ObservableCollection<BaseValveCoverWithFile> Files { get; set; }
 
         public BaseValveCover()
         {

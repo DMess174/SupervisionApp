@@ -1,4 +1,5 @@
-﻿using DataLayer.Journals.Materials;
+﻿using DataLayer.Files;
+using DataLayer.Journals.Materials;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,6 +27,7 @@ namespace DataLayer.Entities.Materials
         public string FullName => string.Format($"{Name} № {Number}/{WeldingMethod}/ до {ExpiryDate}");
 
         public ObservableCollection<ControlWeldJournal> ControlWeldJournals { get; set; }
+        public ObservableCollection<ControlWeldWithFile> Files { get; set; }
 
         public ControlWeld()
         {

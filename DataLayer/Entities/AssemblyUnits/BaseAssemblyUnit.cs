@@ -1,5 +1,5 @@
-﻿using DataLayer.Journals.AssemblyUnits;
-using System.Collections.Generic;
+﻿using DataLayer.Files;
+using DataLayer.Journals.AssemblyUnits;
 using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.AssemblyUnits
@@ -20,5 +20,6 @@ namespace DataLayer.Entities.AssemblyUnits
         public PID PID { get; set; }
 
         public ObservableCollection<CoatingJournal> CoatingJournals { get; set; }
+        public ObservableCollection<BaseAssemblyUnitWithFile> Files { get; set; }
     }
 }

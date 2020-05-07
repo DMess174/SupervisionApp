@@ -439,6 +439,7 @@
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            Text="{Binding JournalNumber}"
                                       SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                     </ComboBox>
                                 </DataTemplate>
@@ -469,7 +470,7 @@
                   IsReadOnly="True"
                   HorizontalContentAlignment="Stretch"
                   ItemsSource="{Binding SelectedItem.BaseAssemblyUnits}"
-                  SelectedItem="{Binding SelectedAssemblyUnit}">
+                  SelectedItem="{Binding Unit}">
                     <DataGrid.InputBindings>
                         <MouseBinding
                     MouseAction="LeftDoubleClick"
@@ -648,6 +649,13 @@
                    Grid.Row="6"/>
         
         <Grid Grid.Row="7">
+            <Button Style="{StaticResource StandardButton}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                            Content="Открыть файл" 
+                            Margin="10 2 10 2" 
+                            Command="{Binding OpenFileCommand}"/>
+            
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Right" 
                         VerticalAlignment="Center"

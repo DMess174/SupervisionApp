@@ -59,6 +59,8 @@ namespace BusinessLayer.Repository.Implementations.Entities.Detailing
                 .Include(i => i.CoatingJournals)
                     .ThenInclude(i => i.EntityTCP)
                     .ThenInclude(i => i.ProductType)
+                .Include(i => i.Files)
+                    .ThenInclude(i => i.ElectronicDocument)
                 .SingleOrDefaultAsync(i => i.Id == id);
             return result;
         }

@@ -784,21 +784,17 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             try
             {
                 IsBusy = true;
-                if (SelectedItem.BallValves?.Count() < 6 || SelectedItem.BallValves == null)
+                if (SelectedBallValve != null)
                 {
-                    if (SelectedBallValve != null)
+                    if (!await ballValveRepo.IsAssembliedAsync(SelectedBallValve))
                     {
-                        if (!await ballValveRepo.IsAssembliedAsync(SelectedBallValve))
-                        {
-                            SelectedBallValve.BaseValveId = SelectedItem.Id;
-                            ballValveRepo.Update(SelectedBallValve);
-                            SelectedBallValve = null;
-                            BallValves = ballValveRepo.UpdateList();
-                        }
+                        SelectedBallValve.BaseValveId = SelectedItem.Id;
+                        ballValveRepo.Update(SelectedBallValve);
+                        SelectedBallValve = null;
+                        BallValves = ballValveRepo.UpdateList();
                     }
-                    else MessageBox.Show("Объект не выбран!", "Ошибка");
                 }
-                else MessageBox.Show("Невозможно привязать более 6 кранов!", "Ошибка");
+                else MessageBox.Show("Объект не выбран!", "Ошибка");
             }
             finally
             {

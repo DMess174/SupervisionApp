@@ -1,4 +1,5 @@
 ﻿using DataLayer.Entities.AssemblyUnits;
+using DataLayer.Files;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,6 +20,7 @@ namespace DataLayer.Entities.Materials.AnticorrosiveCoating
 
         public ObservableCollection<BaseValveWithCoating> BaseValveWithCoatings { get; set; }
         public ObservableCollection<ReverseShutterWithCoating> ReverseShutterWithCoatings { get; set; }
+        public ObservableCollection<BaseAnticorrosiveCoatingWithFile> Files { get; set; }
 
         public BaseAnticorrosiveCoating()
         {

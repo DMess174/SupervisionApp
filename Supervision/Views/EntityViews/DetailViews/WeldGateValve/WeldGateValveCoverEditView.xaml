@@ -439,6 +439,7 @@
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            Text="{Binding JournalNumber}"
                                       SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                         </ComboBox>
                                     </DataTemplate>
@@ -599,6 +600,7 @@
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            Text="{Binding JournalNumber}"
                                       SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                         </ComboBox>
                                     </DataTemplate>
@@ -759,6 +761,7 @@
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            Text="{Binding JournalNumber}"
                                       SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                         </ComboBox>
                                     </DataTemplate>
@@ -919,6 +922,7 @@
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            Text="{Binding JournalNumber}"
                                       SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                         </ComboBox>
                                     </DataTemplate>

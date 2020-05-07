@@ -2,6 +2,7 @@
 using DataLayer.Entities.Detailing.CompactGateValveDetails;
 using DataLayer.Entities.Detailing.ReverseShutterDetails;
 using DataLayer.Entities.Detailing.WeldGateValveDetails;
+using DataLayer.Files;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -63,5 +64,7 @@ namespace DataLayer.Entities.Materials
         public ObservableCollection<CounterFlange> CounterFlanges { get; set; }
         public ObservableCollection<CoverSealingRing> CoverSealingRings { get; set; }
         public ObservableCollection<CaseEdge> CaseEdges { get; set; }
+
+        public ObservableCollection<MetalMaterialWithFile> Files { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DataLayer.Entities.Materials;
+using DataLayer.Files;
 using DataLayer.Journals.Detailing.CompactGateValveDetails;
 
 namespace DataLayer.Entities.Detailing.CompactGateValveDetails
@@ -23,5 +24,6 @@ namespace DataLayer.Entities.Detailing.CompactGateValveDetails
         public Shutter Shutter{ get; set; }
 
         public ObservableCollection<ShutterGuideJournal> ShutterGuideJournals { get; set; }
+        public ObservableCollection<ShutterGuideWithFile> Files { get; set; }
     }
 }

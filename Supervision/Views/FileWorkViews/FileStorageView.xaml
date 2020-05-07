@@ -1,0 +1,70 @@
+﻿<Window x:Class="Supervision.Views.FileWorkViews.FileStorageView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:enums="clr-namespace:DataLayer;assembly=DataLayer"
+        xmlns:bind="clr-namespace:Supervision.Helpers"
+        xmlns:local="clr-namespace:Supervision.Views.FileWorkViews" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d"
+        Style="{StaticResource StandardWindow}"
+        Title="ЭПД" 
+        WindowState="Normal"
+        WindowStartupLocation="CenterScreen"
+        Height="500" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <ListBox Style="{StaticResource StandardListBox}" 
+                 ItemsSource="{Binding View}"
+                         SelectedItem="{Binding SelectedFile}"
+                     Width="auto"
+                     HorizontalContentAlignment="Stretch"
+                     HorizontalAlignment="Stretch"
+                     Margin="10">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding OpenFileCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <ListBox.GroupStyle>
+                <GroupStyle >
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Expander Header="{Binding Name}" IsExpanded="True" FontSize="16" Padding="5" FontWeight="Bold" VerticalAlignment="Center">
+                                            <ItemsPresenter/>
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListBox.GroupStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="auto" HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Style="{StaticResource StandardTextBlock}" Text="{Binding Number}" FontSize="12" Width="auto" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                        <TextBlock Grid.Column="1" Style="{StaticResource StandardTextBlock}" Text=" от " FontSize="12" Width="auto" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                        <TextBlock Grid.Column="2" Style="{StaticResource StandardTextBlock}" Text="{Binding Date, StringFormat=dd.MM.yyyy}" FontSize="12" Width="auto" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </Grid>
+</Window>

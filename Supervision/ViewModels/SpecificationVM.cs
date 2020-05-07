@@ -10,10 +10,14 @@ using BusinessLayer.Repository.Implementations.Entities;
 using Supervision.Commands;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Microsoft.Win32;
+using System;
+using System.IO;
+using Supervision.Views.FileWorkViews;
 
 namespace Supervision.ViewModels
 {
-    class SpecificationVM : ViewModelBase
+    public class SpecificationVM : ViewModelBase
     {
         private DataContext db;
         private readonly SpecificationRepository specificationRepo;
@@ -93,7 +97,50 @@ namespace Supervision.ViewModels
             }
         }
 
+        public ICommand AddFileCommand { get; private set; }
+        private void AddFile()
+        {
+//            try
+//            {
+//                IsBusy = true;
+//                if (SelectedItem != null)
+//                {
 
+//                    OpenFileDialog dialog = new OpenFileDialog();
+//                    bool? result = dialog.ShowDialog();
+//                    if (result == true)
+//                    {
+//                        var fileName = dialog.FileName;
+//                        var extension = Path.GetExtension(fileName);
+//#if DEBUG
+//                        DirectoryInfo dirInfo = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\" + SelectedItem.Number);
+//                        if (!dirInfo.Exists)
+//                        {
+//                            dirInfo.Create();
+//                        }
+//                        var newFileName = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\" + SelectedItem.Number + @"\" + SelectedItem.Number + extension;
+//#else
+//                        DirectoryInfo dirInfo = new DirectoryInfo(@"O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\Спецификации\" + SelectedItem.Number);
+//                        if (!dirInfo.Exists)
+//                        {
+//                            dirInfo.Create();
+//                        }
+//                        var newFileName = @"O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\Спецификации\" + SelectedItem.Number + @"\" + SelectedItem.Number + extension;
+//#endif
+//                        if (File.Exists(newFileName))
+//                            File.Delete(newFileName);
+//                        File.Copy(fileName, newFileName, true);
+//                        SelectedItem.FilePath = newFileName;
+//                        SaveItemsCommand.ExecuteAsync();
+                        
+//                    }
+//                }
+//            }
+//            finally
+//            {
+//                IsBusy = false;
+//            }
+        }
 
         public ICommand EditPIDCommand { get; private set; }
         private void EditPID()
@@ -106,6 +153,21 @@ namespace Supervision.ViewModels
                 };
             }
         }
+
+        public ICommand FileStorageOpenCommand { get; private set; }
+        private void FileStorageOpen()
+        {
+            if (SelectedItem != null)
+            {
+                _ = new AddFileView
+                {
+                    DataContext = AddSpecificationFileVM.LoadVM(db, SelectedItem)
+                };
+            }
+        }
+        
+
+
 
         public IAsyncCommand SaveItemsCommand { get; private set; }
         private async Task SaveItems()
@@ -267,6 +329,8 @@ namespace Supervision.ViewModels
             RemoveSelectedPIDCommand = new AsyncCommand(RemoveSelectedPID);
             SaveItemsCommand = new AsyncCommand(SaveItems);
             EditPIDCommand = new Command(_ => EditPID());
+            FileStorageOpenCommand = new Command(_ => FileStorageOpen());
+            AddFileCommand = new Command(_ => AddFile());
         }
     }
 }

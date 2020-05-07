@@ -1,5 +1,6 @@
 ﻿using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Entities.Materials;
+using DataLayer.Files;
 using DataLayer.Journals.Detailing;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,5 +27,6 @@ namespace DataLayer.Entities.Detailing
         public BaseValve BaseValve { get; set; }
 
         public ObservableCollection<GateJournal> GateJournals { get; set; }
+        public ObservableCollection<GateWithFile> Files { get; set; }
     }
 }

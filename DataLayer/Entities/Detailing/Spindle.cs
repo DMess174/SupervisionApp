@@ -1,4 +1,5 @@
-﻿using DataLayer.Journals.Detailing;
+﻿using DataLayer.Files;
+using DataLayer.Journals.Detailing;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -16,5 +17,6 @@ namespace DataLayer.Entities.Detailing
         }
 
         public ObservableCollection<SpindleJournal> SpindleJournals { get; set; }
+        public ObservableCollection<SpindleWithFile> Files { get; set; }
     }
 }

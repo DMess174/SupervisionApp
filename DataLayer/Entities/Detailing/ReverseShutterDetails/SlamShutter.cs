@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DataLayer.Entities.AssemblyUnits;
+using DataLayer.Files;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
 
 namespace DataLayer.Entities.Detailing.ReverseShutterDetails
@@ -23,6 +24,7 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
         public ReverseShutter ReverseShutter { get; set; }
 
         public ObservableCollection<SlamShutterJournal> SlamShutterJournals { get; set; }
+        public ObservableCollection<SlamShutterWithFile> Files { get; set; }
     }
 }
 

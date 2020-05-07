@@ -5,6 +5,13 @@ using DataLayer.TechnicalControlPlans;
 using DataLayer.Journals;
 using System.Threading.Tasks;
 using BusinessLayer.Repository.Implementations.Entities;
+using System.Windows.Input;
+using Supervision.Commands;
+using System.Diagnostics;
+using DataLayer.Entities.AssemblyUnits;
+using Supervision.Views.EntityViews.AssemblyUnit;
+using Supervision.ViewModels.EntityViewModels.AssemblyUnit;
+using DataLayer.Entities.Detailing;
 
 namespace Supervision.ViewModels
 {
@@ -27,6 +34,16 @@ namespace Supervision.ViewModels
         private PID selectedItem;
         private IList<ProductType> productTypes;
         private IEnumerable<string> designations;
+        private BaseAssemblyUnit unit;
+        public BaseAssemblyUnit Unit
+        {
+            get => unit;
+            set
+            {
+                unit = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public PID SelectedItem
         {
@@ -131,9 +148,6 @@ namespace Supervision.ViewModels
                 RaisePropertyChanged();
             }
         }
-        
-
-        
 
         public Supervision.Commands.IAsyncCommand SaveItemCommand { get; private set; }
         private async Task Save()
@@ -162,7 +176,54 @@ namespace Supervision.ViewModels
             }
         }
 
+        public ICommand OpenFileStorageCommand { get; private set; }
+        private void OpenFile()
+        {
+            //if (SelectedItem.Specification.FilePath != null)
+            //{
+            //    Process.Start(SelectedItem.Specification.FilePath);
+            //}
+            //else MessageBox.Show("Файл не привязан", "Ошибка");
+        }
 
+        
+
+        public ICommand EditSelectedAssemblyUnitCommand { get; private set; }
+        private void EditSelectedAssemblyUnit()
+        {
+            if (Unit != null)
+            {
+                if (Unit is CastGateValve)
+                {
+                    _ = new CastGateValveEditView
+                    {
+                        DataContext = CastGateValveEditVM.LoadVM(Unit.Id, SelectedItem, db)
+                    };
+                }
+                if (Unit is SheetGateValve)
+                {
+                    _ = new SheetGateValveEditView
+                    {
+                        DataContext = SheetGateValveEditVM.LoadVM(Unit.Id, SelectedItem, db)
+                    };
+                }
+                if (Unit is CompactGateValve)
+                {
+                    _ = new CompactGateValveEditView
+                    {
+                        DataContext = CompactGateValveEditVM.LoadVM(Unit.Id, SelectedItem, db)
+                    };
+                }
+                if (Unit is ReverseShutter)
+                {
+                    _ = new ReverseShutterEditView
+                    {
+                        DataContext = ReverseShutterEditVM.LoadVM(Unit.Id, SelectedItem, db)
+                    };
+                }
+            }
+        }
+        
         public Supervision.Commands.IAsyncCommand RemoveOperationCommand { get; private set; }
         private async Task RemoveOperation()
         {
@@ -254,6 +315,8 @@ namespace Supervision.ViewModels
             CloseWindowCommand = new Commands.Command(o => CloseWindow(o));
             AddOperationCommand = new Commands.AsyncCommand(AddJournalOperation);
             RemoveOperationCommand = new Commands.AsyncCommand(RemoveOperation);
+            //OpenFileCommand = new Command(_ => OpenFile());
+            EditSelectedAssemblyUnitCommand = new Command(_ => EditSelectedAssemblyUnit());
             //SelectedItem.AmountShipped = SelectedItem.BaseAssemblyUnits.Where(i => i.Status == "Отгружен").Count();
 
 

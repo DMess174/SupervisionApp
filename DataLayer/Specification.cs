@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using DataLayer.Files;
+using System.Collections.ObjectModel;
 
 namespace DataLayer
 {
@@ -13,6 +14,7 @@ namespace DataLayer
         public int? CustomerId { get; set; }
         public Customer Customer { get; set; }
 
+        public ObservableCollection<SpecificationWithFile> Files { get; set; }
         public ObservableCollection<PID> PIDs { get; set; }
     }
 }

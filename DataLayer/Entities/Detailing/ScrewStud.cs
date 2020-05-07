@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DataLayer.Entities.AssemblyUnits;
+using DataLayer.Files;
 using DataLayer.Journals.Detailing;
 
 namespace DataLayer.Entities.Detailing
@@ -20,5 +21,6 @@ namespace DataLayer.Entities.Detailing
         public ObservableCollection<BaseValveWithScrewStud> BaseValveWithScrewStuds { get; set; }
 
         public ObservableCollection<ScrewStudJournal> ScrewStudJournals { get; set; }
+        public ObservableCollection<ScrewStudWithFile> Files { get; set; }
     }
 }

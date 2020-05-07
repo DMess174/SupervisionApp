@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DataLayer.Entities.AssemblyUnits;
 using System.Collections.ObjectModel;
+using DataLayer.Files;
 
 namespace DataLayer.Entities.Detailing
 {
@@ -29,5 +30,6 @@ namespace DataLayer.Entities.Detailing
         public BaseValve BaseValve { get; set; }
 
         public ObservableCollection<BallValveJournal> BallValveJournals { get; set; }
+        public ObservableCollection<BallValvesWithFile> Files { get; set; }
     }
 }

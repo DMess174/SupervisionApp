@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using DataLayer.Entities.AssemblyUnits;
+using DataLayer.Files;
 using DataLayer.Journals.Detailing;
 
 namespace DataLayer.Entities.Detailing
@@ -24,5 +25,6 @@ namespace DataLayer.Entities.Detailing
         public ObservableCollection<BaseValveWithSpring> BaseValveWithSprings { get; set; }
 
         public ObservableCollection<SpringJournal> SpringJournals { get; set; }
+        public ObservableCollection<SpringWithFile> Files { get; set; }
     }
 }

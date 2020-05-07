@@ -166,6 +166,12 @@
                         Margin="10" Command="{Binding RemoveSelectedItemCommand}"
                         Width="auto"/>
                 </StackPanel>
+                
+                <Button Style="{StaticResource StandardButton}"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Content="Файлы" 
+                        Margin="10" Command="{Binding FileStorageOpenCommand}"/>
             </Grid>
 
             <Separator Style="{StaticResource HorizontalSeparator}" 

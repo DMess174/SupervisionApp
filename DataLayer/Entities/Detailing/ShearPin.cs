@@ -1,6 +1,7 @@
 ﻿using DataLayer.Journals.Detailing;
 using DataLayer.Entities.AssemblyUnits;
 using System.Collections.ObjectModel;
+using DataLayer.Files;
 
 namespace DataLayer.Entities.Detailing
 {
@@ -23,5 +24,6 @@ namespace DataLayer.Entities.Detailing
         public BaseValve BaseValve { get; set; }
 
         public ObservableCollection<ShearPinJournal> ShearPinJournals { get; set; }
+        public ObservableCollection<ShearPinWithFile> Files { get; set; }
     }
 }

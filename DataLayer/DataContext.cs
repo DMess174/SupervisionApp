@@ -30,6 +30,7 @@ using DataLayer.TechnicalControlPlans;
 using DataLayer.Entities.Periodical;
 using DataLayer.TechnicalControlPlans.Periodical;
 using DataLayer.Journals.Periodical;
+using DataLayer.Files;
 
 namespace DataLayer
 {
@@ -287,6 +288,48 @@ namespace DataLayer
         public DbSet<WeldingMaterialTCP> WeldingMaterialTCPs { get; set; }
         public DbSet<WeldingMaterialJournal> WeldingMaterialJournals { get; set; }
 
+        public DbSet<ElectronicDocument> ElectronicDocuments { get; set; }
+        public DbSet<SpecificationWithFile> SpecificationWithFiles { get; set; }
+        public DbSet<BaseAssemblyUnitWithFile> BaseAssemblyUnitWithFiles { get; set; }
+        public DbSet<BaseCastingCaseWithFile> BaseCastingCaseWithFiles { get; set; }
+        public DbSet<AssemblyUnitSealsWithFile> AssemblyUnitSealsWithFiles { get; set; }
+        public DbSet<BallValvesWithFile> BallValvesWithFiles { get; set; }
+        public DbSet<BaseAnticorrosiveCoatingWithFile> BaseAnticorrosiveCoatingWithFiles { get; set; }
+        public DbSet<BaseValveCoverWithFile> BaseValveCoverWithFiles { get; set; }
+        public DbSet<BronzeSleeveShutterWithFile> BronzeSleeveShutterWithFiles { get; set; }
+        public DbSet<CaseBottomWithFile> CaseBottomWithFiles { get; set; }
+        public DbSet<CaseEdgeWithFile> CaseEdgeWithFiles { get; set; }
+        public DbSet<CaseFlangeWithFile> CaseFlangeWithFiles { get; set; }
+        public DbSet<ControlWeldWithFile> ControlWeldWithFiles { get; set; }
+        public DbSet<CounterFlangeWithFile> CounterFlangeWithFiles { get; set; }
+        public DbSet<CoverFlangeWithFile> CoverFlangeWithFiles { get; set; }
+        public DbSet<CoverSealingRingWithFile> CoverSealingRingWithFiles { get; set; }
+        public DbSet<CoverSleeveWithFile> CoverSleeveWithFiles { get; set; }
+        public DbSet<FrontalSaddleSealingWithFile> FrontalSaddleSealingWithFiles { get; set; }
+        public DbSet<FrontWallWithFile> FrontWallWithFiles { get; set; }
+        public DbSet<GateWithFile> GateWithFiles { get; set; }
+        public DbSet<MetalMaterialWithFile> MetalMaterialWithFiles { get; set; }
+        public DbSet<NozzleWithFile> NozzleWithFiles { get; set; }
+        public DbSet<PIDWithFile> PIDWithFiles { get; set; }
+        public DbSet<RunningSleeveWithFile> RunningSleeveWithFiles { get; set; }
+        public DbSet<SaddleWithFile> SaddleWithFiles { get; set; }
+        public DbSet<ScrewNutWithFile> ScrewNutWithFiles { get; set; }
+        public DbSet<ScrewStudWithFile> ScrewStudWithFiles { get; set; }
+        public DbSet<ShaftShutterWithFile> ShaftShutterWithFiles { get; set; }
+        public DbSet<ShearPinWithFile> ShearPinWithFiles { get; set; }
+        public DbSet<ShutterDiskWithFile> ShutterDiskWithFiles { get; set; }
+        public DbSet<ShutterGuideWithFile> ShutterGuideWithFiles { get; set; }
+        public DbSet<ShutterWithFile> ShutterWithFiles { get; set; }
+        public DbSet<SideWallWithFile> SideWallWithFiles { get; set; }
+        public DbSet<SlamShutterWithFile> SlamShutterWithFiles { get; set; }
+        public DbSet<SpindleWithFile> SpindleWithFiles { get; set; }
+        public DbSet<SpringWithFile> SpringWithFiles { get; set; }
+        public DbSet<SteelSleeveShutterWithFile> SteelSleeveShutterWithFiles { get; set; }
+        public DbSet<StubShutterWithFile> StubShutterWithFiles { get; set; }
+        public DbSet<WeldGateValveCaseWithFile> WeldGateValveCaseWithFiles { get; set; }
+        public DbSet<WeldingMaterialWithFile> WeldingMaterialWithFiles { get; set; }
+        public DbSet<WeldNozzleWithFile> WeldNozzleWithFiles { get; set; }
+
         //TODO: Не забываем добавлять все таблицы
 
         public DataContext()
@@ -326,8 +369,8 @@ namespace DataLayer
             //optionsBuilder.UseSqlite(@"Filename = O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\БД\SupervisionData\SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
 #else
             //optionsBuilder.UseSqlite(@"Filename = T:\06-01-06 - БДУКП\СМТО ОП УТН\SupervisionData\SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
-            //optionsBuilder.UseSqlite("Filename=SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
-            optionsBuilder.UseSqlite(@"Filename = O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\БД\SupervisionTest (Челябинск)\SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
+            optionsBuilder.UseSqlite("Filename=SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
+            //optionsBuilder.UseSqlite(@"Filename = O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\БД\SupervisionTest (Челябинск)\SupervisionData.sqlite", options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
 
 #endif
             base.OnConfiguring(optionsBuilder);

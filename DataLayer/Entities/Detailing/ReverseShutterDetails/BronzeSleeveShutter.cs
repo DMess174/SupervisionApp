@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using DataLayer.Files;
 using DataLayer.Journals.Detailing.ReverseShutterDetails;
 
 namespace DataLayer.Entities.Detailing.ReverseShutterDetails
@@ -23,5 +24,6 @@ namespace DataLayer.Entities.Detailing.ReverseShutterDetails
         public int? ReverseShutterId { get; set; }
 
         public ObservableCollection<BronzeSleeveShutterJournal> BronzeSleeveShutterJournals { get; set; }
+        public ObservableCollection<BronzeSleeveShutterWithFile> Files { get; set; }
     }
 }

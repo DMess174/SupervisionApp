@@ -1,4 +1,5 @@
-﻿using DataLayer.Journals.Detailing;
+﻿using DataLayer.Files;
+using DataLayer.Journals.Detailing;
 using System.Collections.ObjectModel;
 
 namespace DataLayer.Entities.Detailing
@@ -17,5 +18,6 @@ namespace DataLayer.Entities.Detailing
         public BaseValveCover BaseValveCover { get; set; }
 
         public ObservableCollection<RunningSleeveJournal> RunningSleeveJournals { get; set; }
+        public ObservableCollection<RunningSleeveWithFile> Files { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using DataLayer.Entities.Detailing.CastGateValveDetails;
 using DataLayer.Entities.Detailing.WeldGateValveDetails;
 using DataLayer.Entities.Materials;
 using System.Collections.ObjectModel;
+using DataLayer.Files;
 
 namespace DataLayer.Entities.Detailing
 {
@@ -26,5 +27,6 @@ namespace DataLayer.Entities.Detailing
         public CoverSleeve CoverSleeve { get; set; }
 
         public ObservableCollection<CoverSealingRingJournal> CoverSealingRingJournals{ get; set; }
+        public ObservableCollection<CoverSealingRingWithFile> Files { get; set; }
     }
 }

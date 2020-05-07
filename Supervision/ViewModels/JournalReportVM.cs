@@ -133,9 +133,9 @@ namespace Supervision.ViewModels
                         sheet.Cells[recordIndex, 5].Value = row.Description;
                         sheet.Cells[recordIndex, 5].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Justify;
                         sheet.Cells[recordIndex, 6].Value = row.Status;
-                        sheet.Cells[recordIndex, 7].Value = row.Engineer;
-                        sheet.Cells[recordIndex, 8].Value = row.Remark;
-                        sheet.Cells[recordIndex, 9].Value = row.RemarkClosed;
+                        sheet.Cells[recordIndex, 7].Value = row.Remark;
+                        sheet.Cells[recordIndex, 8].Value = row.RemarkClosed;
+                        sheet.Cells[recordIndex, 9].Value = row.Engineer;
                         sheet.Cells[recordIndex, 10].Value = row.Comment;
                         recordIndex++;
                     }
@@ -186,252 +186,252 @@ namespace Supervision.ViewModels
                 {
                     var insp = await Task.Run(() => GetInspectorRecordsAsync(Inspector.Id));
 
-                    foreach (var i in insp.CastGateValveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CastGateValveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CoatingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CoatingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CompactGateValveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CompactGateValveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ReverseShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.ReverseShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SheetGateValveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.SheetGateValveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CastGateValveCaseJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CastGateValveCaseJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CastGateValveCoverJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CastGateValveCoverJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ShutterDiskJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.ShutterDiskJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ShutterGuideJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.ShutterGuideJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.BronzeSleeveShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.BronzeSleeveShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ReverseShutterCaseJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.ReverseShutterCaseJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ShaftShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.ShaftShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SlamShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.SlamShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SteelSleeveShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.SteelSleeveShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.StubShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.StubShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CaseBottomJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CaseBottomJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CaseEdgeJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CaseEdgeJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CaseFlangeJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CaseFlangeJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CompactGateValveCaseJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CompactGateValveCaseJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CompactGateValveCoverJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CompactGateValveCoverJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CoverFlangeJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CoverFlangeJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CoverSleeveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CoverSleeveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.FrontWallJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.FrontWallJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SheetGateValveCaseJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.SheetGateValveCaseJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SheetGateValveCoverJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.SheetGateValveCoverJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SideWallJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.SideWallJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.WeldNozzleJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.WeldNozzleJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.AssemblyUnitSealingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.AssemblyUnitSealingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.BallValveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.BallValveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CounterFlangeJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CounterFlangeJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CoverSealingRingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CoverSealingRingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.FrontalSaddleSealingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.FrontalSaddleSealingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.GateJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.GateJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.NozzleJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.NozzleJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.RunningSleeveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.RunningSleeveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SaddleJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.SaddleJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ScrewNutJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.ScrewNutJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ScrewStudJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.ScrewStudJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ShearPinJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.ShearPinJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SpindleJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.SpindleJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SpringJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.SpringJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.AbovegroundCoatingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.AbovegroundCoatingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.AbrasiveMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.AbrasiveMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.UndercoatJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.UndercoatJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.UndergroundCoatingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.UndergroundCoatingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ControlWeldJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.ControlWeldJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ForgingMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.ForgingMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.PipeMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.PipeMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.RolledMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.RolledMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SheetMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.SheetMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
@@ -441,7 +441,7 @@ namespace Supervision.ViewModels
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.WeldingMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.WeldingMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
@@ -471,12 +471,12 @@ namespace Supervision.ViewModels
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.NDTControls.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.NDTControls.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.WeldingProceduresJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.WeldingProceduresJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
@@ -486,7 +486,7 @@ namespace Supervision.ViewModels
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.PIDJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.PIDJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);

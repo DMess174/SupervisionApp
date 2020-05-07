@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DataLayer.Entities.Materials;
+using DataLayer.Files;
 using DataLayer.Journals.Detailing.WeldGateValveDetails;
 
 namespace DataLayer.Entities.Detailing.WeldGateValveDetails
@@ -24,5 +25,6 @@ namespace DataLayer.Entities.Detailing.WeldGateValveDetails
         public WeldGateValveCase WeldGateValveCase { get; set; }
 
         public ObservableCollection<SideWallJournal> SideWallJournals { get; set; }
+        public ObservableCollection<SideWallWithFile> Files { get; set; }
     }
 }

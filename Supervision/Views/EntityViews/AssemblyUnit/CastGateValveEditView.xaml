@@ -1185,6 +1185,7 @@
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            Text="{Binding JournalNumber}"
                                       SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                                 </ComboBox>
                                             </DataTemplate>
@@ -1399,6 +1400,7 @@
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            Text="{Binding JournalNumber}"
                                       SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                                 </ComboBox>
                                             </DataTemplate>
@@ -1613,6 +1615,7 @@
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            Text="{Binding JournalNumber}"
                                       SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                                 </ComboBox>
                                             </DataTemplate>
@@ -1827,6 +1830,7 @@
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            Text="{Binding JournalNumber}"
                                       SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                                 </ComboBox>
                                             </DataTemplate>
@@ -2041,6 +2045,7 @@
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            Text="{Binding JournalNumber}"
                                       SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                                 </ComboBox>
                                             </DataTemplate>
@@ -2255,6 +2260,7 @@
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            Text="{Binding JournalNumber}"
                                       SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                                 </ComboBox>
                                             </DataTemplate>
@@ -2470,6 +2476,7 @@
                                       VerticalContentAlignment="Center" 
                                       HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding Path=DataContext.JournalNumbers, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                            Text="{Binding JournalNumber}"
                                       SelectedValue="{Binding Path=JournalNumber, UpdateSourceTrigger=PropertyChanged}">
                                                 </ComboBox>
                                             </DataTemplate>
@@ -2579,6 +2586,75 @@
                         </Grid>
                     </TabItem>
                 </TabControl>
+            </TabItem>
+            <TabItem Header="Файлы">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ListView Grid.ColumnSpan="2"
+                          ItemsSource="{Binding FilesView}"
+                          SelectedItem="{Binding File}"
+                          Margin="5">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Наименование" Width="150" DisplayMemberBinding="{Binding Number}" />
+                                    <GridViewColumn Header="Дата" Width="100" DisplayMemberBinding="{Binding Date, StringFormat=dd.MM.yyyy}" />
+                                </GridView>
+                            </ListView.View>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDoubleClick">
+                                    <i:InvokeCommandAction Command="{Binding OpenFileCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.ContainerStyle>
+                                        <Style TargetType="{x:Type GroupItem}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+                                                        <Expander IsExpanded="True" Header="{Binding Name}">
+                                                            <ItemsPresenter />
+                                                        </Expander>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </GroupStyle.ContainerStyle>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                        </ListView>
+                    </Grid>
+
+                    <Separator Style="{StaticResource HorizontalSeparator}"
+                               Grid.Row="1"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="5"
+                                HorizontalAlignment="Right"
+                                Grid.Row="2">
+                        <Button Style="{StaticResource StandardButton}"
+                            Grid.Row="2"
+                                Margin="5"
+                                Content="Добавить файл"
+                            HorizontalAlignment="Right"/>
+                        <Button Style="{StaticResource StandardButton}"
+                                Margin="5"
+                                Content="Удалить файл"
+                            Grid.Row="2"
+                            HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </Grid>
             </TabItem>
         </TabControl>
 

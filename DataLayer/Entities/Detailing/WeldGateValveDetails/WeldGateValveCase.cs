@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DataLayer.Entities.AssemblyUnits;
+using DataLayer.Files;
 
 namespace DataLayer.Entities.Detailing.WeldGateValveDetails
 {
@@ -18,6 +19,7 @@ namespace DataLayer.Entities.Detailing.WeldGateValveDetails
         public ObservableCollection<FrontWall> FrontWalls { get; set; }
         public ObservableCollection<SideWall> SideWalls { get; set; }
         public ObservableCollection<CaseEdge> CaseEdges { get; set; }
+        public ObservableCollection<WeldGateValveCaseWithFile> Files { get; set; }
 
         public BaseWeldValve BaseWeldValve { get; set; }
 

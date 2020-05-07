@@ -1,4 +1,5 @@
-﻿using DataLayer.Journals.Materials;
+﻿using DataLayer.Files;
+using DataLayer.Journals.Materials;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -30,5 +31,6 @@ namespace DataLayer.Entities.Materials
         public string FullName => string.Format($"{Batch}/{Name}");
 
         public ObservableCollection<WeldingMaterialJournal> WeldingMaterialJournals { get; set; }
+        public ObservableCollection<WeldingMaterialWithFile> Files { get; set; }
     }
 }

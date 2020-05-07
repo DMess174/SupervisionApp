@@ -1,4 +1,5 @@
 ﻿using DataLayer.Entities.Materials;
+using DataLayer.Files;
 using DataLayer.Journals.Detailing;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,6 +31,7 @@ namespace DataLayer.Entities.Detailing
         public BaseCastingCase CastingCase { get; set; }
 
         public ObservableCollection<NozzleJournal> NozzleJournals { get; set; }
+        public ObservableCollection<NozzleWithFile> Files { get; set; }
 
         [NotMapped]
         public new string FullName => string.Format($"{Name}/{Number}/{Diameter}/{Thickness}");

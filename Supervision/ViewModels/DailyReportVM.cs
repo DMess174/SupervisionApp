@@ -324,11 +324,15 @@ namespace Supervision.ViewModels
             AssemblyDate = valve.CastGateValveJournals?.Where(e => e.Point == "6.4").Select(a => a.Date).Max().GetValueOrDefault().Date;
             TestDate = valve.CastGateValveJournals?.Where(e => e.Point == "7.17").Select(a => a.Date).Max().GetValueOrDefault().Date;
             CoatingDate = valve.CoatingJournals?.Where(e => e.Point == "9 (АКП)" && e.Description.Contains("адгез")).Select(a => a.Date).Max().GetValueOrDefault().Date;
-            ShippingDate = valve.CastGateValveJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            if (!String.IsNullOrWhiteSpace(valve.AutoNumber) || !String.IsNullOrEmpty(valve.AutoNumber))
+            {
+                ShippingDate = valve.CastGateValveJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date;
+                StringShippingDate = ShippingDate.Value.ToShortDateString();
+            }
             StringAssemblyDate = AssemblyDate.Value.ToShortDateString();
             StringTestDate = TestDate.Value.ToShortDateString();
             StringCoatingDate = CoatingDate.Value.ToShortDateString();
-            StringShippingDate = ShippingDate.Value.ToShortDateString();
+            
         }
 
         public DailyReport(SheetGateValve valve)
@@ -343,11 +347,14 @@ namespace Supervision.ViewModels
             AssemblyDate = valve.SheetGateValveJournals?.Where(e => e.Point == "5.4").Select(a => a.Date).Max().GetValueOrDefault().Date;
             TestDate = valve.SheetGateValveJournals?.Where(e => e.Point == "6.17").Select(a => a.Date).Max().GetValueOrDefault().Date;
             CoatingDate = valve.CoatingJournals?.Where(e => e.Point == "9 (АКП)" && e.Description.Contains("адгез")).Select(a => a.Date).Max().GetValueOrDefault().Date;
-            ShippingDate = valve.SheetGateValveJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            if (!String.IsNullOrWhiteSpace(valve.AutoNumber) || !String.IsNullOrEmpty(valve.AutoNumber))
+            {
+                ShippingDate = valve.SheetGateValveJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date;
+                StringShippingDate = ShippingDate.Value.ToShortDateString();
+            }
             StringAssemblyDate = AssemblyDate.Value.ToShortDateString();
             StringTestDate = TestDate.Value.ToShortDateString();
             StringCoatingDate = CoatingDate.Value.ToShortDateString();
-            StringShippingDate = ShippingDate.Value.ToShortDateString();
         }
 
         public DailyReport(CompactGateValve valve)
@@ -361,11 +368,14 @@ namespace Supervision.ViewModels
             AssemblyDate = valve.CompactGateValveJournals?.Where(e => e.Point == "5.4").Select(a => a.Date).Max().GetValueOrDefault().Date;
             TestDate = valve.CompactGateValveJournals?.Where(e => e.Point == "6.17").Select(a => a.Date).Max().GetValueOrDefault().Date;
             CoatingDate = valve.CoatingJournals?.Where(e => e.Point == "9 (АКП)" && e.Description.Contains("адгез")).Select(a => a.Date).Max().GetValueOrDefault().Date;
-            ShippingDate = valve.CompactGateValveJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            if (!String.IsNullOrWhiteSpace(valve.AutoNumber) || !String.IsNullOrEmpty(valve.AutoNumber))
+            {
+                ShippingDate = valve.CompactGateValveJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date;
+                StringShippingDate = ShippingDate.Value.ToShortDateString();
+            }
             StringAssemblyDate = AssemblyDate.Value.ToShortDateString();
             StringTestDate = TestDate.Value.ToShortDateString();
             StringCoatingDate = CoatingDate.Value.ToShortDateString();
-            StringShippingDate = ShippingDate.Value.ToShortDateString();
         }
 
         public DailyReport(ReverseShutter shutter)
@@ -379,11 +389,14 @@ namespace Supervision.ViewModels
             AssemblyDate = shutter.ReverseShutterJournals?.Where(e => e.Point == "7.1" && e.Description.Contains("сбор")).Select(a => a.Date).Max().GetValueOrDefault().Date;
             TestDate = shutter.ReverseShutterJournals?.Where(e => e.Point == "7.6").Select(a => a.Date).Max().GetValueOrDefault().Date;
             CoatingDate = shutter.CoatingJournals?.Where(e => e.Point == "9 (АКП)" && e.Description.Contains("адгез")).Select(a => a.Date).Max().GetValueOrDefault().Date;
-            ShippingDate = shutter.ReverseShutterJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date;
+            if (!String.IsNullOrWhiteSpace(shutter.AutoNumber) || !String.IsNullOrEmpty(shutter.AutoNumber))
+            {
+                ShippingDate = shutter.ReverseShutterJournals?.Where(e => e.EntityTCP.OperationType.Name == "Отгрузка").Select(a => a.Date).Max().GetValueOrDefault().Date;
+                StringShippingDate = ShippingDate.Value.ToShortDateString();
+            }
             StringAssemblyDate = AssemblyDate.Value.ToShortDateString();
             StringTestDate = TestDate.Value.ToShortDateString();
             StringCoatingDate = CoatingDate.Value.ToShortDateString();
-            StringShippingDate = ShippingDate.Value.ToShortDateString();
         }
     }
 }

@@ -33,6 +33,15 @@
                       SelectedDate="{Binding EndDate}"
                       Width="200"
                       Margin="5"/>
+
+            <Label Style="{StaticResource StandardLabel}"
+               Content="Новый период с:"
+                   Margin="5"/>
+
+            <DatePicker Style="{StaticResource StandardDatepicker}"
+                      SelectedDate="{Binding NewPeriod}"
+                      Width="200"
+                      Margin="5"/>
         </StackPanel>
 
         <TabControl Style="{StaticResource StandardTabControl}"
@@ -703,14 +712,24 @@
             </TabItem>
 
         </TabControl>
-                
 
-                <Button Style="{StaticResource StandardButton}"
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="3">
+            <Button Style="{StaticResource StandardButton}"
                 Margin="10 2" 
                 Grid.Row="3"
                 HorizontalAlignment="Left"
                 Content="Сформировать"
                 Command="{Binding GetReportCommand}"/>
+
+            <Button Style="{StaticResource StandardButton}"
+                Margin="10 2" 
+                Grid.Row="3"
+                HorizontalAlignment="Left"
+                Content="Открыть в Excel"
+                Command="{Binding OpenExcelReportCommand}"/>
+        </StackPanel>
 
         <Button Style="{StaticResource StandardButton}" 
                 Grid.Row="3"

@@ -1,5 +1,6 @@
 ﻿using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Entities.Materials;
+using DataLayer.Files;
 using DataLayer.Journals.Detailing;
 using System.Collections.ObjectModel;
 
@@ -26,5 +27,6 @@ namespace DataLayer.Entities.Detailing
         public BaseValve BaseValve { get; set; }
 
         public ObservableCollection<CounterFlangeJournal> CounterFlangeJournals { get; set; }
+        public ObservableCollection<CounterFlangeWithFile> Files { get; set; }
     }
 }

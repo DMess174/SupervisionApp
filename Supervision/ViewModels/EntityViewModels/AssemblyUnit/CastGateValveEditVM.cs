@@ -6,11 +6,13 @@ using DataLayer.Entities.AssemblyUnits;
 using DataLayer.Entities.Detailing;
 using DataLayer.Entities.Detailing.CastGateValveDetails;
 using DataLayer.Entities.Materials.AnticorrosiveCoating;
+using DataLayer.Files;
 using DataLayer.Journals.AssemblyUnits;
 using DataLayer.TechnicalControlPlans.AssemblyUnits;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.Native;
 using Microsoft.EntityFrameworkCore;
+using Supervision.Commands;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.ReverseShutter;
 using Supervision.ViewModels.EntityViewModels.DetailViewModels.Valve;
@@ -21,11 +23,15 @@ using Supervision.Views.EntityViews.AssemblyUnit;
 using Supervision.Views.EntityViews.DetailViews;
 using Supervision.Views.EntityViews.DetailViews.Valve;
 using Supervision.Views.EntityViews.MaterialViews.AnticorrosiveCoating;
+using Supervision.Views.FileWorkViews;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
@@ -685,21 +691,17 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             try
             {
                 IsBusy = true;
-                if (SelectedItem.BallValves?.Count() < 6 || SelectedItem.BallValves == null)
+                if (SelectedBallValve != null)
                 {
-                    if (SelectedBallValve != null)
+                    if (!await ballValveRepo.IsAssembliedAsync(SelectedBallValve))
                     {
-                        if (!await ballValveRepo.IsAssembliedAsync(SelectedBallValve))
-                        {
-                            SelectedBallValve.BaseValveId = SelectedItem.Id;
-                            ballValveRepo.Update(SelectedBallValve);
-                            SelectedBallValve = null;
-                            BallValves = ballValveRepo.UpdateList();
-                        }
+                        SelectedBallValve.BaseValveId = SelectedItem.Id;
+                        ballValveRepo.Update(SelectedBallValve);
+                        SelectedBallValve = null;
+                        BallValves = ballValveRepo.UpdateList();
                     }
-                    else MessageBox.Show("Объект не выбран!", "Ошибка");
                 }
-                else MessageBox.Show("Невозможно привязать более 6 кранов!", "Ошибка");
+                else MessageBox.Show("Объект не выбран!", "Ошибка");
             }
             finally
             {
@@ -1214,6 +1216,42 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             else MessageBox.Show("Для просмотра привяжите PID", "Ошибка");
         }
 
+        private ElectronicDocument file;
+        public ElectronicDocument File
+        {
+            get => file;
+            set
+            {
+                file = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ICommand OpenFileCommand { get; private set; }
+        private void OpenFile()
+        {
+            if (File != null)
+            {
+                Process.Start(File.FilePath);
+            }
+            else MessageBox.Show("Файл не выбран", "Ошибка");
+        }
+
+        public ICommand AddFileCommand { get; private set; }
+        private void AddFile()
+        {
+            _ = new AddFileView
+            {
+                DataContext = AddFileVM.LoadVM(db, SelectedItem)
+            };
+        }
+
+        public ICommand DeleteFileCommand { get; private set; }
+        private void DeleteFile()
+        {
+            
+        }
+
         public Supervision.Commands.IAsyncCommand SaveItemCommand { get; private set; }
         private async Task SaveItem()
         {
@@ -1375,10 +1413,40 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 CoatingJournal = SelectedItem.CoatingJournals.OrderBy(x => x.PointId);
                 DocumentationJournal = SelectedItem.CastGateValveJournals.Where(i => i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId);
                 ShippingJournal = SelectedItem.CastGateValveJournals.Where(i => i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId);
+                Files = new List<ElectronicDocument>();
+                foreach (var i in SelectedItem.Files)
+                {
+                    Files.Add(i.ElectronicDocument);
+                }
+                FilesView = CollectionViewSource.GetDefaultView(Files);
+                FilesView.GroupDescriptions.Add(new PropertyGroupDescription("FileType"));
+                FilesView.SortDescriptions.Add(new SortDescription("Number", ListSortDirection.Ascending));
             }
             finally
             {
                 IsBusy = false;
+            }
+        }
+
+        private IList<ElectronicDocument> files;
+        public IList<ElectronicDocument> Files
+        {
+            get => files;
+            set
+            {
+                files = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private ICollectionView filesView;
+        public ICollectionView FilesView
+        {
+            get => filesView;
+            set
+            {
+                filesView = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -1435,8 +1503,10 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             EditCaseCommand = new Supervision.Commands.Command(o => EditCase());
             EditCoverCommand = new Supervision.Commands.Command(o => EditCover());
             EditGateCommand = new Supervision.Commands.Command(o => EditGate());
-            EditPIDCommand = new Supervision.Commands.Command(o => EditPID());
+            EditPIDCommand = new Command(o => EditPID());
             EditSpindleCommand = new Supervision.Commands.Command(o => EditSpindle());
+            OpenFileCommand = new Command(o => OpenFile());
+            AddFileCommand = new Command(o => AddFile());
         }
     }
 }

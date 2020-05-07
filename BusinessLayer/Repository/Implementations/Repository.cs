@@ -49,14 +49,14 @@ namespace BusinessLayer.Repository.Implementations
             return await metalMaterials.ToListAsync();
         }
 
-        public TEntity Add(TEntity entity)
+        public virtual TEntity Add(TEntity entity)
         {
             table.Add(entity);
             SaveChanges();
             return entity;
         }
 
-        public IEnumerable<TEntity> Add(IEnumerable<TEntity> entities)
+        public virtual IEnumerable<TEntity> Add(IEnumerable<TEntity> entities)
         {
             table.AddRange(entities);
             SaveChanges();
@@ -79,14 +79,14 @@ namespace BusinessLayer.Repository.Implementations
             return newEntity;
         }
 
-        public async Task<TEntity> AddAsync(TEntity entity)
+        public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
             await table.AddAsync(entity);
             await SaveChangesAsync();
             return entity;
         }
 
-        public async Task<IEnumerable<TEntity>> AddAsync(IEnumerable<TEntity> entities)
+        public virtual async Task<IEnumerable<TEntity>> AddAsync(IEnumerable<TEntity> entities)
         {
             await table.AddRangeAsync(entities);
             await SaveChangesAsync();
