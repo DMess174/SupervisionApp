@@ -29,7 +29,6 @@ namespace Supervision.ViewModels
         private string newFileName;
         private DateTime? searchFileDate;
         private DateTime? newFileDate;
-        private readonly SpecificationRepository specificationRepo;
         private IList<ElectronicDocument> files;
         private ICollectionView allInstancesView;
         private ElectronicDocument selectedFile;

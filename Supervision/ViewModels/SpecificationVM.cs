@@ -161,7 +161,7 @@ namespace Supervision.ViewModels
             {
                 _ = new AddFileView
                 {
-                    DataContext = AddSpecificationFileVM.LoadVM(db, SelectedItem)
+                    DataContext = AddFileVM.LoadVM(db, SelectedItem)
                 };
             }
         }

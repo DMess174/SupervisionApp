@@ -336,7 +336,7 @@ namespace DataLayer
         {
             //Database.EnsureDeleted();
             //Database.EnsureCreated();
-            //Database.Migrate();
+            Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

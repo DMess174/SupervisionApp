@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
         xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
         mc:Ignorable="d"
       Style="{StaticResource StandardWindow}"
@@ -33,7 +34,7 @@
                 <ColumnDefinition Width="13*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center" >
+            <!--<StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center" >
                 
                 <TextBlock Style="{StaticResource StandardTextBlock}" 
                            Text="Номер" 
@@ -83,7 +84,7 @@
                          VerticalAlignment="Center" 
                          Margin="5"
                          Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
+            </StackPanel>-->
         </Grid>
 
         <Separator Style="{StaticResource HorizontalSeparator}" 
@@ -94,6 +95,7 @@
                 Grid.Column="0" 
                 RowHeight="20"
                 IsReadOnly="True"
+                dgx:DataGridFilter.IsAutoFilterEnabled="True"
                 ItemsSource="{Binding AllInstancesView}"
                 SelectedItem="{Binding SelectedItem}">
             <DataGrid.InputBindings>
