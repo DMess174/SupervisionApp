@@ -133,10 +133,10 @@ namespace Supervision.ViewModels
                         sheet.Cells[recordIndex, 5].Value = row.Description;
                         sheet.Cells[recordIndex, 5].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Justify;
                         sheet.Cells[recordIndex, 6].Value = row.Status;
-                        sheet.Cells[recordIndex, 7].Value = row.Remark;
-                        sheet.Cells[recordIndex, 8].Value = row.RemarkClosed;
+                        sheet.Cells[recordIndex, 7].Value = !String.IsNullOrWhiteSpace(row.Remark) ? row.Remark : "-";
+                        sheet.Cells[recordIndex, 8].Value = !String.IsNullOrWhiteSpace(row.RemarkClosed) ? row.RemarkClosed : "-";
                         sheet.Cells[recordIndex, 9].Value = row.Engineer;
-                        sheet.Cells[recordIndex, 10].Value = row.Comment;
+                        sheet.Cells[recordIndex, 10].Value = !String.IsNullOrWhiteSpace(row.Comment) ? row.Comment : "-";
                         recordIndex++;
                     }
                     sheet.PrinterSettings.PrintArea = sheet.Cells[1, 1, recordIndex - 1, 10];
@@ -167,7 +167,7 @@ namespace Supervision.ViewModels
         {
             if (filePath != null & File.Exists(filePath))
             {
-                //TODO: Реализовать автопечать
+                //TODO: Реализовать печать без открытия Excel файла
 
             }
         }
@@ -629,7 +629,7 @@ namespace Supervision.ViewModels
         public string RemarkClosed { get; set; }
         public string Comment { get; set; }
 
-        #region Ctors
+        #region Constructors
 
         public JournalReport() {}
 

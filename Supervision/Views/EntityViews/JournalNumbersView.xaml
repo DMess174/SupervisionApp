@@ -48,7 +48,7 @@
                             <TextBox  Text="{Binding Path = Number, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MaxLines="50"
                                      SpellCheck.IsEnabled="True"

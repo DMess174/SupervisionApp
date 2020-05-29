@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+      xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
         mc:Ignorable="d"
       Style="{StaticResource StandardWindow}"
       d:DesignHeight="500" d:DesignWidth="800"
@@ -21,6 +22,7 @@
         </Grid.RowDefinitions>
         <DataGrid Style="{StaticResource StandardDataGrid}"
                   Margin="5"
+                  dgx:DataGridFilter.IsAutoFilterEnabled="True"
                   MinRowHeight="15"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ItemsSource="{Binding TCPsView, UpdateSourceTrigger=PropertyChanged}"
@@ -65,7 +67,8 @@
                             <TextBox Text="{Binding Path = Point, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
+                   AcceptsTab="True"
                                      VerticalContentAlignment="Center"
                                      VerticalAlignment="Center"
                                      MinLines="3"
@@ -99,7 +102,8 @@
                             <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                   AcceptsTab="True"
+                                     
                                      VerticalContentAlignment="Center"
                                      VerticalAlignment="Center"
                                      MinLines="3"

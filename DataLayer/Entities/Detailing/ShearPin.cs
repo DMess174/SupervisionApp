@@ -14,7 +14,8 @@ namespace DataLayer.Entities.Detailing
 
         public ShearPin(ShearPin shearPin) : base(shearPin)
         {
-
+            Diameter = shearPin.Diameter;
+            TensileStrength = shearPin.TensileStrength;
         }
 
         public string Diameter { get; set; }

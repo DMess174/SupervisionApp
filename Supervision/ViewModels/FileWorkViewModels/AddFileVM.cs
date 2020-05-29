@@ -184,12 +184,12 @@ namespace Supervision.ViewModels
                             db.SaveChanges();
                         }
 #else
-                        DirectoryInfo dirInfo = new DirectoryInfo(@"O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\Спецификации\" + SelectedItem.Number);
-                        if (!dirInfo.Exists)
-                        {
-                            dirInfo.Create();
-                        }
-                        var newFileName = @"O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\Спецификации\" + SelectedItem.Number + @"\" + SelectedItem.Number + extension;
+                        //DirectoryInfo dirInfo = new DirectoryInfo(@"O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\Спецификации\" + SelectedItem.Number);
+                        //if (!dirInfo.Exists)
+                        //{
+                        //    dirInfo.Create();
+                        //}
+                        //var newFileName = @"O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\Спецификации\" + SelectedItem.Number + @"\" + SelectedItem.Number + extension;
 #endif
                         
 

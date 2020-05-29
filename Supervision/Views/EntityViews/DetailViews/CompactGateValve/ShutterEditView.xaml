@@ -365,7 +365,7 @@
                    Margin="5" 
                    TextWrapping="Wrap"
                    AcceptsReturn="True"
-                   AcceptsTab="True"
+                   
                    VerticalAlignment="Stretch"
                    MinLines="3"
                    MaxLines="50"

@@ -1160,7 +1160,7 @@
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1210,7 +1210,7 @@
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1227,7 +1227,7 @@
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1261,7 +1261,7 @@
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1376,7 +1376,7 @@
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1426,7 +1426,7 @@
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1443,7 +1443,7 @@
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1477,7 +1477,7 @@
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1591,7 +1591,7 @@
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1641,7 +1641,7 @@
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1658,7 +1658,7 @@
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1692,7 +1692,7 @@
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1806,7 +1806,7 @@
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1856,7 +1856,7 @@
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1873,7 +1873,7 @@
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -1907,7 +1907,7 @@
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2021,7 +2021,7 @@
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2071,7 +2071,7 @@
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2088,7 +2088,7 @@
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2122,7 +2122,7 @@
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2236,7 +2236,7 @@
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2286,7 +2286,7 @@
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2303,7 +2303,7 @@
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2337,7 +2337,7 @@
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2452,7 +2452,7 @@
                                                 <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2502,7 +2502,7 @@
                                                 <TextBox Text="{Binding Path=RemarkIssued, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2519,7 +2519,7 @@
                                                 <TextBox Text="{Binding Path=RemarkClosed, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2553,7 +2553,7 @@
                                                 <TextBox Text="{Binding Path = Comment, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     AcceptsTab="True"
+                                     
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"
@@ -2673,8 +2673,9 @@
                    Grid.Row="1"
                    Margin="5" 
                    TextWrapping="Wrap"
-                   AcceptsReturn="True"
                    AcceptsTab="True"
+                   AcceptsReturn="True"
+                   
                    VerticalAlignment="Stretch"
                    MinLines="3"
                    MaxLines="50"

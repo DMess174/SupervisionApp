@@ -24,7 +24,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
         private IEnumerable<CaseFlange> caseFlanges;
         private IEnumerable<CaseBottom> caseBottoms;
         private IEnumerable<FrontWall> frontWalls;
-        private IEnumerable<WeldNozzle> weldNozzles;
+        private List<WeldNozzle> weldNozzles;
         private IEnumerable<CaseEdge> caseEdges;
         private FrontWall selectedFrontWall;
         private FrontWall selectedFrontWallFromList;
@@ -243,7 +243,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 RaisePropertyChanged();
             }
         }
-        public IEnumerable<WeldNozzle> WeldNozzles
+        public List<WeldNozzle> WeldNozzles
         {
             get => weldNozzles;
             set
@@ -334,6 +334,7 @@ namespace Supervision.ViewModels.EntityViewModels.DetailViewModels.WeldGateValve
                 AssemblyJournal = SelectedItem.SheetGateValveCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Сборка/Сварка").OrderBy(x => x.PointId);
                 MechanicalJournal = SelectedItem.SheetGateValveCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Механическая обработка").OrderBy(x => x.PointId);
                 NDTJournal = SelectedItem.SheetGateValveCaseJournals.Where(i => i.EntityTCP.OperationType.Name == "Неразрушающий контроль").OrderBy(x => x.PointId);
+                
             }
             finally
             {

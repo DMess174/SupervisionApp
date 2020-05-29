@@ -1413,14 +1413,14 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
                 CoatingJournal = SelectedItem.CoatingJournals.OrderBy(x => x.PointId);
                 DocumentationJournal = SelectedItem.CastGateValveJournals.Where(i => i.EntityTCP.OperationType.Name == "Документация").OrderBy(x => x.PointId);
                 ShippingJournal = SelectedItem.CastGateValveJournals.Where(i => i.EntityTCP.OperationType.Name == "Отгрузка").OrderBy(x => x.PointId);
-                Files = new List<ElectronicDocument>();
-                foreach (var i in SelectedItem.Files)
-                {
-                    Files.Add(i.ElectronicDocument);
-                }
-                FilesView = CollectionViewSource.GetDefaultView(Files);
-                FilesView.GroupDescriptions.Add(new PropertyGroupDescription("FileType"));
-                FilesView.SortDescriptions.Add(new SortDescription("Number", ListSortDirection.Ascending));
+                //Files = new List<ElectronicDocument>();
+                //foreach (var i in SelectedItem.Files)
+                //{
+                //    Files.Add(i.ElectronicDocument);
+                //}
+                //FilesView = CollectionViewSource.GetDefaultView(Files);
+                //FilesView.GroupDescriptions.Add(new PropertyGroupDescription("FileType"));
+                //FilesView.SortDescriptions.Add(new SortDescription("Number", ListSortDirection.Ascending));
             }
             finally
             {
@@ -1428,27 +1428,27 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             }
         }
 
-        private IList<ElectronicDocument> files;
-        public IList<ElectronicDocument> Files
-        {
-            get => files;
-            set
-            {
-                files = value;
-                RaisePropertyChanged();
-            }
-        }
+        //private IList<ElectronicDocument> files;
+        //public IList<ElectronicDocument> Files
+        //{
+        //    get => files;
+        //    set
+        //    {
+        //        files = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
-        private ICollectionView filesView;
-        public ICollectionView FilesView
-        {
-            get => filesView;
-            set
-            {
-                filesView = value;
-                RaisePropertyChanged();
-            }
-        }
+        //private ICollectionView filesView;
+        //public ICollectionView FilesView
+        //{
+        //    get => filesView;
+        //    set
+        //    {
+        //        filesView = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
         public CastGateValveEditVM(BaseTable entity, DataContext context)
         {

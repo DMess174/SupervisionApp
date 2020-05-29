@@ -35,7 +35,7 @@
                 <ColumnDefinition Width="13*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+            <!--<StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
                 <TextBlock Style="{StaticResource StandardTextBlock}" 
                            Text="Номер" 
                            Margin="5" 
@@ -111,7 +111,7 @@
                          VerticalAlignment="Center" 
                          Margin="5"
                          Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
+            </StackPanel>-->
         </Grid>
 
         <Separator Style="{StaticResource HorizontalSeparator}" 

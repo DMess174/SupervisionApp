@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+      xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
         mc:Ignorable="d" 
       Style="{StaticResource StandardWindow}"
       Height="900" Width="1300"
@@ -51,7 +52,7 @@
             <DataGrid Style="{StaticResource StandardDataGrid}"
                 IsReadOnly="False"
                 Height="auto"
-                CanUserSortColumns="True"
+
                 HorizontalContentAlignment="Stretch"
                 ItemsSource="{Binding AllInstancesView}"
                 SelectedItem="{Binding SelectedItem}">
@@ -167,11 +168,11 @@
                         Width="auto"/>
                 </StackPanel>
                 
-                <Button Style="{StaticResource StandardButton}"
+                <!--<Button Style="{StaticResource StandardButton}"
                         Grid.Column="1"
                         HorizontalAlignment="Right"
                         Content="Файлы" 
-                        Margin="10" Command="{Binding FileStorageOpenCommand}"/>
+                        Margin="10" Command="{Binding FileStorageOpenCommand}"/>-->
             </Grid>
 
             <Separator Style="{StaticResource HorizontalSeparator}" 
@@ -194,11 +195,11 @@
                     Command="{Binding EditPIDCommand}"/>
                 </DataGrid.InputBindings>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Номер" 
+                    <DataGridTemplateColumn Header="ID" 
                                     Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path = Number, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBlock Text="{Binding Path = Id, UpdateSourceTrigger=PropertyChanged}"
                                            Padding="5"
                                      TextWrapping="Wrap"
                                      HorizontalAlignment="Center"
@@ -207,7 +208,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Наименование&#x0a;      изделия" 
+                    <DataGridTemplateColumn Header="Номер" 
                                     Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
