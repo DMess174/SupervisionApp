@@ -10,10 +10,12 @@ using BusinessLayer.Repository.Implementations.Entities;
 using Supervision.Commands;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
-using Microsoft.Win32;
+using Supervision.Views.FileWorkViews;
+using System.Linq;
+using OfficeOpenXml;
 using System;
 using System.IO;
-using Supervision.Views.FileWorkViews;
+using System.Diagnostics;
 
 namespace Supervision.ViewModels
 {
@@ -165,7 +167,133 @@ namespace Supervision.ViewModels
                 };
             }
         }
-        
+
+        private IEnumerable<NonCheckedPIDReport> nonCheckedPIDs;
+        public IEnumerable<NonCheckedPIDReport> NonCheckedPIDs
+        {
+            get => nonCheckedPIDs;
+            set
+            {
+                nonCheckedPIDs = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public class NonCheckedPIDReport
+        {
+            public string SpecificationNumber { get; set; }
+            public IList<string> PIDNumbers { get; set; }
+        }
+
+        private void OpenNonCheckedPIDReport(IEnumerable<PID> report)
+        {
+            NonCheckedPIDs = report.GroupBy(a => new
+            {
+                a.Specification?.Number
+            })
+                .Select(j => new NonCheckedPIDReport
+                {
+                    SpecificationNumber = j.Key.Number ?? "Без номера",
+                    PIDNumbers = j.Select(c => c.Number).ToList()
+                }); ;
+            
+            if (NonCheckedPIDs != null)
+            {
+                ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+                // Create Excel EPPlus Package
+                using (ExcelPackage package = new ExcelPackage())
+                {
+                    foreach (var i in NonCheckedPIDs)
+                    {
+                        ExcelWorksheet sheet = package.Workbook.Worksheets.Add(String.IsNullOrEmpty(i.SpecificationNumber) ? "Без номера" : i.SpecificationNumber);
+                        sheet.PrinterSettings.PaperSize = ePaperSize.A4;
+                        sheet.PrinterSettings.Orientation = eOrientation.Portrait;
+                        sheet.Cells["A1:B1"].Merge = true;
+                        sheet.Column(1).Width = 5.5;
+                        sheet.Column(1).Style.Font.Name = "Franklin Gothic Book";
+                        sheet.Column(1).Style.Font.Size = 12;
+                        sheet.Column(1).Style.WrapText = true;
+                        sheet.Column(2).Width = 100;
+                        sheet.Column(2).Style.Font.Name = "Franklin Gothic Book";
+                        sheet.Column(2).Style.Font.Size = 12;
+                        sheet.Column(2).Style.WrapText = true;
+
+                        sheet.Row(1).Style.Font.Bold = true;
+                        sheet.Row(1).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        sheet.Row(1).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Bottom;
+                        sheet.Row(1).CustomHeight = false;
+
+                        sheet.Row(2).Style.Font.Bold = true;
+                        sheet.Row(2).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        sheet.Row(2).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                        sheet.Row(2).CustomHeight = false;
+
+                        sheet.Row(3).Style.Font.Bold = true;
+                        sheet.Row(3).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        sheet.Row(3).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                        sheet.Row(3).CustomHeight = false;
+
+                        sheet.Cells["A1"].Value = $"Перечень непроверенных PID в спецификации № {i.SpecificationNumber}";
+                        sheet.Cells["A2"].Value = "№ п/п";
+                        sheet.Cells["B2"].Value = "Номер PID";
+
+                        sheet.Cells["A3"].Value = "1";
+                        sheet.Cells["B3"].Value = "2";
+
+                        int recordIndex = 4;
+                        foreach (var row in i.PIDNumbers)
+                        {
+                            sheet.Row(recordIndex).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                            sheet.Row(recordIndex).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                            sheet.Row(recordIndex).CustomHeight = false;
+
+                            sheet.Cells[recordIndex, 1].Value = (recordIndex - 3).ToString();
+                            sheet.Cells[recordIndex, 2].Value = row ?? "Без номера";
+
+                            sheet.Row(recordIndex).OutlineLevel = 1;
+                            
+                            recordIndex++;
+
+                        }
+                        sheet.PrinterSettings.PrintArea = sheet.Cells[1, 1, recordIndex, 2];
+                        sheet.PrinterSettings.FitToPage = true;
+                        sheet.PrinterSettings.FitToWidth = 1;
+                        sheet.PrinterSettings.FitToHeight = 0;
+                        sheet.Cells[2, 1, recordIndex, 2].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                        sheet.Cells[2, 1, recordIndex, 2].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                        sheet.Cells[2, 1, recordIndex, 2].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                        sheet.Cells[2, 1, recordIndex, 2].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                        sheet.View.ZoomScale = 70;
+                        sheet.View.PageBreakView = true;
+                    }
+                    byte[] bin = package.GetAsByteArray();
+                    var filePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\PIDs.xlsx";
+                    if (File.Exists(filePath))
+                        File.Delete(filePath);
+                    File.WriteAllBytes(filePath, bin);
+                    FileInfo fi = new FileInfo(filePath);
+                    if (filePath != null & File.Exists(filePath))
+                        Process.Start(filePath);
+                }
+            }
+        }
+
+        public IAsyncCommand GetNonCheckedCommand { get; private set; }
+        private async Task GetNonChecked ()
+        {
+            try
+            {
+                IsBusy = true;
+                var temp = await Task.Run(() => pIDRepo.GetNonChecked());
+                OpenNonCheckedPIDReport(temp);
+                
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
 
 
 
@@ -331,6 +459,7 @@ namespace Supervision.ViewModels
             EditPIDCommand = new Command(_ => EditPID());
             FileStorageOpenCommand = new Command(_ => FileStorageOpen());
             AddFileCommand = new Command(_ => AddFile());
+            GetNonCheckedCommand = new AsyncCommand(GetNonChecked);
         }
     }
 }

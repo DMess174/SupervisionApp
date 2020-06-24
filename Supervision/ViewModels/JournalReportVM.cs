@@ -17,10 +17,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -31,9 +29,9 @@ namespace Supervision.ViewModels
     {
         private readonly DataContext db;
         private readonly InspectorRepository inspectorRepo;
-        private readonly JournalNumberRepository journalRepo;
         private IList<Inspector> inspectors;
         private IEnumerable<string> journalNumbers;
+        private IEnumerable<ResultJournalReport> consolidatedJournal;
         private string journalNumber;
         private bool isBusy;
         public bool IsBusy
@@ -45,6 +43,16 @@ namespace Supervision.ViewModels
                 RaisePropertyChanged();
             }
         }
+        public IEnumerable<ResultJournalReport> ConsolidatedJournal
+        {
+            get => consolidatedJournal;
+            set
+            {
+                consolidatedJournal = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public IList<Inspector> Inspectors
         {
             get => inspectors;
@@ -113,6 +121,42 @@ namespace Supervision.ViewModels
         {
             IEnumerable<JournalReport> journalReport = obj as IEnumerable<JournalReport>;
 
+            var e = journalReport.GroupBy(a => new
+            {
+                a.JournalNumber
+            })
+                .Select(i => new ResultJournalReport()
+                {
+                    JournalNumber = i.Key.JournalNumber,
+                    ConsolidatedJournalReports = i.GroupBy(c => new
+                    {
+                        c.StringDate,
+                        c.Name,
+                        c.Point,
+                        c.Description,
+                        c.Engineer,
+                        c.Comment,
+                        c.Remark,
+                        c.RemarkClosed,
+                        c.Status
+                    })
+                .Select(j => new ConsolidatedJournalReport()
+                {
+                    Date = j.Key.StringDate,
+                    Name = j.Key.Name,
+                    Point = j.Key.Point,
+                    Description = j.Key.Description,
+                    Engineer = j.Key.Engineer,
+                    Comment = j.Key.Comment,
+                    Remark = j.Key.Remark,
+                    RemarkClosed = j.Key.RemarkClosed,
+                    Status = j.Key.Status,
+                    JournalReports = j.Select(a => a.Number).ToList()
+                })
+                });;
+
+            ConsolidatedJournal = e;
+
             // Read Template
             using (FileStream templateDocumentStream = File.OpenRead("BaseJournalReport.xlsx"))
             {
@@ -120,30 +164,42 @@ namespace Supervision.ViewModels
                 // Create Excel EPPlus Package based on template stream
                 using (ExcelPackage package = new ExcelPackage(templateDocumentStream))
                 {
-                    // Grab the sheet with the template, sheet name is "Report".
-                    ExcelWorksheet sheet = package.Workbook.Worksheets["Report"];
-                    int recordIndex = 4;
-                    sheet.Cells[1, 9].Value = JournalNumber;
-                    foreach (var row in journalReport)
+                    foreach (var a in ConsolidatedJournal)
                     {
-                        sheet.Cells[recordIndex, 1].Value = (recordIndex - 3).ToString();
-                        sheet.Cells[recordIndex, 2].Value = row.StringDate;
-                        sheet.Cells[recordIndex, 3].Value = row.Point;
-                        sheet.Cells[recordIndex, 4].Value = row.Name;
-                        sheet.Cells[recordIndex, 5].Value = row.Description;
-                        sheet.Cells[recordIndex, 5].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Justify;
-                        sheet.Cells[recordIndex, 6].Value = row.Status;
-                        sheet.Cells[recordIndex, 7].Value = !String.IsNullOrWhiteSpace(row.Remark) ? row.Remark : "-";
-                        sheet.Cells[recordIndex, 8].Value = !String.IsNullOrWhiteSpace(row.RemarkClosed) ? row.RemarkClosed : "-";
-                        sheet.Cells[recordIndex, 9].Value = row.Engineer;
-                        sheet.Cells[recordIndex, 10].Value = !String.IsNullOrWhiteSpace(row.Comment) ? row.Comment : "-";
-                        recordIndex++;
+
+                        // Grab the sheet with the template.
+                        ExcelWorksheet sheet = package.Workbook.Worksheets.Add(String.IsNullOrEmpty(a.JournalNumber) ? "Без номера" : a.JournalNumber, package.Workbook.Worksheets["Report"]);
+                        int recordIndex = 4;
+                        sheet.Cells[1, 9].Value = a.JournalNumber;
+                        foreach (var row in a.ConsolidatedJournalReports)
+                        {
+                            sheet.Row(recordIndex).CustomHeight = false;
+                            string numbers = "";
+                            sheet.Cells[recordIndex, 1].Value = (recordIndex - 3).ToString();
+                            sheet.Cells[recordIndex, 2].Value = row.Date;
+                            sheet.Cells[recordIndex, 3].Value = row.Point;
+                            foreach (var i in row.JournalReports)
+                            {
+                                numbers += i + ";\n";
+                            }
+                            sheet.Cells[recordIndex, 4].Value = $"{row.Name} № {numbers}";
+                            sheet.Cells[recordIndex, 5].Value = row.Description;
+                            sheet.Cells[recordIndex, 5].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Justify;
+                            sheet.Cells[recordIndex, 6].Value = row.Status;
+                            sheet.Cells[recordIndex, 7].Value = !String.IsNullOrWhiteSpace(row.Remark) ? row.Remark : "-";
+                            sheet.Cells[recordIndex, 8].Value = !String.IsNullOrWhiteSpace(row.RemarkClosed) ? row.RemarkClosed : "-";
+                            sheet.Cells[recordIndex, 9].Value = row.Engineer;
+                            sheet.Cells[recordIndex, 10].Value = !String.IsNullOrWhiteSpace(row.Comment) ? row.Comment : "-";
+                            recordIndex++;
+                        }
+                        sheet.PrinterSettings.PrintArea = sheet.Cells[1, 1, recordIndex - 1, 10];
+                        sheet.Cells[2, 1, recordIndex - 1, 10].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                        sheet.Cells[2, 1, recordIndex - 1, 10].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                        sheet.Cells[2, 1, recordIndex - 1, 10].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                        sheet.Cells[2, 1, recordIndex - 1, 10].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                     }
-                    sheet.PrinterSettings.PrintArea = sheet.Cells[1, 1, recordIndex - 1, 10];
-                    sheet.Cells[2, 1, recordIndex - 1, 10].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                    sheet.Cells[2, 1, recordIndex - 1, 10].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                    sheet.Cells[2, 1, recordIndex - 1, 10].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                    sheet.Cells[2, 1, recordIndex - 1, 10].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                    package.Workbook.Worksheets.MoveToEnd("Report");
+                    package.Workbook.Worksheets["Report"].Hidden = eWorkSheetHidden.VeryHidden;
 
                     byte[] bin = package.GetAsByteArray();
                     filePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\Report.xlsx";
@@ -182,311 +238,311 @@ namespace Supervision.ViewModels
             {
                 IsBusy = true;
                 var report = new ObservableCollection<JournalReport>();
-                if (Inspector != null && JournalNumber != null && Date != null)
+                if (Inspector != null && Date != null)
                 {
                     var insp = await Task.Run(() => GetInspectorRecordsAsync(Inspector.Id));
 
-                    foreach (var i in insp.CastGateValveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CastGateValveJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CoatingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CoatingJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CompactGateValveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CompactGateValveJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ReverseShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.ReverseShutterJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SheetGateValveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.SheetGateValveJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CastGateValveCaseJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CastGateValveCaseJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CastGateValveCoverJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CastGateValveCoverJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ShutterDiskJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.ShutterDiskJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ShutterGuideJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.ShutterGuideJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.BronzeSleeveShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.BronzeSleeveShutterJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ReverseShutterCaseJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.ReverseShutterCaseJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ShaftShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.ShaftShutterJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SlamShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.SlamShutterJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SteelSleeveShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.SteelSleeveShutterJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.StubShutterJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.StubShutterJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CaseBottomJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CaseBottomJournals.Where(i => i.Date == Date &&  i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CaseEdgeJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CaseEdgeJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CaseFlangeJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CaseFlangeJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CompactGateValveCaseJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CompactGateValveCaseJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CompactGateValveCoverJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CompactGateValveCoverJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CoverFlangeJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CoverFlangeJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CoverSleeveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CoverSleeveJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.FrontWallJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.FrontWallJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SheetGateValveCaseJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.SheetGateValveCaseJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SheetGateValveCoverJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.SheetGateValveCoverJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SideWallJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.SideWallJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.WeldNozzleJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.WeldNozzleJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.AssemblyUnitSealingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.AssemblyUnitSealingJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.BallValveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.BallValveJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CounterFlangeJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CounterFlangeJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CoverSealingRingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.CoverSealingRingJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.FrontalSaddleSealingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.FrontalSaddleSealingJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.GateJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.GateJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.NozzleJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.NozzleJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.RunningSleeveJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.RunningSleeveJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SaddleJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.SaddleJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ScrewNutJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.ScrewNutJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ScrewStudJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.ScrewStudJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ShearPinJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.ShearPinJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SpindleJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.SpindleJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SpringJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.SpringJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.AbovegroundCoatingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.AbovegroundCoatingJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.AbrasiveMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.AbrasiveMaterialJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.UndercoatJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.UndercoatJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.UndergroundCoatingJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.UndergroundCoatingJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ControlWeldJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.ControlWeldJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.ForgingMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.ForgingMaterialJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.PipeMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.PipeMaterialJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.RolledMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.RolledMaterialJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.SheetMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.SheetMaterialJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.StoresControlJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.StoresControlJournals.Where(i => i.Date == Date))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.WeldingMaterialJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.WeldingMaterialJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CoatingChemicalCompositionJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CoatingChemicalCompositionJournals.Where(i => i.Date == Date))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CoatingPlasticityJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CoatingPlasticityJournals.Where(i => i.Date == Date))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CoatingPorosityJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CoatingPorosityJournals.Where(i => i.Date == Date))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.CoatingProtectivePropertiesJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.CoatingProtectivePropertiesJournals.Where(i => i.Date == Date))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.DegreasingChemicalCompositionJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.DegreasingChemicalCompositionJournals.Where(i => i.Date == Date))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.NDTControls.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.NDTControls.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.WeldingProceduresJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.WeldingProceduresJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.FactoryInspectionJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber))
+                    foreach (var i in insp.FactoryInspectionJournals.Where(i => i.Date == Date))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
                     }
-                    foreach (var i in insp.PIDJournals.Where(i => i.Date == Date && i.JournalNumber == JournalNumber && i.DetailId != null))
+                    foreach (var i in insp.PIDJournals.Where(i => i.Date == Date && i.DetailId != null))
                     {
                         var temp = new JournalReport(i);
                         report.Add(temp);
@@ -588,7 +644,6 @@ namespace Supervision.ViewModels
             {
                 IsBusy = true;
                 Inspectors = await Task.Run(() => inspectorRepo.GetAllAsync());
-                JournalNumbers = await Task.Run(() => journalRepo.GetActiveJournalNumbersAsync());
             }
             finally
             {
@@ -607,7 +662,6 @@ namespace Supervision.ViewModels
         {
             db = context;
             inspectorRepo = new InspectorRepository(db);
-            journalRepo = new JournalNumberRepository(db);
             CreateReportFileCommand = new Commands.AsyncCommand(CreateReportFile);
             CloseWindowCommand = new Command(o => CloseWindow(o));
             OpenExcelReportCommand = new Command(o => OpenExcelReport());
@@ -616,18 +670,40 @@ namespace Supervision.ViewModels
         }
     }
 
+    public class ResultJournalReport 
+    {
+        public string JournalNumber { get; set; }
+        public IEnumerable<ConsolidatedJournalReport> ConsolidatedJournalReports { get; set; }
+    }
+
+    public class ConsolidatedJournalReport
+    {
+        public string Date { get; set; }
+        public string Point { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Status { get; set; }
+        public string Engineer { get; set; }
+        public string Comment { get; set; }
+        public string Remark { get; set; }
+        public string RemarkClosed { get; set; }
+        public IList<string> JournalReports { get; set; }
+    }
+
     public class JournalReport
     {
         public DateTime? Date { get; set; }
         public string StringDate { get; set; }
         public string Point { get; set; }
         public string Name { get; set; }
+        public string Number { get; set; }
         public string Description { get; set; }
         public string Status { get; set; }
         public string Engineer { get; set; }
         public string Remark { get; set; }
         public string RemarkClosed { get; set; }
         public string Comment { get; set; }
+        public string JournalNumber { get; set; }
 
         #region Constructors
 
@@ -638,13 +714,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number = journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CoatingJournal journal)
@@ -652,13 +730,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number = journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CompactGateValveJournal journal)
@@ -666,13 +746,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(ReverseShutterJournal journal)
@@ -680,13 +762,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(SheetGateValveJournal journal)
@@ -694,13 +778,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CastGateValveCaseJournal journal)
@@ -708,13 +794,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CastGateValveCoverJournal journal)
@@ -722,13 +810,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(ShutterDiskJournal journal)
@@ -736,13 +826,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(ShutterGuideJournal journal)
@@ -750,13 +842,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(BronzeSleeveShutterJournal journal)
@@ -764,13 +858,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(ReverseShutterCaseJournal journal)
@@ -778,13 +874,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(ShaftShutterJournal journal)
@@ -792,13 +890,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(SlamShutterJournal journal)
@@ -806,13 +906,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(SteelSleeveShutterJournal journal)
@@ -820,13 +922,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(StubShutterJournal journal)
@@ -834,13 +938,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CaseBottomJournal journal)
@@ -848,13 +954,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CaseEdgeJournal journal)
@@ -862,13 +970,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CaseFlangeJournal journal)
@@ -876,13 +986,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CompactGateValveCaseJournal journal)
@@ -890,13 +1002,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CompactGateValveCoverJournal journal)
@@ -904,13 +1018,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CoverFlangeJournal journal)
@@ -918,13 +1034,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CoverSleeveJournal journal)
@@ -932,13 +1050,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(FrontWallJournal journal)
@@ -946,13 +1066,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(SheetGateValveCaseJournal journal)
@@ -960,13 +1082,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(SheetGateValveCoverJournal journal)
@@ -974,13 +1098,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(SideWallJournal journal)
@@ -988,13 +1114,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(WeldNozzleJournal journal)
@@ -1002,13 +1130,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(AssemblyUnitSealingJournal journal)
@@ -1016,13 +1146,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " партия № " + journal.Entity.Batch + ", серия № " + journal.Entity.Series + " - " + journal.Entity.Amount + " шт.";
+            Name = journal.Entity.Name;
+            Number ="партия" + journal.Entity.Batch + ", серия" + journal.Entity.Series + " - " + journal.Entity.Amount + " шт.";
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(BallValveJournal journal)
@@ -1030,13 +1162,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " " + journal.Entity.Designation + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name;
+            Number = journal.Entity.Designation +  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CounterFlangeJournal journal)
@@ -1044,13 +1178,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CoverSealingRingJournal journal)
@@ -1058,13 +1194,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(FrontalSaddleSealingJournal journal)
@@ -1072,13 +1210,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " партия № " + journal.Entity.Batch + ", серия № " + journal.Entity.Series + " - " + journal.Entity.Amount + " шт.";
+            Name = journal.Entity.Name;
+            Number = "партия" + journal.Entity.Batch + ", серия" + journal.Entity.Series + " - " + journal.Entity.Amount + " шт.";
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(GateJournal journal)
@@ -1086,13 +1226,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(NozzleJournal journal)
@@ -1100,13 +1242,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(RunningSleeveJournal journal)
@@ -1114,13 +1258,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(SaddleJournal journal)
@@ -1128,13 +1274,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(ScrewNutJournal journal)
@@ -1142,13 +1290,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " " + journal.Entity.Thread + " № " + journal.Entity.Number + " - " + journal.Entity.Amount + " шт.";
+            Name = journal.Entity.Name;
+            Number =   journal.Entity.Number + " " + journal.Entity.Thread + " - " + journal.Entity.Amount + " шт.";
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(ScrewStudJournal journal)
@@ -1156,13 +1306,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " " + journal.Entity.Thread + " № " + journal.Entity.Number + " - " + journal.Entity.Amount + " шт.";
+            Name = journal.Entity.Name;
+            Number =   journal.Entity.Number + " " + journal.Entity.Thread + " - " + journal.Entity.Amount + " шт.";
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(ShearPinJournal journal)
@@ -1170,13 +1322,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name;
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(SpindleJournal journal)
@@ -1184,13 +1338,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name;
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(SpringJournal journal)
@@ -1198,13 +1354,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number + " - " + journal.Entity.Amount + " шт.";
+            Name = journal.Entity.Name;
+            Number =  journal.Entity.Number + " - " + journal.Entity.Amount + " шт.";
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(AbovegroundCoatingJournal journal)
@@ -1212,26 +1370,30 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Batch;
+            Name = journal.Entity.Name;
+            Number =  journal.Entity.Batch;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
         public JournalReport(AbrasiveMaterialJournal journal)
         {
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Batch;
+            Name = journal.Entity.Name;
+            Number =  journal.Entity.Batch;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(UndercoatJournal journal)
@@ -1239,26 +1401,31 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Batch;
+            Name = journal.Entity.Name;
+            Number =  journal.Entity.Batch;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
+
         public JournalReport(UndergroundCoatingJournal journal)
         {
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Batch;
+            Name = journal.Entity.Name;
+            Number =  journal.Entity.Batch;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(ControlWeldJournal journal)
@@ -1266,13 +1433,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name;
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(SheetMaterialJournal journal)
@@ -1280,13 +1449,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name;
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(PipeMaterialJournal journal)
@@ -1294,13 +1465,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name;
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(RolledMaterialJournal journal)
@@ -1308,13 +1481,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(ForgingMaterialJournal journal)
@@ -1322,13 +1497,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Number;
+            Name = journal.Entity.Name; 
+            Number =  journal.Entity.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(StoresControlJournal journal)
@@ -1343,6 +1520,7 @@ namespace Supervision.ViewModels
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(WeldingMaterialJournal journal)
@@ -1350,13 +1528,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = journal.Entity.Name + " № " + journal.Entity.Batch + " - " + journal.Entity.Amount;
+            Name = journal.Entity.Name; 
+            Number = " № " + journal.Entity.Batch + " - " + journal.Entity.Amount;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CoatingChemicalCompositionJournal journal)
@@ -1370,6 +1550,7 @@ namespace Supervision.ViewModels
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CoatingPlasticityJournal journal)
@@ -1383,6 +1564,7 @@ namespace Supervision.ViewModels
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CoatingPorosityJournal journal)
@@ -1396,6 +1578,7 @@ namespace Supervision.ViewModels
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(CoatingProtectivePropertiesJournal journal)
@@ -1409,6 +1592,7 @@ namespace Supervision.ViewModels
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(DegreasingChemicalCompositionJournal journal)
@@ -1422,6 +1606,7 @@ namespace Supervision.ViewModels
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(NDTControlJournal journal)
@@ -1436,6 +1621,7 @@ namespace Supervision.ViewModels
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(WeldingProceduresJournal journal)
@@ -1450,6 +1636,7 @@ namespace Supervision.ViewModels
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(FactoryInspectionJournal journal)
@@ -1463,6 +1650,7 @@ namespace Supervision.ViewModels
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         public JournalReport(PIDJournal journal)
@@ -1470,13 +1658,15 @@ namespace Supervision.ViewModels
             Date = journal.Date;
             StringDate = Date.Value.ToShortDateString();
             Point = journal.Point;
-            Name = "PID № " + journal.Entity.Number + ";\nСпецификация № " + journal.Entity.Specification.Number;
+            Name = "PID"; 
+            Number = journal.Entity.Number + ";\nСпецификация № " + journal.Entity.Specification.Number;
             Description = journal.Description;
             Status = journal.Status;
             Engineer = journal.Inspector.FullName;
             Remark = journal.RemarkIssued;
             RemarkClosed = journal.RemarkClosed;
             Comment = journal.Comment;
+            JournalNumber = journal.JournalNumber;
         }
 
         #endregion

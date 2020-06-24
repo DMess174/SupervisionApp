@@ -30,15 +30,16 @@ namespace BusinessLayer.Repository.Implementations.Entities
             }
         }
 
-        //public async Task<IEnumerable<PID>> GetNonChecked()
-        //{
-        //    using (DataContext context = new DataContext())
-        //    {
-        //        var result = await context.PIDs
-        //            .Include(i => i.Specification)
-        //            .Include(i => i.PIDJournals).Where(i => i.PIDJournals)
-        //    }
-        //}
+        public async Task<IEnumerable<PID>> GetNonChecked()
+        {
+            using (DataContext context = new DataContext())
+            {
+                var result = await context.PIDs
+                    .Include(i => i.Specification)
+                    .Include(i => i.PIDJournals).Where(i => !i.PIDJournals.Any(e => e.Status == "Соответствует")).ToListAsync();
+                return result;
+            }
+        }
         //TODO: реализовать выборку PIDов
 
         public bool CheckAssemblyUnitIntoPID(PID pid, int id)

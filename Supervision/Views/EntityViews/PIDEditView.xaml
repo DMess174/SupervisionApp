@@ -352,7 +352,7 @@
                                     <TextBox Text="{Binding Path = Description, UpdateSourceTrigger=PropertyChanged}"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
-                                     
+                                     IsReadOnly="True"
                                      VerticalAlignment="Center"
                                      MinLines="3"
                                      MaxLines="50"

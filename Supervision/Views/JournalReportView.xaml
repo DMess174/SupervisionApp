@@ -39,18 +39,6 @@
                       DisplayMemberPath="FullName"
                       SelectedItem="{Binding Inspector}"
                       Width="150"/>
-
-            <Label Style="{StaticResource StandardLabel}"
-               Content="Журнал"
-                   VerticalAlignment="Center"
-                   Margin="5"/>
-
-            <ComboBox Style="{StaticResource StandardComboBox}"
-                      Height="25"
-                      IsEditable="True"
-                      ItemsSource="{Binding JournalNumbers}"
-                      SelectedItem="{Binding JournalNumber}"
-                      Width="150"/>
         </StackPanel>
 
         <DataGrid Style="{StaticResource StandardDataGrid}"
@@ -91,8 +79,13 @@
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="Наименование изделия"
-                                            Binding="{Binding Name}"
                                             Width="auto">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding StringFormat="{}{0} {1}">
+                            <Binding Path="Name"/>
+                            <Binding Path="Number"/>
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -100,6 +93,7 @@
                             <Setter Property="HorizontalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
+                    
                 </DataGridTextColumn>
 
                 
