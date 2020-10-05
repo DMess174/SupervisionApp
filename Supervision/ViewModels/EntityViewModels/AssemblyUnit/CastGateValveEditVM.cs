@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -1216,41 +1217,41 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             else MessageBox.Show("Для просмотра привяжите PID", "Ошибка");
         }
 
-        private ElectronicDocument file;
-        public ElectronicDocument File
-        {
-            get => file;
-            set
-            {
-                file = value;
-                RaisePropertyChanged();
-            }
-        }
+        //private ElectronicDocument file;
+        //public ElectronicDocument File
+        //{
+        //    get => file;
+        //    set
+        //    {
+        //        file = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
-        public ICommand OpenFileCommand { get; private set; }
-        private void OpenFile()
-        {
-            if (File != null)
-            {
-                Process.Start(File.FilePath);
-            }
-            else MessageBox.Show("Файл не выбран", "Ошибка");
-        }
+        //public ICommand OpenFileCommand { get; private set; }
+        //private void OpenFile()
+        //{
+        //    if (File != null)
+        //    {
+        //        Process.Start(File.FilePath);
+        //    }
+        //    else MessageBox.Show("Файл не выбран", "Ошибка");
+        //}
 
-        public ICommand AddFileCommand { get; private set; }
-        private void AddFile()
-        {
-            _ = new AddFileView
-            {
-                DataContext = AddFileVM.LoadVM(db, SelectedItem)
-            };
-        }
+        //public ICommand AddFileCommand { get; private set; }
+        //private void AddFile()
+        //{
+        //    _ = new AddFileView
+        //    {
+        //        DataContext = AddFileVM.LoadVM(db, SelectedItem)
+        //    };
+        //}
 
-        public ICommand DeleteFileCommand { get; private set; }
-        private void DeleteFile()
-        {
+        //public ICommand DeleteFileCommand { get; private set; }
+        //private void DeleteFile()
+        //{
             
-        }
+        //}
 
         public Supervision.Commands.IAsyncCommand SaveItemCommand { get; private set; }
         private async Task SaveItem()
@@ -1505,8 +1506,8 @@ namespace Supervision.ViewModels.EntityViewModels.AssemblyUnit
             EditGateCommand = new Supervision.Commands.Command(o => EditGate());
             EditPIDCommand = new Command(o => EditPID());
             EditSpindleCommand = new Supervision.Commands.Command(o => EditSpindle());
-            OpenFileCommand = new Command(o => OpenFile());
-            AddFileCommand = new Command(o => AddFile());
+            //OpenFileCommand = new Command(o => OpenFile());
+            //AddFileCommand = new Command(o => AddFile());
         }
     }
 }

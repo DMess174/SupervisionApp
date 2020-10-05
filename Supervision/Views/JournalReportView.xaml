@@ -192,8 +192,8 @@
                 Margin="10 2" 
                 Grid.Row="3"
                 HorizontalAlignment="Left"
-                Content="Печать"
-                Command="{Binding PrintReportCommand}"/>
+                Content="Сформировать (Test)"
+                Command="{Binding CreateDesktopReportFileCommand}"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal"

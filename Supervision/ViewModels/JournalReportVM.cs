@@ -630,6 +630,421 @@ namespace Supervision.ViewModels
             }
         }
 
+        public IAsyncCommand CopyDbFileCommand { get; private set; }
+        private void CopyDbFile()
+        {
+            //File.Copy(@"O:\38-00 - Челябинское УТН\38-04 - СМТО\Производство\БД\Supervision\SupervisionData.sqlite",
+            //    Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\SupervisionData.sqlite", 
+            //    true);
+
+            File.Copy(@"T:\06-01-06 - БДУКП\СМТО ОП УТН\SupervisionData\Supervision\SupervisionData.sqlite",
+                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\SupervisionData.sqlite",
+                true);
+        }
+
+        public IAsyncCommand CreateDesktopReportFileCommand { get; private set; }
+        private async Task CreateDesktopReportFile()
+        {
+            try
+            {
+                IsBusy = true;
+
+                CopyDbFile();
+
+                var report = new ObservableCollection<JournalReport>();
+                if (Inspector != null && Date != null)
+                {
+                    var insp = await Task.Run(() => GetDesktopInspectorRecordsAsync(Inspector.Id));
+
+                    foreach (var i in insp.CastGateValveJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CoatingJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CompactGateValveJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.ReverseShutterJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.SheetGateValveJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CastGateValveCaseJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CastGateValveCoverJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.ShutterDiskJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.ShutterGuideJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.BronzeSleeveShutterJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.ReverseShutterCaseJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.ShaftShutterJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.SlamShutterJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.SteelSleeveShutterJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.StubShutterJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CaseBottomJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CaseEdgeJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CaseFlangeJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CompactGateValveCaseJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CompactGateValveCoverJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CoverFlangeJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CoverSleeveJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.FrontWallJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.SheetGateValveCaseJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.SheetGateValveCoverJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.SideWallJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.WeldNozzleJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.AssemblyUnitSealingJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.BallValveJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CounterFlangeJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CoverSealingRingJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.FrontalSaddleSealingJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.GateJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.NozzleJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.RunningSleeveJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.SaddleJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.ScrewNutJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.ScrewStudJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.ShearPinJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.SpindleJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.SpringJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.AbovegroundCoatingJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.AbrasiveMaterialJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.UndercoatJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.UndergroundCoatingJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.ControlWeldJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.ForgingMaterialJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.PipeMaterialJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.RolledMaterialJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.SheetMaterialJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.StoresControlJournals.Where(i => i.Date == Date))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.WeldingMaterialJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CoatingChemicalCompositionJournals.Where(i => i.Date == Date))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CoatingPlasticityJournals.Where(i => i.Date == Date))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CoatingPorosityJournals.Where(i => i.Date == Date))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.CoatingProtectivePropertiesJournals.Where(i => i.Date == Date))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.DegreasingChemicalCompositionJournals.Where(i => i.Date == Date))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.NDTControls.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.WeldingProceduresJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.FactoryInspectionJournals.Where(i => i.Date == Date))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    foreach (var i in insp.PIDJournals.Where(i => i.Date == Date && i.DetailId != null))
+                    {
+                        var temp = new JournalReport(i);
+                        report.Add(temp);
+                    }
+                    Journal = report;
+                }
+
+                if (Journal != null) 
+                    CreateFile(Journal);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private async Task<Inspector> GetDesktopInspectorRecordsAsync(int id)
+        {
+            using (DesktopDataContext context = new DesktopDataContext())
+            {
+                var result = await context.Inspectors
+                    .Include(i => i.PIDJournals).ThenInclude(e => e.Entity).ThenInclude(e => e.Specification)
+                    .Include(i => i.CastGateValveJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CompactGateValveJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.SheetGateValveJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.ReverseShutterJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CoatingJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CastGateValveCaseJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CastGateValveCoverJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.ShutterDiskJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.ShutterGuideJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.ShutterJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.BronzeSleeveShutterJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.ReverseShutterCaseJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.ShaftShutterJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.SlamShutterJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.SteelSleeveShutterJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.StubShutterJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CaseBottomJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CaseEdgeJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CaseFlangeJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CompactGateValveCaseJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CompactGateValveCoverJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CoverFlangeJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CoverSleeveJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.FrontWallJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.SheetGateValveCaseJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.SheetGateValveCoverJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.SideWallJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.WeldNozzleJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.AssemblyUnitSealingJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.BallValveJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CounterFlangeJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CoverSealingRingJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.FrontalSaddleSealingJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.GateJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.NozzleJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.RunningSleeveJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.SaddleJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.ScrewNutJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.ScrewStudJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.ShearPinJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.SpindleJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.SpringJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.AbovegroundCoatingJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.AbrasiveMaterialJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.UndercoatJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.UndergroundCoatingJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.ControlWeldJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.ForgingMaterialJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.PipeMaterialJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.RolledMaterialJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.SheetMaterialJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.StoresControlJournals)
+                    .Include(i => i.WeldingMaterialJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.CoatingChemicalCompositionJournals)
+                    .Include(i => i.CoatingPlasticityJournals)
+                    .Include(i => i.CoatingPorosityJournals)
+                    .Include(i => i.CoatingProtectivePropertiesJournals)
+                    .Include(i => i.DegreasingChemicalCompositionJournals)
+                    .Include(i => i.NDTControls).ThenInclude(e => e.Entity)
+                    .Include(i => i.WeldingProceduresJournals).ThenInclude(e => e.Entity)
+                    .Include(i => i.FactoryInspectionJournals)
+                    .FirstOrDefaultAsync(i => i.Id == id);
+                return result;
+            }
+        }
+
         public ICommand CloseWindowCommand { get; set; }
         private void CloseWindow(object obj)
         {
@@ -663,6 +1078,7 @@ namespace Supervision.ViewModels
             db = context;
             inspectorRepo = new InspectorRepository(db);
             CreateReportFileCommand = new Commands.AsyncCommand(CreateReportFile);
+            CreateDesktopReportFileCommand = new Commands.AsyncCommand(CreateDesktopReportFile);
             CloseWindowCommand = new Command(o => CloseWindow(o));
             OpenExcelReportCommand = new Command(o => OpenExcelReport());
             PrintReportCommand = new Command(o => PrintReport());

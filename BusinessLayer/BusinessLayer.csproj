@@ -28,12 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
+    <Folder Include="Repository\Implementations\Entities\AssemblyUnits\" />
+    <Folder Include="Repository\Interfaces\Entities\Material\AnticorrosiveCoating\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repository\Implementations\Entities\AssemblyUnits\" />
-    <Folder Include="Repository\Interfaces\Entities\Material\AnticorrosiveCoating\" />
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
